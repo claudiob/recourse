@@ -1,0 +1,9 @@
+<% content_for :h2, @model.name.pluralize %>
+
+<% content_for :search, search_form(q: @q, model: @model) if @model.recourse_searchable? %>
+
+<% button_link_to_add @model.name.underscore, url_for(action: :new) if @model.recourse_actions.include? :new %>
+
+<%= table items: @resources, cached: @model.recourse_cachable?, positioned: @model.recourse_positionable?, pagy: @pagy, empty_label: "No #{@model.name.underscore.pluralize}" do |resource, section| %>
+  <%= render 'row', resource: resource, section: section %>
+<% end %>

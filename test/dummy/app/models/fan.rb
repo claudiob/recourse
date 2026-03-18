@@ -1,0 +1,2 @@
+class Fan < ApplicationRecord
+end

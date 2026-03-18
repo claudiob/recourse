@@ -1,0 +1,2 @@
+class BabiesController < RecourseController
+end
