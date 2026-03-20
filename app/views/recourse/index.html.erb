@@ -1,6 +1,18 @@
-<% content_for :h2, @model.name.pluralize %>
+<% content_for :title, @model.name.pluralize %>
 
-<% content_for :search, search_form(q: @q, model: @model) if @model.recourse_searchable? %>
+<% content_for :search do %>
+  <script>
+    function debounce(method) {
+      let timer
+      return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => { method.apply(this, args) }, 300);
+      }
+    }
+    const debouncedSubmit = debounce((form) => form.requestSubmit())
+  </script>
+  <%= search_form q: @q, model: @model %>
+<% end if @model.recourse_searchable? %>
 
 <% button_link_to_add @model.name.underscore, url_for(action: :new) if @model.recourse_actions.include? :new %>
 

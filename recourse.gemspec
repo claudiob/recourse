@@ -23,5 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'bh'
   spec.add_dependency 'pagy'
   spec.add_dependency 'ransack'
+  spec.add_development_dependency 'minitest', '< 6'
   spec.add_development_dependency 'simplecov'
 end

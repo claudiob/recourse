@@ -3,6 +3,10 @@ class Post < ApplicationRecord
     %w[ content ]
   end
 
+  def self.ransortable_attributes(auth_object = nil)
+    %w[ id ]
+  end
+
   # Returns the name of the field to search specialtys with Ransack.
   def self.search_field
     :content_cont
