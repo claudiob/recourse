@@ -30,7 +30,7 @@ module Recourse
 
     # @return [Boolean] whether Ransack attributes are defined on the resource.
     def recourse_searchable?
-      ransackable_attributes.any?
+      ransackable_attributes.any? || ransortable_attributes.any?
     end
   end
 end

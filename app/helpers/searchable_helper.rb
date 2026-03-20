@@ -1,15 +1,10 @@
 # A collection of helper methods used for navigation link in the admin-only section
-module RecourseHelper
-  # Adds a link next to the title to add a new resource.
-  def button_link_to_add(name, path)
-    content_for(:edit) { button_link_to "Add #{name}", path, class: 'btn-sm btn-outline ms-3' }
-  end
-
+module SearchableHelper
   # Renders a form with a field to search within +model+ that uses +placeholder+.
   # @param [String] q the search query.
   # @param [ApplicationRecord] model the model of each object returned by the search
   def search_form(q:, model:, url: url_for(model))
-    search_form_for q, search_form_params(url: url) do |form|
+    search_form_for(q, search_form_params(url: url)) do |form|
       safe_join [filter_field_for(form, model:), search_field_for(form, model:)].compact
     end
   end
@@ -35,7 +30,7 @@ private
   def search_form_params(url:)
     {
       url: url, class: 'col-8 col-sm-6 col-md-4 d-flex', role: 'search',
-      data: { turbo_frame: :results, turbo_action: :advance }
+      data: { turbo_frame: :results, turbo_action: :advance },
     }
   end
 
@@ -51,13 +46,5 @@ private
       aria: { label: 'Filter' }, class: 'form-control form-control-sm me-3',
       onchange: 'debouncedSubmit(this.form)',
     }
-  end
-
-  def button_link_to(name, path, options = {})
-    link_to name, path, with_class('btn theme-primary', options)
-  end
-
-  def with_class(classes, options = {})
-    options.merge class: [options[:class], classes].compact.join(' ')
   end
 end
