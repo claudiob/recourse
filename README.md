@@ -27,7 +27,6 @@ In a resourceful Active Record model:
 - `recourse_includes`: the associations to include when fetching the resources
 - `recourse_order`: the SQL to sort the resources by
 - `recourse_positionable?`: whether the model has a position field to drag'n'drop sort
-- `recourse_searchable?`: whether the model has Ransack enabled for searches
 
 Anywhere:
 
