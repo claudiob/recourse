@@ -28,9 +28,14 @@ module Recourse
       false
     end
 
-    # @return [Boolean] whether Ransack attributes are defined on the resource.
+    # @return [Boolean] whether Ransack search attributes are defined on the resource.
     def recourse_searchable?
-      ransackable_attributes.any? || ransortable_attributes.any?
+      ransackable_attributes.any?
+    end
+
+    # @return [Boolean] whether Ransack sort attributes are defined on the resource.
+    def recourse_sortable?
+       ransortable_attributes.any?
     end
   end
 end
