@@ -1,6 +1,8 @@
 require 'recourse/model/recoursive'
 require 'recourse/model/searchable'
 
-# TODO: Replace these with on_load
-ActiveRecord::Base.extend Recourse::Recoursive
-ActiveRecord::Base.extend Recourse::Searchable
+
+ActiveSupport.on_load(:active_record) do
+  extend Recourse::Recoursive
+  extend Recourse::Searchable
+end
