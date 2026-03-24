@@ -13,7 +13,7 @@ Provides a new `recourses` method that can be invoked in a Rails app inside conf
 How to install
 ==============
 
-1. Add `gem 'resource'` to the `Gemfile` file of your Rails app.
+1. Add `gem 'recourse'` to the `Gemfile` file of your Rails app.
 
 Available methods
 =================
