@@ -50,4 +50,11 @@ class IndexTest < ActionDispatch::IntegrationTest
     assert_select 'option', text: 'Running'
     assert_select 'option', text: 'Stopped'
   end
+
+  test 'renders a nested controller if the resource is nested' do
+    get baby_posts_url baby_id: babies(:first).id
+
+    assert_select 'title', text: 'Posts'
+    assert_select 'p', text: 'No posts.'
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_20_044912) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_23_234318) do
   create_table "babies", force: :cascade do |t|
     t.integer "age"
     t.datetime "created_at", null: false
@@ -25,9 +25,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_044912) do
   end
 
   create_table "posts", force: :cascade do |t|
+    t.integer "baby_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["baby_id"], name: "index_posts_on_baby_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -41,4 +43,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_044912) do
     t.string "name"
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "posts", "babies"
 end
