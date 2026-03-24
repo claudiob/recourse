@@ -5,9 +5,18 @@ module Recourse
     # This method is equivalent to Rails `resources` with the added bonus that we store
     # the name of these administered resources so we can display them to admins in the navbar.
     def recourses(*administered_resources, concerns: nil, **options, &block)
-      # NOTE: only is not enough, I need the except as well
       administered_resources.each { |resource| Recourse.resources[resource] = options }
-      resources *administered_resources, concerns: concerns, **options, &block
+
+      if block_given?
+        error = 'recourses accepts only one resource if a block is given'
+        raise ArgumentError, error unless administered_resources.one?
+        administered_resource = administered_resources.sole
+        resources administered_resource, concerns: concerns, **options do
+          scope module: administered_resource, &block
+        end
+      else
+        resources *administered_resources, concerns: concerns, **options, &block
+      end
     end
   end
 end
