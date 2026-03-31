@@ -14,7 +14,13 @@
   <%= search_form q: @q, model: @model %>
 <% end if @model.recourse_searchable? %>
 
-<% button_link_to_add @model.name.underscore, url_for(action: :new) if @model.recourse_actions.include? :new %>
+<% content_for :actions do %>
+  <% begin %>
+    <%= link_to "Add #{controller_path.split('/').last.singularize}", url_for(action: :new), class: 'btn theme-primary btn-sm btn-outline ms-3'%>
+  <% rescue ActionController::UrlGenerationError %>
+  <% end %>
+<% end %>
+
 
 <%= table items: @resources, cached: @model.recourse_cachable?, positioned: @model.recourse_positionable?, pagy: @pagy, empty_label: "No #{@model.name.underscore.pluralize}" do |resource, section| %>
   <%= render 'row', resource: resource, section: section %>

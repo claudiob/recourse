@@ -8,6 +8,7 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 ## 1.2.0 - 2026-03-31
 
 * [BREAKING CHANGE] `RecourseController` is now `RecoursesController`
+* [BREAKING CHANGE] "Add" button is now yield in the `content_for :actions`
 
 ## 1.1.0 - 2026-03-24
 
