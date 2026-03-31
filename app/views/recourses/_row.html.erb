@@ -1,4 +1,10 @@
-<%# locals: (resource:, section:) -%>
-<%= column section: section, header: 'ID' do %>
-  <%= resource.id %>
+<%# locals: (recourse:) -%>
+<% recourse.attributes.each do |name, value| %>
+  <%= column header: (recourse.class.ransortable_attributes.include?(name) ? sort_link(@q, name, name.upcase_first) : name) do %>
+    <% if recourse.class.ransackable_attributes.include? name %>
+      <%= search_highlight value, model: recourse.class %>
+    <% else %>
+      <%= value %>
+    <% end %>
+  <% end unless recourse.encrypted_attribute?(name) %>
 <% end %>

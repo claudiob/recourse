@@ -1,7 +1,7 @@
-<%= column section: section, header: 'Age' do -%>
-  <%= resource.age -%>
+<%= column header: 'Age' do -%>
+  <%= baby.age -%>
 <% end -%>
 
-<%= column section: section, header: 'Posts' do -%>
-  <%= link_to 'Posts', baby_posts_path(resource) -%>
+<%= column header: 'Posts' do -%>
+  <%= link_to 'Posts', baby_posts_path(baby) -%>
 <% end -%>

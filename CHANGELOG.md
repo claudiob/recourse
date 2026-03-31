@@ -9,6 +9,10 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 * [BREAKING CHANGE] `RecourseController` is now `RecoursesController`
 * [BREAKING CHANGE] "Add" button is now yield in the `content_for :actions`
+* [BREAKING CHANGE] `recourse_positionable?` is no longer supported
+* [Deprecation] `header:` parameter is no longer required in `column`.
+* [Feature] support for nested resources
+* [Feature] support for ransack searches
 
 ## 1.1.0 - 2026-03-24
 

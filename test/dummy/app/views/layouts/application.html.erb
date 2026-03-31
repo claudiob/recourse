@@ -23,6 +23,10 @@
   </head>
 
   <body>
+    <% Recourse.resources.select{|k,v| v[:routes].include? :index }.each do |resource, options| %>
+      <%= nav_link_to resource.to_s.singularize.humanize.pluralize, url_for([options[:module]&.to_sym, resource].compact) %>
+    <% end %>
+
     <%= yield :actions %>
     <%= yield :search %>
     <%= yield %>

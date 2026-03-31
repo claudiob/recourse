@@ -12,10 +12,14 @@ module Recourse
   private
 
     def store_recourses(args, kwargs)
-      routes = Array(kwargs.fetch :only, self.class::Resource.default_actions(false))
-      routes-= Array(kwargs.fetch :except, [])
+      if @scope[:scope_level_resource]
+        Recourse.resources[@scope[:scope_level_resource].name.to_sym][:nested] = args
+      else
+        routes = Array(kwargs.fetch :only, self.class::Resource.default_actions(false))
+        routes-= Array(kwargs.fetch :except, [])
 
-      Recourse.resources.merge! args.to_h { |arg| [arg, { routes: routes }] }
+        Recourse.resources.merge! args.to_h { |arg| [arg, { module: @scope[:module], routes: routes }] }
+      end
     end
 
     def scoped(args, &block)
@@ -23,6 +27,10 @@ module Recourse
 
       parent_module = args.sole
       Proc.new { scope module: parent_module, &block }
+      # :nocov:
+    rescue Enumerable::SoleItemExpectedError
+      raise ArgumentError, 'recourses accepts only one resource if a block is given'
+      # :nocov:
     end
   end
 end

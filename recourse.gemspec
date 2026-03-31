@@ -20,7 +20,6 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency 'rails'
-  spec.add_dependency 'bh'
   spec.add_dependency 'pagy'
   spec.add_dependency 'ransack'
   spec.add_development_dependency 'minitest', '< 6'
