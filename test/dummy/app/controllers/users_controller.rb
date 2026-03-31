@@ -1,2 +1,2 @@
-class UsersController < RecourseController
+class UsersController < RecoursesController
 end
