@@ -39,3 +39,7 @@ module Recourse
     end
   end
 end
+
+ActiveSupport.on_load(:active_record) do
+  extend Recourse::Recoursive
+end

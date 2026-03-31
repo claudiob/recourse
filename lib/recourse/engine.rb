@@ -4,7 +4,8 @@ module Recourse
   class Engine < ::Rails::Engine
     config.to_prepare do
       require 'recourse/routing'
-      require 'recourse/model'
+      require 'recourse/recoursive'
+      require 'recourse/searchable'
     end
   end
 end
