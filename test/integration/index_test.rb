@@ -1,6 +1,17 @@
 require "test_helper"
 
 class IndexTest < ActionDispatch::IntegrationTest
+  test 'makes Recourse.resources available to display a navbar of root-only recourses' do
+    get users_url
+
+    assert_select 'a', text: 'Users'
+    assert_select 'a', text: 'Babies'
+    assert_select 'a', text: 'Fans'
+    assert_select 'a', text: 'Posts'
+    assert_select 'a', text: 'Tasks'
+    assert_not_select 'a', text: 'Words'
+  end
+
   test 'renders a paragraph for a model with no data' do
     get users_url
 
@@ -18,7 +29,7 @@ class IndexTest < ActionDispatch::IntegrationTest
     get fans_url
 
     assert_select 'title', text: 'Fans'
-    assert_select 'th[scope=col]', text: 'ID'
+    assert_select 'th[scope=col]', text: 'id'
     assert_select 'td', text: fans(:first).id.to_s
     assert_select 'span.pagy.info', text: 'Displaying 1 item'
   end
@@ -51,10 +62,10 @@ class IndexTest < ActionDispatch::IntegrationTest
     assert_select 'option', text: 'Stopped'
   end
 
-  test 'renders a nested controller if the resource is nested' do
+  test 'renders a nested controller if the resource is nested. Does not overwrite the title.' do
     get baby_posts_url baby_id: babies(:first).id
 
-    assert_select 'title', text: 'Posts'
+    assert_select 'title', text: 'Dummy'
     assert_select 'p', text: 'No posts.'
   end
 end

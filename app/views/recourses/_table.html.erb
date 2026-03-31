@@ -1,0 +1,35 @@
+<%# locals: (recourses:, pagy: nil, cached: true) -%>
+<% name = @lookup_context.find_template('row', @lookup_context.prefixes, true).short_identifier.split('/')[-2] %>
+<% key = name.singularize.to_sym %>
+
+<%= turbo_frame_tag :results, data: { turbo_action: :advance }, class: 'w-100' do %>
+  <% if recourses.empty? %>
+    <p>No <%= controller_path.split('/').last %>.</p>
+  <% else %>
+    <% cache_if cached, [recourses, (recourses.unscoped.size if cached)].compact do %>
+      <table class='table caption-top table-hover table-responsive'>
+        <thead>
+          <tr>
+            <% @recourse_headers = true %>
+            <%= render 'row', key => recourses.first %>
+          </tr>
+        </thead>
+        <tbody class='table-group-divider'>
+        <% @recourse_headers = false %>
+        <% recourses.each do |recourse| %>
+          <% cache_if (cached && !params.key?(:q)), recourse do %>
+            <tr><%= render 'row', key => recourse %></tr>
+          <% end %>
+        <% end %>
+        </tbody>
+      </table>
+
+      <% if pagy %>
+        <div class='d-flex align-items-center'>
+          <div class='ps-2 flex-grow-1'><%== pagy.info_tag %></div>
+          <div class='pe-2'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

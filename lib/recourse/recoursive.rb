@@ -16,19 +16,14 @@ module Recourse
       true
     end
 
-    # Return whether the model has a position field to use for drag'n'drop sorting.
-    def recourse_positionable?
-      false
-    end
-
     # @return [Boolean] whether Ransack search attributes are defined on the resource.
     def recourse_searchable?
-      ransackable_attributes.any?
+      ransackable_attributes.any? || ransackable_associations.any?
     end
 
     # @return [Boolean] whether Ransack sort attributes are defined on the resource.
     def recourse_sortable?
-       ransortable_attributes.any?
+      ransortable_attributes.any?
     end
   end
 end

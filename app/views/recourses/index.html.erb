@@ -1,4 +1,8 @@
-<% content_for :title, @model.name.pluralize %>
+<% resources = instance_variable_get("@#{controller_path.split('/').last}") || @resources %>
+
+<% content_for :title, controller_path.split('/').last.humanize if @where&.empty? %>
+
+<% model = controller_name.classify.constantize %>
 
 <% content_for :search do %>
   <script>
@@ -11,8 +15,8 @@
     }
     const debouncedSubmit = debounce((form) => form.requestSubmit())
   </script>
-  <%= search_form q: @q, model: @model %>
-<% end if @model.recourse_searchable? %>
+  <%= search_form q: @q, model: model, url: request.path %>
+<% end if model.recourse_searchable? %>
 
 <% content_for :actions do %>
   <% begin %>
@@ -21,7 +25,6 @@
   <% end %>
 <% end %>
 
+<% locals = { @lookup_context.find_template('table', @lookup_context.prefixes, true).short_identifier.split('/')[-2].to_sym => resources } %>
 
-<%= table items: @resources, cached: @model.recourse_cachable?, positioned: @model.recourse_positionable?, pagy: @pagy, empty_label: "No #{@model.name.underscore.pluralize}" do |resource, section| %>
-  <%= render 'row', resource: resource, section: section %>
-<% end %>
+<%= render 'table', locals.merge(pagy: @pagy, cached: model.recourse_cachable?) %>
