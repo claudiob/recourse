@@ -1,2 +1,2 @@
-class BabiesController < RecourseController
+class BabiesController < RecoursesController
 end

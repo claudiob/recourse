@@ -1,12 +1,12 @@
 # Base class for controllers that require admin access
-class RecourseController < ApplicationController
+class RecoursesController < ApplicationController
   helper RecoursiveHelper, SearchableHelper
   include Pagy::Method
 
   def index
     @model = controller_name.classify.constantize
     @pagy, @resources = paginate @model, order: @model.recourse_order, includes: @model.recourse_includes
-    render 'recourse/index'
+    render 'recourses/index'
   end
 
 private

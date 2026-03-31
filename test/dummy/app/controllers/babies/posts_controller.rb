@@ -1,4 +1,4 @@
-class Babies::PostsController < RecourseController
+class Babies::PostsController < RecoursesController
   before_action :set_baby
 
   def index

@@ -1,2 +1,2 @@
-class PostsController < RecourseController
+class PostsController < RecoursesController
 end

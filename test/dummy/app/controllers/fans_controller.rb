@@ -1,2 +1,2 @@
-class FansController < RecourseController
+class FansController < RecoursesController
 end

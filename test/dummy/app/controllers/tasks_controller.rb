@@ -1,2 +1,2 @@
-class TasksController < RecourseController
+class TasksController < RecoursesController
 end
