@@ -4,19 +4,25 @@ module Recourse
   module Routing
     # This method is equivalent to Rails `resources` with the added bonus that we store
     # the name of these administered resources so we can display them to admins in the navbar.
-    def recourses(*administered_resources, concerns: nil, **options, &block)
-      administered_resources.each { |resource| Recourse.resources[resource] = options }
+    def recourses(*args, **kwargs, &block)
+      store_recourses args, kwargs
+      resources(*args, **kwargs, &scoped(args, &block))
+    end
 
-      if block_given?
-        error = 'recourses accepts only one resource if a block is given'
-        raise ArgumentError, error unless administered_resources.one?
-        administered_resource = administered_resources.sole
-        resources administered_resource, concerns: concerns, **options do
-          scope module: administered_resource, &block
-        end
-      else
-        resources *administered_resources, concerns: concerns, **options, &block
-      end
+  private
+
+    def store_recourses(args, kwargs)
+      routes = Array(kwargs.fetch :only, self.class::Resource.default_actions(false))
+      routes-= Array(kwargs.fetch :except, [])
+
+      Recourse.resources.merge! args.to_h { |arg| [arg, { routes: routes }] }
+    end
+
+    def scoped(args, &block)
+      return unless block_given?
+
+      parent_module = args.sole
+      Proc.new { scope module: parent_module, &block }
     end
   end
 end
