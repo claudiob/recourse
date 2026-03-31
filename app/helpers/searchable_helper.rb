@@ -1,4 +1,4 @@
-# A collection of helper methods used for navigation link in the admin-only section
+# A collection of helper methods used to search resources with Ransack.
 module SearchableHelper
   # Renders a form with a field to search within +model+ that uses +placeholder+.
   # @param [String] q the search query.

@@ -7,13 +7,6 @@ module Recourse
       %i[]
     end
 
-    # Return the actions available for the model (among :new, :edit, :destroy)
-    def recourse_actions
-      default = %i[new edit destroy]
-      options = Recourse.resources[name.underscore.pluralize.to_sym]
-      (Array(options.fetch :only, default) & default) - Array(options.fetch :except, [])
-    end
-
     # Return the fields to .order when loading all the models.
     def recourse_order
     end
