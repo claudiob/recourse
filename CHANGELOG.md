@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 1.2.0 - 2026-03-31
+
+* [BREAKING CHANGE] `RecourseController` is now `RecoursesController`
+* [Feature] support for nested resources
+* [Feature] support for ransack searches
+
 ## 1.1.0 - 2026-03-24
 
 * [BREAKING CHANGE] `recourses` only accepts one resource if a block is provided
