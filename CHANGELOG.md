@@ -5,16 +5,16 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
-## 1.3.0 - 2026-04-03
-
-* [BREAKING CHANGE] Rename `search_placeholder` to `search_prompt`
-
-## 1.2.1 - 2026-04-02
+## 1.3.1 - 2026-04-06
 
 * [Fix] Use a different caching key based on the controller path
 
 Posts could be displayed differently under /users/:id/posts or under /topics/:id/posts
 so they should be cached separately.
+
+## 1.3.0 - 2026-04-03
+
+* [BREAKING CHANGE] Rename `search_placeholder` to `search_prompt`
 
 ## 1.2.0 - 2026-03-31
 
