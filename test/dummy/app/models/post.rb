@@ -15,7 +15,7 @@ class Post < ApplicationRecord
   end
 
   # Returns the placeholder for the field to search specialtys with Ransack.
-  def self.search_placeholder
+  def self.search_prompt
     'Filter by content'
   end
 end

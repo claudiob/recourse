@@ -24,7 +24,7 @@ private
   end
 
   def search_field_for(form, model:)
-    form.search_field model.search_field, search_field_params(placeholder: model.search_placeholder)
+    form.search_field model.search_field, search_field_params(placeholder: model.search_prompt)
   end
 
   def search_form_params(url:)

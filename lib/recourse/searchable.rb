@@ -22,7 +22,7 @@ module Recourse
     end
 
     # @note to be overriden by subclasses -- the placeholder for the field to search with.
-    def search_placeholder
+    def search_prompt
     end
 
     # @note to be overriden by subclasses -- the name of the field to filter by.
