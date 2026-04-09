@@ -6,7 +6,7 @@
   <% if recourses.empty? %>
     <p>No <%= controller_path.split('/').last %>.</p>
   <% else %>
-    <% cache_if cached, [recourses, (recourses.unscoped.size if cached), controller_path].compact do %>
+    <%# cache_if cached, [recourses, (recourses.unscoped.size if cached), controller_path].compact do %>
       <table class='table caption-top table-hover table-responsive'>
         <thead>
           <tr>
@@ -17,9 +17,9 @@
         <tbody class='table-group-divider'>
         <% @recourse_headers = false %>
         <% recourses.each do |recourse| %>
-          <% cache_if (cached && !params.key?(:q)), [recourse, controller_path] do %>
+          <%# cache_if (cached && !params.key?(:q)), [recourse, controller_path] do %>
             <tr><%= render 'row', key => recourse %></tr>
-          <% end %>
+          <%# end %>
         <% end %>
         </tbody>
       </table>
@@ -30,6 +30,6 @@
           <div class='pe-2'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
         </div>
       <% end %>
-    <% end %>
+    <%# end %>
   <% end %>
 <% end %>

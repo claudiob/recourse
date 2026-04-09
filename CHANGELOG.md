@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 1.3.2 - 2026-04-09
+
+* Temporarily disable caching
+
 ## 1.3.1 - 2026-04-06
 
 * [Fix] Use a different caching key based on the controller path
