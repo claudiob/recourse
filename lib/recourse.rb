@@ -9,5 +9,5 @@ Pagy::OPTIONS[:limit] = 15
 module Recourse
   # Return all the administered resources.
   mattr_reader :resources
-  @@resources = {}
+  @@resources = Hash.new { |hash, key| hash[key] = { routes: [] } }
 end
