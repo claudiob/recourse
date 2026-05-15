@@ -26,7 +26,7 @@
 
       <% if pagy %>
         <div class='d-flex align-items-center'>
-          <div class='ps-2 flex-grow-1'><%== pagy.info_tag %></div>
+          <div class='ps-2 flex-grow-1'><%== pagy.info_tag.gsub(/of (\d*?) in total/) { "of #{number_with_delimiter $1} in total" } %></div>
           <div class='pe-2'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
         </div>
       <% end %>
