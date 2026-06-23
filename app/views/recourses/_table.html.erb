@@ -1,5 +1,5 @@
 <%# locals: (recourses:, pagy: nil, cached: true) -%>
-<% name = @lookup_context.find_template('row', @lookup_context.prefixes, true).short_identifier.split('/')[-2] %>
+<% name = @lookup_context.find('row', @lookup_context.prefixes, true).short_identifier.split('/')[-2] %>
 <% key = name.singularize.to_sym %>
 
 <%= turbo_frame_tag :results, data: { turbo_action: :advance }, class: 'w-100' do %>

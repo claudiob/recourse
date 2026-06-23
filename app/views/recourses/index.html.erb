@@ -25,6 +25,6 @@
   <% end %>
 <% end %>
 
-<% locals = { @lookup_context.find_template('table', @lookup_context.prefixes, true).short_identifier.split('/')[-2].to_sym => resources } %>
+<% locals = { @lookup_context.find('table', @lookup_context.prefixes, true).short_identifier.split('/')[-2].to_sym => resources } %>
 
 <%= render 'table', locals.merge(pagy: @pagy, cached: model.recourse_cachable?) %>
