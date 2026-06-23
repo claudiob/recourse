@@ -1,6 +1,6 @@
 # Base class for recoursive controllers.
 class RecoursesController < ApplicationController
-  helper RecoursiveHelper, SearchableHelper
+  helper NavigableHelper, RecoursiveHelper, SearchableHelper
   include Pagy::Method
 
   def index
