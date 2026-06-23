@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 1.4.0 - 2026-06-23
+
+* [Feature] Add navigation_links method
+
 ## 1.3.5 - 2026-05-15
 
 * [Feature] Display pagy info with number delimiters
