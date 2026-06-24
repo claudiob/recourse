@@ -1,6 +1,6 @@
 <% resources = instance_variable_get("@#{controller_path.split('/').last}") || @resources %>
 
-<% content_for :title, controller_path.split('/').last.humanize if @where&.empty? %>
+<% content_for :title, controller_path.split('/').last.singularize.humanize.pluralize if @where&.empty? %>
 
 <% model = controller_name.classify.constantize %>
 

@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 1.4.2 - 2026-06-24
+
+* [Feature] Add common acronyms, e.g.: API, CRM, ZIP
+
 ## 1.4.1 - 2026-06-23
 
 * [Fix] Remove deprecated LookupContext.find_template!
