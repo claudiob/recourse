@@ -16,6 +16,7 @@ module NavigableHelper
     'Logout' => 'box-arrow-right',
     'Offer questions' => 'gift',
     'Optimizations' => 'sliders',
+    'Platforms' => 'plugin',
     'Prompts' => 'terminal',
     'Providers' => 'people-fill',
     'Satisfaction questions' => 'emoji-smile',
