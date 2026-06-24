@@ -7,6 +7,7 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## 1.4.2 - 2026-06-24
 
+* [Feature] Add common recourse icons
 * [Feature] Add common acronyms, e.g.: API, CRM, ZIP
 
 ## 1.4.1 - 2026-06-23
