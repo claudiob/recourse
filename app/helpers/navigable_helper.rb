@@ -6,6 +6,7 @@ module NavigableHelper
     'Apps' => 'window',
     'Assessments' => 'clipboard-check',
     'Bookings' => 'calendar-check',
+    'Brands' => 'buildings',
     'Campaigns' => 'megaphone',
     'Conversations' => 'chat-dots',
     'Counties' => 'map',
