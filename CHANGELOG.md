@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 2.0.1 - 2026-07-13
+
+* [Fix] Improve search bar responsiveness
+
 ## 2.0.0 - 2026-07-13
 
 * [BREAKING CHANGE] Restyle table and search field to take advantage of Bootstrap 6

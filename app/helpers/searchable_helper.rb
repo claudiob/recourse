@@ -33,7 +33,7 @@ private
 
   def search_form_params(url:)
     {
-      url: url, class: 'col-4 d-flex', role: 'search',
+      url: url, class: 'col-8 sm:col-6 md:col-4 d-flex pe-4', role: 'search',
       data: { turbo_frame: :results, turbo_action: :advance },
     }
   end
