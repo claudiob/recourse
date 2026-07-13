@@ -5,12 +5,12 @@ module NavigableHelper
     'Answers' => 'question-circle', 'Apps' => 'window', 'Assessments' => 'clipboard-check',
     'Bookings' => 'calendar-check', 'Brands' => 'buildings', 'Campaigns' => 'megaphone',
     'Conversations' => 'chat-dots', 'Counties' => 'map', 'Episodes' => 'collection-play',
-    'Evaluations' => 'speedometer2', 'Franchises' => 'shop', 'Logout' => 'box-arrow-right',
-    'Markets' => 'pin-map', 'Offer questions' => 'gift', 'Optimizations' => 'sliders',
-    'Platforms' => 'plugin', 'Prompts' => 'terminal', 'Providers' => 'people-fill',
-    'Satisfaction questions' => 'emoji-smile', 'Searches' => 'search', 'Settings' => 'gear',
-    'Specialties' => 'award', 'Specialty matches' => 'award', 'Verticals' => 'bar-chart',
-    'ZIPs' => 'geo-alt-fill',
+    'Evaluations' => 'speedometer2', 'Franchises' => 'shop', 'Home' => 'home',
+    'Logout' => 'box-arrow-right', 'Markets' => 'pin-map', 'Offer questions' => 'gift',
+    'Optimizations' => 'sliders', 'Platforms' => 'plugin', 'Prompts' => 'terminal',
+    'Providers' => 'people-fill', 'Satisfaction questions' => 'emoji-smile', 'Searches' => 'search',
+    'Settings' => 'gear', 'Specialties' => 'award', 'Specialty matches' => 'award',
+    'Verticals' => 'bar-chart', 'ZIPs' => 'geo-alt-fill',
   }
 
   # @return [Array<String, String>] caption and URL of each link a top-level resource.
@@ -24,8 +24,8 @@ module NavigableHelper
 private
 
   # @return [String] a meaningful icon based on the resource name, or a generic one if not found.
-  def navigation_icon_for(caption)
-    icon = NAVIGATION_ICONS.fetch caption, 'app'
-    tag.i class: "bi bi-#{icon}"
+  def navigation_icon_for(caption, style: nil)
+    icon = NAVIGATION_ICONS.fetch caption, 'house-door-fill'
+    tag.i class: "bi bi-#{icon}", style: style
   end
 end

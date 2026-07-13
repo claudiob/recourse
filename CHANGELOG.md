@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 2.0.0 - 2026-07-13
+
+* [BREAKING CHANGE] Restyle table and search field to take advantage of Bootstrap 6
+
 ## 1.4.6 - 2026-07-10
 
 * [Feature] Replace "Benches" with "Markets" icons

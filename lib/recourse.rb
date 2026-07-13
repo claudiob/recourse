@@ -3,7 +3,7 @@ require 'ransack'
 require 'recourse/engine'
 
 # @see https://ddnexus.github.io/pagy/resources/initializer/
-Pagy::OPTIONS[:limit] = 15
+Pagy::OPTIONS[:limit] = 20
 
 # A module to manage administered resources.
 module Recourse

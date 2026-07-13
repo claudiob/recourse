@@ -7,22 +7,30 @@
     <p>No <%= controller_path.split('/').last %>.</p>
   <% else %>
     <%# cache_if cached, [recourses, (recourses.unscoped.size if cached), controller_path].compact do %>
-      <table class='table caption-top table-hover table-responsive'>
-        <thead>
-          <tr>
-            <% @recourse_headers = true %>
-            <%= render 'row', key => recourses.first %>
-          </tr>
-        </thead>
-        <tbody class='table-group-divider'>
-        <% @recourse_headers = false %>
-        <% recourses.each do |recourse| %>
-          <%# cache_if (cached && !params.key?(:q)), [recourse, controller_path] do %>
-            <tr><%= render 'row', key => recourse %></tr>
-          <%# end %>
-        <% end %>
+      <div class='table-responsive'>
+        <table class='table caption-top table-hover align-middle md:table-stacked'>
+          <thead>
+            <tr>
+              <% @recourse_headers = true %>
+              <%= render 'row', key => recourses.first %>
+              <!-- <th scope='col' class='text-end'>Edit</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <% @recourse_headers = false %>
+            <% recourses.each do |recourse| %>
+              <%# cache_if (cached && !params.key?(:q)), [recourse, controller_path] do %>
+                <tr>
+                  <%= render 'row', key => recourse %>
+                  <%#= column header: 'Edit', class: 'text-end' do %>
+                    <%#= edit_link_to action: :edit, id: 1 %>
+                  <%# end %>
+                </tr>
+              <%# end %>
+            <% end %>
         </tbody>
-      </table>
+        </table>
+      </div>
 
       <% if pagy %>
         <div class='d-flex align-items-center'>

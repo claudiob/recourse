@@ -24,19 +24,23 @@ private
   end
 
   def search_field_for(form, model:)
-    form.search_field model.search_field, search_field_params(placeholder: model.search_prompt)
+    adorn = tag.svg width: 16, height: 16, viewBox: '0 0 16 16', xmlns: 'http://www.w3.org/2000/svg' do
+      tag.path d: 'M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'
+    end
+    field = form.search_field model.search_field, search_field_params(placeholder: model.search_prompt)
+    tag.div safe_join([adorn, field]), class: 'form-control form-control-sm form-adorn'
   end
 
   def search_form_params(url:)
     {
-      url: url, class: 'col-8 col-sm-6 col-md-4 d-flex', role: 'search',
+      url: url, class: 'col-4 d-flex', role: 'search',
       data: { turbo_frame: :results, turbo_action: :advance },
     }
   end
 
   def search_field_params(placeholder:)
     {
-      class: 'form-control form-control-sm flex-grow-1', placeholder: placeholder,
+      class: 'form-ghost', placeholder: placeholder,
       oninput: 'debouncedSubmit(this.form)', aria: { label: 'Search' }
     }
   end
