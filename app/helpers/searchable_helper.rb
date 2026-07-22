@@ -10,9 +10,7 @@ module SearchableHelper
   end
 
   # Highlights the search query within the text of the matched content.
-  def search_highlight(content, model:)
-    highlight content.to_s, params.dig(:q, model.search_field)
-  end
+  def search_highlight(content, model:) = highlight content.to_s, params.dig(:q, model.search_field)
 
 private
 

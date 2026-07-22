@@ -27,6 +27,9 @@ module Recourse
 
     # @note to be overriden by subclasses -- the name of the field to filter by.
     def filter_fields = {}
+
+    # Returns the names of all the search and filter fields.
+    def searchable_fields = [search_field, filter_fields.keys]
   end
 end
 
