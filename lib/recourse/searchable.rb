@@ -26,16 +26,7 @@ module Recourse
     end
 
     # @note to be overriden by subclasses -- the name of the field to filter by.
-    def filter_field
-    end
-
-    # @note to be overriden by subclasses -- the prompt for the field to filter by.
-    def filter_prompt
-    end
-
-    # @note to be overriden by subclasses -- the values for the field to filter by.
-    def filter_choices
-    end
+    def filter_fields = {}
   end
 end
 

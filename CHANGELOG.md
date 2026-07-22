@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 3.0.0 - 2026-07-22
+
+* [BREAKING CHANGE] Replace single filter_field with multiple filter_fields
+
 ## 2.0.2 - 2026-07-20
 
 * [Feature] Add "Contract", "Profile", "CRM" icons

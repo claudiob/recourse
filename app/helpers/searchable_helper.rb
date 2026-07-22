@@ -5,7 +5,7 @@ module SearchableHelper
   # @param [ApplicationRecord] model the model of each object returned by the search
   def search_form(q:, model:, url: url_for(model))
     search_form_for(q, search_form_params(url: url)) do |form|
-      safe_join [filter_field_for(form, model:), search_field_for(form, model:)].compact
+      safe_join [*filter_fields_for(form, model:), search_field_for(form, model:)].compact
     end
   end
 
@@ -16,14 +16,16 @@ module SearchableHelper
 
 private
 
-  def filter_field_for(form, model:)
-    method = model.filter_field
-    choices = model.filter_choices
-    options = { prompt: model.filter_prompt }
-    form.select method, choices, options, filter_field_params if method && choices
+  def filter_fields_for(form, model:)
+    selects = model.filter_fields.map do |method, options = {}|
+      choices = options.delete :choices
+      form.select method, choices, options, filter_field_params if choices
+    end
+    safe_join selects.compact
   end
 
   def search_field_for(form, model:)
+    return unless model.search_field
     adorn = tag.svg width: 16, height: 16, viewBox: '0 0 16 16', xmlns: 'http://www.w3.org/2000/svg' do
       tag.path d: 'M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'
     end
@@ -33,7 +35,7 @@ private
 
   def search_form_params(url:)
     {
-      url: url, class: 'col-8 sm:col-6 md:col-4 d-flex pe-4', role: 'search',
+      url: url, class: 'col-6 d-flex pe-4', role: 'search',
       data: { turbo_frame: :results, turbo_action: :advance },
     }
   end
