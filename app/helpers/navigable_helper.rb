@@ -4,7 +4,7 @@ module NavigableHelper
   NAVIGATION_ICONS = {
     'Answers' => 'question-circle', 'Apps' => 'window', 'Assessments' => 'clipboard-check',
     'Bookings' => 'calendar-check', 'Brands' => 'buildings', 'Campaigns' => 'megaphone',
-    'Contract' => 'file-earmark-check', 'CRM' => 'plugin',
+    'Contacts' => 'person-rolodex', 'Contract' => 'file-earmark-check', 'CRM' => 'plugin',
     'Conversations' => 'chat-dots', 'Counties' => 'map', 'Episodes' => 'collection-play',
     'Evaluations' => 'speedometer2', 'Franchises' => 'shop', 'Home' => 'home',
     'Logout' => 'box-arrow-right', 'Markets' => 'pin-map', 'Offer questions' => 'gift',
