@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 3.0.3 - 2026-07-24
+
+* [Feature] Add "Agents" icon
+
 ## 3.0.2 - 2026-07-23
 
 * [Feature] Add "Contacts" icon

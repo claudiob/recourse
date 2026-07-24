@@ -2,6 +2,7 @@
 module NavigableHelper
   # Boostrap icons to be used for specific resources.
   NAVIGATION_ICONS = {
+    'Agents' => 'robot',
     'Answers' => 'question-circle', 'Apps' => 'window', 'Assessments' => 'clipboard-check',
     'Bookings' => 'calendar-check', 'Brands' => 'buildings', 'Campaigns' => 'megaphone',
     'Contacts' => 'person-rolodex', 'Contract' => 'file-earmark-check', 'CRM' => 'plugin',
@@ -10,8 +11,9 @@ module NavigableHelper
     'Logout' => 'box-arrow-right', 'Markets' => 'pin-map', 'Offer questions' => 'gift',
     'Optimizations' => 'sliders', 'Platforms' => 'plugin',
     'Profile' => 'person-circle', 'Prompts' => 'terminal',
-    'Providers' => 'people-fill', 'Satisfaction questions' => 'emoji-smile', 'Searches' => 'search',
-    'Settings' => 'gear', 'Specialties' => 'award', 'Specialty matches' => 'award',
+    'Providers' => 'briefcase', 'Satisfaction questions' => 'emoji-smile', 'Searches' => 'search',
+    'Settings' => 'gear', 'Sources'=> 'signpost',
+    'Specialties' => 'award', 'Specialty matches' => 'award',
     'Verticals' => 'bar-chart', 'ZIPs' => 'geo-alt-fill',
   }
 
