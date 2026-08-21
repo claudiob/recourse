@@ -8,6 +8,7 @@ module NavigableHelper
     'Contacts' => 'person-rolodex', 'Contract' => 'file-earmark-check', 'CRM' => 'plugin',
     'Conversations' => 'chat-dots', 'Counties' => 'map', 'Episodes' => 'collection-play',
     'Evaluations' => 'speedometer2', 'Franchises' => 'shop', 'Home' => 'home',
+    'Inquiries' => 'magic',
     'Logout' => 'box-arrow-right', 'Markets' => 'pin-map', 'Offer questions' => 'gift',
     'Optimizations' => 'sliders', 'Platforms' => 'plugin',
     'Profile' => 'person-circle', 'Prompts' => 'terminal',
