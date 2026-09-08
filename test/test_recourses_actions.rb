@@ -53,7 +53,9 @@ class TestRecoursesActions < IntegrationCase
   def test_a_route_named_exit_earns_the_sidebar_a_way_out
     visit '/people'
 
-    assert_includes body, %(action="/session"><input type="hidden" name="_method" value="delete")
+    assert_includes body,
+                    %(<form data-turbo="false" class="button_to" method="post" action="/session">)
+    assert_includes body, %(<input type="hidden" name="_method" value="delete")
     assert_includes body, "<i class='bi bi-box-arrow-right'></i>"
     assert_includes body, '>Log out</span>'
   end

@@ -13,6 +13,10 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   either under a rounded corner.
 
 * [Fix] A bookmark click no longer marks the row green
+* [Fix] The log-out button is submitted by the browser, not by Turbo
+
+  A log out ends with a redirect to wherever the host signs people in, which is
+  another origin a fetch cannot follow, so the click left the page where it was.
 
   The kept tint taking or leaving is the whole report.
 
