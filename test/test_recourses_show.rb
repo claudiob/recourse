@@ -50,9 +50,10 @@ class TestRecoursesShow < IntegrationCase
     visit "/people/#{person.id}"
 
     assert_includes body, %(href="/people/#{person.id}/places">)
-    assert_includes body, "#{person.places_count} places"
+    # The words wrapped, so a phone keeps the icon and the figure and drops them.
+    assert_includes body, %(#{person.places_count} <span class="recourse-tab-word">places</span>)
     assert_includes body, %(href="/people/#{person.id}/memos">)
-    assert_includes body, '</i> Memos</a>'
+    assert_includes body, '</i> <span class="recourse-tab-word">Memos</span></a>'
     # The tab order is the routes file's: places was nested first. By href, since a
     # bare action's button carries a path of its own before the tabs are drawn.
     assert_operator body.index(%(href="/people/#{person.id}/places")), :<,

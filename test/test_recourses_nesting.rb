@@ -54,7 +54,8 @@ class TestRecoursesNesting < IntegrationCase
     assert_includes body, %(href="/teams/#{team.id}/edit")
     # The namespace leads the tab, so two nestings of one model read apart — and
     # it is the routes that say so, not the model, which knows nothing of either.
-    assert_includes body, %(#{team.places_count} visited places)
+    assert_includes body,
+                    %(#{team.places_count} <span class="recourse-tab-word">visited places</span>)
     assert_includes body, %(active" aria-current="page" href="/teams/#{team.id}/visited/places")
     # And the tab beside it, for a nested index no `has_many` on Team answers to:
     # named after the route, with no count and no icon, because nothing else knows.

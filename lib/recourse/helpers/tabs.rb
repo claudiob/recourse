@@ -29,27 +29,30 @@ module Recourse
         [lead.presence&.upcase_first, title].compact.join ' '
       end
 
-      # The icon is the counted model's own, whatever leads the words beside it.
+      # The icon is the counted model's own, whatever leads the words beside it. The
+      # words are wrapped where a picture or a figure stands beside them, so a phone,
+      # which has room for neither, keeps the picture and the figure and drops the words.
       def association_tab_label(record, association, namespace)
         icon = Recourse.known_model_icon association.klass
+        count = tab_count record, association
+        words = tab_words association, namespace, count
+        words = tag.span words, class: 'recourse-tab-word' if icon || count
 
-        words = [icon && tag.i(class: "bi bi-#{icon}"), tab_name(record, association, namespace)]
-
-        safe_join words.compact, ' '
+        safe_join [icon && tag.i(class: "bi bi-#{icon}"), count, words].compact, ' '
       end
 
-      # `8 ZIPs` where the record keeps a count — read off the record itself, no
-      # query, like the column — and the bare `ZIPs` where it keeps none. A namespace
-      # the routes drew leads either of those, so two nestings of one model read
-      # apart: `10 visited places` beside `4 booked places`, `Visited places` beside
-      # `Booked places`. Whatever leads earns the downcase, and a title that leads
-      # keeps its capital — which is what puts these beside Show and Edit.
-      def tab_name(record, association, namespace)
-        count = tab_count record, association
-        lead = [count, namespace_words(namespace)].compact_blank.join ' '
-        title = Recourse.model_title association.klass, count: count, lower: lead.present?
+      # `ZIPs` where the record keeps no count, and `places` after the `8` where it
+      # does — read off the record itself, no query, like the column. A namespace the
+      # routes drew leads either, so two nestings of one model read apart: `10 visited
+      # places` beside `4 booked places`, `Visited places` beside `Booked places`.
+      # Whatever leads earns the downcase, and a title that leads keeps its capital —
+      # which is what puts these beside Show and Edit.
+      def tab_words(association, namespace, count)
+        lead = namespace_words namespace
+        lead = lead.upcase_first unless count
+        title = Recourse.model_title association.klass, count: count, lower: count || lead.present?
 
-        [lead.presence&.upcase_first, title].compact.join ' '
+        [lead.presence, title].compact.join ' '
       end
 
       def tab_count(record, association)

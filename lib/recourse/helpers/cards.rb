@@ -60,7 +60,9 @@ module Recourse
       end
 
       def tab_label(action)
-        safe_join [icon_tag(Actions::ICONS[action]), t("recourse.#{action}")], ' '
+        word = tag.span t("recourse.#{action}"), class: 'recourse-tab-word'
+
+        safe_join [icon_tag(Actions::ICONS[action]), word], ' '
       end
     end
   end
