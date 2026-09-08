@@ -21,6 +21,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 * [Fix] The footer's sentence stands above the pages on a phone rather than beside them
 * [Fix] A filter's menu drops over the first rows of the table rather than under them
+* [Feature] A date or a time is headed `Created` and `Updated`, not `Created at` and `Updated at`
+* [Fix] A touch screen gets no hover tint on a table's rows
 
 ## 4.2.0 - 2026-09-08
 

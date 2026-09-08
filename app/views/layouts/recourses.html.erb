@@ -107,6 +107,15 @@
          scrolled to it is a page Safari zooms out of and draws the navbar short on. */
       html, .recourse-shell { overflow-x: hidden; }
 
+      /* A finger does not hover. The tint a pointer leaves on the row under it would
+         stay on whatever row was last touched, so a touch screen gets none. */
+      @media (hover: none) {
+        .table-hover > tbody > tr:hover > * {
+          --bs-table-color-state: initial;
+          --bs-table-bg-state: initial;
+        }
+      }
+
       /* The navbar and the sidebar stack over the main column: a menu opened from a
          filter or a link's tooltip drops over the first rows rather than under them. */
       .recourse-shell > nav, .recourse-sidebar { position: relative; z-index: 2; }
