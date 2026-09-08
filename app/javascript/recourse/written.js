@@ -1,7 +1,5 @@
-// The mark a write leaves on the row it landed on, and how long it stands for. Two
-// things write rows here and both say so this way: a create or an update, which has a
-// toast to keep time with, and the square that keeps a row, which has none — so the
-// marking is here and the clock belongs to whoever calls it.
+// The mark a create or an update leaves on the row it landed on, and how long the toast
+// saying so stands — the one clock, which the toast controller reads too.
 export const DELAY = 2000
 
 // Marked, and handed back the way to let it go. Letting go swaps one class for the
@@ -19,11 +17,4 @@ export function mark(row) {
     row.classList.remove('recourse-written')
     row.classList.add('recourse-written-out')
   }
-}
-
-// And the same, on a clock of its own, for a write with no message to keep time with.
-export function marked(row) {
-  const fade = mark(row)
-
-  setTimeout(fade, DELAY)
 }

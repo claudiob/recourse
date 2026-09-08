@@ -1,6 +1,5 @@
 import { Controller } from '/recourse/stimulus.js'
 import { flash } from '/recourse/flash.js'
-import { marked } from '/recourse/written.js'
 
 // The square that keeps a row, answered before the server does. The icon flips under
 // the cursor and the request goes in the background, so the table is never redrawn and
@@ -78,13 +77,11 @@ export default class extends Controller {
       })
       if (!response.ok) return this.revert(kept)
 
-      // Two halves of one report, and the reason there is no toast. The tint lasts and
-      // says which rows are kept; the mark passes and says this one was written just
-      // now — the same outline a create or an update leaves while its message stands.
-      // The icon flipped on the click and would have flipped under a request that
-      // never landed, so both are the half only the server can give.
+      // The report, and the reason there is no toast: the row takes or loses its tint,
+      // which says which rows are kept. The icon flipped on the click and would have
+      // flipped under a request that never landed, so this is the half only the server
+      // can give.
       this.row?.classList.toggle('recourse-kept', kept)
-      marked(this.row)
     } catch {
       this.revert(kept)
     }

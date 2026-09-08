@@ -962,11 +962,9 @@ before writing or editing any layout, view or partial.
   lands where the click happened rather than in a corner of the page, and a click
   that never reached the server never colors anything. Dropping a kept row reads the
   same way round: the tint stays until the delete is actually written.
-- A kept square leaves the same mark a create or an update leaves, through the same
-  `written.js`: the tint lasts and says which rows are kept, the mark passes and says
-  this row was written just now. With no toast to keep time with, the square runs the
-  shared `DELAY` on a clock of its own — one number, in one module, which is also the
-  toast controller's own default.
+- Nothing more than the tint. The mark a create or an update leaves on its row would
+  land on top of a tint that has just changed, saying a second time what the first
+  already said.
 - Which is why a click that *worked* says nothing at all. There is no success toast —
   the row is the message, and a toast per click on a column built for clicking twenty
   times would be twenty toasts. Only a failure speaks: the square goes back and the
