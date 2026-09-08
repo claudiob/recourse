@@ -101,6 +101,12 @@
         --bs-breadcrumb-link-hover-color: var(--bs-breadcrumb-link-active-color);
       }
 
+      /* Nothing here is meant to be wider than the window: the one thing that is, a
+         table, scrolls inside its own wrapper. Safari lays a stacked table's hidden
+         header row out at its full width all the same, and a page that can be
+         scrolled to it is a page Safari zooms out of and draws the navbar short on. */
+      html, .recourse-shell { overflow-x: hidden; }
+
       /* An action column is as wide as a row is tall — an icon in a square — and a
          counter column starts at the same square, widening only when a figure like
          38,405 needs the room: a table laying out to 100% reads the width as a
@@ -114,6 +120,19 @@
           white-space: nowrap;
           text-align: center;
         }
+      }
+
+      /* Stacked, a cell reads as one line — `Estimate hi: 600`, the heading semibold
+         and the value after it — where Bootstrap puts the heading on a line of its own.
+         And a value with no space in it — an address, a token — breaks rather than
+         widening the row past the phone. */
+      @container (width < 576px) {
+        .sm\:table-stacked > tbody > tr > td[data-cell]:not(:first-child)::before {
+          content: attr(data-cell) ': ';
+          display: inline;
+        }
+        .sm\:table-stacked > tbody > tr > td:not(:first-child) + td::before { margin-block-start: 0; }
+        .sm\:table-stacked > tbody > tr > td { overflow-wrap: anywhere; }
       }
 
       /* A counter says what it counts in one of two ways, and the table's own width is
