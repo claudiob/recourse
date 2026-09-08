@@ -32,13 +32,16 @@ module Recourse
       # The icon is the counted model's own, whatever leads the words beside it. The
       # words are wrapped where a picture or a figure stands beside them, so a phone,
       # which has room for neither, keeps the picture and the figure and drops the words.
+      # A figure and its words share one element: the link lays its children out with a
+      # gap, and two of them would stand a gap and a space apart.
       def association_tab_label(record, association, namespace)
         icon = Recourse.known_model_icon association.klass
         count = tab_count record, association
         words = tab_words association, namespace, count
         words = tag.span words, class: 'recourse-tab-word' if icon || count
+        words = tag.span safe_join([count, words], ' ') if count
 
-        safe_join [icon && tag.i(class: "bi bi-#{icon}"), count, words].compact, ' '
+        safe_join [icon && tag.i(class: "bi bi-#{icon}"), words].compact, ' '
       end
 
       # `ZIPs` where the record keeps no count, and `places` after the `8` where it
