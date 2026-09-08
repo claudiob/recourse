@@ -1,4 +1,4 @@
-<%# locals: (name:, id:, placeholder:, invalid: false, feedback: nil, described: nil, required: false, label: nil, counter: nil, recourses: nil, values: [], multiple: false, selected: [], aria_label: nil, small: false, all: nil, none: nil, shown: nil, key: nil, grouped: nil) -%>
+<%# locals: (name:, id:, placeholder:, invalid: false, feedback: nil, described: nil, required: false, label: nil, counter: nil, recourses: nil, values: [], multiple: false, selected: [], aria_label: nil, small: false, all: nil, none: nil, shown: nil) -%>
 <button class='form-control<%= ' form-control-sm' if small %><%= ' is-invalid' if invalid %> combobox-toggle' type='button' id='<%= id %>'
         data-bs-toggle='combobox' data-bs-name='<%= name %>' data-controller='combobox'
         data-combobox-more-value='<%= t 'recourse.more' %>'
@@ -38,16 +38,8 @@
       an enum has a dozen of them and they are already in memory. Nor is a table with
       no timestamp on it, which has no version for a key to carry. -%>
   <% if recourses -%>
-    <% cache_if keepable_menu?(recourses), [recourses, multiple, selected, key, grouped] do %>
-      <% heading = nil -%>
+    <% cache_if keepable_menu?(recourses), [recourses, multiple, selected] do %>
       <% recourses.each do |recourse| %>
-        <%# A heading over each run of options sharing the value `grouped` names — the
-            state over its counties — so the rows want ordering by it first. It carries
-            the key too, so narrowing hides the heading along with its options. -%>
-        <% if grouped && recourse.attributes[grouped] != heading -%>
-          <% heading = recourse.attributes[grouped] -%>
-          <div class='menu-header' <%= tag.attributes 'data-narrow-key': (recourse.attributes[key] if key) %>><%= heading %></div>
-        <% end -%>
         <% chosen = selected.include? recourse.id.to_s -%>
         <%# In the menu but not on it: an option accounting for none of the rows being
             filtered is `d-none` until `All` asks for it. One already ticked stays put,
@@ -55,10 +47,8 @@
         <% empty = counter && !chosen && recourse.attributes[counter].to_i.zero? -%>
         <%# The name in a `.menu-item-content > span`, which is what the plugin copies into
             the closed box: a count belongs in the menu and not on the box. Its wrapper
-            is `flex: 1`, so the count needs no margin of its own to sit at the right.
-            `key` names the column another menu narrows this one by, written on each
-            option and each heading for the `narrow` controller to read. -%>
-        <button class='menu-item<%= ' selected' if chosen %><%= ' d-none' if empty %>' type='button' data-bs-value='<%= recourse.id %>' aria-selected='<%= chosen %>' <%= tag.attributes 'data-narrow-key': (recourse.attributes[key] if key) %>><span class='menu-item-content'><span><%= recourse.attributes[label] %></span></span><% if counter %><span class='recourse-count fg-2'><%= number_with_delimiter recourse.attributes[counter] %></span><% end %><% if multiple %><i class='bi bi-check menu-item-check'></i><% end %></button>
+            is `flex: 1`, so the count needs no margin of its own to sit at the right. -%>
+        <button class='menu-item<%= ' selected' if chosen %><%= ' d-none' if empty %>' type='button' data-bs-value='<%= recourse.id %>' aria-selected='<%= chosen %>'><span class='menu-item-content'><span><%= recourse.attributes[label] %></span></span><% if counter %><span class='recourse-count fg-2'><%= number_with_delimiter recourse.attributes[counter] %></span><% end %><% if multiple %><i class='bi bi-check menu-item-check'></i><% end %></button>
       <% end %>
     <% end %>
   <% else -%>
