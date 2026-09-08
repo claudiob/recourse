@@ -28,7 +28,7 @@ en:
     displaying:
       one: Displaying 1 item
       other: Displaying %{count} items
-    displaying_slice: Displaying items %{from}-%{to} of %{total} in total
+    displaying_slice: Displaying items %{from}-%{to} of %{total}
     edit: Edit
     format: Please match the format %{example}
     from_now: "in %{distance}"

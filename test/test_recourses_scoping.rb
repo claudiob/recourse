@@ -17,6 +17,6 @@ class TestRecoursesScoping < IntegrationCase
     kept = Memo.where(person: Person.where(id: team.places.select(:person_id))).count
 
     assert_operator Memo.count, :>, kept
-    assert_includes body, "of #{kept} in total"
+    assert_match(/of #{kept}\s*</, body)
   end
 end

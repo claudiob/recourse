@@ -9,7 +9,7 @@ class TestRecoursesPagination < IntegrationCase
   def test_it_paginates_at_twenty_rows_and_says_what_it_is_showing
     visit '/zips'
 
-    assert_includes body, 'Displaying items 1-20 of 101 in total'
+    assert_includes body, 'Displaying items 1-20 of 101'
     assert_includes body, 'href="/zips?page=2"'
     # Four teams fit on one page, so that page says so and offers no nav.
     visit '/teams'
@@ -35,7 +35,7 @@ class TestRecoursesPagination < IntegrationCase
     @session.cookies[Recourse::LIMIT_STORAGE] = '100'
     visit '/zips'
 
-    assert_includes body, 'Displaying items 1-100 of 101 in total'
+    assert_includes body, 'Displaying items 1-100 of 101'
     assert_includes body, 'data-limit-to-value="20"'
     assert_includes body, '>20 per page</button>'
     # A cookie is a value a stranger can write, so one naming no size we offer is not
@@ -43,6 +43,6 @@ class TestRecoursesPagination < IntegrationCase
     @session.cookies[Recourse::LIMIT_STORAGE] = '250'
     visit '/zips'
 
-    assert_includes body, 'Displaying items 1-20 of 101 in total'
+    assert_includes body, 'Displaying items 1-20 of 101'
   end
 end
