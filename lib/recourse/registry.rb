@@ -1,7 +1,7 @@
 # Reopened for what the routes file said, which several helpers each need read back.
 module Recourse
-  # What the routes file said, remembered: which resources were drawn, which were
-  # nested under which, and which listing edits a join rather than only reading one.
+  # What the routes file said, remembered: which resources were drawn, and which were
+  # nested under which.
   # Extended onto `Recourse`, so every one of these is `Recourse.something` wherever
   # it is called from, and every ivar below is that module's own.
   module Registry
@@ -29,19 +29,6 @@ module Recourse
     # nesting added is something the routes knew and a path no longer says.
     def parent_of(child)
       @parents[child.to_s]
-    end
-
-    # Records the join a listing edits: `recourses :teams, through: :memberships` is
-    # a page of every team with a membership to add or drop beside each one, rather
-    # than a page of the teams a person is already on.
-    def join(path, through)
-      @joins[path.to_s] = through.to_s
-    end
-
-    # The join model a path edits, or nil where the page only lists. A model rather
-    # than the word, so everything downstream asks it what its own keys are.
-    def join_of(path)
-      @joins[path.to_s]&.classify&.safe_constantize
     end
   end
 

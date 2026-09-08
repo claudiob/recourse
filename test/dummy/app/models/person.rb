@@ -8,10 +8,6 @@ class Person < ApplicationRecord
   # A memo outlives whoever it was about, and keeps no counter cache — so the tab
   # beside Places reads as the bare word.
   has_many :memos, dependent: :nullify
-  # The join a page edits: every team is listed, and each row says whether this
-  # person is on it.
-  has_many :memberships, dependent: :destroy
-  has_many :teams, through: :memberships
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true

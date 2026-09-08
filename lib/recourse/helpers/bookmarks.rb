@@ -24,8 +24,8 @@ module Recourse
       # none. The rows are the model's own and never change when a bookmark does, so
       # without this a fragment drawn before the last click outlives it — and the
       # ids are the viewer's, so this is also what keeps one agent's icons off
-      # another's page. The name leads for the reason the join's does: an expanded
-      # key renders `nil` and `[]` alike.
+      # another's page. The name leads because an expanded key renders `nil` and `[]`
+      # alike.
       def bookmark_digest
         [:bookmarked, *bookmarked_ids.to_a.sort] if resource_bookmarks
       end

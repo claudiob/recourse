@@ -1022,13 +1022,6 @@ before writing or editing any layout, view or partial.
 - It carries `aria-pressed`, which is what says it is a toggle rather than a button
   that does something once, and an `aria-label` reading `Bookmark` or `Remove
   bookmark` to match the state it is in.
-- A listing of a many-to-many carries the button writing the join beside each row,
-  which is the column the page exists for: `Add` where the two are not joined and
-  `Remove` where they are, one `button_to` either way, since the path names both
-  records and neither needs submitting. `btn btn-sm btn-solid`, and no `theme-*` —
-  solid because it performs, and neutral because a column of colored buttons would
-  shout over the rows it is about. Not the delete's danger either, a join being taken
-  back by clicking again, which is the bookmark square's argument above.
 - The bookmark square carries **no** tooltip, and the line is drawn on whether the
   thing labels itself rather than on how often it is drawn — a counter's cells carry one per row.
   A bookmark square looks like what it means, filled or hollow, so a label chasing

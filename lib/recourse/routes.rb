@@ -17,22 +17,21 @@ module Recourse
     # host's word, which wins.
     def recourses(*names, **options, &block)
       refuse_unscoped_nesting names
-      through = options.delete :through
       # Asked before the block, where every resource is its own parent. Top level
       # only: a resource nested under another is reached through its parent, and its
       # rows are kept at the resource's own route rather than at a second one drawn
       # under every parent that happens to list them.
       keepable = Recourse.bookmarks? && parent_resource.nil?
 
-      names.each { |name| declare_resource name, through }
+      names.each { |name| declare_resource name }
       options = default_nested_actions options
       # Only where there is a table to arrange: the place a row holds is written from
       # an index and from nowhere else.
       arrangeable = indexed? options
 
-      return resources(*names, **options) unless block || through || keepable || arrangeable
+      return resources(*names, **options) unless block || keepable || arrangeable
 
-      resources(*names, **options) { draw_within keepable, arrangeable, through, block }
+      resources(*names, **options) { draw_within keepable, arrangeable, block }
     end
 
     # What `resource` draws, recorded the same way: one record reached without an id,
@@ -56,10 +55,9 @@ module Recourse
 
     # The module is the namespace being drawn in, so a resource is declared and its
     # controller defined under the path Rails will route to.
-    def declare_resource(name, through)
+    def declare_resource(name)
       path = [current_module, name].compact.join '/'
       record_declaration path
-      Recourse.join path, through if through
       Controllers.define_missing path
     end
 

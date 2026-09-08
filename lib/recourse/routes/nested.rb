@@ -1,20 +1,19 @@
 module Recourse
   module Routes
     # What a `recourses` block draws around whatever the host wrote inside it: the
-    # square that keeps one of its rows, and the join a listing writes.
+    # square that keeps one of its rows, and the place a row of an arranged table holds.
     module Nested
     private
 
-      # What a resource holds: the square that keeps one of its rows, the join a listing
-      # writes, and whatever the host's own block declared — each under the resource's
-      # own module, which is what every nested page relies on.
-      def draw_within(keepable, arrangeable, through, block)
+      # What a resource holds: the square that keeps one of its rows, its position, and
+      # whatever the host's own block declared — each under the resource's own module,
+      # which is what every nested page relies on.
+      def draw_within(keepable, arrangeable, block)
         addressable = addressable_rows?
 
         scope module: parent_resource.name do
           draw_bookmark if keepable && addressable
           draw_position if arrangeable && addressable
-          draw_join through if through
           instance_exec(&block) if block
         end
       end
@@ -55,20 +54,6 @@ module Recourse
         path = [current_module, 'bookmarks'].compact.join '/'
         Controllers.define_missing path, ::BookmarksController
         resource :bookmark, only: %i[create destroy]
-      end
-
-      # The row a listing's Add and Remove write: one record joining the parent to the
-      # row the button sat on, reached at `/people/1/teams/2/membership` and answered
-      # by a controller of the gem's own rather than by the generic one.
-      def draw_join(through)
-        path = [current_module, through].compact.join '/'
-        # Recorded under the listing it belongs to, which is how it finds its way back
-        # there for a request that arrived without a referer. No tab and no button
-        # come of it: a tab asks for a page and a button for an id-less write, and a
-        # join draws neither.
-        Recourse.nest current_module, path
-        Controllers.define_missing path, JoinsController
-        resource through.to_s.singularize.to_sym, only: %i[create destroy]
       end
     end
   end

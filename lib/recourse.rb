@@ -46,7 +46,6 @@ module Recourse
   @declared = []
   @nested = {}
   @parents = {}
-  @joins = {}
   @declared_bookmarks = nil
 
   # Columns a user may set: the form offers these, the show page reads these out, and

@@ -5,14 +5,12 @@
     resolved at render, which the fragment's own template digest never follows.
     And the column list: which columns a table shows is decided in Ruby —
     `recourse_hidden`, timestamps, counters — that no digest covers either. And the
-    join, where the buttons are of rows this relation knows nothing about. And the
     bookmarks, which are the viewer's rather than the relation's — so this is what
     keeps one person's kept rows off another person's page as well as what expires
     the fragment when a square is clicked. And the zone, for the same reason again:
     a timestamp is drawn against the reader's own clock, so without it the first
     person to load a table would settle what hour everybody else read. -%>
-<% key = [recourses, row_digest, resource_columns, join_digest, bookmark_digest,
-          Time.zone.name] -%>
+<% key = [recourses, row_digest, resource_columns, bookmark_digest, Time.zone.name] -%>
 <% cache_if cacheable_table?, key do %>
   <% actions = resource_actions %>
   <% arranged = arranged? %>
@@ -27,9 +25,6 @@
           <%# The square a row is kept by opens the table, ahead of the pages it
               leads to: whether this row is one of mine, before what to do with it. -%>
           <%= column header: bookmark_header, class: 'recourse-actions' if resource_bookmarks %>
-          <%# A listing of a many-to-many opens with the button writing the join,
-              which is the column the page exists for. -%>
-          <%= column header: t('recourse.attach'), class: 'recourse-actions' if resource_join %>
           <% actions.each do |action| -%>
             <%= column header: action_header(action), class: 'recourse-actions' %>
           <% end -%>
@@ -47,9 +42,6 @@
             <% end -%>
             <% if resource_bookmarks -%>
               <%= column header: bookmark_header, class: 'recourse-actions' do %><%= bookmark_button recourse %><% end %>
-            <% end -%>
-            <% if resource_join -%>
-              <%= column header: t('recourse.attach'), class: 'recourse-actions' do %><%= join_button recourse %><% end %>
             <% end -%>
             <% actions.each do |action| -%>
               <%= column header: action_header(action), class: 'recourse-actions' do %><%= resource_action_link action, recourse %><% end %>

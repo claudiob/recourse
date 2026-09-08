@@ -15,9 +15,8 @@ module Recourse
       answer 'bookmark_added'
     end
 
-    # And drops it. `destroy_all` rather than `destroy!` for the reason the join
-    # gives: a unique index is what keeps this to one row, and a page should not
-    # fail for having none.
+    # And drops it. `destroy_all` rather than `destroy!`: a unique index is what keeps
+    # this to one row, and a page should not fail for having none.
     def destroy
       viewer_bookmarks.where(bookmark_key).destroy_all
       answer 'bookmark_removed'

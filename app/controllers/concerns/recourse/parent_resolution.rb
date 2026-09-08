@@ -32,27 +32,21 @@ module Recourse
     end
 
     # What the route settled and every action honours: the index lists rows carrying
-    # these columns, and `new` and `create` build records that do. A listing that
-    # edits a join is the exception, and lists every row of the far side: the parent
-    # is what the buttons write, not what the rows have in common. A polymorphic key
+    # these columns, and `new` and `create` build records that do. A polymorphic key
     # is written as the association rather than as the column, so the class name lands
     # beside the id — a key without its type points into every table at once.
     def parent_columns
-      return {} if resource_join || attachment_reflection || @recourse_parent_association.nil?
+      return {} if attachment_reflection || @recourse_parent_association.nil?
       return { @recourse_parent_association.name => @recourse_parent } if polymorphic_parent?
 
       { @recourse_parent_association.foreign_key => @recourse_parent.id }
     end
 
     # The belongs_to whose record the path names, or nil at the top level. Path
-    # parameters rather than `params`, so a stray `?county_id=` nests nothing. A
-    # join's own keys count too: the far side of a many-to-many holds none pointing
-    # at the parent, which is what the join row is for. A key naming no one table is
-    # asked last, and asked the other way round.
+    # parameters rather than `params`, so a stray `?county_id=` nests nothing. A key
+    # naming no one table is asked last, and asked the other way round.
     def parent_association
-      associations = own_references + join_references
-
-      associations.find { |one| path_names? one.name } || polymorphic_parent
+      own_references.find { |one| path_names? one.name } || polymorphic_parent
     end
 
     # A host may serve a page over something that is no Active Record model at all --
@@ -63,14 +57,6 @@ module Recourse
       return [] unless resource_model? && resource_class.respond_to?(:recourse_references)
 
       resource_class.recourse_references
-    end
-
-    def join_references
-      resource_join ? resource_join.recourse_references : []
-    end
-
-    def resource_join
-      Recourse.join_of controller_path
     end
 
     def parent_id
