@@ -485,10 +485,6 @@ before writing or editing any layout, view or partial.
   status stops being a word, on the table and on the form both.
 - A counter cache is not on the page at all. Rails keeps it, so there is nothing to
   read and nothing to set; the index table is where a count belongs.
-- Nor is the column an arranged model is ordered by, for the same reason read the
-  other way: the app keeps it, a reader sets it by dragging a row, and the table
-  is where a position means anything at all — a lone `Position 3` on a record's own
-  page is a fact about a list the page is not showing.
 - An encrypted value arrives masked: one `*` per character, and a `Show` beside it
   that swaps the plaintext in. The plaintext travels in a
   `data-reveal-plain-value` attribute and the swap is a Stimulus controller, so
@@ -542,18 +538,6 @@ before writing or editing any layout, view or partial.
   carries it as a local, the partial having rendered the attribute for its error
   message all along. A **typed reference** builds the attribute itself, so it says both
   in one place.
-- No field asks for the column a model arranges by. A position is set by dragging a
-  row, so a box asking for the number would be a second way to say what the row's own
-  place already says — and the two would disagree the moment either was used.
-  `Recourse.editable_columns` is what drops it, beside the counter caches it already
-  drops, so the field, the show page's row and the `create` params go together: a
-  column no form offers is not one a hand-written POST may set either.
-- It is the model's declaration that keeps it off and not the page's level. An index
-  hides the column only where the arranging means something there — `arranged?` — but
-  a memo's form offers no position whether it was reached from the person who owns it
-  or from the table listing everybody's. `Recourse.position_columns` is the model-level
-  question, and answers `[]` for an aggregate, which has no rows to put in an order and
-  so never answers `recourse_order` at all.
 - Which field a column gets is decided by what it holds, the same question the show
   page asks: `attribute_kind`. A checkbox for a boolean, a combobox for an enum, a
   number field stepped by what the column keeps, a telephone field for a phone.

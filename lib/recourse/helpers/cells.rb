@@ -29,23 +29,15 @@ module Recourse
       end
 
       # Ciphertext, the id that addresses the row, the parent a nested route already
-      # names, the column an arranged table is ordered by, the timestamps and every JSON
-      # payload — what a machine keeps rather than what a row is about — and whatever the
-      # model asked to hide, the one of these a host decides without the override above.
+      # names, the timestamps and every JSON payload — what a machine keeps rather than
+      # what a row is about — and whatever the model asked to hide, the one of these a
+      # host decides without the override above.
       def columns_hidden_by_default
         [
           resource_model.recourse_encrypted_names, resource_model.primary_key, TIMESTAMPS,
-          resource_parent_association&.foreign_key, arranged_columns, json_columns,
+          resource_parent_association&.foreign_key, json_columns,
           Recourse.hidden_columns(resource_model),
         ].flatten.compact
-      end
-
-      # A place in an order somebody set is what the order of the rows already says, so
-      # no table draws one. Read at a level it is not counted at it says even less: the
-      # same figure down a column, once per parent. Both are dropped — the model's own,
-      # and the one this listing is arranged by, which is not always the same column.
-      def arranged_columns
-        [Recourse.position_columns(resource_model), controller_assign('recourse_position')]
       end
 
       # Columns a form offers — less the parent a nested route has already

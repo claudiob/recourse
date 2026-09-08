@@ -198,72 +198,6 @@ attribute. A model with no rows renders `No contacts.` instead. A heading sorts 
 it, and the form above the table narrows what it shows, by search or by
 filter.
 
-### A table somebody arranged
-
-A model may say that a column holds an order somebody put its rows in rather than
-one the database found, by writing `:positionable` where a direction would go:
-
-```ruby
-def recourse_order = { position: :positionable }
-```
-
-The index then draws a grip beside each row and no heading to sort by — a second
-way to read the rows would contradict the order they were put in — and a drop
-writes the row's new place. Only where the arranging means something: a table
-nothing points away from is one arrangement, and a nested index is another, but
-the resource's own index of every parent's rows at once is neither, and sorts and
-searches like any other.
-
-Two things go with that, and both come with the word: nothing to include and
-nothing to remember. A new row lands last among its own, since the form the gem
-draws never asks for a position. The gap closes behind one that goes, since what a
-drop reports is a row's place on the page — a position only while the table runs
-1, 2, 3 with no gaps in it. The rows either is counted among are worked out from
-the model: what it points at, or the whole table where it points nowhere. Where
-more than one key could be the parent, the model says which:
-
-```ruby
-# A picture belongs to a department and to the file it shows, and its place is
-# among the department's.
-def recourse_siblings = Picture.where(department_id:)
-```
-
-A model names one such column, and `recourse_order` refuses a second: the order a
-table is read in and the order somebody put it in are one fact. A *listing* may be
-in another order, though — a plan holds a place among its service's plans and
-another among every plan of its department, which is reached through the service
-and by no key of the plan's own. Which of them a page is in is the page's answer:
-
-```ruby
-class Admin::Departments::PlansController < RecoursesController
-private
-
-  def find_parent = @recourse_parent = Department.find(params.expect(:department_id))
-  def recourse_relation = @recourse_parent.plans.order(:ordering)
-  def recourse_position = 'ordering'
-end
-```
-
-Three things come with taking it over, since the gem only maintains the column
-`recourse_order` nominates. The positions controller the gem drew under that index
-has to be told the same two things — define it and it wins, as any controller of
-yours does — or a drop renumbers rows the page never showed:
-
-```ruby
-class Admin::Departments::Plans::PositionsController < Recourse::PositionsController
-  include Admin::Departments::Plans::Arranged  # the two methods above, written once
-end
-```
-
-Filling the column on create and closing its gap on delete is yours, the way
-`recourse_siblings` is the gem's for the model's own. And whatever did the shifting
-before has to stop: `Positioning` moves the block now, and two things shifting the
-same neighbours leave two rows holding one number.
-
-Moving a row is the gem's. Writing a new position on the record itself is not, so
-a host whose own pages do that keeps whatever closes up behind it — two things
-shifting the same neighbours leave two rows holding one number.
-
 A show page reads what the form offers and whatever `recourse_displayed` names
 besides, which is how a column is read where it is not typed: a band's label is
 written by the model and is the first thing to know about one, and hiding it to
@@ -383,8 +317,8 @@ defaults are there without a model mentioning them.
 | `recourse_label` | `:name` | the column that stands for a record — what a combobox lists, and what a table cell shows for a foreign key pointing here |
 | `recourse_typed_label?` | true when that column has a length validator | whether a foreign key to this model is typed into a text field or picked from a list |
 | `recourse_includes` | every `belongs_to` the table names | what the index eager-loads, in any shape `includes` accepts |
-| `recourse_order` | `:id` | how the index sorts, in any shape `order` accepts — one key may read `:positionable` instead of a direction, which arranges the table by hand |
-| `recourse_displayed` | `[]` | columns a table and a show page draw that they would otherwise leave off — the encrypted ones, the primary key, a polymorphic `*_type`, the inheritance column, every `json` / `jsonb` payload, whichever column holds a position, and `created_at` / `updated_at`, which come last whatever order they are named in. One name or a list |
+| `recourse_order` | `:id` | how the index sorts, in any shape `order` accepts |
+| `recourse_displayed` | `[]` | columns a table and a show page draw that they would otherwise leave off — the encrypted ones, the primary key, a polymorphic `*_type`, the inheritance column, every `json` / `jsonb` payload, and `created_at` / `updated_at`, which come last whatever order they are named in. One name or a list |
 | `recourse_hidden` | `[]` | columns kept off every screen — the table, the show page, the form (which also stops permitting them) and the search box. One name or a list: `def recourse_hidden = :name` and `%i[name title]` both read |
 | `recourse_comment` | the column's own SQL comment | what a column is for, drawn under its field on a form. Nil on an adapter that keeps no comments — SQLite is one — so a host there answers it by hand |
 | `recourse_broadcasts?` | `true` | whether saving a record refreshes every open index listing it — see [Live index refreshes](#live-index-refreshes) |
@@ -854,11 +788,9 @@ Anything your app defines wins, because your app's view paths come first and
 | `app/views/recourses/_card.html.erb` | the tabbed card the show and edit pages sit in |
 | `app/views/recourses/_sidebar.html.erb` | a shared partial, for every resource at once |
 
-Three private methods on a controller of yours are the seams for a screen the gem
+Two private methods on a controller of yours are the seams for a screen the gem
 otherwise draws whole. `recourse_relation` says which rows an index lists, and
-nothing narrows an answer of its own. `recourse_position` says which column those
-rows are dragged into order by, where it is not the one the model nominates — see
-[A table somebody arranged](#a-table-somebody-arranged). `recourse_model` says
+nothing narrows an answer of its own. `recourse_model` says
 which model the screen is about, where the route's name is not one: a page of `neighbors` lists what a
 measurement answers rather than what a table holds, so it is named for the answer
 and there is no `Neighbor` class to find.

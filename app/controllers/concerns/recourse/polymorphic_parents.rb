@@ -38,9 +38,9 @@ module Recourse
     end
 
     # The path the rows being served are listed at, which is this controller's own
-    # everywhere but under one of the gem's own writes: a position and a bookmark are
-    # drawn beside a listing and act on its rows, so each answers with the path one
-    # segment up instead — and the parent that scopes the listing scopes them too.
+    # everywhere but under one of the gem's own writes: a bookmark is drawn beside a
+    # listing and acts on its rows, so it answers with the path one segment up instead
+    # — and the parent that scopes the listing scopes it too.
     def listing_path = controller_path
   end
 end

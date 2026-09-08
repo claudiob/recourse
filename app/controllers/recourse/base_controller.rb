@@ -3,7 +3,7 @@ module Recourse
   # its own behavior above it — `class RecoursesController < Recourse::BaseController`
   # with a `before_action :authenticate!` guards every screen the gem serves.
   class BaseController < ApplicationController
-    include Pagy::Method, Arranging,
+    include Pagy::Method,
             Landing, Paging, ListResolution, ParentNaming,
             ParentResolution, PolymorphicParents, ReferenceResolution, ResourceResolution,
             Zoning
@@ -21,7 +21,7 @@ module Recourse
 
     # Lists one page of the model the route is named after. `@q` is Ransack's own name.
     def index
-      search = Search.new recourse_relation, params[:q], arranged: arranged?
+      search = Search.new recourse_relation, params[:q]
       @q = search.query
       @pagy, @resources = pagy search.scope, limit: recourse_limit
     end

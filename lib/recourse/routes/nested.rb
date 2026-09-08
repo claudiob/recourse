@@ -1,44 +1,25 @@
 module Recourse
   module Routes
     # What a `recourses` block draws around whatever the host wrote inside it: the
-    # square that keeps one of its rows, and the place a row of an arranged table holds.
+    # square that keeps one of its rows.
     module Nested
     private
 
-      # What a resource holds: the square that keeps one of its rows, its position, and
-      # whatever the host's own block declared — each under the resource's own module,
-      # which is what every nested page relies on.
-      def draw_within(keepable, arrangeable, block)
-        addressable = addressable_rows?
-
+      # What a resource holds: the square that keeps one of its rows, and whatever the
+      # host's own block declared — each under the resource's own module, which is what
+      # every nested page relies on.
+      def draw_within(keepable, block)
         scope module: parent_resource.name do
-          draw_bookmark if keepable && addressable
-          draw_position if arrangeable && addressable
+          draw_bookmark if keepable && addressable_rows?
           instance_exec(&block) if block
         end
       end
 
       # Whether this resource has rows to address one at a time. A bookmark names one
-      # row and a position names one row, so neither means anything for a name with no
-      # class behind it at all. Both were drawn for those anyway, at
-      # `/placeholders/:placeholder_id/bookmark`, where nothing linked to them and
-      # anything reaching one raised.
-      #
-      # Answered from the class and nothing else. What a model keeps in the way of a
-      # position column is a question for a request, not for this: it would reach for a
-      # database before the routes are even finished.
+      # row, which means nothing for a name with no class behind it at all — and one was
+      # drawn anyway, at `/placeholders/:placeholder_id/bookmark`, where nothing linked
+      # to it and anything reaching it raised.
       def addressable_rows? = Recourse.model?(parent_resource.name).present?
-
-      # The place a row of an arranged table holds, at `/teams/5/position`. Recorded
-      # nowhere, for the reason the bookmark gives: a tab and a bare-action button
-      # both look under a resource, and this is neither. Drawn wherever an index is —
-      # whether the model arranges anything is the model's word, and asking for it
-      # here would reach for a database before the routes are even finished.
-      def draw_position
-        path = [current_module, 'positions'].compact.join '/'
-        Controllers.define_missing path, ::PositionsController
-        resource :position, only: :update
-      end
 
       # The row a table's bookmark square writes: one record kept by whoever is looking,
       # at `/places/5/bookmark`. Deliberately not recorded through `Recourse.nest` — it

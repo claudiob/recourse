@@ -41,7 +41,6 @@
       import RevealController from '/recourse/reveal_controller.js'
       import SchemeController from '/recourse/scheme_controller.js'
       import SearchController from '/recourse/search_controller.js'
-      import SortableController from '/recourse/sortable_controller.js'
       import ShortcutsController from '/recourse/shortcuts_controller.js'
       import TimezoneController from '/recourse/timezone_controller.js'
       import ToastController from '/recourse/toast_controller.js'
@@ -62,7 +61,6 @@
         window.Stimulus.register('reveal', RevealController)
         window.Stimulus.register('scheme', SchemeController)
         window.Stimulus.register('search', SearchController)
-        window.Stimulus.register('sortable', SortableController)
         window.Stimulus.register('shortcuts', ShortcutsController)
         window.Stimulus.register('timezone', TimezoneController)
         window.Stimulus.register('toast', ToastController)
@@ -383,13 +381,6 @@
       :root[data-bs-theme='light'] .recourse-scheme-dark { display: none; }
       :root[data-bs-theme='dark'] .recourse-scheme-light { display: none; }
       :root[data-bs-theme='dark'] .recourse-scheme-dark { display: inline; }
-
-      /* The grip says the row can be taken hold of, and only the grip is draggable:
-         a whole draggable row would fight selecting the text in it. `.sortable-ghost`
-         is the gap SortableJS leaves where the row will land. */
-      .recourse-handle { cursor: grab; }
-      .recourse-handle:active { cursor: grabbing; }
-      .sortable-ghost { opacity: .4; }
 
       /* The icon font drops every glyph an eighth of an em to sit on a text
          baseline, which inside an icon link reads as the arrow resting on the

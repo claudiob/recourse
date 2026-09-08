@@ -541,17 +541,6 @@ two is filed under the one a reader would look in first.
   A booking's `answers_count` will not link while the page listing those answers is
   nested as `messages`. The count still draws; only the link is withheld.
 
-#### Arranging is opted into by :positionable, not by a direction
-
-- `positionable_key` returns nil unless `recourse_order` is a **Hash**, and
-  `arranged?` compares the direction against `POSITIONABLE = :positionable`. So
-  `'position ASC'`, `:position` and `{ created_at: :desc }` are all plain orders,
-  and only `{ position: :positionable }` arranges.
-- Which makes tidying a SQL-string order into a symbol behaviour-neutral, and
-  turning one into `{ column: :positionable }` a feature switch: it hands the table
-  drag handles and takes the column off it. Never do the second while doing the
-  first.
-
 #### Decorate a cell in named_cell, never in reference_cell
 
 - `reference_cell` has two jobs. Besides a table cell it supplies a **form field's

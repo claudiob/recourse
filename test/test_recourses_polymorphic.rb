@@ -7,9 +7,6 @@ require 'integration_case'
 class TestRecoursesPolymorphic < IntegrationCase
   def teardown
     Note.where(body: 'About a ZIP').destroy_all
-    Note.order(:id).group_by(&:about_id).each_value do |notes|
-      notes.each_with_index { |note, index| note.update_column :position, index + 1 }
-    end
   end
 
   # And where the key is drawn rather than answered by the address, it is the record
@@ -25,7 +22,10 @@ class TestRecoursesPolymorphic < IntegrationCase
     every = Memo.all.map { |one| "#{one.about_type} #{one.about_id}" }
 
     named.each { |cell| assert_includes every, cell.gsub(/<[^>]*>/, '') }
-    assert_includes drawn, '' # a key pointing at nothing names nothing
+    # A key pointing at nothing names nothing, and the last page is all such memos.
+    visit '/memos?page=3'
+
+    assert_includes body.scan(%r{data-cell="About"[^>]*>(.*?)</td>}m).flatten.map(&:strip), ''
 
     # And where that record has a page of its own the cell leads to it. A place does,
     # so the kind and the id are the words of a link; a ZIP is drawn under a parent
@@ -80,20 +80,5 @@ class TestRecoursesPolymorphic < IntegrationCase
     assert_includes body, 'data-cell="About"'
     assert_empty Memo.where(about: team)
     refute_empty body.scan('data-cell="Body"')
-  end
-
-  # And so are the rows a drag counts among. The route that arranges is drawn a
-  # segment below the listing, where no nesting is recorded — so a page correct to
-  # read could still renumber every other parent's rows on a drop.
-  def test_a_move_under_a_polymorphic_key_leaves_the_other_parents_alone
-    zip = ZIP.order(:id).first
-    elsewhere = Note.where.not(about: zip).order(:id).pluck :id, :position
-    moved = zip.notes.order(:position).last
-
-    @session.patch "/zips/#{zip.id}/notes/#{moved.id}/position", params: { position: 1 }
-
-    assert_includes [204, 303], @session.response.status
-    assert_equal 1, moved.reload.position
-    assert_equal elsewhere, Note.where.not(about: zip).order(:id).pluck(:id, :position)
   end
 end

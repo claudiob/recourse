@@ -1,5 +1,4 @@
 require_relative 'helpers/actions'
-require_relative 'helpers/arrangements'
 require_relative 'helpers/bookmarks'
 require_relative 'helpers/buttons'
 require_relative 'helpers/cards'
@@ -40,7 +39,7 @@ require_relative 'helpers/zones'
 module Recourse
   # View helpers for the pages the gem renders, and what the parts share.
   module Helpers
-    include Actions, Arrangements, Bookmarks, Buttons, Cards,
+    include Actions, Bookmarks, Buttons, Cards,
             Cells, Choices, Colors, Comboboxes, Constraints, Counters, Deletions,
             Details,
             Examples, Fields, Filters, Formats, Inputs, Kinds, Limits,

@@ -43,7 +43,7 @@ module Recourse
     # path alone, and still a `RecoursesController`, that being where a host keeps the
     # filters guarding its admin. So what runs on every request asks this first, and the
     # actions the gem serves reach for the model again and raise where it is missing.
-    # Asked of `resource_class`, which a position and a bookmark answer from the listing.
+    # Asked of `resource_class`, which a bookmark answers from the listing.
     def resource_model?
       resource_class.present?
     rescue Error

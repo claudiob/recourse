@@ -34,12 +34,6 @@ class IntegrationCase < Minitest::Test
     sql_matching %(FROM "#{table}"), &
   end
 
-  # And the same for what a block wrote, which names its table without a `FROM`:
-  # a shift written a row at a time costs a statement each, and only a count says so.
-  def writes_on(table, &)
-    sql_matching %(UPDATE "#{table}"), &
-  end
-
 private
 
   def sql_matching(fragment)

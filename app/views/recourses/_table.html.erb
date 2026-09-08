@@ -13,15 +13,11 @@
 <% key = [recourses, row_digest, resource_columns, bookmark_digest, Time.zone.name] -%>
 <% cache_if cacheable_table?, key do %>
   <% actions = resource_actions %>
-  <% arranged = arranged? %>
   <div class='table-responsive'>
     <table class='table caption-top table-hover align-middle sm:table-stacked'>
       <thead>
         <tr>
           <% @recourse_headers = true %>
-          <%# The grip leads, because dragging it moves the whole row: what a reader
-              takes hold of belongs at the edge they reach for it from. -%>
-          <%= column header: arrangement_header, class: 'recourse-actions' if arranged %>
           <%# The square a row is kept by opens the table, ahead of the pages it
               leads to: whether this row is one of mine, before what to do with it. -%>
           <%= column header: bookmark_header, class: 'recourse-actions' if resource_bookmarks %>
@@ -31,15 +27,10 @@
           <%= render 'row', resource_key => nil %>
         </tr>
       </thead>
-      <tbody <%= tag.attributes data: arrangement_data(pagy) if arranged %>>
+      <tbody>
         <% @recourse_headers = false %>
         <% recourses.each do |recourse| %>
-          <tr <%= tag.attributes id: Recourse.row_id(recourse),
-                                 class: bookmark_row_class(recourse),
-                                 data: ({ sortable_update_url: arrangement_url(recourse) } if arranged) %>>
-            <% if arranged -%>
-              <%= column header: arrangement_header, class: 'recourse-actions recourse-handle' do %><%= arrangement_handle %><% end %>
-            <% end -%>
+          <tr <%= tag.attributes id: Recourse.row_id(recourse), class: bookmark_row_class(recourse) %>>
             <% if resource_bookmarks -%>
               <%= column header: bookmark_header, class: 'recourse-actions' do %><%= bookmark_button recourse %><% end %>
             <% end -%>

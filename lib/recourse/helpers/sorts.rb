@@ -39,16 +39,8 @@ module Recourse
         resource_column_title column.to_s
       end
 
-      # An arranged table offers no heading a reader can sort by: the order is one
-      # somebody set, and a second way to read the same rows would contradict it.
-      # Asked here rather than in `_table`, so a row partial of a host's own — which
-      # draws its headings through `sort_header` like every other — needs no edit the
-      # day its model becomes arranged.
-      def sortable_column?(column)
-        return false if arranged?
-
-        resource_model.ransortable_attributes.include? column.to_s
-      end
+      # Whether the model lets a heading sort by this column.
+      def sortable_column?(column) = resource_model.ransortable_attributes.include?(column.to_s)
 
       def sort_caret(column)
         sort = resource_search.sorts.find { |one| one.name == column.to_s }

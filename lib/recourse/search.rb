@@ -14,11 +14,7 @@ module Recourse
     # it narrowed to rather than around it — the model is still what answers for the
     # order, the eager loads and the allowlist, and a relation knows its own.
     #
-    # `arranged` is the controller's word rather than a question asked here: whether
-    # a position means anything depends on the level the page was reached at, which
-    # the route knows and a relation does not.
-    def initialize(relation, params, arranged: false)
-      @arranged = arranged
+    def initialize(relation, params)
       @model = relation.klass
       @query = relation.ransack conditions(params)
     end
@@ -27,7 +23,7 @@ module Recourse
     # asked, so the model's own order only applies when nothing did.
     def scope
       scope = @query.result
-      scope = scope.order(*kept_first, Recourse.order_for(@model)) if @query.sorts.empty?
+      scope = scope.order(*kept_first, @model.recourse_order) if @query.sorts.empty?
       includes = @model.recourse_includes
       return scope if includes.blank?
 
@@ -39,11 +35,9 @@ module Recourse
     # The rows this viewer has kept, ahead of whatever the model orders by — but only
     # where nobody clicked a heading, which is the same word `recourse_order` answers
     # to. A semi-join rather than an outer one: it cannot multiply a row, and it
-    # leaves the count pagy runs over this relation well-formed. Never on an arranged
-    # table, where it would put one reader's bookmarks ahead of the order everybody
-    # else set by hand.
+    # leaves the count pagy runs over this relation well-formed.
     def kept_first
-      reflection = Recourse.bookmarks_for @model unless @arranged
+      reflection = Recourse.bookmarks_for @model
       return [] unless reflection
 
       kept = Recourse.bookmarks_of(reflection).select reflection.foreign_key
@@ -58,13 +52,8 @@ module Recourse
     # since `IN ()` would match no row rather than every one.
     def conditions(params)
       # `?q=anything` reaches here as a String rather than as parameters of its own,
-      # and a search nobody asked for reaches here as nil. Neither is a condition —
-      # and neither is anything at all where the table is arranged by hand, since a
-      # sort or a filter would draw those rows in an order nobody set and a drag would
-      # then write a position against what the reader is looking at. Refused here
-      # rather than by leaving the controls off the page, because a URL is typed as
-      # readily as it is clicked.
-      return {} if @arranged || !params.is_a?(ActionController::Parameters)
+      # and a search nobody asked for reaches here as nil. Neither is a condition.
+      return {} unless params.is_a? ActionController::Parameters
 
       params.to_unsafe_h.filter_map do |key, value|
         next if value.blank?
