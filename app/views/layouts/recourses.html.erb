@@ -107,13 +107,15 @@
          scrolled to it is a page Safari zooms out of and draws the navbar short on. */
       html, .recourse-shell { overflow-x: hidden; }
 
-      /* A finger does not hover. The tint a pointer leaves on the row under it would
-         stay on whatever row was last touched, so a touch screen gets none. */
+      /* A finger does not hover. The tint a pointer leaves on the row under it, or on
+         the link under it, would stay on whatever was last touched — or land on whatever
+         the redrawn page put under the finger — so a touch screen gets none. */
       @media (hover: none) {
         .table-hover > tbody > tr:hover > * {
           --bs-table-color-state: initial;
           --bs-table-bg-state: initial;
         }
+        .nav-link:hover:not(.active) { background-color: transparent; }
       }
 
       /* The navbar and the sidebar stack over the main column: a menu opened from a
@@ -148,6 +150,13 @@
           font-weight: var(--bs-font-weight-semibold);
         }
         .sm\:table-stacked > tbody > tr > td:first-child { font-weight: inherit; }
+        /* A counter's heading goes inside its link, so the whole `Franchises: 21` is
+           one thing to tap; the cell's own heading steps aside for it. */
+        .sm\:table-stacked > tbody > tr > td.recourse-counter::before { content: none; }
+        .sm\:table-stacked > tbody > tr > td.recourse-counter > [data-cell]::before {
+          content: attr(data-cell) ': ';
+          font-weight: var(--bs-font-weight-semibold);
+        }
         .sm\:table-stacked > tbody > tr > td:not(:first-child) + td::before { margin-block-start: 0; }
         .sm\:table-stacked > tbody > tr > td { overflow-wrap: anywhere; }
       }
@@ -417,6 +426,20 @@
           margin-block-start: auto;
           align-self: stretch;
         }
+      }
+
+      /* A phone's card has room for a row of tabs only as pictures and figures: Show
+         and Edit are their icons, a counted tab its icon and its number. A tab with
+         neither keeps its word, there being nothing else to stand for it. */
+      @media (width < 768px) {
+        .recourse-tab-word { display: none; }
+      }
+
+      /* And the trail at the top: a resource's crumb is its icon alone on a phone, so the
+         search box and the button beside it have the row. A record's crumb has no icon
+         and keeps its words. */
+      @media (width < 768px) {
+        .recourse-crumb-word { display: none; }
       }
 
       /* While the sidebar is a row its foot has room for words, so each icon is followed

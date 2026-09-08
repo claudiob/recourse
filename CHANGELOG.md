@@ -8,6 +8,12 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 ## Unreleased
 
 * [Fix] Tapping the light/dark toggle or the log out on a phone leaves no tint behind
+* [Feature] On a phone a resource's breadcrumb is its icon alone, leaving the row to the search box and the button
+* [Feature] On a phone a card's tabs are their icons and figures: Show and Edit their
+  icons, a counted tab its icon and its number
+* [Feature] On a phone the whole `Franchises: 21` of a stacked counter cell is the link
+* [Fix] A touch screen shows no tooltips, a tap being what would open the link beneath one
+* [Fix] A sidebar link tapped on a phone leaves no hover tint on it or on the link the next page puts under the finger
 
 ## 4.3.0 - 2026-09-08
 
