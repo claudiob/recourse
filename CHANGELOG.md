@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [Feature] The log-out button sits beside the light/dark toggle
+
+  The two share the sidebar's foot, each centered in its own half, and a hover tints
+  either under a rounded corner.
+
+* [Fix] A bookmark click no longer marks the row green
+
+  The kept tint taking or leaving is the whole report.
+
 ## 4.1.2 - 2026-09-08
 
 * [Fix] The engine requires turbo-rails after Rails, not before
