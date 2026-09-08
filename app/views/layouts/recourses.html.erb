@@ -107,6 +107,10 @@
          scrolled to it is a page Safari zooms out of and draws the navbar short on. */
       html, .recourse-shell { overflow-x: hidden; }
 
+      /* The navbar and the sidebar stack over the main column: a menu opened from a
+         filter or a link's tooltip drops over the first rows rather than under them. */
+      .recourse-shell > nav, .recourse-sidebar { position: relative; z-index: 2; }
+
       /* An action column is as wide as a row is tall — an icon in a square — and a
          counter column starts at the same square, widening only when a figure like
          38,405 needs the room: a table laying out to 100% reads the width as a
@@ -243,6 +247,9 @@
         .recourse-search { max-width: none; }
         .recourse-search-box,
         .recourse-search .combobox-toggle { flex: 1 1 100%; }
+        /* Safari zooms in on a field whose text is under 16px, and the small controls
+           are 14px: on a phone they take the body's size, and focusing one moves nothing. */
+        .recourse-search { --bs-btn-input-sm-font-size: var(--bs-body-font-size); }
       }
 
       /* Held Option marks the letter each sidebar link answers to. Marked rather than
@@ -392,6 +399,17 @@
         .recourse-sidebar .recourse-foot {
           margin-block-start: auto;
           align-self: stretch;
+        }
+      }
+
+      /* While the sidebar is a row its foot has room for words, so each icon is followed
+         by its own; as a column the words are read but not seen, the way Bootstrap's
+         `.visually-hidden` does it. */
+      .recourse-foot-word { margin-inline-start: .4em; }
+      @media (width >= 768px) {
+        .recourse-foot-word {
+          position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+          overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
         }
       }
 

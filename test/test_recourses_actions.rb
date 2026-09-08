@@ -57,6 +57,6 @@ class TestRecoursesActions < IntegrationCase
                     %(<form data-turbo="false" class="button_to" method="post" action="/session">)
     assert_includes body, %(<input type="hidden" name="_method" value="delete")
     assert_includes body, "<i class='bi bi-box-arrow-right'></i>"
-    assert_includes body, '>Log out</span>'
+    assert_includes body, '>Exit</span>'
   end
 end

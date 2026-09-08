@@ -1,6 +1,7 @@
 <%# locals: (pagy:) %>
 <% if pagy %>
-  <div class='d-flex align-items-center' <%= tag.attributes data: limit_data(pagy) %>>
+  <%# A column on a phone, the sentence above the pages, and one row from `sm` up. -%>
+  <div class='d-flex flex-column sm:flex-row sm:align-items-center' <%= tag.attributes data: limit_data(pagy) %>>
     <%# The gem's own sentence from pagy's public readers, every figure delimited —
         rewriting pagy's English with a regex delimited one figure, only in English.
         The switch follows it after a dot: how much of the table is showing, then the
@@ -17,6 +18,6 @@
         <%= t 'recourse.displaying', count: pagy.count %>
       <% end %>
     </div>
-    <div class='pe-2'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
+    <div class='px-2 mt-2 sm:mt-0'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
   </div>
 <% end %>

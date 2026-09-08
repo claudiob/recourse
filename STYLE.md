@@ -88,6 +88,9 @@ before writing or editing any layout, view or partial.
   Same reason the sidebar's own borders are written out — see the note there.
 - Not sticky. The foot rides on the fold while the links leave room and comes to rest
   under the last of them once they do not, to be scrolled to like anything else.
+- While the sidebar is a row each icon is followed by its word — `Dark mode`, `Light
+  mode`, `Exit` — there being room for one; as a column the word is read but not seen,
+  through `.recourse-foot-word`, which repeats `.visually-hidden` above 768px.
 - A hover tints the control's background with `--bs-bg-1` under a rounded corner, the
   same tint the combobox's clear button takes: a hand cursor alone says little on an
   icon, and a tint says it is a control.

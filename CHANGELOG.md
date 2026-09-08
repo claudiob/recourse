@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [Feature] On a phone a stacked cell reads as one line, `Estimate hi: 600`
+* [Feature] On a phone the sidebar's icons carry their words: `Dark mode`, `Light mode`, `Exit`
+* [Fix] A page never scrolls sideways on a phone, and Safari no longer zooms out of it
+
+  Safari laid the stacked table's hidden header row out at its full width; the page
+  now clips what would run past the window.
+
+* [Fix] Safari no longer zooms in on the search box or a filter when it is focused
+
+  The small controls were 14px, and Safari zooms on any field under 16; on a phone
+  they take the body's size.
+
+* [Fix] The footer's sentence stands above the pages on a phone rather than beside them
+* [Fix] A filter's menu drops over the first rows of the table rather than under them
+
 ## 4.2.0 - 2026-09-08
 
 * [Feature] The log-out button sits beside the light/dark toggle

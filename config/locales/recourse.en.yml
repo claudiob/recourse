@@ -21,10 +21,10 @@ en:
     create: Create
     created: "%{model} was created."
     created_error: "%{model} could not be created."
-    darken: Darken the page
+    darken: Dark mode
     delete: Delete %{model}
     deleted: "%{model} was deleted."
-    exit: Log out
+    exit: Exit
     displaying:
       one: Displaying 1 item
       other: Displaying %{count} items
@@ -37,7 +37,7 @@ en:
     items:
       one: 1 item
       other: "%{count} items"
-    lighten: Lighten the page
+    lighten: Light mode
     missing_model: You declared `recourses :%{name}` in your routes file, but this app
       has no %{model} model.
     nested: You nested `recourses %{names}` inside `resources :%{parent}`, which does
