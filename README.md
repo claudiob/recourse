@@ -876,59 +876,6 @@ end
 The local a row partial receives is still named after the route — `neighbor:` — so
 what a page is called and what it lists stay two separate things.
 
-A resource need not keep rows at all. `include Recourse::Aggregate` in a plain class
-answers everything a table answers from its columns and its keys as the nothing an
-aggregate has, and names the class the way a model is named, so a page assembled out
-of other models' records is a resource like any other:
-
-```ruby
-class Message
-  include Recourse::Aggregate
-
-  class << self
-    def recourse_label = :content
-    def recourse_icon = :message
-  end
-end
-```
-
-Its controller says what the rows are, the same way any other narrows what it lists:
-
-```ruby
-class MessagesController < RecoursesController
-private
-
-  def recourse_relation = Message.assembled
-end
-```
-
-Write its `index.html.erb` and the gem draws the chrome around it. A collection that is
-no Active Record relation is listed as it was handed over — there is nothing to search
-it by, to sort it by or to eager-load, which is what `Aggregate` answers — and it is
-paged like any other index, so return every row and let the page take the slice it
-shows. Return them as an `Array`: that is what pagy counts and slices without asking a
-database.
-
-That template can draw the rows itself, or hand them to the gem's own table and write a
-`_row` for the cells, which is the same seam any resource has:
-
-```erb
-<% content_for :title, 'Weeks' %>
-
-<%= render 'table', recourses: @resources, pagy: @pagy %>
-```
-
-```erb
-<%# locals: (week:) -%>
-<%= column header: 'Week' do %><%= week %><% end %>
-<%= column header: 'Memos' do %><%= week.memos %><% end %>
-```
-
-Such a table is never kept, where every other one is. A record says when it last changed
-and a cached fragment is filed under that; an object assembled in Ruby says nothing, so
-a key built from a page of them cannot tell one page from the next — and the reader after
-this one would be served this one's page.
-
 No cache stands in the way. The index table renders inside a fragment, and its
 key carries the digest of whichever `_row` the lookup resolved — so a row
 partial added, edited or deleted expires the table by itself, with nothing to

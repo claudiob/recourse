@@ -17,29 +17,15 @@ module Recourse
     # `arranged` is the controller's word rather than a question asked here: whether
     # a position means anything depends on the level the page was reached at, which
     # the route knows and a relation does not.
-    #
-    # A collection that is no relation at all is held as it was handed over. That is a
-    # page a host assembled out of other models' records rather than read off a table —
-    # the weeks a month came to, the memos of everyone on a team — and there is nothing
-    # to search it by, nothing to sort it by and nothing to eager-load, which is what
-    # `Aggregate` already answers for each of those. Only the paging is left, and a
-    # collection can be paged — an `Array` of one, which pagy counts and slices
-    # itself rather than asking a database to.
     def initialize(relation, params, arranged: false)
-      @relation = relation
       @arranged = arranged
-      return unless relation.respond_to? :ransack
-
       @model = relation.klass
       @query = relation.ransack conditions(params)
     end
 
     # The relation the index lists. Ransack has already ordered it where a heading
-    # asked, so the model's own order only applies when nothing did — and a collection
-    # nobody can search is listed in the order the host assembled it in.
+    # asked, so the model's own order only applies when nothing did.
     def scope
-      return @relation unless @query
-
       scope = @query.result
       scope = scope.order(*kept_first, Recourse.order_for(@model)) if @query.sorts.empty?
       includes = @model.recourse_includes

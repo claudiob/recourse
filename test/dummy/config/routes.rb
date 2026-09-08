@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       # controller come out under it, and no tab is drawn for a child filed there.
       namespace(:visited) { recourses :places, only: :index }
       # A nested index the parent has no `has_many` for, which a host draws over an
-      # aggregate, an attachment, or the whole of a table read under one record. The
+      # an attachment, or the whole of a table read under one record. The
       # tab is named after the route, since there is no association to count or to
       # take an icon from.
       recourses :memos, only: :index
@@ -86,9 +86,4 @@ Rails.application.routes.draw do
   # has taken. Its own key is what this table is here for: a menu of every reading is
   # past what a menu is, and an id is not a word the box could look through instead.
   recourses :readings, only: %i[index new create]
-
-  # A resource with no rows of its own, assembled out of the memos. Its controller says
-  # what the rows are and its own template says how they read; everything around them —
-  # the crumbs, the sidebar, the paging — is the gem's.
-  recourses :weeks, only: :index
 end

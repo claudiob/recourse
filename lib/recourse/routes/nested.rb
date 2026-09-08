@@ -19,20 +19,15 @@ module Recourse
       end
 
       # Whether this resource has rows to address one at a time. A bookmark names one
-      # row and a position names one row, so neither means anything for a page a host
-      # assembles — an aggregate has no ids to name — nor for a name with no class
-      # behind it at all. Both were drawn for those anyway, at `/weeks/:week_id/bookmark`
-      # and `/placeholders/:placeholder_id/bookmark`, where nothing linked to them and
+      # row and a position names one row, so neither means anything for a name with no
+      # class behind it at all. Both were drawn for those anyway, at
+      # `/placeholders/:placeholder_id/bookmark`, where nothing linked to them and
       # anything reaching one raised.
       #
       # Answered from the class and nothing else. What a model keeps in the way of a
       # position column is a question for a request, not for this: it would reach for a
       # database before the routes are even finished.
-      def addressable_rows?
-        !Recourse.model(parent_resource.name).include? Recourse::Aggregate
-      rescue Error
-        false
-      end
+      def addressable_rows? = Recourse.model?(parent_resource.name).present?
 
       # The place a row of an arranged table holds, at `/teams/5/position`. Recorded
       # nowhere, for the reason the bookmark gives: a tab and a bare-action button

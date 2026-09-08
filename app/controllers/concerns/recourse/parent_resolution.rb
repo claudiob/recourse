@@ -25,7 +25,7 @@ module Recourse
     def path_parent
       parent = Recourse.parent_of controller_path
       model = parent && Recourse.model?(parent)
-      return unless model.respond_to? :find_by
+      return unless model
 
       id = request.path_parameters[:"#{model.model_name.singular}_id"]
       model.find_by id: id if id
@@ -49,14 +49,11 @@ module Recourse
       own_references.find { |one| path_names? one.name } || polymorphic_parent
     end
 
-    # A host may serve a page over something that is no Active Record model at all --
-    # an aggregate it assembles itself, or a verb with no class behind it whose action
-    # the host answers itself -- and neither answers a question about keys. The routes
-    # still named a parent, and the host still finds it.
+    # A host may serve a page over a verb with no class behind it, whose action the
+    # host answers itself, and a verb answers no question about keys. The routes still
+    # named a parent, and the host still finds it.
     def own_references
-      return [] unless resource_model? && resource_class.respond_to?(:recourse_references)
-
-      resource_class.recourse_references
+      resource_model? ? resource_class.recourse_references : []
     end
 
     def parent_id

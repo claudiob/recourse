@@ -925,10 +925,8 @@ before writing or editing any layout, view or partial.
   are sorted, filtered or paged past them — and nothing where no toast is present,
   since then nothing would ever end it.
 - **Every row carries a name**: `<tr id='place_4'>`, from `Recourse.row_id`, which is
-  `dom_id` guarded by an actual key. A host's aggregate rows answer `to_key` with nil
-  and `dom_id` turns that into `new_week` — one name for twenty rows, worse than none
-  — so those get no `id` at all. The name is deterministic per row, so it caches
-  exactly as safely as the rest of the fragment.
+  `dom_id`. The name is deterministic per row, so it caches exactly as safely as the
+  rest of the fragment.
 - The mark is a tint on the cells, exactly like the kept tint beside it: the table
   collapses its borders, so the cells are what paint, and one tint across all of them is
   what reads as a single row. Anything drawn per cell — a border, a shadow — reads as a

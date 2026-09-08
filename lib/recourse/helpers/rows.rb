@@ -21,19 +21,10 @@ module Recourse
       # requests can ask for one relation and want different rows, and only one of them
       # clicked a heading to say so.
       #
-      # Nor a page of rows a host assembled. An aggregate keeps no columns, so its rows
-      # are plain objects rather than records — and a plain object is asked for its
-      # cache key the same way, which for anything built on `ActiveModel::Model` is a
-      # `to_param` of nil. Every row of every page then reads as the same key, so the
-      # second page of one would be served the first page of another. A host can answer
-      # `cache_key` itself and be right, but nothing makes it, and being wrong here is
-      # somebody else's page — so these are drawn each time instead.
-      #
       # Nor a table of rows nothing versions. `cache` reads `MAX(updated_at)` off the
       # relation without asking whether there is such a column, and reference data — a
       # table of counties written by a migration and never again — keeps none. The same
-      # question `keepable_menu?` asks of a menu, for the same reason; an aggregate has
-      # no columns at all and so answers no here as well.
+      # question `keepable_menu?` asks of a menu, for the same reason.
       def cacheable_table?
         params[:q].blank? && resource_model.column_names.include?('updated_at')
       end

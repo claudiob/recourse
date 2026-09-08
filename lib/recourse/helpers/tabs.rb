@@ -6,8 +6,8 @@ module Recourse
 
       # What a nested resource's tab reads as. For an index, a `has_many` of that name
       # counts its rows and lends its icon; a route the parent has no association for
-      # is named after the path instead — an aggregate the host assembles, an Active
-      # Storage attachment, a full index reached under a record. There is no model to
+      # is named after the path instead — an Active Storage attachment, a full index
+      # reached under a record. There is no model to
       # ask then, so such a tab carries neither an icon nor a count. A singular
       # resource is one record and never a list, so no association is asked for it at
       # all: a `has_many` of that name would count rows this page is not.
