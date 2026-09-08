@@ -18,6 +18,7 @@
         <%= t 'recourse.displaying', count: pagy.count %>
       <% end %>
     </div>
-    <div class='px-2 mt-2 sm:mt-0'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
+    <%# Centered on the row of their own a phone gives them, and at the end of the shared row from `sm` up. -%>
+    <div class='px-2 mt-2 sm:mt-0 d-flex justify-content-center sm:justify-content-end'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
   </div>
 <% end %>

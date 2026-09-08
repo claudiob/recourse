@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [Fix] `search_highlight` marks the label of a record the search reached through a key
+
+  A row drawn out of the provider a sector points at marks `provider.name` with
+  `search_highlight provider.name, :name`; the helper checked `name` against the
+  sector, which has none, and marked nothing.
+
+* [Fix] On a phone the pages under a table are centered on their own row
+
 ## 4.4.1 - 2026-09-08
 
 * [Fix] The footer reads `Displaying items 1-20 of 101`, without `in total`
