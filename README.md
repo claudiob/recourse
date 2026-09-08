@@ -68,10 +68,7 @@ class RecoursesController < Recourse::BaseController
 end
 ```
 
-A controller the app already defines is left alone. Three private methods of
-`Recourse::BaseController` are the seams for one screen: `recourse_relation` (which rows
-the index lists), `recourse_model` (which model the route stands for) and
-`resource_params` (what a form may submit).
+A controller the app already defines is left alone.
 
 ## In `config/initializers/recourse.rb`
 
@@ -111,14 +108,13 @@ end
 | [`recourse_displayed`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_displayed-instance_method) | `[]` | columns a table draws that it would leave off: encrypted ones, the id, timestamps, JSON |
 | [`recourse_order`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_order-instance_method) | `:id` | the index's order, in any shape `order` takes |
 | [`recourse_icon`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_icon-instance_method) | the model's name | the icon on the sidebar, the crumbs and the tabs |
-| [`recourse_includes`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_includes-instance_method) | every `belongs_to` | what the index eager-loads |
-| [`recourse_comment`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_comment-instance_method) | the schema's comment | the note under a form field |
-| [`recourse_broadcasts?`](https://rubydoc.info/gems/recourse/Recourse/Broadcasting#recourse_broadcasts%3F-instance_method) | `true` | whether saving a row refreshes every open index of it |
-| [`filter_fields`](https://rubydoc.info/gems/recourse/Recourse/Searchable/Filters#filter_fields-instance_method) | one menu per enum, boolean and `belongs_to` | the menus beside the search box |
-| [`ransackable_attributes`](https://rubydoc.info/gems/recourse/Recourse/Searchable#ransackable_attributes-instance_method), [`ransortable_attributes`](https://rubydoc.info/gems/recourse/Recourse/Searchable#ransortable_attributes-instance_method) | every plain column; the indexed ones | what a request may search and sort by |
 
 What needs no hook, being read off the model:
 
+- The index eager-loads every `belongs_to` the table names, sorts by whatever an index
+  covers, searches through its indexed string columns and the labels behind its foreign
+  keys, marks what it matched, and offers a filter menu per enum, boolean and `belongs_to`.
+- Saving a row refreshes every open index of it.
 - A form field per column, carrying the rules the validators state: a length is a
   `maxlength`, a format a `pattern`, a numericality a numeric keyboard.
 - An enum is a badge on a page and a menu on a form; a foreign key is a menu of the
@@ -129,8 +125,6 @@ What needs no hook, being read off the model:
 - An encrypted column stays off the table, arrives masked on the record's page behind a
   `Show`, and is edited in the clear.
 - The delete button names what goes with the record, counted one association down.
-- The search box looks through the indexed string columns the table shows and the labels
-  behind its foreign keys, and marks what it matched.
 
 ## In `app/views`
 
