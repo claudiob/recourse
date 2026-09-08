@@ -25,7 +25,7 @@ module Recourse
         nested = nested_path_of path, association
         return tag.span(counted, **named) unless nested && routed?(nested, 'index')
 
-        turbo_link_to counted, nested_url(resource, path, nested, :index), **named
+        turbo_link_to counted, nested_url(resource, path, nested), **named
       end
 
       # The two forms of one count, of which a stylesheet ever shows one: the bare

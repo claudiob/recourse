@@ -9,27 +9,12 @@ Rails.application.routes.draw do
   scope module: :admin do
     # All seven, and the model that has a column of every kind.
     recourses :places do
-      # `recourse` rather than `recourses`: one memo about this place, reached with
-      # no id of its own. Routed `show` as well, so it is a page with a tab of its
-      # own, and the delete stands on that page only while there is one to delete.
-      recourse :memo, only: %i[show destroy]
       # A name this app has no class for at all: an action is a verb, and the button
       # still needs a word.
-      recourse :sweep, only: :create
-      # And one routed `show`: a page rather than an action, which Rails draws no
-      # index for -- so the tab on the place is the only thing that reaches it.
-      recourse :zip, only: :show
-      # The same, and this one the gem serves whole: a `has_one` it reads off the
-      # place, with `new` routed so an absent one is a form to fill in rather than a
-      # page saying there is none.
-      recourse :audit, only: %i[new create show]
-      # And one routed `show create destroy`, which is a page and two verbs and no
-      # form: nothing to fill in, so the button that makes the record and the one that
-      # removes it both stand on the page that reads it, one at a time.
-      recourse :seal, only: %i[show create destroy]
-      # The same, over a record a place may not have: what the host finds is what the
-      # page reads, and a page that finds nothing says so.
-      recourse :person, only: :show
+      recourses :sweeps, only: :create
+      # And one with a model and no form: nothing to fill in, so the button that makes
+      # the record stands on the place's page, and a second press is refused.
+      recourses :seals, only: :create
     end
 
     # Everything but making one: a person arrives from somewhere else.

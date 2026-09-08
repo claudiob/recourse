@@ -4,34 +4,9 @@ module Recourse
   module ResourceResolution
   private
 
-    # A singular resource is reached with no id — `/places/5/memo` names the record by
-    # the path it hangs off rather than by a key of its own — so it is read off the
-    # parent instead, under the name the route already gives it. Where the parent has
-    # no association of that name the record is still the host's to find, in a
-    # controller of its own.
-    def find_resource
-      return assign resource_class.find(params.expect(:id)) if params.key? :id
-      return unless singular_reflection
-
-      record = @recourse_parent.association(singular_reflection.name).reader
-
-      record ? assign(record) : missing_record
-    end
-
-    # The parent's association of this resource's own name, whichever kind it is: a
-    # `has_one` where the parent keeps the record, a `belongs_to` where it points at
-    # one. `reflect_on_association` rather than a rescue, so a name the parent has
-    # never heard of reads as nothing to resolve rather than as an error.
-    def singular_reflection
-      @recourse_parent&.class&.reflect_on_association controller_name.singularize
-    end
-
-    # Nothing found, which for a resource routed `new` means the page that makes one:
-    # a `has_one` nobody has written yet is a form to fill in, not an absence to read.
-    # Where no `new` is drawn, nothing is assigned and the page says so instead.
-    def missing_record
-      redirect_to url_for(action: :new) if Recourse.routed? controller_path, 'new'
-    end
+    # The record the id names, under the name Rails would use. `find`, so an id naming
+    # nothing answers 404.
+    def find_resource = assign resource_class.find(params.expect(:id))
 
     def assign(record)
       @recourse = record
@@ -39,7 +14,7 @@ module Recourse
     end
 
     # Whether there is a model behind this page at all. A bare action has none: it is a
-    # verb the host answers itself — `recourse :sweep, only: :create` — labelled from the
+    # verb the host answers itself — `recourses :sweeps, only: :create` — labelled from the
     # path alone, and still a `RecoursesController`, that being where a host keeps the
     # filters guarding its admin. So what runs on every request asks this first, and the
     # actions the gem serves reach for the model again and raise where it is missing.

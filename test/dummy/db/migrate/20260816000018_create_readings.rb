@@ -7,6 +7,8 @@ class CreateReadings < ActiveRecord::Migration[8.1]
       # A reading taken where the last one was, so this is the key whose menu would be
       # the whole of this table.
       t.references :previous_reading, foreign_key: { to_table: :readings }
+      # Optional: a reading is taken before anybody has said how it came out.
+      t.references :grade, foreign_key: true
 
       t.timestamps
     end

@@ -10,26 +10,13 @@ module Recourse
         crumbs = parent_breadcrumbs
         leaf = breadcrumb_leaf
         here = controller.controller_path
-        return crumbs << [here, breadcrumb_name, nil] unless leaf
+        return crumbs << [here, resources_name, nil] unless leaf
 
-        crumbs << [here, breadcrumb_name, index_url] << [nil, leaf, nil]
+        crumbs << [here, resources_name, index_url] << [nil, leaf, nil]
       end
 
-      # What the crumb naming this resource reads: its plural, or its singular where
-      # the routes drew one record rather than a list. Rails routes a singular resource
-      # to a plural controller, so the path says `properties` for the one property a
-      # location keeps -- and the crumb over it would read `HouseCanaries` for a page
-      # there is only ever one of. The same word the tab leading here took, from the
-      # same place, since the two stand for one page.
-      def breadcrumb_name
-        return resources_name unless idless_route? controller.controller_path, 'show'
-
-        Recourse.known_singular controller.controller_name
-      end
-
-      # Where this resource's index is, or nil where it has none: a singular resource
-      # is one record reached with no id, so there is no list of it to go back to and
-      # the crumb naming it is read out rather than linked.
+      # Where this resource's index is, or nil where it has none, in which case the crumb
+      # naming it is read out rather than linked.
       def index_url
         url_for action: :index if routed_action? 'index'
       end

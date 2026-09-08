@@ -30,23 +30,6 @@ module Recourse
       resources(*names, **options) { draw_within keepable, block }
     end
 
-    # What `resource` draws, recorded the same way: one record reached without an id,
-    # at `/providers/5/authentication`. Rails routes a singular resource to a plural
-    # controller, so that is the path declared here — and recording it is the whole
-    # point, since an action drawn with no index of its own earns its button on the
-    # parent, and only a recorded nesting is ever looked for there.
-    def recourse(*names, **)
-      refuse_unscoped_nesting names
-
-      names.each do |name|
-        path = [current_module, name.to_s.pluralize].compact.join '/'
-        record_declaration path
-        Controllers.define_missing path
-      end
-
-      resource(*names, **)
-    end
-
   private
 
     # The module is the namespace being drawn in, so a resource is declared and its

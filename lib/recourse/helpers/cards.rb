@@ -44,34 +44,19 @@ module Recourse
       end
 
       # One tab per resource nested under the record, in the order routes.rb nested
-      # them — the order the sidebar already keeps. The nested route is the whole
-      # requirement: an index earns a tab reading its rows, and a singular resource
-      # earns one reading its record. A `has_many` of that name decides how the first
-      # of those reads, and a counter cache whether it carries a number, but neither
-      # is what puts it there.
+      # them — the order the sidebar already keeps. The nested index is the whole
+      # requirement: a `has_many` of that name decides how the tab reads, and a counter
+      # cache whether it carries a number, but neither is what puts it there. A nesting
+      # with no index is an action, and its button stands beside the breadcrumbs instead.
       def nested_tabs(record, path)
         Recourse.nested_under(path).filter_map do |nested|
-          action = nested_tab_action nested
-          next unless action
+          next unless routed? nested, 'index'
 
           name, namespace = nested_segments nested, path
 
-          [nested_tab_label(record, name, namespace, action),
-           nested_url(record, path, nested, action), nested == controller.controller_path,]
+          [nested_tab_label(record, name, namespace), nested_url(record, path, nested),
+           nested == controller.controller_path,]
         end
-      end
-
-      # Which page of the nesting its tab opens, or nil where it has none to open: the
-      # index where one is routed, and otherwise the one record a singular resource
-      # keeps — a `show` the router needs no id for, which is what tells
-      # `recourse :memo` from `recourses :memos` here, since Rails routes both to the
-      # same plural controller. An index wins where a host drew both, being the page
-      # that reads every row rather than one of them. A nesting with neither page is an
-      # action, and its button stands beside the breadcrumbs instead.
-      def nested_tab_action(nested)
-        return :index if routed? nested, 'index'
-
-        :show if idless_route? nested, 'show'
       end
 
       def tab_label(action)

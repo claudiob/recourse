@@ -30,13 +30,10 @@ module Recourse
       redirect_to written_url, status: :see_other
     end
 
-    # And where a write goes: the index, or the record's own page where the routes drew none
-    # — a singular resource is the collection of one. A nesting that routed neither has
-    # no page anywhere to land on, so the write goes back to the record it hangs off,
-    # which for a bare action is the page its button stood on.
+    # And where a write goes: the index, or — where the routes drew none — back to the
+    # record it hangs off, which for a bare action is the page its button stood on.
     def written_url
       return url_for action: :index if Recourse.routed? controller_path, 'index'
-      return url_for action: :show if Recourse.idless_route? controller_path, 'show'
 
       parent_url
     end

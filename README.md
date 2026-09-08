@@ -116,36 +116,6 @@ end
 A resource with no `index` route gets no sidebar entry, which is what
 `only: []` is for.
 
-`recourse` draws what Rails' `resource` draws, and the gem records it the same way:
-one record reached with no id of its own, at `/locations/5/property`. Rails routes a
-singular resource to a plural controller, so `Locations::PropertiesController` is what
-answers, and a `has_one` needs no id in the path. What such a nesting earns on the
-location's card depends on what it routes, and only on that. Routed `show`, it earns a
-tab reading the model's own word in the singular — `Property`, or `HouseCanary` where a
-locale renamed the model — pointing at that one page. Routed `create` or `destroy` and
-neither `index` nor `new`, it earns a button beside the breadcrumb instead: `Add
-property`, `Delete property`. Routed both, it earns both, which is a page to read and a
-verb to press — and the button then stands on that page rather than on every page the
-record has, since a page of its own is somewhere for it to be. Which verb it offers is
-the record's to say: `Add property` while the `has_one` holds nothing, `Delete property`
-once it does, and never both. An action with no page anywhere — `recourse :sweep, only:
-:create` — has nowhere of its own, so its button stands on the record's own show page,
-every other page of the record being about something else.
-
-A singular resource has no id to look up, so the gem reads the record off the parent
-under the name the route already gives it — `location.property`, whether the parent
-keeps it with a `has_one` or points at it with a `belongs_to`. Where the association
-holds nothing, a resource routed `new` sends you to the form that makes one, and a
-resource without one says `No property.` on the page. And a write has no index to
-return to, so it lands on the record's own page instead: a singular resource is the
-collection of one.
-
-Where the parent has no association of that name, the record is still yours to find —
-`def find_resource = assign @recourse_parent.chat` in a controller of your own — which
-is what a page reached through something else needs, a chat a nomination gets through
-its booking. The gem assigns nothing in that case, so an override is all there is to
-write, and anything else the page needs goes beside it.
-
 A resource names a model, and a name that resolves to none is an error rather
 than a mystery: `recourses :pizzas` with no `Pizza` in the app answers
 
@@ -243,8 +213,8 @@ icon set's business rather than a Bootstrap class written into the gem.
 
 Both pages wrap their content in a Bootstrap card whose header is a row of tabs,
 one per page the record has — `Show` behind the eye, then `Edit` behind the
-pencil, then one per resource nested under the record that routes a page of its own:
-an index, or the single record a `recourse` draws. The page being read is marked
+pencil, then one per resource nested under the record that routes an index. The page
+being read is marked
 `active` and `aria-current='page'`. They are links rather than a JavaScript tab set,
 since each is a page of its own; a resource with only one of the two gets a card with
 one tab.

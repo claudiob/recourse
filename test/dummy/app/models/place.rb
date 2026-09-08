@@ -17,14 +17,8 @@ class Place < ApplicationRecord
 
   enum :status, STATUSES.index_by(&:itself)
 
-  # At most one, which is what a singular resource stands for.
-  has_one :audit, dependent: :destroy
-
-  # The same, and made by pressing a button rather than by filling in a form.
+  # At most one, and made by pressing a button rather than by filling in a form.
   has_one :seal, dependent: :destroy
-
-  # And the one a place is written about, which points back polymorphically.
-  has_one :memo, as: :about
 
   # 101 of them, so a form asks for a code; three teams, so a form lists them.
   belongs_to :zip, counter_cache: true

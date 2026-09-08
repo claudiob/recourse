@@ -27,11 +27,6 @@ class TestRecoursesPolymorphic < IntegrationCase
 
     assert_includes body.scan(%r{data-cell="About"[^>]*>(.*?)</td>}m).flatten.map(&:strip), ''
 
-    # And where that record has a page of its own the cell leads to it. A place does,
-    # so the kind and the id are the words of a link; a ZIP is drawn under a parent
-    # here and has no page a row could address on its own, so the same column reads as
-    # words -- which is the point of asking the routes rather than assuming a page.
-    assert_includes named, '<a data-turbo-frame="_top" href="/places/3">Place 3</a>'
     assert_includes named, 'ZIP 1'
   end
 

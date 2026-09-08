@@ -23,16 +23,6 @@ module Recourse
 
         @recourse_routed.include? "#{controller_path}##{action}"
       end
-
-      # True where the route needs no id of its own — a collection action, or a
-      # singular resource's. What a button on the parent can reach, in other words:
-      # a member action wants a row, and a row is what a table is for. Asked of
-      # `Recourse` rather than answered here: a write asks the same question of the
-      # same routes, and one of them scanning while the other remembers is two answers
-      # waiting to disagree.
-      def idless_route?(controller_path, action)
-        Recourse.idless_route? controller_path, action
-      end
     end
   end
 end

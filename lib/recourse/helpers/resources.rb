@@ -31,10 +31,7 @@ module Recourse
       end
 
       # What the record on the page is called, by whatever its model labels it with —
-      # and nothing where there is no record to name. A singular resource is one the
-      # host finds, since the path carries no id, and a `has_one` it finds nothing for
-      # is still a page: the crumb above it goes unnamed rather than taking the chrome
-      # down with it, and what the body says about the absence is the host's to write.
+      # and nothing where there is no record to name.
       def resource_record_label
         resource_record&.attributes&.dig resource_model.recourse_label.to_s
       end

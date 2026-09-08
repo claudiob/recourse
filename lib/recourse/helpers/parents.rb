@@ -22,8 +22,8 @@ module Recourse
       # named after the path the children are nested under rather than after the page
       # being served, since a page nested one level up is served by another controller
       # entirely.
-      def nested_url(record, path, nested, action)
-        url_for controller: "/#{nested}", action:,
+      def nested_url(record, path, nested)
+        url_for controller: "/#{nested}", action: :index,
                 "#{path.split('/').last.singularize}_id": record.id
       end
 

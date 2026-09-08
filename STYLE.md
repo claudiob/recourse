@@ -363,10 +363,8 @@ before writing or editing any layout, view or partial.
   `ICONS` map, so a row and a card cannot come to disagree about which is which.
 - After them, one tab per resource nested under the record — in the order routes.rb
   nested them, the same order the sidebar keeps, never the associations' — and the
-  nested route is the whole requirement. Two routes earn a tab: an index, whose tab
-  reads its rows, and a `show` the router needs no id for, which is what a singular
-  `recourse` draws and whose tab reads the one record. An index wins where a host drew
-  both. A nesting with neither is an action rather than a page, and its button stands
+  nested index is the whole requirement. A nesting with none is an action rather than a
+  page, and its button stands
   beside the breadcrumb instead — wearing `btn theme-primary btn-sm btn-solid`, the
   same dress as the index's bare `Create` it is the sibling of, and solid for the same
   reason: it performs rather than navigates.
@@ -378,16 +376,11 @@ before writing or editing any layout, view or partial.
   the column, so the tab costs no query — and the bare `ZIPs` where it does not. The
   count is what earns the downcase; a word that leads keeps its capital, like the Show
   and Edit beside it.
-- A singular resource's tab reads its model's own word in the singular, `ZIP` — the
-  word the bare action's button takes, from the same split, so the two under one record
-  cannot disagree. No count, since a `has_one` has nothing to count, and no icon: an
-  icon here comes from an association the gem counted and from nowhere else, and one
-  guessed off a path segment would ice two routes to one model differently.
 - A nested *page* is one of those pages, so it sits in the same card — the *parent*
   record's — with its own tab as the current one and the parent's own Show and
   Edit tabs beside it, each drawn only where its route is, and neither of them marked:
-  the nested tab is the page being read. That holds for a nested index, for a singular
-  resource's one record, and for a member page a host nested on purpose — the card
+  the nested tab is the page being read. That holds for a nested index and for a member
+  page a host nested on purpose — the card
   names the record above, so every template hands it `resource_parent` before its own.
 - One tab where a resource has only one of the two pages, rather than no card: the
   card is what says which page of a record is being read, and that is worth saying

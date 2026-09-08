@@ -74,7 +74,7 @@ module Recourse
   end
 
   # The same, answering nil where there is no such model rather than raising. A bare
-  # action is a verb — `recourse :sweep, only: :create` — and the gem labels its button
+  # action is a verb — `recourses :sweeps, only: :create` — and the gem labels its button
   # from the path alone, so whether a name has a model behind it has to be a question
   # and not an accusation.
   def self.model?(name) = model_name(name).safe_constantize

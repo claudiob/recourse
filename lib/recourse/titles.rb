@@ -36,11 +36,8 @@ module Recourse
       model ? model_title(model) : segment.humanize
     end
 
-    # And the singular of that, for the two places a page stands for one record rather
-    # than a list: the tab a singular resource earns, and the button a bare action
-    # earns. Off `known_title` rather than `model_title(count: 1)`, since a name this
-    # app has no class for is humanized from a plural path segment and needs
-    # singularizing too.
+    # And the singular of that, for the button a bare action earns: `Add sweep` is one
+    # sweep, and the same split that names the tab beside it.
     def known_singular(name)
       known_title(name).singularize
     end

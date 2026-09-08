@@ -8,6 +8,8 @@ class Reading < ApplicationRecord
   # A key typed rather than picked for the other reason: the name is bounded, not the
   # table long — and two sensors answer to one of the names.
   belongs_to :sensor, optional: true
+  # Optional, and the reason this form draws a menu: grades keep no timestamps.
+  belongs_to :grade, optional: true
 
   validates :depth, presence: true
 end
