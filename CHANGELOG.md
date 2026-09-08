@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
-## Unreleased
+## 4.0.0 - 2026-09-08
 
 Version 4 is a rewrite, developed under the working name `drive` and released here
 because it is the same library: the module is still `Recourse` and the entry point is
