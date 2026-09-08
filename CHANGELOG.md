@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
-## Unreleased
+## 4.4.2 - 2026-09-08
 
 * [Fix] `search_highlight` marks the label of a record the search reached through a key
 
