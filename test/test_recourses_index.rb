@@ -38,8 +38,8 @@ class TestRecoursesIndex < IntegrationCase
       'Bookmark', 'Show', 'Edit', 'Status', 'ZIP', 'Team', 'Person', 'Name', 'Slug',
       'Capacity', 'Rating', 'Area', 'Hourly rate', 'Commission rate', 'Phone', 'Website',
       'Busiest month', 'Founded year', 'Time zone', 'Active', 'Verified', 'About', 'Tags',
-      'Opens on',
-      'Audited at', 'Created at', 'Updated at',
+      'Opens',
+      'Audited', 'Created', 'Updated',
     ], headings
     # `ZIP` and not `ZIP code`, which is the word the form asks with: a heading stands
     # over what a record is called, and nothing is typed under one.

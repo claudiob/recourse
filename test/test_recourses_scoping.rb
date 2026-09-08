@@ -13,7 +13,7 @@ class TestRecoursesScoping < IntegrationCase
     team = Team.order(:id).second
     visit "/teams/#{team.id}/memos"
 
-    assert_includes body, 'data-cell="Created at"'
+    assert_includes body, 'data-cell="Created"'
     kept = Memo.where(person: Person.where(id: team.places.select(:person_id))).count
 
     assert_operator Memo.count, :>, kept

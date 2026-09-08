@@ -443,6 +443,9 @@ before writing or editing any layout, view or partial.
   about the page. Each carries an `aria-label`, since an icon says nothing aloud.
 - An enum is a `.badge`, in the word the column holds rather than a humanized one —
   the same word the form's menu offers, so the two never read differently.
+- A date or a time is headed without the `at` or `on` its column's name ends in:
+  `Created`, `Updated`, `Audited`. When it happened is what the column holds, and the
+  preposition said so twice.
 - Everything else stays the plain link it was. A spreadsheet is a download and there is
   nothing to open in place.
 - A **list** takes the same `<details>`, and for the same reason: a column of values
@@ -985,7 +988,7 @@ before writing or editing any layout, view or partial.
   them rather than `_row`. That is the whole point of putting them there: a host
   that writes its own row still gets the columns, prepended before whatever
   columns that row defines, so `/contacts` reads `(eye) | (pencil) | ZIPs count |
-  Name | Phone | Created at`.
+  Name | Phone | Created`.
 - One column for the show page and one for the edit page, each drawn only where
   its action is routed. The heading and every cell are the icon rather than the
   word — `<i class='bi bi-eye'></i>` and `<i class='bi bi-pencil-square'></i>` —

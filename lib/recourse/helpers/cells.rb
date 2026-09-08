@@ -59,9 +59,18 @@ module Recourse
       # column holds a number and the heading says what the number is of.
       def resource_column_title(column)
         counted = resource_model.recourse_counters[column]
-        return resource_model.human_attribute_name column unless counted
+        return dated_title column unless counted
 
         Recourse.model_title counted.klass
+      end
+
+      # The model's own name for a column, less the `at` or `on` a date's name ends in:
+      # `Created`, not `Created at`, since when it happened is what the column holds.
+      def dated_title(column)
+        title = resource_model.human_attribute_name column
+        dated = column.end_with?('_at', '_on') && Columns::DATE_KINDS.include?(attribute_type(column))
+
+        dated ? title.sub(/ (at|on)\z/, '') : title
       end
 
       # Value for one cell, formatted according to what the column holds.
