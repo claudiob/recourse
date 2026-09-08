@@ -337,8 +337,9 @@
 
       /* The foot of the sidebar holds the scheme toggle and the way out side by side,
          each centered in its own half of the row: the toggle alone is in the middle, and
-         the two together are at a quarter and at three quarters. `button_to` wraps its
-         button in a form, so the form is the half and centers what it holds. */
+         the two together are at a quarter and at three quarters. Each control sits in
+         a wrapper — the toggle's own, the form `button_to` draws — and the wrapper is
+         the half, so a button is only as wide as its icon and so is its hover. */
       .recourse-foot { display: flex; }
       .recourse-foot > * { flex: 1 1 0; display: flex; justify-content: center; }
       .recourse-foot .nav-link { border-radius: var(--bs-radius-5); }

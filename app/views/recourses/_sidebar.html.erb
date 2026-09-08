@@ -17,17 +17,21 @@
       is which of the two mode icons shows — the mode may be the system's, which only CSS
       knows, so both are drawn. -%>
   <li class='nav-item recourse-foot'>
-    <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
-                   data: scheme_data do %>
-      <span class='recourse-scheme-light'>
-        <i class='bi bi-moon-fill'></i>
-        <span class='visually-hidden'><%= t 'recourse.darken' %></span>
-      </span>
-      <span class='recourse-scheme-dark'>
-        <i class='bi bi-sun-fill'></i>
-        <span class='visually-hidden'><%= t 'recourse.lighten' %></span>
-      </span>
-    <% end %>
+    <%# In a wrapper of its own, as the way out is in its form: the wrapper is the half
+        of the row, and the button is only as wide as its icon. -%>
+    <div>
+      <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
+                     data: scheme_data do %>
+        <span class='recourse-scheme-light'>
+          <i class='bi bi-moon-fill'></i>
+          <span class='visually-hidden'><%= t 'recourse.darken' %></span>
+        </span>
+        <span class='recourse-scheme-dark'>
+          <i class='bi bi-sun-fill'></i>
+          <span class='visually-hidden'><%= t 'recourse.lighten' %></span>
+        </span>
+      <% end %>
+    </div>
     <% if exit? %>
       <%= button_to exit_path, method: :delete, class: 'nav-link border-0 bg-transparent' do %>
         <i class='bi bi-box-arrow-right'></i>
