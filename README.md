@@ -33,16 +33,16 @@ end
 Every recourse with `index` gets a sidebar entry (in routes order), a keyboard shortcut on its
 first letter, and a paginated, searchable, sortable, filterable index table:
 
-[image]
+<img width="3824" height="2274" alt="Image" src="https://github.com/user-attachments/assets/f952d3e5-c320-464b-b166-77c7ab8f9071" />
 
 Every recourse with `show` gets a detail page where attributes are displayed with the appropriate
 formatting, or masked if sensitive:
 
-[image]
+<img width="3824" height="2274" alt="Image" src="https://github.com/user-attachments/assets/515f63c4-8a9b-422e-95c4-88d6647911d8" />
 
 Every recourse with `new` or `edit` gets a form with appropriate browser formatting and validation:
 
-[image]
+<img width="3824" height="1220" alt="Image" src="https://github.com/user-attachments/assets/ebe5108b-bbd1-4cd1-a635-89eef0e6fc50" />
 
 Every recourse with `destroy` gets a button with a detailed confirmation message:
 
@@ -50,7 +50,7 @@ Every recourse with `destroy` gets a button with a detailed confirmation message
 
 Every nested recourse gets namespaced after the parent:
 
-[image]
+<img width="3824" height="2274" alt="Image" src="https://github.com/user-attachments/assets/9b242335-a25b-4fa8-8023-422538d235b0" />
 
 
 ## Step 2. Enhance your models
@@ -133,6 +133,9 @@ your `config/initializers/recourse.rb` file:
 Recourse.color = :orange
 Recourse.bookmarks = -> { Keepsake.where agent: Current.agent }
 ```
+
+<img width="3824" height="1220" alt="Image" src="https://github.com/user-attachments/assets/d1db4adb-0b5c-4e41-8bb6-cf72a35288f0" />
+
 
 ## Development
 
