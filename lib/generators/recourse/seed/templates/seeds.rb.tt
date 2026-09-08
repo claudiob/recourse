@@ -1,0 +1,19 @@
+<%#-*- coding: UTF-8 -*-%>
+# <%= Recourse::Generators::Rows::ROWS %> <%= @facts.plural.humanize.downcase %>: the first carries only what a row
+# cannot save without, the last fills every attribute, and the rest mix which
+# optional attributes are filled. The values are of each column's own type and
+# nothing more — a validator this model has grown will have opinions about them.
+#
+# `find_or_create_by!` throughout, so seeding twice finds these rows rather than
+# making them again.
+[
+<% seed_rows.each do |row| -%>
+  { <%= row %> },
+<% end -%>
+].each do |attributes|
+  <%= @facts.class_name %>.find_or_create_by! attributes
+rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid
+  # A row a validator or the database refuses is skipped rather than stopping the
+  # seed, and the count the loader prints — rows standing in the table — never
+  # sees it.
+end

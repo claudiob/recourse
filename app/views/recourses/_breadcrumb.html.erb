@@ -1,0 +1,35 @@
+<nav aria-label='breadcrumb'>
+  <ol class='breadcrumb mb-0'>
+    <% crumbs = resource_breadcrumbs %>
+    <% crumbs.each_with_index do |(resource, title, path), index| %>
+      <% unless index.zero? %>
+        <li class='breadcrumb-divider'></li>
+      <% end %>
+      <% if path %>
+        <%# A crumb naming a record — the parent a nested page is under — links
+            without an icon: the crumb before it already carries the resource's. -%>
+        <li class='breadcrumb-item'>
+          <%= link_to resource ? resource_label(resource, title) : title, path,
+                      class: class_names('breadcrumb-link', 'gap-2': resource) %>
+        </li>
+      <% elsif index < crumbs.size - 1 %>
+        <%# A crumb standing between links without being one — the record a nested
+            page is under — reads as plain text, with no icon of its own: the crumb
+            before it already carries the parent resource's. -%>
+        <li class='breadcrumb-item'>
+          <span class='breadcrumb-link'><%= title %></span>
+        </li>
+      <% elsif resource %>
+        <li class='breadcrumb-item' aria-current='page'>
+          <span class='breadcrumb-link active gap-2'><%= resource_label resource, title %></span>
+        </li>
+      <% else %>
+        <%# A leaf names a page rather than a resource — `New market`, or a record by
+            its label — and the crumb before it already carries the icon. -%>
+        <li class='breadcrumb-item' aria-current='page'>
+          <span class='breadcrumb-link active'><%= title %></span>
+        </li>
+      <% end %>
+    <% end %>
+  </ol>
+</nav>

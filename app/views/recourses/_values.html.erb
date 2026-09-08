@@ -1,0 +1,9 @@
+<% shown_columns.each do |name| -%>
+  <%= value name %>
+<% end -%>
+<% shown_attachments.each do |name| -%>
+  <%= attachment_value name %>
+<% end -%>
+<% host_columns(local_assigns[resource_key]).each do |label, value| -%>
+  <%= host_value label, value %>
+<% end -%>

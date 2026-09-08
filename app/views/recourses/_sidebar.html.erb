@@ -1,0 +1,41 @@
+<ul class='nav md:flex-column' data-controller='shortcuts'>
+  <% sidebar_resources.each do |name, title, path, key| %>
+    <% current = current_resource? name %>
+    <li class='nav-item'>
+      <%= link_to resource_label(name, title, key), path,
+                  class: class_names('nav-link', active: current),
+                  aria: { current: ('page' if current) },
+                  data: { key: (title[key].downcase if key) } %>
+    </li>
+  <% end %>
+
+  <%# An app's own way out of the sidebar, and whatever else the routes cannot
+      name. A button where one is asked for, since a log out is never a GET. -%>
+  <% sidebar_extras.each do |label, path, method| %>
+    <li class='nav-item'>
+      <% if method %>
+        <%= button_to label, path, method:, class: 'nav-link border-0 bg-transparent' %>
+      <% else %>
+        <%= link_to label, path, class: 'nav-link' %>
+      <% end %>
+    </li>
+  <% end %>
+
+  <%# A reader's own say in how the page looks: the last item of the sidebar, and at the
+      foot of it wherever it is a column. Which side of the fold that lands on is the
+      layout's business rather than this file's, and so is which of the two icons shows —
+      the mode may be the system's, which only CSS knows, so both are drawn. -%>
+  <li class='nav-item recourse-scheme'>
+    <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
+                   data: scheme_data do %>
+      <span class='recourse-scheme-light'>
+        <i class='bi bi-moon-fill'></i>
+        <span class='visually-hidden'><%= t 'recourse.darken' %></span>
+      </span>
+      <span class='recourse-scheme-dark'>
+        <i class='bi bi-sun-fill'></i>
+        <span class='visually-hidden'><%= t 'recourse.lighten' %></span>
+      </span>
+    <% end %>
+  </li>
+</ul>

@@ -1,0 +1,37 @@
+Description:
+    Everything `rails generate resource` writes, with the route drawn by
+    `recourses` rather than `resources`. That one word is what hands the model
+    its seven screens: index, new, create, edit, update and destroy, served by
+    this gem without a controller or a view of your own.
+
+    The controller it writes inherits RecoursesController rather than
+    ApplicationController, so the actions and the views arrive with it.
+
+    An attribute of type references gets a counter cache and both sides of the
+    association: the migration adds an integer column to the parent table, the
+    belongs_to is written with counter_cache: true, and the parent model gains
+    the matching has_many, with dependent: :destroy since a child that cannot
+    exist without its parent goes with it. The parent's has_many is written only
+    where that model exists already, so generate the parent first. For the
+    models an app already has, `rails generate recourse:counters` writes the
+    same three pieces wherever one is missing.
+
+    It also writes db/seeds/<resources>.rb, holding two rows: one with only the
+    attributes the row cannot save without, and one with every optional attribute
+    assigned as well. A row cannot save without whatever the migration marks
+    null: false — write name:string! to mark one — nor without a references
+    attribute, which belongs_to requires. Pass --no-seeds to write no seed file.
+
+Example:
+    bin/rails generate recourse contact name:string phone:string
+
+    This will create:
+        app/models/contact.rb, its migration, fixture and test
+        app/controllers/contacts_controller.rb, inheriting RecoursesController
+        app/helpers/contacts_helper.rb and app/views/contacts
+        db/seeds/contacts.rb, and a line in db/seeds.rb that loads it
+        recourses :contacts, in config/routes.rb
+
+    bin/rails generate recourse admin/market name:string
+
+    This will draw the route inside `namespace :admin`.

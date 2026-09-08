@@ -1,0 +1,28 @@
+<%# The palette and mode a reader chose last time, back before anything is painted.
+    Classic and inline rather than a module or a Stimulus controller: both of those run
+    after the first paint, which would show the palette the server chose for an instant
+    and then swap it. The name is checked against the shape a palette's name has before
+    it reaches a URL — the storage is the reader's own, but a value read back out of it
+    is still not a value to trust. -%>
+<script>
+  (function () {
+    var stored
+    try { stored = JSON.parse(localStorage.getItem('<%= Recourse::SCHEME_STORAGE %>')) }
+    catch (error) { return }
+    if (!stored) { return }
+
+    if (stored.mode === 'light' || stored.mode === 'dark') {
+      document.documentElement.dataset.bsTheme = stored.mode
+    }
+    if (!/^[a-z_]+$/.test(stored.theme || '')) { return }
+
+    var link = document.querySelector('link[data-recourse-theme]')
+    if (!link) {
+      link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.dataset.recourseTheme = ''
+      document.head.appendChild(link)
+    }
+    link.href = '<%= Recourse::THEMES_PATH %>/' + stored.theme + '.css'
+  })()
+</script>

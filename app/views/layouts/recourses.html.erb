@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title><%= content_for(:title) || 'Recourse' %></title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name='color-scheme' content='light dark'>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel='stylesheet' href='/recourse/bootstrap.min.css'>
+    <link rel='stylesheet' href='/recourse/bootstrap-icons.min.css'>
+    <%# Preloaded from the head instead of discovered at the end of the body, so the
+        module the toast controller and the dismiss X import is already in flight. -%>
+    <link rel='modulepreload' href='/recourse/bootstrap.bundle.min.js'>
+    <%# Both after the stylesheet, which is what makes them win: every selector is
+        `:root`. The palette repaints the ramps and the color says which repainted ramp
+        is primary, so the palette comes first and the head reads outside in. Between
+        the two it is only a reading order: a custom property is substituted where it is
+        used, so a ramp written later still reaches a primary written earlier. What
+        matters is that neither comes before the link. -%>
+    <%= theme_stylesheet_link %>
+    <%= scheme_restore_script %>
+    <%= primary_color_style %>
+
+    <%# The host's own icon, under whichever of the four names it ships it: Rails 8
+        writes `icon.png` and `icon.svg`, and an older app has a `favicon`. The browser
+        takes the first it can fetch, so an app that has done nothing but draw a route
+        still wears its own tab. -%>
+    <link rel='icon' href='/icon.png' type='image/png'>
+    <link rel='icon' href='/icon.svg' type='image/svg+xml'>
+    <link rel='icon' href='/favicon.ico' sizes='any'>
+    <link rel='icon' href='/favicon.png' type='image/png'>
+    <link rel='apple-touch-icon' href='/icon.png'>
+
+    <script type='module'>
+      import { Application } from '/recourse/stimulus.js'
+      import BookmarkController from '/recourse/bookmark_controller.js'
+      import ClearController from '/recourse/clear_controller.js'
+      import ComboboxController from '/recourse/combobox_controller.js'
+      import DeselectController from '/recourse/deselect_controller.js'
+      import LimitController from '/recourse/limit_controller.js'
+      import MapController from '/recourse/map_controller.js'
+      import NarrowController from '/recourse/narrow_controller.js'
+      import PhoneController from '/recourse/phone_controller.js'
+      import RelativeTimeController from '/recourse/relative_time_controller.js'
+      import RevealController from '/recourse/reveal_controller.js'
+      import SchemeController from '/recourse/scheme_controller.js'
+      import SearchController from '/recourse/search_controller.js'
+      import SortableController from '/recourse/sortable_controller.js'
+      import ShortcutsController from '/recourse/shortcuts_controller.js'
+      import TimezoneController from '/recourse/timezone_controller.js'
+      import ToastController from '/recourse/toast_controller.js'
+      import WrittenController from '/recourse/written_controller.js'
+      import TooltipController from '/recourse/tooltip_controller.js'
+
+      // In the head, and guarded: Turbo re-runs body scripts on every visit, and a
+      // second application would connect every controller twice.
+      if (!window.Stimulus) {
+        window.Stimulus = Application.start()
+        window.Stimulus.register('bookmark', BookmarkController)
+        window.Stimulus.register('clear', ClearController)
+        window.Stimulus.register('combobox', ComboboxController)
+        window.Stimulus.register('deselect', DeselectController)
+        window.Stimulus.register('limit', LimitController)
+        window.Stimulus.register('map', MapController)
+        window.Stimulus.register('narrow', NarrowController)
+        window.Stimulus.register('phone', PhoneController)
+        window.Stimulus.register('relative-time', RelativeTimeController)
+        window.Stimulus.register('reveal', RevealController)
+        window.Stimulus.register('scheme', SchemeController)
+        window.Stimulus.register('search', SearchController)
+        window.Stimulus.register('sortable', SortableController)
+        window.Stimulus.register('shortcuts', ShortcutsController)
+        window.Stimulus.register('timezone', TimezoneController)
+        window.Stimulus.register('toast', ToastController)
+        window.Stimulus.register('tooltip', TooltipController)
+        window.Stimulus.register('written', WrittenController)
+      }
+    </script>
+
+    <style>
+      /* System faces at a compact size, and no webfont: nothing to download, no
+         swap flash, and the last external host the layout reached for is gone.
+         14px as rem, so a browser's own text-size setting still scales it. */
+      :root {
+        --bs-body-font-family: helvetica, verdana, arial, sans-serif;
+        --bs-body-font-size: 0.875rem;
+      }
+
+      /* Bootstrap's .15s fade reads as vanishing. Only the hide ever transitions here
+         — the toast is born visible — and reduced-motion still wins, because its rule
+         sets `transition: none` outright rather than through this variable. */
+      .toast { --bs-transition-fade: opacity 1s linear; }
+
+      /* A marked match is part of the word it sits in, so it carries no padding of
+         its own: 'Nash' in 'Nashville' must not read as a word standing apart. */
+      mark { padding: 0; }
+
+      /* A crumb that is not a link keeps its resting colors under the cursor.
+         Bootstrap lights every .breadcrumb-link on hover, which on a <span>
+         promises a click that goes nowhere — and the element is the whole
+         discriminator, since a crumb that links is an <a>. Redefining the hover
+         tokens, rather than out-cascading the hover rule, leaves Bootstrap's own
+         selector in charge and the active crumb its own resting color. */
+      span.breadcrumb-link {
+        --bs-breadcrumb-link-hover-color: var(--bs-breadcrumb-link-color);
+        --bs-breadcrumb-link-hover-bg: transparent;
+      }
+      span.breadcrumb-link.active {
+        --bs-breadcrumb-link-hover-color: var(--bs-breadcrumb-link-active-color);
+      }
+
+      /* An action column is as wide as a row is tall — an icon in a square — and a
+         counter column starts at the same square, widening only when a figure like
+         38,405 needs the room: a table laying out to 100% reads the width as a
+         preference, never crushes content into it, and hands what these cells do
+         not use to the columns carrying text. Not while the table is stacked, where
+         every cell is a block and a square one is a squashed one — the query
+         matches `.sm:table-stacked`'s. */
+      @container (width >= 576px) {
+        .recourse-actions, .recourse-counter {
+          width: calc(1em * var(--bs-body-line-height) + 2 * var(--bs-table-cell-padding-y));
+          white-space: nowrap;
+          text-align: center;
+        }
+      }
+
+      /* A counter says what it counts in one of two ways, and the table's own width is
+         what picks: the icon and a bare figure where the column is a square, the
+         counted model's words where there is room to read them. Bootstrap's `xl`, so
+         words arrive on a wide monitor and nowhere narrower — the width above is a
+         preference a table never crushes content into, so the column simply widens to
+         take them. Against `.table-responsive` like every query here, which is the
+         table's width rather than the window's: a sidebar takes a few hundred pixels
+         the window knows nothing about. */
+      .recourse-counter-word { display: none; }
+      @container (width >= 1280px) {
+        .recourse-counter-icon, .recourse-counter-figure { display: none; }
+        .recourse-counter-word { display: inline; }
+      }
+
+      /* One rule per row of the show page, so a value and its heading read as one thing
+         and the next pair as another. On the cells rather than between them: a column's
+         gutter is padding inside it, so two side by side draw one unbroken line.
+         Every row reserves the width a rule takes, in `transparent`, and the show page
+         only colors it in — which is what leaves a field at exactly the height of the
+         value it edits, row after row down two pages. */
+      .recourse-row {
+        border-block-end: var(--bs-border-width) solid transparent;
+      }
+      .recourse-values > .recourse-row {
+        border-block-end-color: var(--bs-border-color);
+      }
+      /* And a value stands as tall as the control that edits it, so a row on one page
+         is a row of the same height on the other. Bootstrap gives
+         `.form-control-plaintext` a control's padding and line height but no minimum,
+         and an icon or a badge is shorter than a box. */
+      .recourse-values .form-control-plaintext {
+        min-height: var(--bs-control-min-height);
+      }
+      /* The reveal is a word beside a value rather than a control beside it, so it takes
+         the line's height and not `.btn-sm`'s minimum — which would leave a masked row
+         taller than the field that edits the same attribute. */
+      .form-control-plaintext .btn {
+        min-height: 0;
+      }
+
+      /* A long page scrolls its content, not its chrome. Above the width the sidebar
+         becomes a column at, the shell is exactly the viewport and `main` is the only
+         thing inside it that scrolls, so the navbar and the sidebar stay where they
+         are however far down the table a reader is. Two things make it hold. Every step
+         between takes `min-height: 0`, a flex child being as tall as its content unless
+         told otherwise. And the row stops wrapping: a wrapped line is as tall as the
+         tallest thing on it, and stretching only ever grows an item to the line, never
+         shrinks it to one — so `main` kept its own height and took the page with it.
+         Below that width the sidebar is a band across the top, the row wraps to stack
+         the two, and the page scrolls as one, which is the only thing that reads on a
+         phone.
+         Named by the path down to it rather than as any `.row` in the shell: a show
+         page lays its values out in one and a form lays its fields out in another, and
+         `flex-wrap: nowrap` reaches those too as a descendant — which is three `col-6`
+         values squeezed onto one line instead of two rows of two. Only the row holding
+         the sidebar and the content is meant here, and only it is a child of the
+         container.
+         `main` is the only thing that scrolls inside the shell, and the sidebar
+         deliberately is not. A window dragged shorter than the sidebar itself is the one
+         case the viewport cannot hold, and there the sidebar is allowed to be taller
+         than the line it was stretched to, spill past the shell, and let the browser
+         scroll the page — which is what a reader expects of something taller than the
+         screen. Were it to scroll on its own instead, the same overflow would be hidden
+         inside it and the page would look whole while its foot was unreachable. */
+      @media (width >= 768px) {
+        .recourse-shell { min-height: 0; height: 100dvh; }
+        .recourse-shell > .container-fluid,
+        .recourse-shell > .container-fluid > .row { min-height: 0; }
+        .recourse-shell > .container-fluid > .row { flex-wrap: nowrap; }
+        .recourse-shell main { overflow-y: auto; }
+        /* Stretched to the line like any item, but never squeezed under its own
+           content: the floor is what carries the rule below down past the fold. */
+        .recourse-shell .recourse-sidebar { min-height: min-content; }
+      }
+
+      /* The sidebar rules off the content below it while it sits under the navbar,
+         and off the content beside it once it is a column again. v6 generates no
+         responsive border utilities, so the switch is written out. */
+      .recourse-sidebar {
+        border-block-end: var(--bs-border-width) solid var(--bs-border-color);
+      }
+      @media (width >= 768px) {
+        .recourse-sidebar {
+          border-block-end: 0;
+          border-inline-end: var(--bs-border-width) solid var(--bs-border-color);
+        }
+      }
+
+      /* The search and its filters take the width the breadcrumb and the buttons
+         leave, and give it back as the viewport narrows: the box shrinks to a floor
+         that still shows a word, and below 768px the row is allowed to wrap. */
+      .recourse-search { flex: 1 1 auto; max-width: 48rem; }
+      /* The box grows and the filters do not, so the field someone types into is the
+         widest thing in the row on a large viewport. A toggle is `width: 100%`, which
+         as a flex item would otherwise mean the whole form. */
+      .recourse-search-box { flex: 2 1 16rem; min-width: 8rem; }
+
+      /* A map takes the height a table of a page would: tall enough to read the places
+         on, and short enough to leave the footer under it in view. */
+      .recourse-map { height: 60vh; }
+      .recourse-search .combobox-toggle { flex: 0 1 10rem; }
+      /* The per-page switch is a word in the sentence beside it rather than a control
+         next to one, so it takes the line's height and not `.btn`'s own minimum —
+         which would leave the row under every table taller than the words in it. */
+      .recourse-limit { min-height: 0; }
+      /* Stacked, each control is a row of its own rather than a fragment of one:
+         there is no second control beside it to share the line with. */
+      @media (width < 768px) {
+        .recourse-search { max-width: none; }
+        .recourse-search-box,
+        .recourse-search .combobox-toggle { flex: 1 1 100%; }
+      }
+
+      /* Held Option marks the letter each sidebar link answers to. Marked rather than
+         bracketed: '[C]ontacts' would shift the whole sidebar two characters wide the
+         moment the key went down. Swap the two rules below for the bracketed form. */
+      .recourse-keys .recourse-key {
+        font-weight: var(--bs-font-weight-semibold);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      /* .recourse-keys .recourse-key::before { content: '['; }
+         .recourse-keys .recourse-key::after  { content: ']'; } */
+
+      /* The button that empties a combobox search sits inside the field it clears. */
+      .combobox-search { position: relative; }
+      .combobox-search-input { padding-inline-end: 2rem; }
+      /* `:not(.d-none)`, because v6's display utilities carry no `!important` and
+         this rule is later in the cascade: a plain `display` here would beat the
+         `.d-none` the button is hidden with, and show an X over an empty field. */
+      .combobox-search-clear:not(.d-none) { display: flex; }
+      .combobox-search-clear {
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-end: calc(var(--bs-menu-padding-x) + .35rem);
+        transform: translateY(-50%);
+        padding: .15rem;
+        border: 0;
+        border-radius: var(--bs-radius-5);
+        background: transparent;
+        color: var(--bs-fg-2);
+        line-height: 1;
+      }
+      .combobox-search-clear:hover { background-color: var(--bs-bg-1); color: var(--bs-fg-body); }
+
+      /* A payload in a block of its own, bounded so it scrolls rather than grows. `pre`
+         for the indentation that makes JSON readable, but wrapping rather than running
+         off to the side: a flex item's automatic minimum size is the min-content width
+         of whatever is inside it, and `overflow` on this box does not lower it — so one
+         unbroken 4,000-character token became the width of the value's column, then of
+         `main`, which then wrapped below the sidebar it belongs beside. `pre-wrap` keeps
+         the indentation and takes the wrapping, and `anywhere` is what lowers
+         min-content, which `break-word` in its place would not. */
+      .recourse-payload {
+        max-height: 12rem;
+        margin-block-end: 0;
+        overflow: auto;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      /* And the columns holding it may be narrower than it is. A flex item's automatic
+         minimum size is the min-content width of what is inside it, and `overflow` on
+         the box inside does not lower it — so without these the 32,000px one unbroken
+         token wants becomes the width of the value's column, then of `main`, then of
+         the page, and `main` wraps below the sidebar it should be sitting beside. These
+         two are every flex item in this layout that holds a page's own content, which
+         is what makes `overflow` on the box inside mean what it says. */
+
+      /* A row the viewer has kept, and the only report a click ever gets, so it has to
+         be seen. A twelfth of the primary mixed into the page rather than
+         `--bs-primary-bg-subtle`: that token is a fixed step of the ramp, far enough
+         from the page on a low-contrast palette to cost the text a point of contrast
+         it has not got — mixing into the page keeps the tint the same distance from it
+         whatever the palette. A background rather than `.table-active`, which sets the
+         very variable `.table-hover` sets and would read as the row under the cursor,
+         and lose its tint the moment it became one; a background lets the hover shadow
+         lay over it. */
+      .table > tbody > .recourse-kept > * {
+        background-color: color-mix(in srgb, var(--bs-primary-fg) 12%, var(--bs-bg-body));
+      }
+
+      /* The row a write just landed on, tinted for as long as the message saying so
+         stands. On the cells rather than on the row, like the kept tint beside it: the
+         table collapses its borders, so the cells are what paint, and one tint across
+         all of them is what reads as a single row — where anything drawn per cell reads
+         as a box around each of them instead.
+         A background rather than a border. A border on a collapsing table is a width
+         the table then measures around, and taking it away again leaves the line it
+         drew sitting between two rows that no longer want one.
+         Mixed into the page exactly as the kept tint below is, and never
+         `--bs-success-bg-subtle`: that token is `light-dark(--bs-green-100,
+         --bs-green-900)`, and a palette builds those steps by mixing toward white or
+         black rather than toward the page — so how far it lands from the page is the
+         palette's business and not ours. Mixing here keeps it the same distance on all
+         nine. The success family rather than the primary one is what tells it apart
+         from the kept tint it may land on top of: a different hue reads as a different
+         thing, where a second shade of the primary would read as more of the same. */
+      .table > tbody > .recourse-written > *,
+      .table > tbody > .recourse-written-out > * {
+        --recourse-written: color-mix(in srgb, var(--bs-success-fg) 12%, var(--bs-bg-body));
+      }
+      .table > tbody > .recourse-written > * {
+        background-color: var(--recourse-written);
+      }
+      /* Let go of over the second the toast beside it takes to fade, and started by the
+         same event. The class above comes off as this one goes on, so the animation is
+         the only thing painting the row while it runs and nothing paints it afterwards
+         — which hands a kept row back its own tint rather than leaving it wearing this
+         one. */
+      .table > tbody > .recourse-written-out > * {
+        animation: recourse-written-out 1s linear;
+      }
+      @keyframes recourse-written-out {
+        from { background-color: var(--recourse-written); }
+        to { background-color: var(--bs-bg-body); }
+      }
+      /* The tint itself is not motion; only its going is. */
+      @media (prefers-reduced-motion: reduce) {
+        .table > tbody > .recourse-written-out > * { animation: none; }
+      }
+
+      /* The scheme toggle sits at the foot of the sidebar and centered across it while
+         the sidebar is a column, and is simply the last item of the row while it is not
+         — the query matches the `md:` the sidebar's own classes use. Both lines are
+         needed: `.nav-item` ships `flex: auto`, so every item would take an equal share
+         of a full-height nav and the auto margin would never have anything left to
+         push against. Pin the items to their own height and the toggle takes the rest. */
+      @media (width >= 768px) {
+        /* A floor rather than a height, and never wrapped. `.nav` ships `flex-wrap:
+           wrap`, and a column that may wrap, whose items are pinned to their own height
+           by the line below, and which is told exactly how tall to be has one way to
+           place a link that does not fit: a second column. Which is what a short window
+           used to draw. The floor lets it be taller than the space it was given. */
+        .recourse-sidebar .nav { min-height: 100%; flex-wrap: nowrap; }
+        .recourse-sidebar .nav-item { flex: 0 0 auto; }
+        /* And it rides at the foot of the screen, which the auto margin alone is
+           enough to do: the nav's floor is the sidebar's full height, so while the
+           links leave room the margin takes all of it and the toggle sits on the fold,
+           rising with it as the window is shortened. Once the links fill the nav there
+           is no room left to take, and the toggle comes to rest immediately below the
+           last of them and goes under the fold with it, to be scrolled to.
+           Deliberately not sticky. Sticking it to the bottom of the viewport would lift
+           it off that resting place and hold it over the links it had passed — which is
+           what the background color was for, masking whichever one it covered. Both go
+           together: nothing is painted over, so nothing needs painting out. */
+        .recourse-sidebar .recourse-scheme {
+          margin-block-start: auto;
+          align-self: center;
+        }
+      }
+
+      /* The toggle draws both icons and shows the one that names where a click
+         would go: a moon on a light page, a sun on a dark one. Three states rather than
+         two, because a page nobody has chosen for carries no attribute at all, and the
+         media query is then the only thing that knows which mode it is in. Both are
+         declared at every step rather than one left to its default, so that no state
+         can end up hiding the pair and leaving a button with nothing in it. */
+      .recourse-scheme-light { display: inline; }
+      .recourse-scheme-dark { display: none; }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-bs-theme='light']) .recourse-scheme-light { display: none; }
+        :root:not([data-bs-theme='light']) .recourse-scheme-dark { display: inline; }
+      }
+      :root[data-bs-theme='light'] .recourse-scheme-light { display: inline; }
+      :root[data-bs-theme='light'] .recourse-scheme-dark { display: none; }
+      :root[data-bs-theme='dark'] .recourse-scheme-light { display: none; }
+      :root[data-bs-theme='dark'] .recourse-scheme-dark { display: inline; }
+
+      /* The grip says the row can be taken hold of, and only the grip is draggable:
+         a whole draggable row would fight selecting the text in it. `.sortable-ghost`
+         is the gap SortableJS leaves where the row will land. */
+      .recourse-handle { cursor: grab; }
+      .recourse-handle:active { cursor: grabbing; }
+      .sortable-ghost { opacity: .4; }
+
+      /* The icon font drops every glyph an eighth of an em to sit on a text
+         baseline, which inside an icon link reads as the arrow resting on the
+         line. A sixteenth up clears the baseline without floating — on the
+         ::before, so the hover transform on the .bi box itself is untouched. */
+      .icon-link > .bi::before { vertical-align: .0625em; }
+    </style>
+  </head>
+
+  <%# The reader's zone is told to the server here rather than from a page of its
+      own: every screen the gem draws is one to read against their clock. -%>
+  <body class='recourse-shell d-flex flex-column min-vh-100'
+        data-controller='timezone' data-timezone-storage-value='<%= Recourse::ZONE_STORAGE %>'>
+    <nav class='navbar border-bottom'>
+      <%# `row-gap` rather than a margin on the search: a margin is there whether the
+          form wrapped or not, and on the line it shares with the breadcrumb it drops
+          the field a few pixels below it. A row gap only exists between lines. -%>
+      <div class='container-fluid px-3 justify-content-start row-gap-2'>
+        <%= render 'recourses/breadcrumb' %>
+        <%= yield :actions %>
+        <%= yield :search %>
+      </div>
+    </nav>
+
+    <div class='container-fluid flex-grow-1 d-flex'>
+      <%# Stacked, the sidebar and the content are two lines of a wrapping flex row,
+          and `align-content: stretch` would hand each of them half the height the
+          page has left over — an empty gap under a dozen links. Packed to the top
+          below 768px, and stretched again above it, where the single line being full
+          height is what draws the sidebar's rule the whole way down. -%>
+      <div class='row flex-grow-1 align-content-start md:align-content-stretch'>
+        <aside class='recourse-sidebar col-12 md:col-auto py-3 px-3 mx-0'>
+          <%= render 'recourses/sidebar' %>
+        </aside>
+
+        <main class='col-12 md:col py-4 px-3'>
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+
+    <%= render 'recourses/flash' %>
+    <%= render 'recourses/confirm' %>
+
+    <%# turbo-rails' own bundle, in the version that gem signs its streams for: the
+        Turbo behind every frame and morph here, plus the cable element and Action
+        Cable client that turn an index's subscription tag into a connection. -%>
+    <script type='module' src='/recourse/turbo.min.js'></script>
+    <script type='module' src='/recourse/bootstrap.bundle.min.js'></script>
+    <script type='module'>
+      import confirm from '/recourse/confirm.js'
+
+      // The browser's confirm() becomes the Bootstrap dialog. Re-assigned on every
+      // visit, since body scripts re-run — harmless, the module hands back the same
+      // function each time.
+      window.Turbo.config.forms.confirm = confirm
+    </script>
+  </body>
+</html>

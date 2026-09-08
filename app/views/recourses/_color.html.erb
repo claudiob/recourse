@@ -1,0 +1,20 @@
+<%# locals: (color:, ink:) -%>
+<%# Bootstrap's own nine `:root` declarations for the primary color, with the family
+    swapped — upstream's order and upstream's shapes, so a later Bootstrap can be
+    diffed against this block. The ninth is the label a solid fill carries, and it is
+    the one that names a color rather than a family, so it arrives already decided:
+    `white` or `gray-975`, whichever reads better on the 500 step. Both are shapes
+    upstream ships. A host overrides this partial to say it differently. -%>
+<style>
+  :root {
+    --bs-primary-base: var(--bs-<%= color %>-500);
+    --bs-primary-fg: light-dark(var(--bs-<%= color %>-600), var(--bs-<%= color %>-400));
+    --bs-primary-fg-emphasis: light-dark(var(--bs-<%= color %>-800), var(--bs-<%= color %>-200));
+    --bs-primary-bg: var(--bs-<%= color %>-500);
+    --bs-primary-bg-subtle: light-dark(var(--bs-<%= color %>-100), var(--bs-<%= color %>-900));
+    --bs-primary-bg-muted: light-dark(var(--bs-<%= color %>-200), var(--bs-<%= color %>-800));
+    --bs-primary-border: light-dark(var(--bs-<%= color %>-300), var(--bs-<%= color %>-600));
+    --bs-primary-focus-ring: light-dark(color-mix(in oklch, var(--bs-<%= color %>-500) 50%, var(--bs-bg-body)), color-mix(in oklch, var(--bs-<%= color %>-500) 75%, var(--bs-bg-body)));
+    --bs-primary-contrast: var(--bs-<%= ink %>);
+  }
+</style>

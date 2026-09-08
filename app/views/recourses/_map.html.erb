@@ -1,0 +1,13 @@
+<%# locals: (recourses:, pagy:) %>
+<%# This page of the rows on a Google map, each place's area filled in, in the frame
+    and over the footer the table has — so the search, the sort and the pages all work
+    the same on either shape. Never cached: the map is drawn by the browser. In a card,
+    which gives it the border and the corners the page's other card has — `overflow`
+    since the map is a canvas that would otherwise square the corners off — and under
+    it the margin a table keeps, so the footer stands as far from the map as it does
+    from the rows. -%>
+<div class='card overflow-hidden mb-3'>
+  <div class='recourse-map' <%= tag.attributes data: map_data(recourses) %>></div>
+</div>
+
+<%= render 'footer', pagy: pagy %>

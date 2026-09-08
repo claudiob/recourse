@@ -1,43 +1,67 @@
-<%# locals: (recourses:, pagy: nil, cached: true) -%>
-<% name = @lookup_context.find('row', @lookup_context.prefixes, true).short_identifier.split('/')[-2] %>
-<% key = name.singularize.to_sym %>
-
-<%= turbo_frame_tag :results, data: { turbo_action: :advance }, class: 'w-100' do %>
-  <% if recourses.empty? %>
-    <p>No <%= controller_path.split('/').last %>.</p>
-  <% else %>
-    <%# cache_if cached, [recourses, (recourses.unscoped.size if cached), controller_path].compact do %>
-      <div class='table-responsive'>
-        <table class='table caption-top table-hover align-middle md:table-stacked'>
-          <thead>
-            <tr>
-              <% @recourse_headers = true %>
-              <%= render 'row', key => recourses.first %>
-              <!-- <th scope='col' class='text-end'>Edit</th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <% @recourse_headers = false %>
-            <% recourses.each do |recourse| %>
-              <%# cache_if (cached && !params.key?(:q)), [recourse, controller_path] do %>
-                <tr>
-                  <%= render 'row', key => recourse %>
-                  <%#= column header: 'Edit', class: 'text-end' do %>
-                    <%#= edit_link_to action: :edit, id: 1 %>
-                  <%# end %>
-                </tr>
-              <%# end %>
-            <% end %>
-        </tbody>
-        </table>
-      </div>
-
-      <% if pagy %>
-        <div class='d-flex align-items-center'>
-          <div class='ps-2 flex-grow-1'><%== pagy.info_tag.gsub(/of (\d*?) in total/) { "of #{number_with_delimiter $1} in total" } %></div>
-          <div class='pe-2'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
-        </div>
-      <% end %>
-    <%# end %>
-  <% end %>
+<%# locals: (recourses:, pagy:) %>
+<%# A sorted or filtered table is drawn live: two requests can ask for one relation
+    and want different headings, since only one of them clicked a heading to get it. -%>
+<%# The key carries three riders. The row partial's digest: a host's `_row` is
+    resolved at render, which the fragment's own template digest never follows.
+    And the column list: which columns a table shows is decided in Ruby —
+    `recourse_hidden`, timestamps, counters — that no digest covers either. And the
+    join, where the buttons are of rows this relation knows nothing about. And the
+    bookmarks, which are the viewer's rather than the relation's — so this is what
+    keeps one person's kept rows off another person's page as well as what expires
+    the fragment when a square is clicked. And the zone, for the same reason again:
+    a timestamp is drawn against the reader's own clock, so without it the first
+    person to load a table would settle what hour everybody else read. -%>
+<% key = [recourses, row_digest, resource_columns, join_digest, bookmark_digest,
+          Time.zone.name] -%>
+<% cache_if cacheable_table?, key do %>
+  <% actions = resource_actions %>
+  <% arranged = arranged? %>
+  <%# Read once for the whole table: every row stands under the same labels. -%>
+  <% @recourse_extra = host_column_labels recourses %>
+  <div class='table-responsive'>
+    <table class='table caption-top table-hover align-middle sm:table-stacked'>
+      <thead>
+        <tr>
+          <% @recourse_headers = true %>
+          <%# The grip leads, because dragging it moves the whole row: what a reader
+              takes hold of belongs at the edge they reach for it from. -%>
+          <%= column header: arrangement_header, class: 'recourse-actions' if arranged %>
+          <%# The square a row is kept by opens the table, ahead of the pages it
+              leads to: whether this row is one of mine, before what to do with it. -%>
+          <%= column header: bookmark_header, class: 'recourse-actions' if resource_bookmarks %>
+          <%# A listing of a many-to-many opens with the button writing the join,
+              which is the column the page exists for. -%>
+          <%= column header: t('recourse.attach'), class: 'recourse-actions' if resource_join %>
+          <% actions.each do |action| -%>
+            <%= column header: action_header(action), class: 'recourse-actions' %>
+          <% end -%>
+          <%= render 'row', resource_key => nil %>
+        </tr>
+      </thead>
+      <tbody <%= tag.attributes data: arrangement_data(pagy) if arranged %>>
+        <% @recourse_headers = false %>
+        <% recourses.each do |recourse| %>
+          <tr <%= tag.attributes id: Recourse.row_id(recourse),
+                                 class: bookmark_row_class(recourse),
+                                 data: ({ sortable_update_url: arrangement_url(recourse) } if arranged) %>>
+            <% if arranged -%>
+              <%= column header: arrangement_header, class: 'recourse-actions recourse-handle' do %><%= arrangement_handle %><% end %>
+            <% end -%>
+            <% if resource_bookmarks -%>
+              <%= column header: bookmark_header, class: 'recourse-actions' do %><%= bookmark_button recourse %><% end %>
+            <% end -%>
+            <% if resource_join -%>
+              <%= column header: t('recourse.attach'), class: 'recourse-actions' do %><%= join_button recourse %><% end %>
+            <% end -%>
+            <% actions.each do |action| -%>
+              <%= column header: action_header(action), class: 'recourse-actions' do %><%= resource_action_link action, recourse %><% end %>
+            <% end -%>
+            <%= render 'row', resource_key => recourse %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% end %>
+
+<%= render 'footer', pagy: pagy %>

@@ -1,0 +1,83 @@
+<%# locals: (name:, id:, placeholder:, invalid: false, feedback: nil, described: nil, required: false, label: nil, counter: nil, recourses: nil, values: [], multiple: false, selected: [], aria_label: nil, small: false, all: nil, none: nil, shown: nil, key: nil, grouped: nil) -%>
+<button class='form-control<%= ' form-control-sm' if small %><%= ' is-invalid' if invalid %> combobox-toggle' type='button' id='<%= id %>'
+        data-bs-toggle='combobox' data-bs-name='<%= name %>' data-controller='combobox'
+        data-combobox-more-value='<%= t 'recourse.more' %>'
+        data-bs-placeholder='<%= placeholder %>' data-bs-search='true'
+        aria-required='<%= required %>' <%= tag.attributes 'data-bs-multiple': ('true' if multiple), 'aria-label': aria_label, 'aria-describedby': described %>>
+  <span class='combobox-value'><%= placeholder %></span>
+  <i class='bi bi-chevron-down combobox-caret'></i>
+</button>
+<div class='menu'>
+  <div class='combobox-search' data-controller='clear'>
+    <input type='text' class='form-control combobox-search-input'
+           placeholder='<%= t 'recourse.search' %>'
+           autocomplete='off' aria-label='<%= t 'recourse.search' %>'
+           data-clear-target='input' data-action='input->clear#toggle'>
+    <button type='button' class='combobox-search-clear d-none' aria-label='<%= t 'recourse.clear' %>'
+            data-clear-target='button' data-action='clear#clear'>
+      <i class='bi bi-x-lg'></i>
+    </button>
+  </div>
+  <%# No `data-bs-value`, so the plugin's own click handler passes it by and this one
+      is ours; and never `.selected`, which it counts whatever the element is. -%>
+  <% if all -%>
+    <button type='button' class='menu-item' data-controller='deselect' data-action='deselect#all'
+            data-deselect-multiple-value='<%= multiple %>'><%= all %></button>
+    <div class='menu-divider'></div>
+  <% end -%>
+  <%# A value of its own, and an empty one: the plugin builds its hidden input from
+      whichever item is selected, so this is what sets an optional key back to
+      nothing. `deselect` cannot serve here — in a single menu the plugin selects
+      whatever is clicked rather than toggling it, so re-clicking the chosen item
+      would change nothing at all. -%>
+  <% if none -%>
+    <button type='button' class='menu-item' data-bs-value='' aria-selected='false'><span class='menu-item-content'><span><%= none %></span></span></button>
+    <div class='menu-divider'></div>
+  <% end -%>
+  <%# Records are cached on the relation, and a list of words is not worth caching:
+      an enum has a dozen of them and they are already in memory. Nor is a table with
+      no timestamp on it, which has no version for a key to carry. -%>
+  <% if recourses -%>
+    <% cache_if keepable_menu?(recourses), [recourses, multiple, selected, key, grouped] do %>
+      <% heading = nil -%>
+      <% recourses.each do |recourse| %>
+        <%# A heading over each run of options sharing the value `grouped` names — the
+            state over its counties — so the rows want ordering by it first. It carries
+            the key too, so narrowing hides the heading along with its options. -%>
+        <% if grouped && recourse.attributes[grouped] != heading -%>
+          <% heading = recourse.attributes[grouped] -%>
+          <div class='menu-header' <%= tag.attributes 'data-narrow-key': (recourse.attributes[key] if key) %>><%= heading %></div>
+        <% end -%>
+        <% chosen = selected.include? recourse.id.to_s -%>
+        <%# In the menu but not on it: an option accounting for none of the rows being
+            filtered is `d-none` until `All` asks for it. One already ticked stays put,
+            or the box would name a filter its own menu does not offer. -%>
+        <% empty = counter && !chosen && recourse.attributes[counter].to_i.zero? -%>
+        <%# The name in a `.menu-item-content > span`, which is what the plugin copies into
+            the closed box: a count belongs in the menu and not on the box. Its wrapper
+            is `flex: 1`, so the count needs no margin of its own to sit at the right.
+            `key` names the column another menu narrows this one by, written on each
+            option and each heading for the `narrow` controller to read. -%>
+        <button class='menu-item<%= ' selected' if chosen %><%= ' d-none' if empty %>' type='button' data-bs-value='<%= recourse.id %>' aria-selected='<%= chosen %>' <%= tag.attributes 'data-narrow-key': (recourse.attributes[key] if key) %>><span class='menu-item-content'><span><%= recourse.attributes[label] %></span></span><% if counter %><span class='recourse-count fg-2'><%= number_with_delimiter recourse.attributes[counter] %></span><% end %><% if multiple %><i class='bi bi-check menu-item-check'></i><% end %></button>
+      <% end %>
+    <% end %>
+  <% else -%>
+    <% values.each do |option| %>
+      <%# A pair reads as its first and submits its second — `Places` on the menu for
+          the `Place` a column holds — and a bare word is both at once, which is what
+          an enum's own values and a boolean's two are. -%>
+      <% words, value = Array(option).values_at 0, -1 -%>
+      <%# Compared as text, because that is what a request carries it back as: a host
+          naming a number or a symbol still reads as ticked once one is picked. -%>
+      <% chosen = selected.include? value.to_s -%>
+      <%# In the menu but not on it, the way an unused filter option is: a list too long
+          to read opens on the few worth reading, and `All` asks for the rest. -%>
+      <% waiting = shown && !chosen && shown.exclude?(value.to_s) -%>
+      <button class='menu-item<%= ' selected' if chosen %><%= ' d-none' if waiting %>' type='button' data-bs-value='<%= value %>' aria-selected='<%= chosen %>'><span class='menu-item-content'><span><%= words %></span></span><% if multiple %><i class='bi bi-check menu-item-check'></i><% end %></button>
+    <% end %>
+  <% end -%>
+  <div class='combobox-no-results d-none'><%= t 'recourse.no_results' %></div>
+</div>
+<% if feedback -%>
+  <small class='invalid-feedback' id='<%= id %>_error'><%= feedback %></small>
+<% end -%>

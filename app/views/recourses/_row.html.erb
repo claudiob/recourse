@@ -1,10 +1,10 @@
-<%# locals: (recourse:) -%>
-<% recourse.attributes.each do |name, value| %>
-  <%= column header: (recourse.class.ransortable_attributes.include?(name) ? sort_link(@q, name, name.upcase_first) : name) do %>
-    <% if recourse.class.ransackable_attributes.include? name %>
-      <%= search_highlight value, model: recourse.class %>
-    <% else %>
-      <%= value %>
-    <% end %>
-  <% end unless recourse.encrypted_attribute?(name) %>
-<% end %>
+<% record = local_assigns[resource_key] -%>
+<% resource_columns.each do |name| -%>
+  <%= column header: sort_header(name), class: counter_class(name) do %><%= resource_cell record, name %><% end %>
+<% end -%>
+<%# The header row is drawn from no record at all, so the labels come from the one the
+    table read them off — and the block a cell is drawn with never runs there. -%>
+<% extra = host_columns record -%>
+<% Array(@recourse_extra).each do |label| -%>
+  <%= column header: label do %><%= host_column extra[label] %><% end %>
+<% end -%>

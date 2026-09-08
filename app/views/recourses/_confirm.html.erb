@@ -1,0 +1,14 @@
+<%# The delete warning's dialog, empty until the confirm hook fills it: the wording
+    still travels in the button's `data-turbo-confirm`, and JavaScript is what moves
+    it here. `dialog-slide-down` is the animation, shipped by Bootstrap 6. -%>
+<dialog class='dialog dialog-slide-down' id='recourse-confirm' aria-labelledby='recourse-confirm-title'>
+  <div class='dialog-header'>
+    <h1 class='dialog-title' id='recourse-confirm-title'></h1>
+  </div>
+  <div class='dialog-body'></div>
+  <div class='dialog-footer'>
+    <%# `autofocus` puts Enter on the safe answer: `showModal` focuses it first. -%>
+    <button type='button' class='btn btn-solid theme-secondary' data-bs-dismiss='dialog' autofocus><%= t 'recourse.cancel' %></button>
+    <button type='button' class='btn btn-solid theme-danger recourse-confirm-delete'><%= t 'recourse.deletion.delete' %></button>
+  </div>
+</dialog>

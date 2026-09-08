@@ -1,0 +1,39 @@
+<%# locals: (record:) -%>
+<%# The record's own pages, worked out here rather than passed in, so a host's index
+    template of its own can put its page in this card by naming only the record. -%>
+<%# The way to another record like this one, on the record's own page and nowhere
+    else. A link rather than a button, and so the first thing here: it opens a form
+    where everything beside it writes.
+
+    Then every bare action the routes drew under this record: a nested resource with no
+    index of its own is reached from nowhere, so its button sits beside the
+    breadcrumbs wherever the record is shown, on whichever of its pages that is.
+    Then whatever the host adds, which the routes could not have said. -%>
+<% content_for :actions do %>
+  <%= clone_resource_link record %>
+  <% (bare_action_buttons(record) + host_actions(record)).each do |label, path, method| %>
+    <%= button_to label, path, method:, form_class: 'ms-3',
+                               class: 'btn theme-primary btn-sm btn-solid' %>
+  <% end %>
+<% end %>
+<%# `card-header-tabs` is what pulls the row up into the header's padding, so the
+    active tab meets the body it belongs to instead of floating above it. -%>
+<div class='card'>
+  <div class='card-header'>
+    <ul class='nav nav-tabs card-header-tabs'>
+      <% resource_tabs(record).each do |label, path, current| %>
+        <li class='nav-item'>
+          <%= link_to label, path, class: class_names('nav-link', active: current),
+                                   aria: { current: ('page' if current) } %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <%# `align-items-stretch`, since a card body is a column flex container that packs
+      its children to the start: a form of two fields would take the width of two
+      fields rather than the width of the card. -%>
+  <div class='card-body align-items-stretch'>
+    <%= yield %>
+  </div>
+</div>

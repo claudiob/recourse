@@ -1,0 +1,10 @@
+<%# locals: (resources:, pagy:) %>
+<%# Both branches, so a search that matches nothing still answers with the frame
+    it was asked for. `advance` puts the query in the address bar. -%>
+<turbo-frame id='results' data-turbo-action='advance'>
+  <% if resources.blank? %>
+    <%= render 'none' %>
+  <% else %>
+    <%= render map_view? ? 'map' : 'table', recourses: resources, pagy: pagy %>
+  <% end %>
+</turbo-frame>

@@ -1,0 +1,26 @@
+<% if flash.any? -%>
+  <%# `data-turbo-temporary`: a toast born visible would otherwise replay from the
+      page snapshot on every Back, announcing a save that happened a page ago. -%>
+  <%# The row a write landed on rides here rather than on a toast: this exists once
+      per page, `hidden.bs.toast` bubbles up to it from whichever toast hides, and
+      `data-turbo-temporary` already takes the whole thing away on a Back. -%>
+  <div class='toast-container position-fixed bottom-0 end-0 p-3' data-turbo-temporary
+       <%= tag.attributes data: written_data %>>
+    <%# Every key here becomes a toast, whoever invented it — so the one carrying the
+        written row, which is data rather than a message, is taken out first. -%>
+    <% flash.to_hash.except(Recourse::WRITTEN).each do |key, message| -%>
+      <%# `fade show` from the server: visible at first paint, before any JavaScript.
+          The `toast` controller owns the timed hide, and hovering or focusing holds
+          the toast open while someone reads it or aims for the X. -%>
+      <div class='toast fade show <%= flash_theme key %>' role='alert' aria-live='assertive' aria-atomic='true'
+           data-controller='toast'
+           data-action='mouseenter->toast#stopTimer mouseleave->toast#startTimer focusin->toast#stopTimer focusout->toast#startTimer'>
+        <div class='toast-header border-0'>
+          <span class='me-auto'><%= message %></span>
+          <button type='button' class='btn-close' data-bs-dismiss='toast' aria-label='Close'></button>
+        </div>
+        <div class='toast-body d-none'></div>
+      </div>
+    <% end -%>
+  </div>
+<% end -%>

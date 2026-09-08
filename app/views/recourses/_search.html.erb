@@ -1,0 +1,24 @@
+<%# locals: (query:, url:, field:, prompt:, filters:, sort:) -%>
+<%# Never `turbo-permanent`: that spans page visits too, and every index names
+    this form the same, so a sidebar click would keep the last resource's form.
+    The search controller skips the form's subtree during a morph instead. -%>
+<%= search_form_for query, url: url, html: { class: 'recourse-search d-flex flex-wrap md:flex-nowrap ' \
+                                                    'align-items-center justify-content-end gap-2 ms-auto',
+                                            role: 'search',
+                                            data: { controller: 'search', turbo_frame: :results } } do |form| %>
+  <%# Always drawn, even empty: a heading clicked after this was rendered has only
+      this field to write the new sort into. -%>
+  <%= hidden_field_tag 'q[s]', sort %>
+
+  <%= safe_join filters %>
+
+  <%# Only where there is something to search: a model may have nothing worth
+      typing at and still be worth narrowing, and the filters above are the form. -%>
+  <% if field.present? -%>
+    <div class='recourse-search-box form-control form-control-sm form-adorn d-flex'>
+      <span class='form-adorn-icon'><i class='bi bi-search'></i></span>
+      <%= form.search_field field, class: 'form-ghost', placeholder: prompt, aria: { label: prompt },
+                                   data: { action: 'input->search#submit', search_target: 'field' } %>
+    </div>
+  <% end -%>
+<% end %>

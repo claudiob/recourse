@@ -1,0 +1,5 @@
+<%# locals: (week:) -%>
+<%# An aggregate has no columns for the gem's own row to lay out, so this app says what
+    each cell holds. Everything round them is the gem's, this being a table like any. -%>
+<%= column header: 'Week' do %><%= week %><% end %>
+<%= column header: 'Memos' do %><%= week.memos %><% end %>

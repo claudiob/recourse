@@ -1,30 +1,33 @@
-<% resources = instance_variable_get("@#{controller_path.split('/').last}") || @resources %>
+<% content_for :title, resources_name %>
 
-<% content_for :title, controller_path.split('/').last.singularize.humanize.pluralize if @where&.empty? %>
-
-<% model = controller_name.classify.constantize %>
-
-<% content_for :search do %>
-  <script>
-    function debounce(method) {
-      let timer
-      return (...args) => {
-        clearTimeout(timer)
-        timer = setTimeout(() => { method.apply(this, args) }, 300);
-      }
-    }
-    const debouncedSubmit = debounce((form) => form.requestSubmit())
-  </script>
-  <%= search_form q: @q, model: model, url: request.path %>
-<% end if model.recourse_searchable? %>
-
-<% content_for :actions do %>
-  <% begin %>
-    <%= link_to "Add #{controller_path.split('/').last.singularize}", url_for(action: :new), class: 'btn theme-primary btn-sm btn-outline ms-3'%>
-  <% rescue ActionController::UrlGenerationError %>
+<% if (new_path = new_resource_path) %>
+  <% content_for :actions do %>
+    <%= link_to t('recourse.add', model: resource_name), new_path,
+                class: 'btn theme-primary btn-sm btn-outline ms-3' %>
+  <% end %>
+<% elsif bare_create? %>
+  <%# `create` routed without `new`: the host has said there is nothing worth
+      asking, so a button posts the record whole and the index returns with it. -%>
+  <% content_for :actions do %>
+    <%= button_to t('recourse.create'), url_for(action: :create),
+                  class: 'btn theme-primary btn-sm btn-solid', form_class: 'ms-3' %>
   <% end %>
 <% end %>
 
-<% locals = { @lookup_context.find('table', @lookup_context.prefixes, true).short_identifier.split('/')[-2].to_sym => resources } %>
+<% content_for :search do %>
+  <%= search_form %>
+<% end %>
 
-<%= render 'table', locals.merge(pagy: @pagy, cached: model.recourse_cachable?) %>
+<%# Outside the frame, so a search keystroke's frame navigation never tears the
+    cable connection down and reopens it. -%>
+<%= refresh_subscription %>
+
+<%# A nested index is a page of the parent record, so it sits in the record's own
+    card, beside the record's other pages — its tab, the count, the current one. -%>
+<% if resource_parent %>
+  <%= render layout: 'card', locals: { record: resource_parent } do %>
+    <%= render 'results', resources: @resources, pagy: @pagy %>
+  <% end %>
+<% else %>
+  <%= render 'results', resources: @resources, pagy: @pagy %>
+<% end %>

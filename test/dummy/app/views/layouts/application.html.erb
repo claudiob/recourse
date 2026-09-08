@@ -1,34 +1,16 @@
+<%# A host's own layout, which every generated Rails app has and this one therefore
+    has too. Nothing the gem serves renders inside it: `RecoursesController` implies
+    `layouts/recourses`, which it finds in the gem before Rails ever falls through to
+    here. Every assertion in the suite about the navbar, the sidebar or the primary
+    color is an assertion that this file lost. -%>
 <!DOCTYPE html>
-<html>
+<html lang='en'>
   <head>
-    <title><%= content_for(:title) || "Dummy" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Dummy">
-    <meta name="mobile-web-app-capable" content="yes">
+    <title>The dummy app's own layout</title>
     <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app %>
   </head>
 
   <body>
-    <% navigation_links.each do |caption, path| %>
-      <%= nav_link_to caption, path %>
-    <% end %>
-
-    <%= yield :actions %>
-    <%= yield :search %>
     <%= yield %>
   </body>
 </html>

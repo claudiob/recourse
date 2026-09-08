@@ -1,0 +1,37 @@
+Description:
+    A seed file for every model your `recourses` routes serve, so every screen
+    has rows to show. Each db/seeds/<resources>.rb holds 25 rows: the first
+    carries only what a row cannot save without — whatever a presence or
+    inclusion validator demands, every required belongs_to, and every column
+    the database refuses NULL in with no default to answer for it — the last
+    fills every attribute, and the rest mix which optional attributes are
+    filled, so a nullable column is seen both ways.
+
+    Values are of each column's own type, drawn at random while generating — so
+    the written file never changes between `rails db:seed` runs. A string is a
+    random length inside its length validator's bounds and its column's SQL
+    limit — whichever gate is tighter wins — and reads as words, each
+    one to fifteen characters joined by single spaces, in an alphabet reaching
+    past ASCII into accents and emoji, never repeated within its column — a
+    column pinned to an exact length gets one solid word, since a code is not
+    prose. An email column gets an address, a phone column ten valid digits, a
+    column named like an id digits alone, an enum cycles the words it admits, a
+    date and a time step back a random distance, and a reference reads a random
+    row of the model it points at. A row a validator or the database refuses
+    is skipped rather than stopping the run — the loader's count never sees it
+    — and editing the file is how a skipped row is won back.
+
+    db/seeds.rb gains the loader that reads the directory, once, so follow-up
+    `rails db:seed` runs pick every file up — alphabetically, so reorder by
+    hand where one model's rows need another's to exist first — and say what
+    they are doing: `Seeding contacts... ⏳` while a file runs, rewritten to
+    `Seeded 45 contacts ✅` once it is done. A resource whose model does not
+    exist is skipped, and a file that already exists asks before being
+    overwritten.
+
+Example:
+    bin/rails generate recourse:seed
+
+    This will create:
+        db/seeds/<resources>.rb, one per model `recourses` declares
+        the loader line in db/seeds.rb, unless it is already there

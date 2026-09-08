@@ -1,0 +1,99 @@
+en:
+  # Namespaced rather than `default`, so a host's own date and time formats stand.
+  date:
+    formats:
+      recourse: "%b %-d, %Y"
+  time:
+    formats:
+      recourse: "%b %-d at %I:%M%P %Z"
+  recourse:
+    add: Add %{model}
+    ago: "%{distance} ago"
+    ambiguous_position: "%{model} points several ways, so which of them its position is
+      counted within is its own to say: `def recourse_siblings` returning the rows it
+      is arranged among."
+    all: All %{models}
+    arrange: Reorder
+    as_map: Display as map
+    as_table: Display as table
+    attach: Add
+    # One message in four spellings: what a record is holding, under the field that
+    # adds to it.
+    attached:
+      many: "%{count} files attached (%{files})"
+      none: No file attached
+      none_many: No files attached
+      one: 1 file attached (%{files})
+    all_values: All
+    blank: "—"
+    bookmark: Bookmark
+    bookmark_added: Bookmark added
+    bookmark_error: Bookmark could not be saved.
+    bookmark_removed: Bookmark removed
+    cancel: Cancel
+    clear: Clear search
+    clone: Clone
+    cloned: "%{list} will be copied too."
+    cloned_one: its %{model}
+    create: Create
+    created: "%{model} was created."
+    created_error: "%{model} could not be created."
+    darken: A darker palette
+    delete: Delete %{model}
+    deleted: "%{model} was deleted."
+    displaying:
+      one: Displaying 1 item
+      other: Displaying %{count} items
+    displaying_slice: Displaying items %{from}-%{to} of %{total} in total
+    edit: Edit
+    format: Please match the format %{example}
+    from_now: "in %{distance}"
+    # How many values a list holds, which is what its summary reads before anybody
+    # opens it.
+    items:
+      one: 1 item
+      other: "%{count} items"
+    lighten: A lighter palette
+    missing_model: You declared `recourses :%{name}` in your routes file, but this app
+      has no %{model} model.
+    missing_position: "`%{model}.recourse_order` arranges by `%{column}`, but that table
+      has no such column."
+    nested: You nested `recourses %{names}` inside `resources :%{parent}`, which does
+      not namespace what it holds. Nest it under `recourses :%{parent}` instead.
+    # What a menu with several picks reads as, the first named and the rest counted.
+    more: "%{first} + %{count} more"
+    new: New %{model}
+    no_results: No results found
+    none: "No %{models}."
+    optional: Optional
+    per_page: "%{limit} per page"
+    position_updated: Position updated
+    remove: Remove
+    # What a typed foreign key says when the words in it name more than one row.
+    ambiguous: "matches more than one record, so it does not say which: %{label}"
+    reference: "%{model} %{attribute}"
+    reveal: Show
+    search: Search…
+    searched_cont: Filter by %{list}
+    searched_eq: Filter by exact %{list}
+    select: Select…
+    show: Show
+    two_positions: "`recourse_order` marks %{keys} as `:positionable`, which is two
+      orders for one table. Mark the one a reader arranges."
+    unbookmark: Remove bookmark
+    unknown_color: "`Recourse.color` is one of %{colors}, or nil for Bootstrap's own
+      blue. It cannot be %{color}."
+    unknown_theme: "`Recourse.theme` is one of %{themes}, or nil for Bootstrap's own
+      palette. It cannot be %{theme}."
+    unsorted_position: "`%{model}.recourse_order` arranges by `%{column}`, but no
+      database index covers it, so no table can be read in that order. Add one."
+    updated: "%{model} was updated."
+    updated_error: "%{model} could not be updated."
+    unset: None
+    deletion:
+      delete: Delete
+      title: Delete %{record}?
+      going: "%{list} will be deleted with it."
+      staying: "%{list} will be kept, without its %{model}."
+      under: Anything under those goes too.
+      undone: This cannot be undone.

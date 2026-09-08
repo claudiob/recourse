@@ -1,2 +1,0 @@
-class Fan < ApplicationRecord
-end

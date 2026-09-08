@@ -1,0 +1,29 @@
+<% if @creating -%>
+# Adds <%= @parent_table %>.<%= @column %> and fills it from the rows already
+# there: `counter_cache: true` keeps a count from here on, and this is what
+# makes it true today.
+<% else -%>
+# Refills <%= @parent_table %>.<%= @column %>: the column predates the option
+# that keeps it, so whatever it holds counts nothing — this starts it over
+# from the rows themselves.
+<% end -%>
+class <%= migration_name.camelize %> < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def change
+<% if @creating -%>
+    add_column :<%= @parent_table %>, :<%= @column %>, :integer, default: 0, null: false
+
+<% end -%>
+    up_only { backfill }
+  end
+
+private
+
+  def backfill
+    execute <<~SQL.squish
+      update <%= @parent_table %> set <%= @column %> = (
+        select count(*) from <%= @child_table %> counted
+        where counted.<%= @foreign_key %> = <%= @parent_table %>.<%= @primary_key %>
+      )
+    SQL
+  end
+end

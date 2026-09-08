@@ -1,0 +1,28 @@
+<%# locals: (pagy:) %>
+<% if pagy %>
+  <div class='d-flex align-items-center' <%= tag.attributes data: limit_data(pagy) %>>
+    <%# The gem's own sentence from pagy's public readers, every figure delimited —
+        rewriting pagy's English with a regex delimited one figure, only in English.
+        The switch follows it after a dot: how much of the table is showing, then the
+        one other amount it could show. Only while there is a second page — a table
+        that fits on one is not being paginated, and there is nothing to switch. -%>
+    <div class='ps-2 flex-grow-1'>
+      <% if pagy.last > 1 %>
+        <%= t 'recourse.displaying_slice', from: number_with_delimiter(pagy.from),
+                                           to: number_with_delimiter(pagy.to),
+                                           total: number_with_delimiter(pagy.count) %>
+        <span class='fg-2'>&middot;</span>
+        <%= limit_link pagy %>
+      <% else %>
+        <%= t 'recourse.displaying', count: pagy.count %>
+      <% end %>
+      <%# And the other shape the same rows can take, where the model keeps a place
+          ID: a table becomes a map of this page's rows, and a map a table again. -%>
+      <% if (other = view_link) %>
+        <span class='fg-2'>&middot;</span>
+        <%= other %>
+      <% end %>
+    </div>
+    <div class='pe-2'><%== pagy.series_nav(:bootstrap, classes: 'pagination mb-0') if pagy.last > 1 %></div>
+  </div>
+<% end %>

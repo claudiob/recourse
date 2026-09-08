@@ -1,38 +1,29 @@
-# A module to manage administered resources.
+# Reopened for the one question a controller and a view both ask of the router.
 module Recourse
-  # Makes Recourse methods like `recourses` available in config/routes.rb
+  # What the router will answer. A view asks it through `Helpers::Routing`, which keeps
+  # a set of its own for the table that asks four times a row; a controller asks here,
+  # at most once a request, so this scans rather than remembering — a set kept between
+  # requests would outlive the routes file it was built from.
   module Routing
-    # This method is equivalent to Rails `resources` with the added bonus that we store
-    # the name of these administered resources so we can display them to admins in the navbar.
-    def recourses(*args, **kwargs, &block)
-      store_recourses args, kwargs
-      resources(*args, **kwargs, &scoped(args, &block))
-    end
-
-  private
-
-    def store_recourses(args, kwargs)
-      if @scope[:scope_level_resource]
-        Recourse.resources[@scope[:scope_level_resource].name.to_sym][:nested] = args
-      else
-        routes = Array(kwargs.fetch :only, self.class::Resource.default_actions(false))
-        routes-= Array(kwargs.fetch :except, [])
-
-        Recourse.resources.merge! args.to_h { |arg| [arg, { module: @scope[:module], routes: routes }] }
+    # True where a route is drawn to this controller and action.
+    def routed?(controller_path, action)
+      Rails.application.routes.routes.any? do |route|
+        route.defaults[:controller] == controller_path && route.defaults[:action] == action.to_s
       end
     end
 
-    def scoped(args, &block)
-      return unless block_given?
+    # True where that route needs no id of its own — a collection action, or a singular
+    # resource's, which is what tells `recourse :memo` from `recourses :memos`: Rails
+    # routes both to the same plural controller, and only the route says which it is.
+    # Nil where no such route is drawn at all, which is a third answer and reads as one.
+    def idless_route?(controller_path, action)
+      route = Rails.application.routes.routes.find do |one|
+        one.defaults[:controller] == controller_path && one.defaults[:action] == action.to_s
+      end
 
-      parent_module = args.sole
-      Proc.new { scope module: parent_module, &block }
-      # :nocov:
-    rescue Enumerable::SoleItemExpectedError
-      raise ArgumentError, 'recourses accepts only one resource if a block is given'
-      # :nocov:
+      route&.required_parts&.exclude? :id
     end
   end
-end
 
-ActionDispatch::Routing::Mapper.include Recourse::Routing
+  extend Routing
+end
