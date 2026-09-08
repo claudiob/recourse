@@ -1230,85 +1230,17 @@ redirects and says `Bookmark added.`, which is the floor every button here
 degrades to. Either way the row is written by `BookmarksController`, which a host
 overrides the way it overrides `RecoursesController`.
 
-## Repainting it
-
-```ruby
-# config/initializers/recourse.rb
-Recourse.theme = :solarized
-```
-
-Eight color schemes from code editors, and Bootstrap's own beside them, so one line
-draws every page in any of nine:
-
-```ruby
-Recourse::THEMES.keys
-# => [:bootstrap, :dawn, :dracula, :gruvbox, :monokai, :nord, :one_dark, :solarized,
-#     :tokyo_night]
-```
-
-`:bootstrap` is what a page wears when nothing is set, so it and nil are the same look
-by two routes: nil links no stylesheet at all, `:bootstrap` links one that declares
-nothing. It is named all the same, because the toggle below rotates through this list
-and a reader who cannot find the palette the pages started in cannot undo a click.
-
-This reaches further than `Recourse.color` does. Bootstrap derives every surface,
-border and text color it ships from one neutral ramp, and names each of its
-meanings after a family — `danger` is red, `success` green, `warning` yellow,
-`info` cyan — so repainting the ramps carries a scheme to the page itself, its
-rules, its headings, its muted text and every accent on it. `Recourse.color` still
-only says which repainted ramp is primary. The two compose, and neither needs to
-know about the other.
-
-Every scheme fills both arms of every ramp, so a page still follows the reader's
-system setting: Solarized Light on a light desktop and Solarized Dark on a dark
-one, from one file. Seven of the eight publish both halves themselves — Nord's
-Snow Storm and Polar Night, Rosé Pine's Dawn and its own base, Dracula's
-foreground and background — and Monokai, which ships no light variant, has its
-light arm derived from its own foreground.
-
-A scheme is a stylesheet rather than a block in the page, served from the engine
-at `/recourse/themes/<name>.css`, so a browser is asked for it once instead of on
-every request. It restates all thirteen steps of each family it repaints, because
-Bootstrap inlines a family's base color into every step rather than holding it in
-a variable, and it repaints `--bs-white` and `--bs-black` too — those are the two
-colors every step is mixed with, and the light page reads `--bs-white` directly.
-
-Each scheme also declares the primary color itself, from the family its own accents
-lead with, so `Recourse.theme` on its own is enough: Dracula publishes no blue, so it
-leads with purple, and Monokai leads with its pink. `Recourse.color` still wins where
-a host names one, its block coming after the palette's file. And each scheme says
-which of its families take a dark label rather than a white one, since a scheme built
-for a dark editor has accents far lighter than Bootstrap's — every accent of all eight
-clears 3:1 with the label it is given, the worst pair being 3.41:1.
-
-A name nobody ships raises a `Recourse::Error` naming the nine, rather than
-asking the browser for a stylesheet that is not there. A host wanting a scheme of
-its own writes `app/stylesheets/recourse/themes/` into its own asset path, or
-overrides the layout — and the shipped files are the worked example to copy.
-
-### Letting the reader choose
+## Light or dark
 
 The sidebar ends with one control: a moon while the page is light and a sun while it
 is dark, at the foot of the sidebar wherever it is a column. The icon names where a
-click goes rather than where the page is, and a click moves it to another palette
-*and* into the other mode — so every scheme is reachable from the page itself rather
-than only from an initializer, upstream's own among them.
-
-Which palette comes next is picked at random from the ones not showing. The nine
-have no order that means anything, and excluding the current one is what stops a
-click looking as though it did nothing.
-
-The choice belongs to the reader, so it is kept in their browser under
-`localStorage['recourse-scheme']` and put back on the next visit. It is put back by
-an inline script in the `<head>` rather than by the Stimulus controller, because a
-controller connects after the first paint and the palette the server chose would
-show for an instant first. The controller says it again on `connect`, since Turbo
-merges the `<head>` on a visit and would otherwise restore the server's palette.
+click goes rather than where the page is. The choice belongs to the reader, so it is
+kept in their browser under `localStorage['recourse-scheme']` and put back on the next
+visit, by an inline script in the `<head>` before the first paint.
 
 The mode is forced with `data-bs-theme` on the `<html>` element — Bootstrap's own
 attribute, which sets `color-scheme` and so decides every `light-dark()` on the page.
-Until a reader clicks, no attribute is set at all and the page follows their system,
-which is why the icon is chosen in CSS across three states rather than in Ruby.
+Until a reader clicks, no attribute is set at all and the page follows their system.
 
 ## Helpers
 
@@ -1466,10 +1398,6 @@ Written in an initializer:
 - `Recourse.color` / `Recourse.color=` — the Bootstrap color family the pages
   call primary, one of `Recourse::COLORS`, or nil for Bootstrap's own blue
 - `Recourse::COLORS` — `%i[blue gray orange purple pink brown]`
-- `Recourse.theme` / `Recourse.theme=` — the code-editor color scheme the pages
-  are drawn in, one of `Recourse::THEMES`, or nil for Bootstrap's own palette
-- `Recourse::THEMES` — the nine palettes, each mapped to the families whose 500 step
-  it puts a dark label on rather than a white one
 
 
 Declared on a model, each overriding a default:

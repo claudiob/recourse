@@ -648,10 +648,6 @@ two is filed under the one a reader would look in first.
   file, and skip comments and blanks by default.
 - `.md`, `.txt`, `.html` and `.erb` are exempt. Prose is not code, and a view
   is markup whose length is driven by the page, not by design choices.
-- `.css` is exempt too, and for the same reason rather than as a workaround: a
-  color scheme under `app/stylesheets/` restates thirteen ramp steps for each
-  family it repaints, which is Bootstrap's count and not a design choice of ours.
-  Splitting one to satisfy a line count would be worse than leaving it long.
 - Anything under `db/migrate/` is exempt. A migration that backfills a table is
   as long as the data it carries, and splitting one to satisfy a line count
   would be worse than leaving it long.

@@ -28,11 +28,5 @@ module Recourse
   end
 
   # Which text a family's 500 step carries, named as the token upstream spells it with.
-  # A palette repaints the step, so it may move a family across the line and answers
-  # first where it does.
-  def self.ink(family)
-    inks = THEMES[theme] || DARK_INKS
-
-    inks.include?(family) ? 'gray-975' : 'white'
-  end
+  def self.ink(family) = DARK_INKS.include?(family) ? 'gray-975' : 'white'
 end

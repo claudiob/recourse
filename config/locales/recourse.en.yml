@@ -36,7 +36,7 @@ en:
     create: Create
     created: "%{model} was created."
     created_error: "%{model} could not be created."
-    darken: A darker palette
+    darken: Darken the page
     delete: Delete %{model}
     deleted: "%{model} was deleted."
     displaying:
@@ -51,7 +51,7 @@ en:
     items:
       one: 1 item
       other: "%{count} items"
-    lighten: A lighter palette
+    lighten: Lighten the page
     missing_model: You declared `recourses :%{name}` in your routes file, but this app
       has no %{model} model.
     missing_position: "`%{model}.recourse_order` arranges by `%{column}`, but that table
@@ -81,8 +81,6 @@ en:
     unbookmark: Remove bookmark
     unknown_color: "`Recourse.color` is one of %{colors}, or nil for Bootstrap's own
       blue. It cannot be %{color}."
-    unknown_theme: "`Recourse.theme` is one of %{themes}, or nil for Bootstrap's own
-      palette. It cannot be %{theme}."
     unsorted_position: "`%{model}.recourse_order` arranges by `%{column}`, but no
       database index covers it, so no table can be read in that order. Add one."
     updated: "%{model} was updated."

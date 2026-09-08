@@ -32,12 +32,12 @@ require_relative 'helpers/resources'
 require_relative 'helpers/refreshes'
 require_relative 'helpers/routing'
 require_relative 'helpers/rows'
+require_relative 'helpers/schemes'
 require_relative 'helpers/searches'
 require_relative 'helpers/shortcuts'
 require_relative 'helpers/sidebars'
 require_relative 'helpers/sorts'
 require_relative 'helpers/tabs'
-require_relative 'helpers/themes'
 require_relative 'helpers/times'
 require_relative 'helpers/values'
 require_relative 'helpers/zones'
@@ -51,7 +51,7 @@ module Recourse
             Examples, Fields, Filters, Formats, Inputs, Joins, Kinds, Limits,
             Names, Navigation, Parents, Pictures, Previews, References, Refreshes,
             Routing,
-            Resources, Rows, Searches, Shortcuts, Sidebars, Sorts, Tabs, Themes,
+            Resources, Rows, Schemes, Searches, Shortcuts, Sidebars, Sorts, Tabs,
             Times, Values, Zones
 
     # The grid a record's own two pages lay an attribute out in: two columns on a large

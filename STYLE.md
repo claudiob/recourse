@@ -60,9 +60,8 @@ before writing or editing any layout, view or partial.
   `:root`, so it wins on being later and nothing else; put it before and it does
   nothing at all.
 - `--bs-primary-contrast` is the one of the nine that names a *color* rather than
-  a family, which is exactly why it is the one a palette can break. It is
-  `var(--bs-white)` or `var(--bs-gray-975)`, decided per family by `Recourse.ink`
-  and handed to the partial as its second local. Both are shapes upstream ships:
+  a family. It is `var(--bs-white)` or `var(--bs-gray-975)`, decided per family by
+  `Recourse.ink` and handed to the partial as its second local. Both are shapes upstream ships:
   Bootstrap gives `warning` and `info` a dark label for the same reason.
 - The floor is 3:1, WCAG's for a UI component, and it is not 4.5:1. A solid button
   is filled from the 500 step, where 4.5:1 is unreachable for a mid-lightness hue —
@@ -70,64 +69,8 @@ before writing or editing any layout, view or partial.
   button label. Say 3:1 and mean it; a host needing AA fills from the 700 step.
 - Never assume white. White on `orange-500` is 2.90:1, and `orange` is one of the
   six: the ink is computed, and the computation is what keeps it honest.
-- A host wanting the ten, or a palette of its own, overrides that partial. It
-  takes the family and its ink as its two locals, so a host's version can ignore
-  both entirely.
-
-## The color scheme
-
-- `Recourse.theme` is the second thing a host says about how every page looks, and
-  it reaches much further than `Recourse.color`. A scheme repaints Bootstrap's
-  ramps; the color still only says which repainted ramp is primary. They compose,
-  and neither knows about the other.
-- That composition is free, and this is why: every other line of
-  `_color.html.erb` is a `var()` into a family the palette has already repainted,
-  so a ramp declared later still reaches a primary declared earlier. A custom
-  property is substituted where it is *used*, not where it is written.
-- Which makes order between the palette and the color a reading order and nothing
-  more. What matters absolutely is that neither comes *before* the Bootstrap link,
-  every selector involved being `:root`.
-- A palette is a stylesheet under `app/stylesheets/recourse/themes/`, served at
-  `/recourse/themes/<name>.css`, never a block in the page. It is the same bytes
-  on every request, so a browser is asked for it once — and a scheme is ~139
-  declarations, which is not something to inline into every page.
-- It restates all thirteen steps of every family it repaints. Bootstrap inlines a
-  family's base into each step rather than holding it in a variable, so redefining
-  the 500 alone changes nothing else. Upstream's order and upstream's shapes, with
-  only the base swapped, so a later Bootstrap diffs against the file.
-- It repaints `--bs-white` and `--bs-black` as well, and those two do the most
-  work: they are what every step is mixed with, and `--bs-bg-body` reads
-  `--bs-white` directly in light mode. Repainting the grays alone would leave a
-  light page white. The gem's own markup uses no `.bg-white` or `.fg-black`, which
-  is what makes this safe.
-- Text is stated rather than left to the ramp. Bootstrap's ramp is monotone and its
-  pairings cross — the step that is a light surface is the same step as dark-mode
-  body text — which a palette built for its own contrast does not agree with. So a
-  palette sets `--bs-fg-1`, `--bs-fg-body` and `--bs-fg-2` outright.
-- Every scheme fills both arms of every ramp, so a page still follows the system
-  setting and the layout needs no `data-bs-theme` and no per-scheme branching. A
-  scheme with no published light half has that half derived from its foreground.
-- A scheme names the family its own accents lead with, so setting only
-  `Recourse.theme` is enough — Dracula publishes no blue and leads with purple.
-  And it names the families that take a dark label, since a scheme built for a
-  dark editor has accents far lighter than Bootstrap's.
-- A palette declares the nine `--bs-primary-*` too, from the family it leads with.
-  Not only so `Recourse.theme` alone looks right, but because a reader can swap the
-  file for another one — the primary has to travel with it, and a block written into
-  the page would stay behind. A host's own color still wins, coming after the file.
-- `:bootstrap` is in the list and declares nothing. The eight work by overriding
-  upstream's `:root`, so dropping their block is the whole of what brings upstream's
-  palette back — and swapping this link in is how the toggle drops it. nil and
-  `:bootstrap` are one look by two routes, and it is named so the rotation can reach
-  it: a reader who cannot get back to the palette the pages started in has been shown
-  a door with no handle on the inside.
-- `THEMES` maps a name to one thing only: the families whose 500 step that palette
-  puts a dark label on. Every other fact about it — every ramp, and the accent it
-  leads with — lives in its stylesheet, which is the only place it can be true. A
-  `primary:` key here outlived its reader once already and went quietly stale.
-- Check the numbers when adding one. Every accent of all eight clears 3:1 against
-  the label it is given, and every text tone clears 4:1 in both modes. Nothing in
-  the suite can see this: the same lines run whichever color is written.
+- A host wanting the ten overrides that partial. It takes the family and its ink as
+  its two locals, so a host's version can ignore both entirely.
 
 ## The scheme toggle
 
@@ -152,10 +95,8 @@ before writing or editing any layout, view or partial.
 - It carries the page's own background color, which is invisible at rest and is there
   for the short viewport: where the links themselves reach the foot, the toggle sticks
   over one, and a transparent icon on top of a link reads as neither.
-- The icon names where a click *goes*, not where the page is. A click moves to another
-  palette and into the other mode, which is what makes one control enough for both.
-- Which palette is next is random among those not showing. Excluding the current one
-  is not a detail: it is what stops a click looking as though it did nothing.
+- The icon names where a click *goes*, not where the page is: a moon on a light page,
+  a sun on a dark one.
 - Both icons are drawn and CSS shows one, because nothing in Ruby knows which mode the
   page is in — until a reader clicks, there is no attribute and the mode is the
   system's. Three states, so the rules read: no attribute plus a `prefers-color-scheme`
@@ -167,15 +108,14 @@ before writing or editing any layout, view or partial.
   v5's `.navbar-dark`. So a page dark by the toggle and a page dark by the system are
   not quite identical in the navbar. Upstream's behaviour, and both read correctly.
 - The reader's choice is kept in their browser, never on the server: it is theirs, and
-  a palette is not something a page needs to be told twice.
+  a mode is not something a page needs to be told twice.
 - It is put back by an inline classic script in the `<head>`, not by the controller. A
   module is deferred and a controller connects after the first paint, either of which
-  would show the server's palette for an instant and then swap it.
+  would show the system's mode for an instant and then swap it.
 - And the controller says it again on `connect`, because Turbo merges the `<head>` on
-  a visit and would otherwise put the server's palette back over the reader's. The
-  sidebar is redrawn every visit, so connecting is the moment that catches it.
-- A name read back out of storage is checked before it reaches a URL, in both halves.
-  The storage is the reader's own, which is not the same as trusted.
+  a visit. The sidebar is redrawn every visit, so connecting is the moment that catches it.
+- A value read back out of storage is checked before it reaches the page, in both
+  halves. The storage is the reader's own, which is not the same as trusted.
 
 ## The navbar
 
