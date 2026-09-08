@@ -21,6 +21,9 @@ module Recourse
         count = number_with_delimiter value
         counted = counter_counted count, value, association
         named = counter_naming count, association
+        # The heading again, for a stacked table to draw inside the link rather than
+        # before it: `Franchises: 21` is then one thing to tap.
+        named[:data] = { cell: Recourse.model_title(association.klass) }
         path = resource_controller_path
         nested = nested_path_of path, association
         return tag.span(counted, **named) unless nested && routed?(nested, 'index')

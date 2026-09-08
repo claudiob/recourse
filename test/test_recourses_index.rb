@@ -66,7 +66,8 @@ class TestRecoursesIndex < IntegrationCase
              'data-bs-placement="top" data-bs-title="Places">3</span>'
     word = '<span class="recourse-counter-word">3 places</span>'
 
-    cell = %(<a aria-label="3 Places" data-turbo-frame="_top" href="/people/#{person.id}/places">)
+    cell = '<a aria-label="3 Places" data-turbo-frame="_top" data-cell="Places" ' \
+           "href=\"/people/#{person.id}/places\">"
 
     assert_includes body, %(q%5Bs%5D=places_count+asc">#{icon}</a></th>)
     assert_includes body, "#{cell}#{figure}#{word}</a>"
