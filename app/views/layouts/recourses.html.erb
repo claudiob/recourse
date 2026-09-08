@@ -136,14 +136,18 @@
       }
 
       /* Stacked, a cell reads as one line — `Estimate hi: 600`, the heading semibold
-         and the value after it — where Bootstrap puts the heading on a line of its own.
-         And a value with no space in it — an address, a token — breaks rather than
-         widening the row past the phone. */
+         and the value after it — where Bootstrap puts the heading on a line of its own
+         and leaves the row's first cell with no heading at all, bold in its place: a
+         status opening a row would be a bare badge. Every cell is headed here. And a
+         value with no space in it — an address, a token — breaks rather than widening
+         the row past the phone. */
       @container (width < 576px) {
-        .sm\:table-stacked > tbody > tr > td[data-cell]:not(:first-child)::before {
+        .sm\:table-stacked > tbody > tr > td[data-cell]::before {
           content: attr(data-cell) ': ';
           display: inline;
+          font-weight: var(--bs-font-weight-semibold);
         }
+        .sm\:table-stacked > tbody > tr > td:first-child { font-weight: inherit; }
         .sm\:table-stacked > tbody > tr > td:not(:first-child) + td::before { margin-block-start: 0; }
         .sm\:table-stacked > tbody > tr > td { overflow-wrap: anywhere; }
       }
