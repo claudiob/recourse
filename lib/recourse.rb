@@ -1,6 +1,8 @@
 require 'pagy'
 # Before searchable.rb, so its `extend` lands ahead of Ransack's own defaults.
 require 'ransack'
+# The engine serves Turbo's own bundle, and a host's Gemfile need not name the gem.
+require 'turbo-rails'
 require 'unicon'
 
 require_relative 'recourse/version'

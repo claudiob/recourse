@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 4.1.1 - 2026-09-08
+
+* [Fix] The engine requires turbo-rails itself
+
+  Bundler requires the gems a host's Gemfile names and not their dependencies, so a
+  host listing only `recourse` booted into `uninitialized constant Turbo`.
+
 ## 4.1.0 - 2026-09-08
 
 * [Feature] Rows with nothing in the sorted column come last
