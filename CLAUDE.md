@@ -463,11 +463,6 @@ two is filed under the one a reader would look in first.
   and `columns_hash` still never appears.
 - Corollary for the database: a constraint the model does not also state is a
   constraint the browser cannot show. Add the validator too.
-- `rails g recourse` obeys that corollary for you, and any generator we write
-  does the same: `title:string!` writes `presence: true` beside its `null:
-  false`, `name:string{100}` writes `length: { maximum: 100 }` beside its limit,
-  and `email:string:uniq` writes `uniqueness: true` beside its index. A hand-
-  written migration still needs the validator written by hand.
 - A boolean is the exception worth remembering: `null: false` on one earns
   `inclusion: { in: [true, false] }`, never `presence: true`, which rejects
   `false` along with nil. A `limit` is a length only on a string or a text
@@ -748,8 +743,7 @@ two is filed under the one a reader would look in first.
 
 #### Never freeze strings
 
-- Never write `# frozen_string_literal: true`. No file gets a magic comment,
-  including generated ones — strip it from generator output.
+- Never write `# frozen_string_literal: true`. No file gets a magic comment.
 - Never call `.freeze` on a string, constant or not. Array and hash constants
   are still worth freezing by hand.
 - Where a constant only names something, prefer a symbol over a string — it is
