@@ -44,9 +44,7 @@ module Recourse
       end
 
       # The line under a field saying what somebody wants to know before filling it in:
-      # what the column is for, or what the record already has attached. Both come
-      # through here, so the two read as one kind of thing and how they read is settled
-      # in one place. Nothing at all where there is nothing to say.
+      # what the column is for. Nothing at all where there is nothing to say.
       #
       # `mt-1` because Bootstrap's `.form-text` declares `--bs-form-text-margin-top` and
       # never applies it; `.25rem` is what that variable holds, so this is the gap the

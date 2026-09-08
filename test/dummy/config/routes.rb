@@ -30,9 +30,6 @@ Rails.application.routes.draw do
       # The same, over a record a place may not have: what the host finds is what the
       # page reads, and a page that finds nothing says so.
       recourse :person, only: :show
-      # No `Photo` in this app: the name is what the place has attached, and the
-      # table is of Active Storage's blobs.
-      recourses :photos, only: :index
     end
 
     # Everything but making one: a person arrives from somewhere else.
@@ -54,10 +51,9 @@ Rails.application.routes.draw do
       # A `namespace` between a block and what it nests: the routes and the
       # controller come out under it, and no tab is drawn for a child filed there.
       namespace(:visited) { recourses :places, only: :index }
-      # A nested index the parent has no `has_many` for, which a host draws over
-      # an attachment, or the whole of a table read under one record. The
-      # tab is named after the route, since there is no association to count or to
-      # take an icon from.
+      # A nested index the parent has no `has_many` for: the whole of a table read
+      # under one record. The tab is named after the route, since there is no
+      # association to count or to take an icon from.
       recourses :memos, only: :index
     end
 

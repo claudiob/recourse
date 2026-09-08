@@ -3,7 +3,7 @@ module Recourse
   # its own behavior above it — `class RecoursesController < Recourse::BaseController`
   # with a `before_action :authenticate!` guards every screen the gem serves.
   class BaseController < ApplicationController
-    include Pagy::Method, Arranging, AttachmentResolution, AttachmentWriting,
+    include Pagy::Method, Arranging,
             Landing, Paging, ListResolution, ParentNaming,
             ParentResolution, PolymorphicParents, ReferenceResolution, ResourceResolution,
             Zoning
@@ -79,8 +79,6 @@ module Recourse
     # `def recourse_relation = County.with_boosts_for(@recourse_parent)`. Private, so
     # overriding it adds a query and never an action.
     def recourse_relation
-      return attachment_relation if attachment_reflection
-
       resource_class.where parent_columns
     end
   end

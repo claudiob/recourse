@@ -12,7 +12,7 @@ module Recourse
 
     # The record a key points at where the resource has one, and otherwise the record
     # the path names: a page nested by the path alone — the memos of a team no memo
-    # belongs to, the blobs a record has attached — still sits under something.
+    # belongs to — still sits under something.
     def find_parent
       @recourse_parent_association = parent_association
       @recourse_parent = @recourse_parent_association ? parent_model.find(parent_id) : path_parent
@@ -36,7 +36,7 @@ module Recourse
     # is written as the association rather than as the column, so the class name lands
     # beside the id — a key without its type points into every table at once.
     def parent_columns
-      return {} if attachment_reflection || @recourse_parent_association.nil?
+      return {} if @recourse_parent_association.nil?
       return { @recourse_parent_association.name => @recourse_parent } if polymorphic_parent?
 
       { @recourse_parent_association.foreign_key => @recourse_parent.id }

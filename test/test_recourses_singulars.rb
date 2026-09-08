@@ -14,8 +14,6 @@ class TestRecoursesSingulars < IntegrationCase
     assert_includes body, %(href="/places/#{place.id}/zip">ZIP</a>)
     # A page rather than an action, so nothing posts to it.
     refute_includes body, %(action="/places/#{place.id}/zip")
-    assert_operator body.index(%(href="/places/#{place.id}/zip")), :<,
-                    body.index(%(href="/places/#{place.id}/photos"))
   end
 
   # And the page is the place's own, card and all: this tab is the current one, the

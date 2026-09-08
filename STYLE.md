@@ -451,25 +451,6 @@ before writing or editing any layout, view or partial.
   about the page. Each carries an `aria-label`, since an icon says nothing aloud.
 - An enum is a `.badge`, in the word the column holds rather than a humanized one —
   the same word the form's menu offers, so the two never read differently.
-- A single attached file is a value here — the name it was uploaded under, linking to
-  the file the way a table of blobs links to one, and the dash where nothing is
-  attached. A `has_many_attached` is not: it has a page of its own, where a column of
-  filenames says more than a list squeezed into one value's row.
-- A file a browser can draw is offered rather than only named. The link becomes a
-  `<details>`: the filename in the `<summary>`, and the picture inside it at
-  `.img-fluid`, which is `max-width: 100%` — so it takes the column's width and a
-  photograph shrinks to fit instead of deciding the page's layout.
-- Closed to begin with, which is the point of a `<details>` rather than an `<img>`. A
-  record's page is a column of values a reader scans, and an image sitting open in one
-  pushes everything under it down every single time the page is opened.
-- The picture is inside the link the name would have been, so clicking what the preview
-  drew is the download — `disposition=attachment`, in a tab of its own, exactly as the
-  filename was. Only the `<img src>` asks for `disposition=inline`.
-- Which files those are is `ActiveStorage.web_image_content_types` and not a list of
-  ours: it is Rails' own answer to *what does a browser render natively*, so a host
-  adding `image/webp` to it adds it here too. It leaves out `image/svg+xml` on purpose
-  — Rails keeps that one in `content_types_to_serve_as_binary` and will not serve it
-  inline at all — which is the right answer here for the same reason it is there.
 - Everything else stays the plain link it was. A spreadsheet is a download and there is
   nothing to open in place.
 - A **list** takes the same `<details>`, and for the same reason: a column of values
@@ -540,9 +521,9 @@ before writing or editing any layout, view or partial.
   answer, so `recourse_comment` reads it off the schema where every other rule is read
   off the model. A host on an adapter that keeps no comments answers it by hand
   instead; SQLite keeps none, which is why the dummy does exactly that.
-- One line under a field, whatever it has to say. A column's comment and an
-  attachment's note both answer *what should I know before I fill this in*, so both go
-  through `field_note` and there is one place that decides how such a line reads.
+- One line under a field, whatever it has to say: a column's comment answers *what
+  should I know before I fill this in*, and `field_note` is the one place that decides
+  how such a line reads.
 - `form-text mt-1 fg-secondary`. `mt-1` because Bootstrap's `.form-text` declares
   `--bs-form-text-margin-top` and then never applies it — `.25rem` is what that variable
   holds, so `mt-1` is the gap the class already meant and not a choice of ours.
@@ -553,40 +534,14 @@ before writing or editing any layout, view or partial.
   points at it with `aria-describedby`, so it is announced when the field takes focus
   and not only when the form is read straight through.
 - Every control the gem draws is told, but each is told a different way, because each
-  reaches the browser differently. A text box, a number, a date, a textarea and a file
-  input take it among the other options `resource_field` builds. A **checkbox** is
+  reaches the browser differently. A text box, a number, a date and a textarea take it
+  among the other options `resource_field` builds. A **checkbox** is
   handed it on its own — `kind_field` drops that hash for a boolean on purpose, the
   rest of it being `maxlength`, `pattern`, `placeholder`, `inputmode` and `required`,
   none of which a box that is either ticked or not has any use for. A **combobox**
   carries it as a local, the partial having rendered the attribute for its error
   message all along. A **typed reference** builds the attribute itself, so it says both
   in one place.
-- What a model keeps as files rather than as columns gets a field of its own, after
-  every column the form draws: a file input is the widest control on the page, and it
-  is also the one thing on the form that is not an attribute. `has_many_attached` earns
-  a `multiple` input and `has_one_attached` a single one, both `.form-control` in the
-  same `.recourse-row` grid a column's field sits in, labelled from
-  `human_attribute_name` like every other. `recourse_hidden :photos` keeps a file off a
-  form exactly as it keeps a column off one.
-- Under each input, on an *edit* form, one of those lines saying what the record is
-  holding now: `No file attached`, `No files attached`, `1 file attached (hairy.png)`,
-  `2 files attached (a.png and b.png)`. A field that adds to something should say what
-  choosing a file will join or replace, and for a `has_many` the answer is a list. The
-  empty message is singular or plural by which kind of attachment it is, since that is
-  what decides whether a choice adds or replaces.
-- Not on a *new* form. A record being made has nothing attached yet, so there is
-  nothing to report and the note says nothing rather than saying so.
-- The word is `file`, not the attachment's own name. `No photos attached` under a field
-  already labelled `Photos` says the word twice, and the gem does not know a `photos`
-  holds photographs.
-- Neither input carries a hidden blank beside it — `include_hidden: false` — because
-  nothing here is assigned. Rails' own writer replaces every attachment rather than
-  adding to them and reads a blank field as an instruction to delete the lot, so a
-  submitted file is *attached* after the record saves, never passed to `update`. An
-  edit that touched only a name would otherwise purge what the record had.
-- The form says `multipart/form-data` without being told: `file_field` sets the
-  builder's `multipart`, and `form_with` reads it off the builder after capturing the
-  block. So `_form.html.erb` says nothing about encoding.
 - No field asks for the column a model arranges by. A position is set by dragging a
   row, so a box asking for the number would be a second way to say what the row's own
   place already says — and the two would disagree the moment either was used.

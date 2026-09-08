@@ -2,8 +2,8 @@
 # is shown with, which its model names and Unicon translates.
 module Recourse
   # What a resource is drawn with, by the name of the class a route resolves to, and
-  # nil where there is no such class -- a page of what a record has attached is drawn
-  # under a word this app may have no class for, and an icon is not worth raising over.
+  # nil where there is no such class -- a bare action is drawn under a word this app
+  # has no class for, and an icon is not worth raising over.
   def self.known_icon(name)
     model = name.to_s.split('/').last.classify.safe_constantize
 

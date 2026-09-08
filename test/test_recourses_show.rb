@@ -39,33 +39,6 @@ class TestRecoursesShow < IntegrationCase
     # closed, so a column of values a reader scans is not pushed down by one of them.
     assert_includes body, '<details><summary>3 items</summary><ul class="mb-0 mt-2">' \
                           '<li>Riverside</li><li>Terrace</li><li>Wheelchair access</li></ul>'
-    # A single file is a value here rather than a table of one row, and nothing
-    # attached reads as the dash every other empty value reads as. A shelf of them is
-    # not: `photos` has a page of its own, where a column of filenames says more.
-    assert_includes body, '<div class="form-label">Floor plan</div>' \
-                          '<div class="form-control-plaintext">—</div>'
-    refute_includes body, '<div class="form-label">Photos</div>'
-  end
-
-  # A file a browser can draw is offered rather than only named: a `<details>` the
-  # reader opens to see it where it stands, at the column's width, so a photograph
-  # shrinks to fit instead of deciding the page's layout. Closed to begin with, since
-  # a record's page is a column of values to scan and an open image pushes the rest of
-  # them down. Clicking what it drew is the download the name alone would have
-  # started — a file a browser draws nothing of stays that plain link, as `plan.txt`
-  # is over in the writes.
-  def test_a_file_a_browser_can_draw_opens_on_the_page_itself
-    place = Place.order(:id).first
-    blob = image_blob
-    ActiveStorage::Attachment.create! blob:, name: 'floor_plan', record: place
-    visit "/places/#{place.id}"
-
-    assert_includes body, '<details><summary>hairy.png</summary><a target="_blank"'
-    assert_includes body, 'disposition=attachment"><img src='
-    assert_includes body, 'disposition=inline" alt="hairy.png" class="img-fluid mt-2">'
-  ensure
-    ActiveStorage::Attachment.where(blob:).destroy_all
-    blob&.destroy
   end
 
   # The card a record's own page sits in: its Show tab first, then one tab per index
@@ -84,15 +57,5 @@ class TestRecoursesShow < IntegrationCase
     # bare action's button carries a path of its own before the tabs are drawn.
     assert_operator body.index(%(href="/people/#{person.id}/places")), :<,
                     body.index(%(href="/people/#{person.id}/memos"))
-  end
-
-private
-
-  # Recorded rather than uploaded, the way the seed records the photos beside it: what
-  # a page draws is the blob's own row — the name and the type — never the bytes.
-  def image_blob
-    ActiveStorage::Blob.create_before_direct_upload! byte_size: 12, checksum: 'hairy',
-                                                     content_type: 'image/png',
-                                                     filename: 'hairy.png'
   end
 end

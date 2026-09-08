@@ -534,8 +534,7 @@ two is filed under the one a reader would look in first.
 - A column kept up by hand is the usual cause. Fountain increments `answers_count`
   in an `after_create_commit`, so the gem cannot see it; declaring
   `counter_cache:` on the polymorphic `belongs_to` would fix both the counting and
-  the heading. An Active Storage attachment count can never be one — there is no
-  `belongs_to` to declare it on.
+  the heading.
 - A recognised counter links only where a nested resource's last path segment
   *equals the association's name*: `nested_path_of` is
   `Recourse.nested_under(path).find { |one| one.split('/').last == association.name.to_s }`.

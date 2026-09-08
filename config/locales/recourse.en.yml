@@ -16,11 +16,6 @@ en:
     arrange: Reorder
     # One message in four spellings: what a record is holding, under the field that
     # adds to it.
-    attached:
-      many: "%{count} files attached (%{files})"
-      none: No file attached
-      none_many: No files attached
-      one: 1 file attached (%{files})
     all_values: All
     blank: "—"
     bookmark: Bookmark

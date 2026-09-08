@@ -5,7 +5,6 @@ gemspec
 
 gem 'actioncable' # carries the dummy app's live index refreshes to the browser
 gem 'activejob' # turbo-rails enqueues refresh broadcasts through it
-gem 'activestorage' # the dummy attaches a file, so a table of attachments has one to draw
 gem 'irb' # REPL that bin/console starts
 gem 'json', '< 3' # Active Support 8.1 hands JSON.parse a positional options hash json 3 refuses
 gem 'minitest' # test framework

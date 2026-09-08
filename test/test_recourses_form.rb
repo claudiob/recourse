@@ -54,25 +54,4 @@ class TestRecoursesForm < IntegrationCase
     assert_includes body, %(rows="3" name="place[tags]" id="place_tags">) +
                           %(\nRiverside\nTerrace\nWheelchair access</textarea>)
   end
-
-  # What a model keeps as files rather than as columns gets a field of its own, after
-  # every column: a file input is the widest control on the page. `multiple` where the
-  # model keeps several and not where it keeps one, and no hidden blank beside either —
-  # nothing here is assigned, so a field nobody touched is one the write passes over.
-  # `form_with` reads the encoding off the fields themselves, so the form says so too.
-  def test_a_file_is_a_field_of_its_own_after_every_column
-    visit '/places/new'
-
-    assert_includes body, '<form enctype="multipart/form-data" action="/places"'
-    assert_includes body, '<label class="form-label" for="place_photos">Photos</label>' \
-                          '<input class="form-control" multiple="multiple" type="file" ' \
-                          'name="place[photos][]" id="place_photos" />'
-    # And nothing points at a note on a form making a record, there being none: a file
-    # input says what is attached only where something could be.
-    refute_includes body, 'aria-describedby="place_photos_help"'
-    assert_includes body, '<label class="form-label" for="place_floor_plan">Floor plan' \
-                          '</label><input class="form-control" type="file" ' \
-                          'name="place[floor_plan]" id="place_floor_plan" />'
-    refute_includes body, 'name="place[photos][]" type="hidden"'
-  end
 end

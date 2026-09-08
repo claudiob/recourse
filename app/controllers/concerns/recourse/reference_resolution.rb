@@ -1,8 +1,26 @@
 module Recourse
   # Resolves a submitted foreign key back to an id, for a belongs_to whose label
-  # is typed rather than picked from a menu.
+  # is typed rather than picked from a menu — and refuses the write where a label
+  # named more than one row.
   module ReferenceResolution
   private
+
+    # A new record, unless a typed label named more than one row, which is answered on
+    # the form rather than by writing a guess.
+    def create_resource(record)
+      return false if ambiguous_references? record
+
+      record.save
+    end
+
+    # The same for one that already exists. The parameters are read before the refusal
+    # is asked about, since reading them is what notices an ambiguous label.
+    def update_resource(record)
+      attributes = resource_params
+      return false if ambiguous_references? record
+
+      record.update attributes
+    end
 
     # A foreign key whose label is typed arrives as that label, so it is looked up
     # here. Nothing found leaves the key nil, and `belongs_to` reports it missing.
