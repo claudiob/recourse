@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 4.1.2 - 2026-09-08
+
+* [Fix] The engine requires turbo-rails after Rails, not before
+
+  4.1.1 required it as the gem loaded, which broke an app loading the gem ahead of
+  Rails: Turbo's engine wants Action Dispatch as it is defined.
+
 ## 4.1.1 - 2026-09-08
 
 * [Fix] The engine requires turbo-rails itself
