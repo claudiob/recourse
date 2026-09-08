@@ -10,17 +10,25 @@ module Recourse
 
   private
 
-    # An attachment's parent is the other one the routes can name and no key points
-    # at: a blob holds nothing pointing back, the way the far side of a join does not.
+    # The record a key points at where the resource has one, and otherwise the record
+    # the path names: a page nested by the path alone — the memos of a team no memo
+    # belongs to, the blobs a record has attached — still sits under something.
     def find_parent
       @recourse_parent_association = parent_association
-      @recourse_parent = if @recourse_parent_association
-                           parent_model.find parent_id
-                         else
-                           attachment_parent
-                         end
+      @recourse_parent = @recourse_parent_association ? parent_model.find(parent_id) : path_parent
 
       name_parent
+    end
+
+    # The record the segment above this one names, read off the routes rather than off
+    # a key, or nil where the path names nothing or the name is no model's.
+    def path_parent
+      parent = Recourse.parent_of controller_path
+      model = parent && Recourse.model?(parent)
+      return unless model.respond_to? :find_by
+
+      id = request.path_parameters[:"#{model.model_name.singular}_id"]
+      model.find_by id: id if id
     end
 
     # What the route settled and every action honours: the index lists rows carrying
