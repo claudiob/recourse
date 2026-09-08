@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
-## Unreleased
+## 4.4.0 - 2026-09-08
 
 * [Fix] Tapping the light/dark toggle or the log out on a phone leaves no tint behind
 * [Feature] On a phone a resource's breadcrumb is its icon alone, leaving the row to the search box and the button
