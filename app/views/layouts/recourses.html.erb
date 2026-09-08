@@ -118,9 +118,11 @@
         .nav-link:hover:not(.active) { background-color: transparent; }
       }
 
-      /* The navbar and the sidebar stack over the main column: a menu opened from a
-         filter or a link's tooltip drops over the first rows rather than under them. */
-      .recourse-shell > nav, .recourse-sidebar { position: relative; z-index: 2; }
+      /* The navbar stacks over the sidebar, and both over the main column: a menu
+         opened from a filter drops over the sidebar's row of links on a phone and over
+         the first rows of the table anywhere, rather than under either. */
+      .recourse-sidebar { position: relative; z-index: 2; }
+      .recourse-shell > nav { position: relative; z-index: 3; }
 
       /* An action column is as wide as a row is tall — an icon in a square — and a
          counter column starts at the same square, widening only when a figure like

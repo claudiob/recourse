@@ -14,6 +14,7 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   sector, which has none, and marked nothing.
 
 * [Fix] On a phone the pages under a table are centered on their own row
+* [Fix] A filter's menu drops over the sidebar's row of links on a phone, not under it
 
 ## 4.4.1 - 2026-09-08
 
