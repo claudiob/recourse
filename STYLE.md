@@ -181,37 +181,6 @@ before writing or editing any layout, view or partial.
   `ms-3` on its form, which is the flex item. Routing it that way is the host's
   word that a bare record can stand — the gem checks nothing further.
 
-## Cloning a record
-
-- A record's own page offers `Clone`, contributed with `content_for :actions` so it
-  sits beside the breadcrumbs. Its own page and nowhere else: an index has no one
-  record to copy, an edit page already holds the delete, and a page nested under
-  another record is about something else.
-- It leads the row, before whatever bare-action buttons the record carries. A link
-  opening a form belongs ahead of buttons that write, and the same order reads on
-  the index, where `Add <resource>` is the only thing in that spot.
-- It is a link and wears a link's dress — `btn theme-primary btn-sm btn-outline ms-3`,
-  the classes `Add <resource>` already takes. `.btn-outline` is the navbar's fill for
-  links, and this one goes to a form like any other: nothing is written until that
-  form is submitted.
-- It appears under the same two guards `Add <resource>` answers to — the `new` route
-  drawn *and* the action implemented — since it opens that same form. So a resource
-  routed without one offers no clone, and the routes are the whole check.
-- It goes to `/places/new?cloned_id=3`, which is the ordinary new form with a seed
-  rather than a page of its own: the same title, the same trail, the same fields, and
-  a submit landing on the same `create`.
-- A field whose column is validated unique with no scope opens empty, since a copy of
-  that value could never be saved. Everything else the record can lend is filled in.
-- The fields are the record's own columns, so whatever `recourse_cloned` names is
-  carried out of sight. The form says what that is, in a `.form-text` under the last
-  field and above the submit — the same line a column comment draws, since both answer
-  a question about the form rather than about one field in it.
-- It counts the way the delete warning counts, and reads the same way round: one of a
-  thing is named and several are counted, `Its audit, its seal, and 2 photos will be
-  copied too.` A file reads as what the record calls it — `2 photos`, never `2 blobs`.
-- Nothing at all where a model names no associations, so an ordinary clone form is the
-  new form with values in it and no extra line.
-
 ## Deleting a record
 
 - The delete lives on the edit page and nowhere else, contributed with

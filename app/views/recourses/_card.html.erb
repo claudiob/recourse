@@ -1,15 +1,10 @@
 <%# locals: (record:) -%>
 <%# The record's own pages, worked out here rather than passed in, so a host's index
     template of its own can put its page in this card by naming only the record. -%>
-<%# The way to another record like this one, on the record's own page and nowhere
-    else. A link rather than a button, and so the first thing here: it opens a form
-    where everything beside it writes.
-
-    Then every bare action the routes drew under this record: a nested resource with no
+<%# Every bare action the routes drew under this record: a nested resource with no
     index of its own is reached from nowhere, so its button sits beside the
     breadcrumbs wherever the record is shown, on whichever of its pages that is. -%>
 <% content_for :actions do %>
-  <%= clone_resource_link record %>
   <% bare_action_buttons(record).each do |label, path, method| %>
     <%= button_to label, path, method:, form_class: 'ms-3',
                                class: 'btn theme-primary btn-sm btn-solid' %>

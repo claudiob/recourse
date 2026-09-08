@@ -26,11 +26,6 @@ class Place < ApplicationRecord
   # And the one a place is written about, which points back polymorphically.
   has_one :memo, as: :about
 
-  # Several notes written about it, so a copy has a collection to bring along rather
-  # than one record. Named for what they are rather than after their class: `notes` is
-  # already a column here, and an association of that name would shadow it.
-  has_many :remarks, class_name: 'Note', as: :about, dependent: :destroy
-
   # 101 of them, so a form asks for a code; three teams, so a form lists them.
   belongs_to :zip, counter_cache: true
   belongs_to :team, counter_cache: true, touch: true

@@ -4,7 +4,7 @@ module Recourse
   # with a `before_action :authenticate!` guards every screen the gem serves.
   class BaseController < ApplicationController
     include Pagy::Method, Arranging, AttachmentResolution, AttachmentWriting,
-            CloneResolution, Landing, Paging, ListResolution, ParentNaming,
+            Landing, Paging, ListResolution, ParentNaming,
             ParentResolution, PolymorphicParents, ReferenceResolution, ResourceResolution,
             Zoning
 
@@ -26,20 +26,15 @@ module Recourse
       @pagy, @resources = pagy search.scope, limit: recourse_limit
     end
 
-    # Builds a blank record under the name Rails would use: @contact for contacts -- or
-    # one filled in from the record a reader is copying. The parent a nested route names
-    # is merged over that, the way `resource_params` merges it over what a form sent: a
-    # copied key cannot outrank the one the path spells out.
+    # Builds a blank record under the name Rails would use: @contact for contacts, with
+    # the parent a nested route names already set on it.
     def new
-      assign resource_class.new(cloned_attributes.merge(parent_columns))
+      assign resource_class.new(parent_columns)
     end
 
     # Saves a submitted record, then shows the index again or says what turned it down.
-    # A copy is built from the record `?cloned_id=` names rather than from nothing, so
-    # the parts a form cannot carry -- the children, the files -- are gathered here where
-    # there is a write to gather them for, and what the reader typed lands over them.
     def create
-      record = assign(cloned_record || resource_class.new)
+      record = assign resource_class.new
       record.assign_attributes resource_params
       model = human_name
 

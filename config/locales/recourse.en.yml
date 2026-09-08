@@ -29,9 +29,6 @@ en:
     bookmark_removed: Bookmark removed
     cancel: Cancel
     clear: Clear search
-    clone: Clone
-    cloned: "%{list} will be copied too."
-    cloned_one: its %{model}
     create: Create
     created: "%{model} was created."
     created_error: "%{model} could not be created."

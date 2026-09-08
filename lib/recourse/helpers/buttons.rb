@@ -35,7 +35,7 @@ module Recourse
         record_page?
       end
 
-      # The one page every record has: what a pageless action and a Clone link both need.
+      # The one page every record has, which is where a pageless action's button goes.
       def record_page?
         !resource_parent && controller.action_name == 'show'
       end

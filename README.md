@@ -178,7 +178,7 @@ page being shown.
 | --- | --- |
 | `index` | one page of the model — 20 rows or 100, as the reader chose, `?page=2` for the next |
 | `show` | the record the id names, read out |
-| `new` | a blank record's form, or one filled in from `?cloned_id=` |
+| `new` | a blank record's form |
 | `create` | the index again, or the form with the errors on it |
 | `edit` | the form for the record the id names |
 | `update` | the index again, or the form with the errors on it |
@@ -384,7 +384,6 @@ defaults are there without a model mentioning them.
 | `recourse_typed_label?` | true when that column has a length validator | whether a foreign key to this model is typed into a text field or picked from a list |
 | `recourse_includes` | every `belongs_to` the table names | what the index eager-loads, in any shape `includes` accepts |
 | `recourse_order` | `:id` | how the index sorts, in any shape `order` accepts — one key may read `:positionable` instead of a direction, which arranges the table by hand |
-| `recourse_cloned` | `[]` | the associations a copy of a record carries with it — see [Cloning a record](#cloning-a-record). Nothing is carried that is not named |
 | `recourse_displayed` | `[]` | columns a table and a show page draw that they would otherwise leave off — the encrypted ones, the primary key, a polymorphic `*_type`, the inheritance column, every `json` / `jsonb` payload, whichever column holds a position, and `created_at` / `updated_at`, which come last whatever order they are named in. One name or a list |
 | `recourse_hidden` | `[]` | columns kept off every screen — the table, the show page, the form (which also stops permitting them) and the search box. One name or a list: `def recourse_hidden = :name` and `%i[name title]` both read |
 | `recourse_comment` | the column's own SQL comment | what a column is for, drawn under its field on a form. Nil on an adapter that keeps no comments — SQLite is one — so a host there answers it by hand |
@@ -998,108 +997,6 @@ spelled — *an hour*, *a user*, *a ZIP*, *an SMS* — and no rule gets that rig
 every language a key might be translated into. `Select…` says as much as `Select
 a State…` under a label that already reads `State`. If your models all take the
 same article, the keys above are where you say so.
-
-## Cloning a record
-
-A record's own page carries a `Clone` link beside the breadcrumbs, wherever the
-resource draws a `new` form for it to open:
-
-```
-/places/5   ->   Clone   ->   /places/new?cloned_id=5
-```
-
-That is the ordinary new form with a seed, not a page of its own — the same title,
-the same trail, the same fields, and a submit landing on the same `create`. Every
-value the record can lend arrives filled in, so making another one like it is a
-matter of changing what differs.
-
-What it will not lend is a value no second row could hold. A column validated
-unique with no scope opens empty:
-
-```ruby
-class Place < ApplicationRecord
-  validates :name, presence: true                    # copied
-  validates :slug, presence: true, uniqueness: true  # left for the reader
-end
-```
-
-Read off the validators rather than off the indexes, so what the browser is asked
-for is what the model will actually enforce. A `uniqueness:` carrying a `scope:` is
-copied instead — what makes that pair unique is the scope, which the reader is free
-to change.
-
-### What comes with it
-
-A record is not always one row, and `recourse_cloned` is where a model says which of
-its associations are part of it:
-
-```ruby
-class Place < ApplicationRecord
-  def self.recourse_cloned = %i[audit seal photos]
-end
-```
-
-Named there, an association is carried; unnamed, it stays behind. Nothing is
-guessed — `dependent: :destroy` is not the signal, because it answers a different
-question. It says what may not *outlive* the parent, where cloning asks what is
-*part* of it, and the two come apart constantly: a bookmark dies with the row it
-keeps and is still the reader's rather than the row's.
-
-One list, three behaviors, each read off the association's own kind:
-
-| Declared as | What the copy gets |
-| --- | --- |
-| `has_many` / `has_one` | new records, copied the same way, all the way down |
-| `has_and_belongs_to_many` | the same records, joined again |
-| `has_many_attached` / `has_one_attached` | the same files, attached again — nothing is re-uploaded |
-
-Because a child is copied by asking it for its own copy, a model deep in the tree
-declares only its own children, and the recursion is the gem's:
-
-```ruby
-class Provider < ApplicationRecord
-  def self.recourse_cloned = %i[notions reviews departments photos]
-end
-
-class Department < ApplicationRecord
-  def self.recourse_cloned = %i[strengths services image]
-end
-```
-
-At every level the copy is cleared of what no second row may inherit: the primary
-key, `created_at` and `updated_at`, every counter cache, and every unscoped-unique
-column. So a counter starts at zero rather than at the source's total, and a clone
-does not claim the age of what it copied.
-
-A position is cleared once, on the record the reader asked for: it lands last in its
-arranged table rather than on top of the row it was copied from. The copies under it
-keep the places they were in — their siblings are the copies beside them, and the
-order somebody put those in is part of what was copied.
-
-Anything a list cannot express is an override, and `super` does the rest:
-
-```ruby
-class Department < ApplicationRecord
-  # `dup` copies this key, and it would point at the plan of the provider we copied.
-  def recourse_deep_clone
-    super.tap { |copy| copy.promoted_plan_id = nil }
-  end
-end
-```
-
-The whole graph is built unsaved and written in one transaction, so a copy either
-arrives complete or does not arrive.
-
-Since the fields on the form are the record's own columns, what a model names is
-carried out of sight — so the form says so, counting what is coming the way the
-delete warning counts what is going:
-
-```
-Its audit, its seal, and 2 photos will be copied too.
-```
-
-Nothing at all for a model that names none, and nothing is written until the form is
-submitted. An id naming no record answers 404, the way it does on any other page.
 
 ## Bookmarking a row
 

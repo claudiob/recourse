@@ -47,13 +47,8 @@ module Recourse
       # Where a form submits: the action that saves it, in the namespace the resource
       # was drawn in. `form_with model:` would ask polymorphic routing instead, which
       # knows the model and not the namespace, and names a route that does not exist.
-      #
-      # A copy carries the record it came from through to the write, which is the only
-      # place its children can be gathered: a form sends columns and nothing else, so
-      # the id the page was opened with has to survive the round trip. `url_for` drops a
-      # nil, so an ordinary form submits exactly where it did before.
       def resource_form_url(record)
-        return url_for action: :create, cloned_id: params[:cloned_id] if record.new_record?
+        return url_for action: :create if record.new_record?
 
         url_for action: :update, id: record
       end

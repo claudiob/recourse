@@ -27,11 +27,6 @@ module Recourse
     # whichever way round it was written.
     def recourse_displayed = []
 
-    # Associations a copy carries with it, none by default. `dependent:` cannot answer
-    # this: it says what may not outlive the parent, and a bookmark dies with the row it
-    # keeps while still being the reader's rather than the row's.
-    def recourse_cloned = []
-
     # Columns holding a counter cache, each mapped to the association it counts. Read
     # from the `belongs_to` on the other side, which is where `counter_cache` is
     # declared: a column merely named `quote_count` is not one of these. Worked out

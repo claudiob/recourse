@@ -25,11 +25,6 @@ class Place
       # makes it the honest test of a column a model simply does not want read out.
       def recourse_hidden = :webhook_url
 
-      # What a copy of a place brings: the records that are the place's own and the
-      # files it was given. Its bookmarks are not among them -- those are whoever kept
-      # it rather than anything the place is made of.
-      def recourse_cloned = %i[audit seal remarks photos floor_plan]
-
       # Both: a place is a thing whose age is worth knowing, where a row written
       # once by a migration is not. Where they go is the table's business — last,
       # and created before updated — so the order named here says nothing.
