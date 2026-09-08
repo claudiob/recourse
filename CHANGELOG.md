@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
-## Unreleased
+## 4.3.0 - 2026-09-08
 
 * [Feature] On a phone a stacked cell reads as one line, `Estimate hi: 600`
 * [Feature] On a phone the sidebar's icons carry their words: `Dark mode`, `Light mode`, `Exit`
