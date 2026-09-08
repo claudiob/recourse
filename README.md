@@ -1230,72 +1230,6 @@ redirects and says `Bookmark added.`, which is the floor every button here
 degrades to. Either way the row is written by `BookmarksController`, which a host
 overrides the way it overrides `RecoursesController`.
 
-## Mapping a table
-
-A table whose model keeps a `google_place_id` can be read as a Google map of the same
-rows: `/providers/57/counties.map` fills in each county on this page, in the frame and
-over the footer the table has, so the search, the sort and the pages work the same on
-either shape. The footer under the table says `Display as map` where there is one to
-display, and the footer under the map says `Display as table`; each keeps the page the
-other was on. The column is the whole opt-in — nothing to declare, and no link where a
-model keeps none.
-
-The map is Google's, so the key and the map it is drawn on are the host's, read from
-its credentials under `google_maps`:
-
-```yaml
-# config/credentials.yml.enc
-google_maps:
-  api_key: AIza…
-  county_map_id: 4f2a…
-```
-
-The map ID is one with the feature layer for counties — `ADMINISTRATIVE_AREA_LEVEL_2`
-in Google's words — turned on in the Cloud console, since that is the layer a place is
-filled in on.
-
-
-```ruby
-# config/initializers/recourse.rb
-Recourse.color = :orange
-```
-
-Bootstrap's primary color is blue, which is what the pages are drawn in when nothing
-says otherwise — `Recourse.color` is nil by default, and nil means exactly that. One
-line makes it one of the other five:
-
-```ruby
-Recourse::COLORS # => [:blue, :gray, :orange, :purple, :pink, :brown]
-```
-
-Every button, link, sorted heading and focus ring follows, because `.theme-primary`
-and everything else Bootstrap draws in that color read the nine `--bs-primary-*`
-custom properties that the gem's layout redefines under `:root` when a color is
-set. Nothing is emitted when no color is named, which is the default — a palette
-names its own lead accent in its own file instead.
-
-Six of the sixteen families Bootstrap ships, and the other ten are left out
-rather than forgotten. Anything else raises a `Recourse::Error` naming the six,
-rather than writing `var(--bs-purpel-500)` into every page and going unnoticed
-until somebody looked at a button.
-
-The last of the nine is the label a solid fill carries, and it follows the family
-rather than always being white: `var(--bs-white)`, or `var(--bs-gray-975)` — the
-darkest neutral — where white would read worse on the step a solid button is
-filled with. That is upstream's own shape, since Bootstrap gives `warning` and
-`info` a dark label for the same reason. White on `orange-500` is 2.90:1, under
-the 3:1 a button's label owes.
-
-3:1 is the floor here, not 4.5:1, and it is a floor rather than a target on
-purpose: a solid button is filled from the 500 step, where 4.5:1 is out of reach
-for a mid-lightness hue — Bootstrap's own blue is 3.56:1 against white. A host
-that needs AA for a 14px label fills from the 700 step in its own copy of the
-partial.
-
-A host that wants the ten, or a palette of its own, overrides
-`app/views/recourses/_color.html.erb`, which takes the family and its ink as its
-two locals.
-
 ## Repainting it
 
 ```ruby
@@ -1536,9 +1470,7 @@ Written in an initializer:
   are drawn in, one of `Recourse::THEMES`, or nil for Bootstrap's own palette
 - `Recourse::THEMES` — the nine palettes, each mapped to the families whose 500 step
   it puts a dark label on rather than a white one
-- `Recourse.google_maps` — the host's `google_maps` credentials, which a map view
-  is drawn with; `Recourse.mappable?(model)` says whether a model has a place ID to
-  be drawn by
+
 
 Declared on a model, each overriding a default:
 

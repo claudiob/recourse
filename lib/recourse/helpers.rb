@@ -22,7 +22,6 @@ require_relative 'helpers/inputs'
 require_relative 'helpers/joins'
 require_relative 'helpers/kinds'
 require_relative 'helpers/limits'
-require_relative 'helpers/maps'
 require_relative 'helpers/names'
 require_relative 'helpers/navigation'
 require_relative 'helpers/parents'
@@ -49,7 +48,7 @@ module Recourse
     include Actions, Arrangements, Attachments, Blobs, Bookmarks, Buttons, Cards,
             Cells, Choices, Clones, Colors, Comboboxes, Constraints, Counters, Deletions,
             Details,
-            Examples, Fields, Filters, Formats, Inputs, Joins, Kinds, Limits, Maps,
+            Examples, Fields, Filters, Formats, Inputs, Joins, Kinds, Limits,
             Names, Navigation, Parents, Pictures, Previews, References, Refreshes,
             Routing,
             Resources, Rows, Searches, Shortcuts, Sidebars, Sorts, Tabs, Themes,

@@ -24,8 +24,6 @@ module Recourse
       search = Search.new recourse_relation, params[:q], arranged: arranged?
       @q = search.query
       @pagy, @resources = pagy search.scope, limit: recourse_limit
-      # A map is the same page in another shape, so the HTML templates draw it.
-      render :index, formats: :html if request.format.map?
     end
 
     # Builds a blank record under the name Rails would use: @contact for contacts -- or

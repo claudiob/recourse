@@ -15,12 +15,6 @@ module Recourse
       ActionDispatch::Routing::Mapper.include Scopes, Routes
     end
 
-    # `/counties.map` is the same page in another shape, so the format is a name for
-    # HTML: without it Rails has no type for the extension and answers 406.
-    initializer 'recourse.formats' do
-      Mime::Type.register_alias 'text/html', :map
-    end
-
     # Serves what a page needs, since a host may run no asset pipeline at all. The
     # prefix keeps its slash: without it `/recourses` would be served as a file.
     # Turbo answers first, by exact path — matched on the prefix alone, the statics

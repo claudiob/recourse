@@ -5,6 +5,6 @@
   <% if resources.blank? %>
     <%= render 'none' %>
   <% else %>
-    <%= render map_view? ? 'map' : 'table', recourses: resources, pagy: pagy %>
+    <%= render 'table', recourses: resources, pagy: pagy %>
   <% end %>
 </turbo-frame>

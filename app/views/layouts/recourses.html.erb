@@ -42,7 +42,6 @@
       import ComboboxController from '/recourse/combobox_controller.js'
       import DeselectController from '/recourse/deselect_controller.js'
       import LimitController from '/recourse/limit_controller.js'
-      import MapController from '/recourse/map_controller.js'
       import NarrowController from '/recourse/narrow_controller.js'
       import PhoneController from '/recourse/phone_controller.js'
       import RelativeTimeController from '/recourse/relative_time_controller.js'
@@ -65,7 +64,6 @@
         window.Stimulus.register('combobox', ComboboxController)
         window.Stimulus.register('deselect', DeselectController)
         window.Stimulus.register('limit', LimitController)
-        window.Stimulus.register('map', MapController)
         window.Stimulus.register('narrow', NarrowController)
         window.Stimulus.register('phone', PhoneController)
         window.Stimulus.register('relative-time', RelativeTimeController)
@@ -225,9 +223,6 @@
          as a flex item would otherwise mean the whole form. */
       .recourse-search-box { flex: 2 1 16rem; min-width: 8rem; }
 
-      /* A map takes the height a table of a page would: tall enough to read the places
-         on, and short enough to leave the footer under it in view. */
-      .recourse-map { height: 60vh; }
       .recourse-search .combobox-toggle { flex: 0 1 10rem; }
       /* The per-page switch is a word in the sentence beside it rather than a control
          next to one, so it takes the line's height and not `.btn`'s own minimum —

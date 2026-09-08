@@ -14,8 +14,6 @@ en:
       is arranged among."
     all: All %{models}
     arrange: Reorder
-    as_map: Display as map
-    as_table: Display as table
     attach: Add
     # One message in four spellings: what a record is holding, under the field that
     # adds to it.
