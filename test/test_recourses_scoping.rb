@@ -19,18 +19,4 @@ class TestRecoursesScoping < IntegrationCase
     assert_operator Memo.count, :>, kept
     assert_includes body, "of #{kept} in total"
   end
-
-  # A card carries what the routes can name. Anything else — a page filed under
-  # another resource, a page a record only sometimes has — is the host's to add,
-  # and `recourse_extra_tabs` is where it says so.
-  def test_a_host_may_add_a_tab_no_route_names
-    person = Person.order(:id).find { |one| one.places.any? }
-    visit "/people/#{person.id}/places"
-
-    assert_includes body, %(href="/zips/#{person.places.first.zip_id}/places">Neighbours</a>)
-    # And which records get one is the host's to say: a place is not a person.
-    visit "/places/#{person.places.first.id}"
-
-    refute_includes body, 'Neighbours'
-  end
 end

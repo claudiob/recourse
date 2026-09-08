@@ -509,12 +509,7 @@ two is filed under the one a reader would look in first.
   real columns, it does not invent them. A `has_one` names no column either.
 - So the honest answer to "main's table showed X and this one does not" is often
   that X was never a column. Check the schema before reaching for a hook.
-- `recourse_extra_columns` is the hook for those cells. Its labels are read off the
-  **first row** — `host_column_labels(recourses) = host_columns(recourses.first).keys`
-  — so a host helper returns the key even when that record has nothing to say for
-  it, with an empty value. Drop the key and the column vanishes for the whole
-  table. Its values go through `linked_or_marked`: a whole web address becomes a
-  link reading `host/…`, everything else is words.
+
 
 #### The order of a row is banded, and there is no hook for it
 

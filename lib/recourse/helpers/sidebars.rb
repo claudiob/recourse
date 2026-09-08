@@ -1,19 +1,14 @@
 module Recourse
   module Helpers
     # The sidebar: one entry per resource the routes declared, in that order, and
-    # whatever the host adds below them.
+    # the way out where the host drew one.
     module Sidebars
     private
 
-      # What the sidebar carries below the resources: an app's own way out of it,
-      # and whatever else the routes cannot name. A host answers `recourse_extra_links`
-      # with `[label, path, method]` — the method only where the link is a button, as
-      # a log out is — the way it answers `recourse_extra_tabs` for one record.
-      def sidebar_extras
-        return [] unless respond_to? :recourse_extra_links
-
-        recourse_extra_links
-      end
+      # Whether the host drew a way out. A route named `exit` — `resource :session,
+      # only: :destroy, as: :exit` — is the whole declaration: the name is the
+      # convention, and its helper existing is what the sidebar asks.
+      def exit? = respond_to? :exit_path
 
       # Sidebar entries as [name, title, path, key], in the order routes.rb declares
       # them, `key` being where in the title the letter that reaches it sits.

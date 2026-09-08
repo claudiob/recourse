@@ -55,9 +55,6 @@ Rails.application.routes.draw do
     end
 
     recourses :teams, except: :show do
-      # A plain `resource`, so the gem records nothing and offers no button: the
-      # wording counts what a sweep would clear, which is the host's to say.
-      resource :sweep, only: :create
       # A `namespace` between a block and what it nests: the routes and the
       # controller come out under it, and no tab is drawn for a child filed there.
       namespace(:visited) { recourses :places, only: :index }
@@ -79,8 +76,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # What the sidebar's own way out posts to, `recourse_extra_links` naming this path.
-  resource :session, only: :destroy
+  # The way out of the sidebar. Named `exit`, which is what earns it the button beside
+  # the toggle: the route is the whole declaration, and the controller is this app's.
+  resource :session, only: :destroy, as: :exit
 
   # Outside the module, and with an index template of the host's own.
   recourses :memos, except: :show

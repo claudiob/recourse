@@ -39,6 +39,7 @@ en:
     darken: Darken the page
     delete: Delete %{model}
     deleted: "%{model} was deleted."
+    exit: Log out
     displaying:
       one: Displaying 1 item
       other: Displaying %{count} items

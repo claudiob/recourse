@@ -66,13 +66,13 @@ class TestRecoursesActions < IntegrationCase
     assert_equal "Swept #{place.name}", @session.request.flash[:notice]
   end
 
-  # The sidebar lists what the routes declared. An app's own way out of it is not
-  # one of those, so the host says it the same way it says a tab.
-  def test_a_host_may_add_a_link_the_sidebar_cannot_declare
+  # A route named `exit` is how the routes declare the way out: a button beside the toggle.
+  def test_a_route_named_exit_earns_the_sidebar_a_way_out
     visit '/people'
 
-    assert_includes body, %(action="/session")
-    assert_includes body, 'Sign out'
+    assert_includes body, %(action="/session"><input type="hidden" name="_method" value="delete")
+    assert_includes body, "<i class='bi bi-box-arrow-right'></i>"
+    assert_includes body, '>Log out</span>'
   end
 
   # A listing of the far side of a many-to-many: every team rather than the ones this

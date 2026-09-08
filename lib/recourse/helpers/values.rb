@@ -4,35 +4,6 @@ module Recourse
     module Values
     private
 
-      # Cells a host adds, which are columns of nothing: a page built from a route rather
-      # than read off a row. A helper of its own answers `{ label => value }` — the same
-      # shape `recourse_extra_tabs` and `recourse_extra_actions` come in, less the path,
-      # since what this draws is what a record says rather than somewhere to go.
-      def host_columns(record)
-        return {} unless respond_to? :recourse_extra_columns
-
-        recourse_extra_columns record
-      end
-
-      # Their labels, read off the first row of a table. The same labels stand over every
-      # row — a table cannot leave a gap where one record has nothing to say — so the
-      # header takes them from a record rather than from the nothing it is handed itself.
-      def host_column_labels(recourses) = host_columns(recourses.first).keys
-
-      # And one of their values, read the way a cell of the same words would be: a whole
-      # web address leads somewhere, and everything else is words.
-      def host_column(value) = linked_or_marked value
-
-      # One of them in the show page's grid, where an empty one reads as the dash every
-      # other empty value reads as rather than leaving the page a row short.
-      def host_value(label, value)
-        tag.div class: ROW do
-          safe_join [tag.div(label, class: 'form-label'),
-                     tag.div(value.presence ? host_column(value) : t('recourse.blank'),
-                             class: 'form-control-plaintext'),]
-        end
-      end
-
       # One labelled value in the show page's grid: the heading the table gives the
       # column, and under it what the record says, formatted the way the table's cell
       # for the same column is — this page reads a record out, so it names its columns

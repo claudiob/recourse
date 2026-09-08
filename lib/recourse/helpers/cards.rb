@@ -14,18 +14,7 @@ module Recourse
         path = card_path
         actions = %i[show edit].filter_map { |action| action_tab record, path, action }
 
-        actions + nested_tabs(record, path) + host_tabs(record)
-      end
-
-      # Tabs no route can name: a page filed under another resource, and one a record
-      # only sometimes has. A host answers `recourse_extra_tabs` in a helper of its
-      # own with `[label, path]` pairs — asked for rather than required, so an app
-      # with no such page writes nothing. Which of them is current is the gem's to
-      # say, the way it is for every other tab.
-      def host_tabs(record)
-        return [] unless respond_to? :recourse_extra_tabs
-
-        recourse_extra_tabs(record).map { |label, path| [label, path, current_page?(path)] }
+        actions + nested_tabs(record, path)
       end
 
       # The resource the card belongs to: the parent's, on a page nested under it —

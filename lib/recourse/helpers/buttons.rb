@@ -40,17 +40,6 @@ module Recourse
         !resource_parent && controller.action_name == 'show'
       end
 
-      # Buttons no route can name: an action a record only sometimes offers, or one
-      # whose wording counts something. A host answers `recourse_extra_actions` in a
-      # helper of its own with `[label, path, method]` triples — the same three a
-      # bare action comes to, so it earns the same button — and returns none where
-      # the record is not one this action is for.
-      def host_actions(record)
-        return [] unless respond_to? :recourse_extra_actions
-
-        recourse_extra_actions record
-      end
-
       # The first of the two the routes drew that needs no id and the record leaves
       # open: a `create` on the collection, or a singular resource's `destroy`. Both,
       # where a singular routed each of them has the record to tell them apart. A

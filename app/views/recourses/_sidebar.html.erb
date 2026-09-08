@@ -9,18 +9,6 @@
     </li>
   <% end %>
 
-  <%# An app's own way out of the sidebar, and whatever else the routes cannot
-      name. A button where one is asked for, since a log out is never a GET. -%>
-  <% sidebar_extras.each do |label, path, method| %>
-    <li class='nav-item'>
-      <% if method %>
-        <%= button_to label, path, method:, class: 'nav-link border-0 bg-transparent' %>
-      <% else %>
-        <%= link_to label, path, class: 'nav-link' %>
-      <% end %>
-    </li>
-  <% end %>
-
   <%# A reader's own say in how the page looks: the last item of the sidebar, and at the
       foot of it wherever it is a column. Which side of the fold that lands on is the
       layout's business rather than this file's, and so is which of the two icons shows —
@@ -38,4 +26,15 @@
       </span>
     <% end %>
   </li>
+
+  <%# And the way out, where the host drew a route named `exit`: a button, since ending
+      a session is never a GET, and an icon like the toggle beside it. -%>
+  <% if exit? %>
+    <li class='nav-item recourse-exit'>
+      <%= button_to exit_path, method: :delete, class: 'nav-link border-0 bg-transparent' do %>
+        <i class='bi bi-box-arrow-right'></i>
+        <span class='visually-hidden'><%= t 'recourse.exit' %></span>
+      <% end %>
+    </li>
+  <% end %>
 </ul>

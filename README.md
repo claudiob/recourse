@@ -855,39 +855,6 @@ Anything your app defines wins, because your app's view paths come first and
 | `app/views/recourses/_card.html.erb` | the tabbed card the show and edit pages sit in |
 | `app/views/recourses/_sidebar.html.erb` | a shared partial, for every resource at once |
 
-### What no column holds
-
-Four helpers of your app's are asked for the things a schema cannot answer. Each is
-optional — the gem asks whether you define it — and each answers for one record, so a
-page a record only sometimes has is a `[]` away:
-
-| Helper | Answers | Drawn as |
-| --- | --- | --- |
-| `recourse_extra_links` | `[label, path, method]` | an entry below the sidebar's resources |
-| `recourse_extra_tabs(record)` | `[label, path]` | a tab on the record's card |
-| `recourse_extra_actions(record)` | `[label, path, method]` | a button beside the breadcrumbs |
-| `recourse_extra_columns(record)` | `{ label => value }` | a cell, on the table and on the record's page |
-
-The last is what a page built from a route rather than read off a row comes to — a
-checkout page belongs to the band it sells, and its address names whichever host is
-serving, so no column can hold it. A whole web address is drawn as the link a cell of one
-would be; anything else reads as words.
-
-```ruby
-def recourse_extra_columns(record)
-  return {} unless record.is_a? Band
-
-  { 'Checkout page' => new_band_checkout_url(record) }
-end
-```
-
-Three things follow from a table drawing it. **The labels are the same for every row** —
-a table cannot leave a gap where one record has nothing to say, so what is missing is the
-value, which reads as the dash an empty column reads as. **Nothing sorts or searches by
-it**, there being no column to order on. And **it is worked out per row**, so a value
-reaching for an association wants preloading in `recourse_relation`, the way any other
-N+1 does.
-
 Three private methods on a controller of yours are the seams for a screen the gem
 otherwise draws whole. `recourse_relation` says which rows an index lists, and
 nothing narrows an answer of its own. `recourse_position` says which column those

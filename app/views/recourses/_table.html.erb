@@ -16,8 +16,6 @@
 <% cache_if cacheable_table?, key do %>
   <% actions = resource_actions %>
   <% arranged = arranged? %>
-  <%# Read once for the whole table: every row stands under the same labels. -%>
-  <% @recourse_extra = host_column_labels recourses %>
   <div class='table-responsive'>
     <table class='table caption-top table-hover align-middle sm:table-stacked'>
       <thead>

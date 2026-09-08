@@ -40,9 +40,6 @@ class TestRecoursesIndex < IntegrationCase
       'Busiest month', 'Founded year', 'Time zone', 'Active', 'Verified', 'About', 'Tags',
       'Opens on',
       'Audited at', 'Created at', 'Updated at',
-      # Two a host added, which stand last and carry no sort link: they are cells rather
-      # than columns, and there is nothing for a heading to order the rows by.
-      'Nearby', 'Opening',
     ], headings
     # `ZIP` and not `ZIP code`, which is the word the form asks with: a heading stands
     # over what a record is called, and nothing is typed under one.
