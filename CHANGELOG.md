@@ -13,6 +13,7 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   icons, a counted tab its icon and its number
 * [Feature] On a phone the whole `Franchises: 21` of a stacked counter cell is the link
 * [Fix] A touch screen shows no tooltips, a tap being what would open the link beneath one
+* [Fix] Safari no longer zooms in on the search box or a filter: the controls are 16px on a phone, where the body itself is 14
 * [Fix] A sidebar link tapped on a phone leaves no hover tint on it or on the link the next page puts under the finger
 
 ## 4.3.0 - 2026-09-08

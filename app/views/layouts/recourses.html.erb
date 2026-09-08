@@ -269,9 +269,10 @@
         .recourse-search { max-width: none; }
         .recourse-search-box,
         .recourse-search .combobox-toggle { flex: 1 1 100%; }
-        /* Safari zooms in on a field whose text is under 16px, and the small controls
-           are 14px: on a phone they take the body's size, and focusing one moves nothing. */
-        .recourse-search { --bs-btn-input-sm-font-size: var(--bs-body-font-size); }
+        /* Safari zooms in on a field whose text is under 16px, an absolute figure: the
+           small controls are 14px, and so is the body on a phone, so the controls say
+           16px themselves and focusing one moves nothing. */
+        .recourse-search .form-control { font-size: 16px; }
       }
 
       /* Held Option marks the letter each sidebar link answers to. Marked rather than
