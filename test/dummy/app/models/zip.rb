@@ -5,9 +5,6 @@ class ZIP < ApplicationRecord
   include Recoursive
 
   has_many :places, dependent: :destroy
-  # The other half of a key that names no one table, and what tells the gem that
-  # `/zips/1/notes` is this association.
-  has_many :notes, as: :about, dependent: :destroy
 
   # Written by the migration that made the table and never again, which is what
   # keeps it off every table the gem draws.

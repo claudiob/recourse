@@ -1056,7 +1056,7 @@ before writing or editing any layout, view or partial.
   answers for its own screens — a contact recognised by nothing but its number is
   the case this was built for. Read *that* one twice before writing it: the reason
   for the default is what a screenshot of a page of twenty carries. The same hook
-  names back the primary key, a polymorphic `*_type`, the inheritance column and
+  names back the primary key, the inheritance column and
   the two timestamps, none of which carry that risk — so keep the warning attached
   to the columns it is about rather than to the hook.
 - The primary key is omitted too. An id is how a row is addressed, not something

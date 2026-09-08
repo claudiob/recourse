@@ -53,17 +53,12 @@
     <% end %>
   <% else -%>
     <% values.each do |option| %>
-      <%# A pair reads as its first and submits its second — `Places` on the menu for
-          the `Place` a column holds — and a bare word is both at once, which is what
-          an enum's own values and a boolean's two are. -%>
-      <% words, value = Array(option).values_at 0, -1 -%>
-      <%# Compared as text, because that is what a request carries it back as: a host
-          naming a number or a symbol still reads as ticked once one is picked. -%>
-      <% chosen = selected.include? value.to_s -%>
+      <%# Compared as text, because that is what a request carries it back as. -%>
+      <% chosen = selected.include? option.to_s -%>
       <%# In the menu but not on it, the way an unused filter option is: a list too long
           to read opens on the few worth reading, and `All` asks for the rest. -%>
-      <% waiting = shown && !chosen && shown.exclude?(value.to_s) -%>
-      <button class='menu-item<%= ' selected' if chosen %><%= ' d-none' if waiting %>' type='button' data-bs-value='<%= value %>' aria-selected='<%= chosen %>'><span class='menu-item-content'><span><%= words %></span></span><% if multiple %><i class='bi bi-check menu-item-check'></i><% end %></button>
+      <% waiting = shown && !chosen && shown.exclude?(option.to_s) -%>
+      <button class='menu-item<%= ' selected' if chosen %><%= ' d-none' if waiting %>' type='button' data-bs-value='<%= option %>' aria-selected='<%= chosen %>'><span class='menu-item-content'><span><%= option %></span></span><% if multiple %><i class='bi bi-check menu-item-check'></i><% end %></button>
     <% end %>
   <% end -%>
   <div class='combobox-no-results d-none'><%= t 'recourse.no_results' %></div>

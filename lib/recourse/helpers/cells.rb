@@ -66,7 +66,7 @@ module Recourse
 
       # Value for one cell, formatted according to what the column holds.
       def resource_cell(resource, column)
-        association = key_association column
+        association = belongs_to_association column
         return search_highlight named_cell(resource, association), column if association
 
         value = resource.attributes[column]

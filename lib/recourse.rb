@@ -49,13 +49,11 @@ module Recourse
   end
 
   # Columns no screen shows: whatever the model asked to hide through
-  # `recourse_hidden` — one name or a list, taken either way — the column Rails
-  # reserves for single table inheritance, and the one a polymorphic key keeps its
-  # class name in. A class name is machinery, not something to read out or type
-  # over, whichever kind of key put it there.
+  # `recourse_hidden` — one name or a list, taken either way — and the column Rails
+  # reserves for single table inheritance. A class name is machinery, not something
+  # to read out or type over.
   def self.hidden_columns(model)
-    Array(model.recourse_hidden).map(&:to_s) + [model.inheritance_column] +
-      model.recourse_reference_types
+    Array(model.recourse_hidden).map(&:to_s) + [model.inheritance_column]
   end
 
   # The names a column is validated under: its own, and — where it is a foreign key

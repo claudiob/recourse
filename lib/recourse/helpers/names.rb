@@ -4,27 +4,9 @@ module Recourse
     module Names
     private
 
-      # The belongs_to a column is the foreign key of, of either kind: one this gem
-      # can follow to a label, and one it can only read the class name of. Both name a
-      # record, where the id alone is a number, so both are asked for together.
-      def key_association(column)
-        belongs_to_association(column) || polymorphic_association(column)
-      end
-
-      # The polymorphic belongs_to a column is the foreign key of, or nil when it is
-      # not one. Every key at once and once per render, rather than a scan of the
-      # model's associations for each cell of each row that holds one.
-      def polymorphic_association(column)
-        @recourse_polymorphs ||= resource_model.recourse_polymorphs
-
-        @recourse_polymorphs[column]
-      end
-
-      # What one key says, whichever kind it is: the label of the record it points at
-      # where it names a table, and the class name beside it where it names none.
+      # What one key says: the label of the record it points at, led to that record's
+      # page where the routes drew one.
       def named_cell(resource, association)
-        return polymorphic_cell resource, association if association.polymorphic?
-
         record = resource.association(association.name).reader
 
         record && led(reference_cell(resource, association), association.klass.name, record.id)
@@ -40,21 +22,6 @@ module Recourse
         return said if path.nil? || said.blank?
 
         turbo_link_to said, url_for(controller: "/#{path}", action: :show, id:)
-      end
-
-      # `Booking 12`. There is no label to read here — a key naming no one table has no
-      # model to ask for one — but the column beside it keeps the class name, and a
-      # kind and an id are between them the record that is meant, where the id on its
-      # own is a number. Read off the attributes the row already carries rather than by
-      # loading the record: naming it this way costs nothing, and loading one per row
-      # to name it would cost a query per row.
-      def polymorphic_cell(resource, association)
-        kind = resource.attributes[association.foreign_type]
-        return unless kind
-
-        id = resource.attributes[association.foreign_key.to_s]
-
-        led "#{kind} #{id}", kind, id
       end
 
       # The resource a kind is read on, where the routes drew one that can be linked to

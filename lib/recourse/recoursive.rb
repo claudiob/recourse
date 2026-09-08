@@ -18,7 +18,7 @@ module Recourse
     def recourse_hidden = []
 
     # And the columns a table draws whatever would otherwise keep them off it —
-    # ciphertext, the id, a polymorphic type, the inheritance column, and the two
+    # ciphertext, the id, the inheritance column, and the two
     # timestamps. Every one of those is a default the gem picks, and a host is what
     # answers for its own screens: `def recourse_displayed = :phone` puts a number
     # back on a table that recognises its rows by nothing else, and
@@ -57,21 +57,6 @@ module Recourse
     # one table, so nothing can label it, list it, filter by it or search through
     # it — its column reads and edits as the number it holds, like any other.
     def recourse_references = reflect_on_all_associations(:belongs_to).reject(&:polymorphic?)
-
-    # The polymorphic belongs_to associations, from the key holding the id to the
-    # association itself. Not references this gem can follow — a key naming no one
-    # table has no model to ask for a label, a list or a filter — but the class name
-    # kept beside it is enough to say which record is meant, which is what a cell
-    # reads out where a label would otherwise go.
-    def recourse_polymorphs
-      reflect_on_all_associations(:belongs_to).select(&:polymorphic?)
-                                              .index_by { |one| one.foreign_key.to_s }
-    end
-
-    # The columns those keys keep a class name in. Machinery rather than anything a
-    # record is about, so they keep the company of the inheritance column and stay
-    # off every screen — the cell beside them reads the kind and the id together.
-    def recourse_reference_types = recourse_polymorphs.values.map(&:foreign_type)
 
     # Associations the index eager-loads, in any shape `includes` accepts. Every
     # belongs_to it can follow, since each cell naming one would be a query of its own.

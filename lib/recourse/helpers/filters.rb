@@ -1,7 +1,7 @@
 module Recourse
   module Helpers
     # The menus beside a search box: one per foreign key a table can be narrowed by,
-    # and one per list of words a host named itself.
+    # and one per column whose values are a known few.
     module Filters
     private
 
@@ -24,13 +24,9 @@ module Recourse
         filters.except "#{parent.foreign_key}_in"
       end
 
-      # One filter: the words a host named, the values a column of its own admits, or
-      # a menu of the records a foreign key points at, holding whichever the request
-      # already asked for. `values:` is the shape for a predicate no column of this
-      # model describes, and it needs the `label:` there is no column to read one off.
-      def filter_field(predicate, label: nil, scope: nil, values: nil)
-        return values_filter predicate, label, values if values
-
+      # One filter: the values a column of its own admits, or a menu of the records a
+      # foreign key points at, holding whichever the request already asked for.
+      def filter_field(predicate, label: nil, scope: nil)
         column = predicate.to_s.sub Search::LIST_PREDICATES, ''
 
         choice_filter(predicate, column, label) || reference_filter(predicate, column, label, scope)

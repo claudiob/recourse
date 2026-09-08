@@ -95,15 +95,6 @@ ones the top-level table draws, pointing at `/comments/2` and
 `/comments/2/edit` — the member pages the nesting left to the resource itself —
 and a counter cell links to the resource's own nested index the same way. A
 nested table is the top-level one, minus the parent's column.
-The parent is found by the key pointing at it, which for a polymorphic
-`belongs_to` names no one table — `/posts/2/comments` says `post`, never
-`about`. What settles it there is the parent's own half: write
-`has_many :comments, as: :about` on the post and the nesting is that
-association, whichever of the model's keys it is. The page then reads like any
-other nested one, and the write puts the class name beside the id. A parent
-declaring no such `has_many` resolves no parent at all — a page gathered from
-several parents at once is nobody's one record, and `recourse_relation` is
-still what scopes it.
 An explicit `only:` or `except:` is your word and wins:
 
 ```ruby
@@ -288,7 +279,7 @@ defaults are there without a model mentioning them.
 | `recourse_typed_label?` | true when that column has a length validator | whether a foreign key to this model is typed into a text field or picked from a list |
 | `recourse_includes` | every `belongs_to` the table names | what the index eager-loads, in any shape `includes` accepts |
 | `recourse_order` | `:id` | how the index sorts, in any shape `order` accepts |
-| `recourse_displayed` | `[]` | columns a table and a show page draw that they would otherwise leave off — the encrypted ones, the primary key, a polymorphic `*_type`, the inheritance column, every `json` / `jsonb` payload, and `created_at` / `updated_at`, which come last whatever order they are named in. One name or a list |
+| `recourse_displayed` | `[]` | columns a table and a show page draw that they would otherwise leave off — the encrypted ones, the primary key, the inheritance column, every `json` / `jsonb` payload, and `created_at` / `updated_at`, which come last whatever order they are named in. One name or a list |
 | `recourse_hidden` | `[]` | columns kept off every screen — the table, the show page, the form (which also stops permitting them) and the search box. One name or a list: `def recourse_hidden = :name` and `%i[name title]` both read |
 | `recourse_comment` | the column's own SQL comment | what a column is for, drawn under its field on a form. Nil on an adapter that keeps no comments — SQLite is one — so a host there answers it by hand |
 | `recourse_broadcasts?` | `true` | whether saving a record refreshes every open index listing it — see [Live index refreshes](#live-index-refreshes) |
@@ -633,40 +624,6 @@ menu would be the whole table. Its label goes into the search box instead:
 Naming that predicate in `filter_fields` with a `scope:` still offers a menu,
 over whichever relation the scope names.
 
-A third shape covers a predicate no column of the model describes: `values:` names
-the menu's options outright. The entry needs a `label:`, since there is no column
-to take a heading from, and each option is a `[label, value]` pair — the words it
-reads as, and what a tick submits — with a bare word standing as both. A provider's
-CRM is the case, kept as the type of a `has_one` rather than as a column here:
-
-```ruby
-# app/models/provider/searchable.rb
-class Provider
-  module Searchable
-    extend ActiveSupport::Concern
-
-    class_methods do
-      def ransackable_associations(auth = nil) = super + ['integration']
-
-      def filter_fields
-        crms = [Integration::Jobber, Integration::HousecallPro]
-        values = crms.map { |one| [one.model_name.human, one.name] }
-
-        super.merge 'integration_type_in' => { label: 'CRM', values: values }
-      end
-    end
-  end
-end
-```
-
-`?q[integration_type_in]=Integration::Jobber` is what a tick submits, and the way
-back reads `All CRMs`, after the label. A value is compared as text, since that is
-what a request carries it back as, so a number or a symbol named here still reads
-as ticked once it is picked. The predicate goes through Ransack like any
-other, so a `values:` filter reaching across an association needs that association
-in `ransackable_associations` — `integration` above — the same allowlist the search
-box's own joins are named in.
-
 Typing in the search box, or picking from a filter's menu, submits the form
 itself — a Stimulus controller resubmits 300ms after the last keystroke, and
 immediately on every option ticked or unticked. Only the table and its
@@ -986,9 +943,8 @@ Searching and filtering:
 - `search_form` — the search and filter form, or nothing where the model offers
   neither a search field nor a filter. The index hands it to `content_for
   :search`, so a layout is what decides where it goes
-- `filter_field(predicate, label: nil, scope: nil, values: nil)` — one filter, a
-  multiple combobox of the records a foreign key points at, of the values a column
-  admits, or of the `[label, value]` pairs `values:` names
+- `filter_field(predicate, label: nil, scope: nil)` — one filter, a multiple
+  combobox of the records a foreign key points at or of the values a column admits
 
 Reading one out:
 

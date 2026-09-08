@@ -13,11 +13,6 @@ class CreateMemos < ActiveRecord::Migration[8.1]
       # Optional, and nullified rather than destroyed when the person goes: a memo
       # outlives whoever it was about.
       t.references :person, foreign_key: { on_delete: :nullify }
-      # Polymorphic, so it names no one table: nothing can label it, list it,
-      # filter by it or search through it, and its column is a number like any
-      # other. Optional, and never filled — what it proves is that the gem asks
-      # what a key points at before reaching for it.
-      t.references :about, polymorphic: true
       t.text :body
 
       t.timestamps

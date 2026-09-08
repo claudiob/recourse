@@ -5,7 +5,7 @@ module Recourse
   class BaseController < ApplicationController
     include Pagy::Method,
             Landing, Paging, ListResolution, ParentNaming,
-            ParentResolution, PolymorphicParents, ReferenceResolution, ResourceResolution,
+            ParentResolution, ReferenceResolution, ResourceResolution,
             Zoning
 
     helper Helpers

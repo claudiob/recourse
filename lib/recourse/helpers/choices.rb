@@ -1,8 +1,7 @@
 module Recourse
   module Helpers
     # The filter menus whose options are values rather than records: what a column
-    # itself admits, read off the model rather than out of another table — and the
-    # words a host named where no column admits anything.
+    # itself admits, read off the model rather than out of another table.
     module Choices
     private
 
@@ -37,16 +36,6 @@ module Recourse
         values = resource_model.defined_enums[column].keys
 
         filter_menu predicate, title, values, choices_all(title)
-      end
-
-      # A menu of the words a host named, for a predicate no column of this model
-      # describes: the type behind a `has_one`, or anything else Ransack can ask that
-      # a schema says nothing about. Each option is a `[label, value]` pair — the words
-      # read, the value submitted — or a bare word standing as both. There is no column
-      # to take a heading from, so the `label:` is what heads it and what the way back
-      # is named after.
-      def values_filter(predicate, label, values)
-        filter_menu predicate, label, values, choices_all(label)
       end
 
       # The way back to no filter at all, named after what the menu is of: `All

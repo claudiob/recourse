@@ -32,21 +32,17 @@ module Recourse
     end
 
     # What the route settled and every action honours: the index lists rows carrying
-    # these columns, and `new` and `create` build records that do. A polymorphic key
-    # is written as the association rather than as the column, so the class name lands
-    # beside the id — a key without its type points into every table at once.
+    # these columns, and `new` and `create` build records that do.
     def parent_columns
       return {} if @recourse_parent_association.nil?
-      return { @recourse_parent_association.name => @recourse_parent } if polymorphic_parent?
 
       { @recourse_parent_association.foreign_key => @recourse_parent.id }
     end
 
     # The belongs_to whose record the path names, or nil at the top level. Path
-    # parameters rather than `params`, so a stray `?county_id=` nests nothing. A key
-    # naming no one table is asked last, and asked the other way round.
+    # parameters rather than `params`, so a stray `?county_id=` nests nothing.
     def parent_association
-      own_references.find { |one| path_names? one.name } || polymorphic_parent
+      own_references.find { |one| path_names? one.name }
     end
 
     # A host may serve a page over a verb with no class behind it, whose action the
@@ -57,26 +53,10 @@ module Recourse
     end
 
     def parent_id
-      request.path_parameters[:"#{parent_key}_id"]
+      request.path_parameters[:"#{@recourse_parent_association.name}_id"]
     end
 
-    # The name the parent arrives under: the association's own, or — where the key
-    # names no one table — the parent model's, since that is the word the route uses.
-    def parent_key
-      return @recourse_parent_association.name unless polymorphic_parent?
-
-      parent_model.model_name.singular
-    end
-
-    # The class the id points at. `klass` raises on a polymorphic reflection, which
-    # is the whole reason the routes are asked for that one instead.
-    def parent_model
-      return @recourse_parent_association.klass unless polymorphic_parent?
-
-      Recourse.model Recourse.parent_of(listing_path)
-    end
-
-    def polymorphic_parent? = @recourse_parent_association&.polymorphic?
+    def parent_model = @recourse_parent_association.klass
 
     def path_names?(name) = request.path_parameters.key?(:"#{name}_id")
   end

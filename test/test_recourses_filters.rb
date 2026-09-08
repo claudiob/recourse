@@ -44,29 +44,6 @@ class TestRecoursesFilters < IntegrationCase
     refute_includes menu, "d-none' type='button' data-bs-value='#{empty.id}'"
   end
 
-  # A third kind of menu, and the one no column of the model could have answered for:
-  # the words a host named itself. Each option reads as a plural and submits the class
-  # name the polymorphic column holds, which is what a pair is for — and the way back
-  # is named after the label, since there is no column to take a heading from.
-  def test_a_filter_narrows_by_the_words_a_host_named
-    visit '/memos'
-    menu = menu_for 'q[about_type_in]'
-
-    assert_includes menu, "data-bs-value='Place' aria-selected='false'>" \
-                          "<span class='menu-item-content'><span>Places</span>"
-    assert_includes menu, "data-bs-value='ZIP' aria-selected='false'>" \
-                          "<span class='menu-item-content'><span>ZIPs</span>"
-    assert_includes menu, '>All subjects</button>'
-    visit '/memos?q%5Babout_type_in%5D=ZIP'
-
-    # The value is what a request carries and what the menu holds ticked, the words
-    # being what is read rather than what is asked for.
-    assert_includes menu_for('q[about_type_in]'), "selected' type='button' data-bs-value='ZIP'"
-    assert_equal Memo.where(about_type: 'ZIP').count, body.scan('data-cell="About"').size
-    # Every memo about a place is off the page, links to their pages and all.
-    refute_includes body, 'href="/places/'
-  end
-
 private
 
   # One combobox's menu, from its toggle to the end of its options.

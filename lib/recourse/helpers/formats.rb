@@ -11,7 +11,7 @@ module Recourse
 
       # What the record says for one column, formatted by what the column holds.
       def formatted_value(column)
-        association = key_association column
+        association = belongs_to_association column
         return named_cell resource_record, association if association
 
         formatted_attribute column, resource_record.attributes[column]

@@ -8,10 +8,9 @@ class Memo
       # one of them would redraw an index nobody is looking at.
       def recourse_broadcasts? = false
 
-      # The kind of thing a memo is about, which the gem files with the machinery and
-      # keeps off every table. Worth reading on this one: a memo about a place and a
-      # memo about a person are different notes, and the id beside it says neither.
-      def recourse_displayed = :about_type
+      # When it was written, which the gem keeps off a table by default: a memo is a
+      # note in a log, and when it was made is the first thing to know about one.
+      def recourse_displayed = :created_at
     end
   end
 end
