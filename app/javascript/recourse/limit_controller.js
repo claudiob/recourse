@@ -2,7 +2,7 @@ import { Controller } from '/recourse/stimulus.js'
 
 // How much of a table one page shows. The choice belongs to the reader rather than
 // to the app, so it is kept in their browser — but in a cookie rather than in local
-// storage, which is where the palette goes: pagy decides the page on the server, and
+// storage, which is where the scheme goes: pagy decides the page on the server, and
 // a cookie is the only storage the server is sent.
 export default class extends Controller {
   static values = { storage: String, to: Number }

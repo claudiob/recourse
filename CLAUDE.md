@@ -113,17 +113,16 @@ two is filed under the one a reader would look in first.
   the same table is a different key — and pairs it with a version from the row
   count and the newest `updated_at`, so nothing has to remember to expire it.
 - The table's key carries four riders:
-  `[recourses, row_digest, resource_columns, join_digest, bookmark_digest]`.
+  `[recourses, row_digest, resource_columns, bookmark_digest, Time.zone.name]`.
   `row_digest` is the digest of whichever `_row` the lookup resolved — `render
   'row'` resolves host-first at render, which the fragment's own template digest
   never follows. `resource_columns` is the column list, decided in Ruby the
   digest cannot see either: a host adding `recourse_hidden`, timestamps or a
   counter expires the table by itself. What still needs the hand-clear is markup
   shape the list does not carry — how a heading reads, what sorts.
-- The last two are there for the same reason as each other: both draw buttons whose
-  state lives in a table the relation knows nothing about, so the relation's own
-  version — its count and newest `updated_at` — does not move when one is clicked.
-  `join_digest` is the joined ids, `bookmark_digest` the kept ones. The bookmarks
+- `bookmark_digest` draws buttons whose state lives in a table the relation knows
+  nothing about, so the relation's own version — its count and newest `updated_at` —
+  does not move when one is clicked. It is the kept ids. The bookmarks
   are also the *viewer's*, which makes that rider do double duty: it is what expires
   the fragment on a click and what keeps one person's kept rows off another
   person's page. Each leads with its own name, because an expanded key renders
@@ -268,7 +267,7 @@ two is filed under the one a reader would look in first.
   concerns went the same way.
 - This narrows the baseline's "every behavior change comes with a test": the
   test comes with it only if it reaches a line nothing else does. The suite it
-  leaves is small on purpose — 43 runs for 1,427 lines, across fourteen files, each
+  leaves is small on purpose — 63 runs across twenty-four files, each
   rendering one page and asserting everything true of it.
 - Two kinds of assertion are exempt, because a covered line cannot stand in for
   them. How many queries a page costs, and how an encrypted column reaches the

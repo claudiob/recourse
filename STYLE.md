@@ -1532,7 +1532,7 @@ before writing or editing any layout, view or partial.
   scanning rather than reading. `index` passes the one in force as `limit:`.
 - Which of the two is the reader's own, kept in their browser under
   `Recourse::LIMIT_STORAGE` — a *cookie*, not local storage, which is where the
-  palette goes. Pagy decides the page on the server, and a cookie is the only
+  scheme goes. Pagy decides the page on the server, and a cookie is the only
   storage the server is sent, so every index answers to it with no `?limit=` in
   any address and nothing written to the host's database.
 - `Recourse::Paging#recourse_limit` checks that cookie against `LIMITS` and falls
