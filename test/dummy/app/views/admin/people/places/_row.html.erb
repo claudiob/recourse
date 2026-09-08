@@ -1,0 +1,5 @@
+<%# locals: (place:) -%>
+<%# A row of this app's own, drawn out of the ZIP the place points at as well as the
+    place: the code is the ZIP's column, and the search reached it through the key. -%>
+<%= column header: sort_header(:name) do %><%= search_highlight place&.name, :name %><% end %>
+<%= column header: 'ZIP' do %><%= search_highlight place&.zip&.code, :code %><% end %>

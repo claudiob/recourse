@@ -38,6 +38,17 @@ class TestRecoursesSearch < IntegrationCase
     refute_includes Place.ransortable_attributes, 'webhook_url'
   end
 
+  # A host's row may draw a column of the record a key points at, and mark it with the
+  # same helper: the search looked through that label, so the mark is honest. Its own
+  # column is marked as before, and one the search never read is not.
+  def test_a_label_reached_through_a_key_is_marked_in_a_hosts_own_row
+    person = Person.order(:id).find { |one| one.places.any? }
+    code = person.places.first.zip.code
+    visit "/people/#{person.id}/places?q%5Bname_or_slug_or_zip_code_cont%5D=#{code}"
+
+    assert_includes body, %(data-cell="ZIP"><mark>#{code}</mark></td>)
+  end
+
   # And the model's own order ends the same way: `{ depth: :desc }` reads as Arel with
   # the empty rows last, where a SQL string a host wrote would be taken as written.
   def test_the_models_own_order_puts_the_empty_rows_last

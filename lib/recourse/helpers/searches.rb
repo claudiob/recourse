@@ -41,11 +41,22 @@ module Recourse
 
       # A foreign key's cell shows a label from the other table, so what decides is
       # whether the search reaches through that association rather than reads a column.
+      # And a row drawn out of the record a key points at marks that record's label with
+      # the same helper — `name` on a page of sectors is the provider's — so a column this
+      # model has none of is looked for among the labels the search reached through.
       def searched_column?(column)
-        association = belongs_to_association column.to_s
+        association = belongs_to_association(column.to_s) || labelled_association(column.to_s)
         return resource_model.recourse_searchable_associations.include? association if association
 
         resource_model.recourse_searchable_columns.include? column.to_s
+      end
+
+      def labelled_association(column)
+        return if resource_model.column_names.include? column
+
+        resource_model.recourse_searchable_associations.find do |one|
+          one.klass.recourse_label.to_s == column
+        end
       end
 
       # The search the action built, under Ransack's own name for one.
