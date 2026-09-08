@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [Feature] Rows with nothing in the sorted column come last
+
+  Whichever way a table is ordered — by the model's own `recourse_order`, or by the
+  heading a reader clicked — the rows with nothing in that column now come after every
+  row that has something, where the database's default put them first on a descending
+  sort. A `recourse_order` given as a Symbol or a Hash earns this; a SQL string a host
+  wrote is still taken as written, so `'size desc nulls last'` and `{ size: :desc }` now
+  say the same thing.
+
 ## 4.0.0 - 2026-09-08
 
 Version 4 is a rewrite, developed under the working name `drive` and released here

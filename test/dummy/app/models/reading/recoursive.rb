@@ -7,6 +7,9 @@ class Reading
 
     class_methods do
       def recourse_label = :id
+
+      # Deepest first, and the readings with no depth recorded after every one that has.
+      def recourse_order = { depth: :desc }
     end
   end
 end

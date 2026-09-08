@@ -24,8 +24,10 @@ class TestRecoursesSearch < IntegrationCase
   # A heading that sorted the table says which way, with a caret; the others say
   # nothing, because an arrow on every heading says nothing about the order in force.
   def test_the_sorted_heading_wears_the_caret_and_no_other_does
-    visit '/places?q%5Bs%5D=name+desc'
+    sql = queries_on('places') { visit '/places?q%5Bs%5D=name+desc' }
 
+    # Whichever way the rows run, the ones with nothing in the column come last.
+    assert_includes sql.last, 'ORDER BY "places"."name" DESC NULLS LAST'
     assert_includes body, 'bi bi-caret-down-fill'
     refute_includes body, 'bi bi-caret-up-fill'
     # And a search keeps the order a heading asked for, carried as a hidden field.
@@ -34,5 +36,13 @@ class TestRecoursesSearch < IntegrationCase
     # may. No page can show this -- a hidden column has no heading to look at -- which
     # is why it is asserted on the list rather than on the markup.
     refute_includes Place.ransortable_attributes, 'webhook_url'
+  end
+
+  # And the model's own order ends the same way: `{ depth: :desc }` reads as Arel with
+  # the empty rows last, where a SQL string a host wrote would be taken as written.
+  def test_the_models_own_order_puts_the_empty_rows_last
+    sql = queries_on('readings') { visit '/readings' }
+
+    assert_includes sql.last, 'ORDER BY "readings"."depth" DESC NULLS LAST'
   end
 end

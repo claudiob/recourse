@@ -95,7 +95,7 @@ module Market::Recoursive extend ActiveSupport::Concern
     def recourse_label = :slug                     # what a menu and a cell call one
     def recourse_hidden = %i[callback_url payload] # off every screen
     def recourse_displayed = :created_at           # back on the table
-    def recourse_order = 'size desc nulls last'    # how the index sorts
+    def recourse_order = { size: :desc }           # how the index sorts
     def recourse_icon = :question                  # a Unicon concept
   end
 end
@@ -106,7 +106,7 @@ end
 | [`recourse_label`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_label-instance_method) | `:name` | the column a combobox shows and a foreign-key cell reads; typed rather than picked where it has a length validator |
 | [`recourse_hidden`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_hidden-instance_method) | `[]` | columns kept off the table, the page, the form and the search |
 | [`recourse_displayed`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_displayed-instance_method) | `[]` | columns a table draws that it would leave off: encrypted ones, the id, timestamps, JSON |
-| [`recourse_order`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_order-instance_method) | `:id` | the index's order, in any shape `order` takes |
+| [`recourse_order`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_order-instance_method) | `:id` | the index's order, a Symbol or a Hash; rows with nothing in the column come last |
 | [`recourse_icon`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_icon-instance_method) | the model's name | the icon on the sidebar, the crumbs and the tabs |
 
 What needs no hook, being read off the model:

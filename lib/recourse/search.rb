@@ -19,11 +19,9 @@ module Recourse
       @query = relation.ransack conditions(params)
     end
 
-    # The relation the index lists. Ransack has already ordered it where a heading
-    # asked, so the model's own order only applies when nothing did.
+    # The relation the index lists, in the order a heading asked for or the model's own.
     def scope
-      scope = @query.result
-      scope = scope.order(*kept_first, @model.recourse_order) if @query.sorts.empty?
+      scope = @query.result.reorder(*ordering)
       includes = @model.recourse_includes
       return scope if includes.blank?
 
@@ -31,6 +29,16 @@ module Recourse
     end
 
   private
+
+    # A heading's sort or the model's own order, each column with its empty rows last.
+    # Ransack has ordered the relation already where a heading asked, but as the bare
+    # column; the same sort is written again here so it ends the way every order does.
+    def ordering
+      sorts = @query.sorts.map { |sort| sort.attr.public_send(sort.dir).nulls_last }
+      return sorts if sorts.any?
+
+      kept_first + Recourse.nulls_last(@model, @model.recourse_order)
+    end
 
     # The rows this viewer has kept, ahead of whatever the model orders by — but only
     # where nobody clicked a heading, which is the same word `recourse_order` answers
