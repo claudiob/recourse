@@ -335,12 +335,22 @@
         .table > tbody > .recourse-written-out > * { animation: none; }
       }
 
-      /* The scheme toggle sits at the foot of the sidebar and centered across it while
-         the sidebar is a column, and is simply the last item of the row while it is not
+      /* The foot of the sidebar holds the scheme toggle and the way out side by side,
+         each centered in its own half of the row: the toggle alone is in the middle, and
+         the two together are at a quarter and at three quarters. `button_to` wraps its
+         button in a form, so the form is the half and centers what it holds. */
+      .recourse-foot { display: flex; }
+      .recourse-foot > * { flex: 1 1 0; display: flex; justify-content: center; }
+      .recourse-foot .nav-link { border-radius: var(--bs-radius-5); }
+      /* A hand cursor alone says little on an icon: a tint under it says it is a control. */
+      .recourse-foot .nav-link:hover { background-color: var(--bs-bg-1); color: var(--bs-fg-body); }
+
+      /* The foot sits at the bottom of the sidebar and stretches across it while the
+         sidebar is a column, and is simply the last item of the row while it is not
          — the query matches the `md:` the sidebar's own classes use. Both lines are
          needed: `.nav-item` ships `flex: auto`, so every item would take an equal share
          of a full-height nav and the auto margin would never have anything left to
-         push against. Pin the items to their own height and the toggle takes the rest. */
+         push against. Pin the items to their own height and the foot takes the rest. */
       @media (width >= 768px) {
         /* A floor rather than a height, and never wrapped. `.nav` ships `flex-wrap:
            wrap`, and a column that may wrap, whose items are pinned to their own height
@@ -351,17 +361,17 @@
         .recourse-sidebar .nav-item { flex: 0 0 auto; }
         /* And it rides at the foot of the screen, which the auto margin alone is
            enough to do: the nav's floor is the sidebar's full height, so while the
-           links leave room the margin takes all of it and the toggle sits on the fold,
+           links leave room the margin takes all of it and the foot sits on the fold,
            rising with it as the window is shortened. Once the links fill the nav there
-           is no room left to take, and the toggle comes to rest immediately below the
+           is no room left to take, and the foot comes to rest immediately below the
            last of them and goes under the fold with it, to be scrolled to.
            Deliberately not sticky. Sticking it to the bottom of the viewport would lift
            it off that resting place and hold it over the links it had passed — which is
            what the background color was for, masking whichever one it covered. Both go
            together: nothing is painted over, so nothing needs painting out. */
-        .recourse-sidebar .recourse-scheme {
+        .recourse-sidebar .recourse-foot {
           margin-block-start: auto;
-          align-self: center;
+          align-self: stretch;
         }
       }
 

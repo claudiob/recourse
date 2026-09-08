@@ -9,11 +9,14 @@
     </li>
   <% end %>
 
-  <%# A reader's own say in how the page looks: the last item of the sidebar, and at the
-      foot of it wherever it is a column. Which side of the fold that lands on is the
-      layout's business rather than this file's, and so is which of the two icons shows —
-      the mode may be the system's, which only CSS knows, so both are drawn. -%>
-  <li class='nav-item recourse-scheme'>
+  <%# The foot of the sidebar: a reader's own say in how the page looks and, where the
+      host drew a route named `exit`, the way out beside it — a button, since ending a
+      session is never a GET. Each takes half the row and centers its icon in it, so the
+      toggle alone sits in the middle and the two together sit at a quarter and at three
+      quarters. Which side of the fold the foot lands on is the layout's business, and so
+      is which of the two mode icons shows — the mode may be the system's, which only CSS
+      knows, so both are drawn. -%>
+  <li class='nav-item recourse-foot'>
     <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
                    data: scheme_data do %>
       <span class='recourse-scheme-light'>
@@ -25,16 +28,11 @@
         <span class='visually-hidden'><%= t 'recourse.lighten' %></span>
       </span>
     <% end %>
-  </li>
-
-  <%# And the way out, where the host drew a route named `exit`: a button, since ending
-      a session is never a GET, and an icon like the toggle beside it. -%>
-  <% if exit? %>
-    <li class='nav-item recourse-exit'>
+    <% if exit? %>
       <%= button_to exit_path, method: :delete, class: 'nav-link border-0 bg-transparent' do %>
         <i class='bi bi-box-arrow-right'></i>
         <span class='visually-hidden'><%= t 'recourse.exit' %></span>
       <% end %>
-    </li>
-  <% end %>
+    <% end %>
+  </li>
 </ul>

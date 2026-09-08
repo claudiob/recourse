@@ -74,27 +74,23 @@ before writing or editing any layout, view or partial.
 
 ## The scheme toggle
 
-- The sidebar ends with one control over how the page looks: a moon while the page is
-  light and a sun while it is dark. It is the last `.nav-item`, so while the sidebar is
-  a row it is simply the last thing in it, and the layout's own rules take it to the
-  foot and centre it across the sidebar while the sidebar is a column.
+- The sidebar ends with the reader's own controls: a moon while the page is light and a
+  sun while it is dark, and — where the host drew a route named `exit` — the way out
+  beside it. They share the last `.nav-item`, `.recourse-foot`, a flex row in which each
+  control is half the width and centers its icon: the toggle alone sits in the middle,
+  and the two together sit at a quarter and at three quarters. While the sidebar is a
+  row the foot is simply the last thing in it; while it is a column the layout's rules
+  take it to the bottom and stretch it across.
 - Those rules are written out rather than reached for as utilities, and both halves are
   load-bearing. `.nav-item` ships `flex: auto`, so in a nav given a height every item
   takes an equal share of it and an auto margin is left nothing to push against: the
-  items are pinned to `flex: 0 0 auto` and only the toggle's margin takes the rest.
+  items are pinned to `flex: 0 0 auto` and only the foot's margin takes the rest.
   Same reason the sidebar's own borders are written out — see the note there.
-- Being at the foot of the sidebar means being at the foot of the *screen*, the sidebar
-  being its own scroll container above 768px. It is `position: sticky` with an
-  `inset-block-end` so that it holds there while a sidebar too long for the window
-  scrolls behind it, and comes to rest in its real place at the end.
-- Sticky and not fixed. Fixed would leave the flow and be positioned against the
-  window, which puts it over the table and asks the layout to guess a left edge; sticky
-  keeps the sidebar's column and its centring, and needs no `z-index` because the two
-  columns never overlap. The offset is `--bs-spacer-3`, the padding the sidebar already
-  carries, so it does not sit flush against the edge of the window.
-- It carries the page's own background color, which is invisible at rest and is there
-  for the short viewport: where the links themselves reach the foot, the toggle sticks
-  over one, and a transparent icon on top of a link reads as neither.
+- Not sticky. The foot rides on the fold while the links leave room and comes to rest
+  under the last of them once they do not, to be scrolled to like anything else.
+- A hover tints the control's background with `--bs-bg-1` under a rounded corner, the
+  same tint the combobox's clear button takes: a hand cursor alone says little on an
+  icon, and a tint says it is a control.
 - The icon names where a click *goes*, not where the page is: a moon on a light page,
   a sun on a dark one.
 - Both icons are drawn and CSS shows one, because nothing in Ruby knows which mode the
