@@ -382,8 +382,12 @@
       .recourse-foot { display: flex; }
       .recourse-foot > * { flex: 1 1 0; display: flex; justify-content: center; }
       .recourse-foot .nav-link { border-radius: var(--bs-radius-5); }
-      /* A hand cursor alone says little on an icon: a tint under it says it is a control. */
-      .recourse-foot .nav-link:hover { background-color: var(--bs-bg-1); color: var(--bs-fg-body); }
+      /* A hand cursor alone says little on an icon: a tint under it says it is a control.
+         Only where something can hover: a finger's tap leaves `:hover` set until the next
+         tap elsewhere, and a tint that stays reads as a button stuck down. */
+      @media (hover: hover) {
+        .recourse-foot .nav-link:hover { background-color: var(--bs-bg-1); color: var(--bs-fg-body); }
+      }
 
       /* The foot sits at the bottom of the sidebar and stretches across it while the
          sidebar is a column, and is simply the last item of the row while it is not
