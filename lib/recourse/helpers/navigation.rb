@@ -63,6 +63,17 @@ module Recourse
         safe_join [icon && tag.i(class: "bi bi-#{icon}"), name].compact, ' '
       end
 
+      # The same for a crumb, whose words a phone drops where the icon stands for them:
+      # the row at the top has a search box and a button to fit beside the trail.
+      def crumb_label(resource, title)
+        icon = Recourse.known_icon resource
+        return title unless icon
+
+        word = tag.span title, class: 'recourse-crumb-word'
+
+        safe_join [tag.i(class: "bi bi-#{icon}"), word], ' '
+      end
+
       # Only a page beneath the index names itself, and names what it is showing.
       def breadcrumb_leaf
         case controller.action_name

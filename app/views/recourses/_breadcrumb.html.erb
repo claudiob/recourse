@@ -9,7 +9,7 @@
         <%# A crumb naming a record — the parent a nested page is under — links
             without an icon: the crumb before it already carries the resource's. -%>
         <li class='breadcrumb-item'>
-          <%= link_to resource ? resource_label(resource, title) : title, path,
+          <%= link_to resource ? crumb_label(resource, title) : title, path,
                       class: class_names('breadcrumb-link', 'gap-2': resource) %>
         </li>
       <% elsif index < crumbs.size - 1 %>
@@ -21,7 +21,7 @@
         </li>
       <% elsif resource %>
         <li class='breadcrumb-item' aria-current='page'>
-          <span class='breadcrumb-link active gap-2'><%= resource_label resource, title %></span>
+          <span class='breadcrumb-link active gap-2'><%= crumb_label resource, title %></span>
         </li>
       <% else %>
         <%# A leaf names a page rather than a resource — `New market`, or a record by
