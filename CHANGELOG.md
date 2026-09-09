@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 4.6.3 - 2026-09-08
+
+* [Fix] The gem's scripts and stylesheets are revalidated on every full load, so a browser runs the version the host deployed rather than the one it fetched hours ago
+
 ## 4.6.2 - 2026-09-08
 
 * [Fix] A filter menu on a page under a record no longer counts each option: the counts were of the whole table, not of the record's share of it
