@@ -45,6 +45,7 @@ en:
     # What a menu with several picks reads as, the first named and the rest counted.
     more: "%{first} + %{count} more"
     new: New %{model}
+    new_tab: Open in a new tab
     no_results: No results found
     none: "No %{models}."
     optional: Optional

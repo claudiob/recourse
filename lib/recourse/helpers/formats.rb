@@ -79,15 +79,21 @@ module Recourse
         value.is_a?(String) && value.match?(WEB_URL)
       end
 
-      # Bootstrap's icon link, saying the value leads somewhere the way text cannot.
-      # What it reads is the host, and an ellipsis where the address goes further --
-      # a path is how a machine finds the page, and the href is already carrying it.
+      # The words lead where the value points, in this tab, the way any link does; the
+      # arrow after them — Bootstrap's icon link, stepping under the cursor — opens the
+      # same address in a new tab. Either reads as the host, and an ellipsis where the
+      # address goes further: a path is how a machine finds the page, and the href has it.
       def url_link(value)
         host, rest = value.match(WEB_URL).captures
         said = rest.delete_suffix('/').empty? ? host : "#{host}/…"
 
-        tag.a safe_join([said, icon_tag(:point_right)], ' '),
-              href: value, class: 'icon-link icon-link-hover'
+        safe_join [tag.a(said, href: value), new_tab_arrow(value)], ' '
+      end
+
+      def new_tab_arrow(value)
+        tag.a icon_tag(:point_right), href: value, target: '_blank', rel: 'noopener',
+                                      class: 'icon-link icon-link-hover',
+                                      aria: { label: t('recourse.new_tab') }
       end
     end
   end

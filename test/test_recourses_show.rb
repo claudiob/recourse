@@ -29,9 +29,12 @@ class TestRecoursesShow < IntegrationCase
     assert_includes body, 'false'
     assert_includes body, '90001'
     assert_includes body, 'Blue Crew'
-    # A URL links to itself and reads as its host: no protocol, no trailing slash.
-    assert_includes body, '<a href="https://place-1.example.com"'
-    assert_includes body, '>place-1.example.com <'
+    # A URL reads as its host — no protocol, no trailing slash — and links to itself
+    # twice: the words in this tab, the arrow after them in a new one.
+    assert_includes body, '<a href="https://place-1.example.com">place-1.example.com</a> ' \
+                          '<a href="https://place-1.example.com" target="_blank" rel="noopener" ' \
+                          'class="icon-link icon-link-hover" aria-label="Open in a new tab">' \
+                          '<i class="bi bi-arrow-right"></i></a>'
     # And the payload the index leaves out: a record's own page is where a value too
     # wide for a column of them still belongs.
     assert_includes body, 'step_free_access'

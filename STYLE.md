@@ -1143,10 +1143,14 @@ before writing or editing any layout, view or partial.
   currency, percentages and decimals at their column's own precision. Only text
   cells are search-highlighted — a search never looked through a number.
 - A value that is one absolute web address and nothing else — `WEB_URL` says
-  which — is a link to itself on the table and the show page alike: Bootstrap's
-  `icon-link` in its `icon-link-hover` style, ending in Unicon's `arrow_right`,
-  so the arrow takes a step under the cursor and the value reads as somewhere to
-  go. Words around an address, or two addresses, stay text.
+  which — links to itself on the table and the show page alike, twice over. The
+  words are a plain link, opening where any link does; the arrow after them is a
+  second link to the same address with `target='_blank'` and `rel='noopener'`, in
+  Bootstrap's `icon-link icon-link-hover` style ending in Unicon's `arrow_right`, so
+  the arrow takes a step under the cursor and opens the page in a new tab — a reader
+  keeps the record they were on. It is labelled `Open in a new tab` for a screen
+  reader, an arrow alone saying nothing to one. Words around an address, or two
+  addresses, stay text.
 - What such a link *reads* is the host, never the address: no protocol, no leading
   `www.`, no trailing slash where the address stops at the host, and `/…` where a
   path follows. A column has room for a host and not for fifty characters of
