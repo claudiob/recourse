@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
-## Unreleased
+## 4.4.4 - 2026-09-08
 
 * [Fix] On a phone the search form keeps its place beside the breadcrumb once a filter is picked
 
