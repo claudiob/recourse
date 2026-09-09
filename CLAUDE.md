@@ -564,6 +564,22 @@ two is filed under the one a reader would look in first.
   exactly that reason, and a host writing a controller per nested resource just to
   inherit a base class is a sign something belongs here instead.
 
+#### Nothing loads a class while the routes draw
+
+- `recourses` runs inside `config/routes.rb`, and a production rake task — `db:migrate`
+  on a release — draws its routes while the app is still initializing and will not eager
+  load. Rails 8.2 logs a warning for every component loaded then, and raises under
+  `config.action_on_early_load_hook = :raise`: Action Controller, Active Record, the
+  encryption, the adapter — seven of them for houston.
+- So the DSL reads constants without loading them. Whether a name has a model behind it
+  is `Object.const_defined?`, true for a Zeitwerk autoload without triggering it, where
+  `safe_constantize` loads. A missing controller's superclass is named by a block, never
+  passed, and while the app boots that way (`Controllers.booting?`) the class is made on
+  the executor's first run — a request, a job — rather than at once.
+- Reproduce in a host with `RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bin/rails
+  environment`: a clean run prints nothing. A local `rails server` never shows it, since
+  development draws its routes lazily and production eager loads.
+
 #### recourse_hidden has no table-only form
 
 - Stated in STYLE.md already — it takes a column off the table, the form and the

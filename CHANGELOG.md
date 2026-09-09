@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [Fix] A production rake task boots without Rails 8.2 warning that Action Controller and Active Record were loaded early
+
+  `recourses` defined each missing controller as the routes drew, which loaded the host's
+  `RecoursesController` and everything above it, and asked a nested name for its model the
+  same way. A boot that will not eager load — a `db:migrate` on release — draws its routes
+  before it is done, and Rails 8.2 logs a warning for every component loaded then. The
+  controller now waits for the app's first request or job, and the model is looked up as a
+  constant, without loading it.
+
 ## 4.4.4 - 2026-09-08
 
 * [Fix] On a phone the search form keeps its place beside the breadcrumb once a filter is picked

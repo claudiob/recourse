@@ -18,8 +18,9 @@ module Recourse
       # Whether this resource has rows to address one at a time. A bookmark names one
       # row, which means nothing for a name with no class behind it at all — and one was
       # drawn anyway, at `/placeholders/:placeholder_id/bookmark`, where nothing linked
-      # to it and anything reaching it raised.
-      def addressable_rows? = Recourse.model?(parent_resource.name).present?
+      # to it and anything reaching it raised. Asked of the constant rather than the
+      # class: loading a model while the routes draw is what Rails 8.2 warns about.
+      def addressable_rows? = Object.const_defined? Recourse.model_name(parent_resource.name)
 
       # The row a table's bookmark square writes: one record kept by whoever is looking,
       # at `/places/5/bookmark`. Deliberately not recorded through `Recourse.nest` — it
@@ -28,7 +29,7 @@ module Recourse
       # since the gem drew it: one segment under the resource, always.
       def draw_bookmark
         path = [current_module, 'bookmarks'].compact.join '/'
-        Controllers.define_missing path, ::BookmarksController
+        Controllers.define_missing(path) { ::BookmarksController }
         resource :bookmark, only: %i[create destroy]
       end
     end
