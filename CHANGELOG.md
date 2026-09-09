@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 4.6.5 - 2026-09-09
+
+* [Fix] A table opens at 15 rows a page rather than 20; the 100-row page stays
+
 ## 4.6.4 - 2026-09-08
 
 * [Fix] On a phone the arrows that put the words back reload the page outright: the visit 4.6.1 made to the same address was morphed in place under an index's refresh metas, and Safari drew the sidebar's entries one over the next all the same
