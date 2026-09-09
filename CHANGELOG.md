@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [Fix] On a phone the search form keeps its place beside the breadcrumb once a filter is picked
+
+  A form sized by its content widened with the words a picked option put on a toggle
+  and wrapped under the crumbs.
+
 ## 4.4.3 - 2026-09-08
 
 * [Fix] A counted tab reads `1 franchise` again, without the extra space 4.4.0 put between the figure and the word

@@ -268,9 +268,12 @@
       /* Stacked, each control is a row of its own rather than a fragment of one:
          there is no second control beside it to share the line with. */
       @media (width < 768px) {
-        .recourse-search { max-width: none; }
+        /* The room the breadcrumb leaves, and never more: a form sized by its content
+           widened with the words a picked option put on a toggle, and wrapped under
+           the crumbs. A basis of nothing and leave to shrink hold it in its row. */
+        .recourse-search { flex: 1 1 0; min-width: 0; max-width: none; }
         .recourse-search-box,
-        .recourse-search .combobox-toggle { flex: 1 1 100%; }
+        .recourse-search .combobox-toggle { flex: 1 1 100%; min-width: 0; }
         /* Safari zooms in on a field whose text is under 16px, an absolute figure: the
            small controls are 14px, and so is the body on a phone, so the controls say
            16px themselves and focusing one moves nothing. */
