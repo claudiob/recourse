@@ -42,6 +42,13 @@ class TestRecoursesFilters < IntegrationCase
     menu = body[/data-bs-name='q\[team_id_in\]'.*?combobox-no-results/m]
 
     refute_includes menu, "d-none' type='button' data-bs-value='#{empty.id}'"
+    # Under a record the counts are of the whole table, not of the record's share of
+    # it, so the menu carries none, hides nothing, and reads in name order.
+    visit "/people/#{Person.order(:id).first.id}/places"
+    menu = body[/data-bs-name='q\[team_id_in\]'.*?combobox-no-results/m]
+
+    refute_includes menu, 'recourse-count'
+    refute_includes menu, "d-none' type='button'"
   end
 
 private

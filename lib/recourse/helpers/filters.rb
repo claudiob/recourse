@@ -69,8 +69,11 @@ module Recourse
       # The column on the model a filter lists that counts the rows being filtered —
       # `markets.zips_count` on `/zips`. Read from the counter caches that model keeps
       # rather than from a column named after this one, so a `zips_count` nobody
-      # maintains is not a count.
+      # maintains is not a count. None on a nested page: the count is of every row in
+      # the table, and the page shows the parent's share of them, which nothing counted.
       def filter_counter(klass)
+        return if resource_parent
+
         klass.recourse_counters.find { |_, one| one.klass == resource_model }&.first
       end
 

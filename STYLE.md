@@ -1319,6 +1319,11 @@ before writing or editing any layout, view or partial.
   hold the same number. A menu is read from the top and most requests want the option
   most rows are behind; the name is what keeps two equal ones from swapping places
   between requests. Without a count to read, the order is the name alone.
+- A page under a record carries no counts at all. `/brands/2/franchises` lists the
+  brand's franchises, and `platforms.franchises_count` counts every brand's: the number
+  beside each platform would be of a table the page is not showing. `filter_counter`
+  answers nil wherever `resource_parent` is set, so the menu hides no option either and
+  reads in name order.
 - An option counting none of the rows is `d-none` rather than absent: the markup is
   there and the `All …` line reveals it, which is one more thing that line does
   besides unticking. `.d-none` and not a class of ours, since Bootstrap's utilities
