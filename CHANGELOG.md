@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
-## Unreleased
+## 4.6.2 - 2026-09-08
+
+* [Fix] A filter menu on a page under a record no longer counts each option: the counts were of the whole table, not of the record's share of it
 
 * [Fix] A counter's tooltip stays away on a phone that reports a coarse pointer, where a tap on `Franchises: 11` flashed it before the page changed
 
