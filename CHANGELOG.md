@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## Unreleased
 
+* [Fix] A counter's tooltip stays away on a phone that reports a coarse pointer, where a tap on `Franchises: 11` flashed it before the page changed
+
 * [Fix] A filter's menu is no longer cut off at the foot of a short page — one whose table has no rows — on a phone
 
 ## 4.6.1 - 2026-09-08

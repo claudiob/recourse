@@ -8,9 +8,11 @@ import { Tooltip } from '/recourse/bootstrap.bundle.min.js'
 //
 // None where nothing can hover: on a touch screen the tap that would open a link
 // is also what shows a tooltip, and a word popping up over a tap reads as a hitch.
+// Asked two ways, since an iPhone answered the first with a tooltip all the same: a
+// screen that cannot hover, or a pointer too coarse to rest on one word of a row.
 export default class extends Controller {
   connect() {
-    if (matchMedia('(hover: none)').matches) return
+    if (matchMedia('(hover: none), (pointer: coarse)').matches) return
 
     this.tooltip = Tooltip.getOrCreateInstance(this.element)
   }
