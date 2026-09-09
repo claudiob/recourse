@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
-## Unreleased
+## 4.6.0 - 2026-09-08
 
 * [Fix] On a phone the `Displaying items` sentence is centered over the pagination links, which already were
 
@@ -15,7 +15,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   a crumb is its icon, a tab its icon and its figure, the foot's controls their icons. The
   words are there for a screen reader, and for anyone who taps the arrows: they write a
   `recourse-density` cookie and the server draws every page with the words beside the icons
-  until the next tap. A column at 768px and wider is unchanged.
+  until the next tap. A column at 768px and wider is unchanged. The arrows on that control
+  are unicon 3.6.0's `:expand` and `:collapse`, which the gem now requires.
 * [Feature] On a phone, a page under a record puts its search form and its buttons on rows below the trail
 
   Two or three crumbs left the form the width of `Filter by na`. An index at the top of
