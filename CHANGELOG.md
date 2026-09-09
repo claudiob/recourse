@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [Feature] `Recourse.theme` draws every page in one of eight editor color schemes, and the sidebar's moon rotates through them
+
+  Back from recourse 4's development tree, where it was cut for the release: Dawn,
+  Dracula, Gruvbox, Monokai, Nord, One Dark, Solarized and Tokyo Night, each a
+  stylesheet served from the engine that repaints Bootstrap's ramps in both modes, with
+  Bootstrap's own palette named `:bootstrap` beside them. A click on the moon or the sun
+  moves the page to another palette and into the other mode, and the reader's choice is
+  kept in their browser. `Recourse.color` still names the primary family on top of any.
+
 ## 4.5.0 - 2026-09-08
 
 * [Fix] A row with a bookmark square is as tall as a row without one: the square no longer claims a button's minimum height

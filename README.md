@@ -124,13 +124,18 @@ Here are some bonus features the gem provides. Customize them by editing their v
 your `config/initializers/recourse.rb` file:
 
 - [`Recourse.color=`](https://rubydoc.info/gems/recourse/Recourse#color%3D-class_method):
-  which Bootstrap family is primary on every page. Readers switch light and dark themselves.
+  which Bootstrap family is primary on every page.
+- [`Recourse.theme=`](https://rubydoc.info/gems/recourse/Recourse#theme%3D-class_method):
+  which color scheme every page is drawn in, one of `Recourse::THEMES.keys` — eight from
+  code editors and Bootstrap's own. Readers rotate through them, light and dark, from the
+  moon at the foot of the sidebar; their choice stays in their browser.
 - [`Recourse.bookmarks=`](https://rubydoc.info/gems/recourse/Recourse#bookmarks%3D-class_method):
   a Proc answering the viewer's bookmark rows. Every table of a model with a `has_many`
   at that class then opens with a square to keep a row by, kept rows first.
 
 ```ruby
 Recourse.color = :orange
+Recourse.theme = :nord
 Recourse.bookmarks = -> { Keepsake.where agent: Current.agent }
 ```
 

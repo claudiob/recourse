@@ -23,7 +23,8 @@ module Recourse
     # prefix keeps its slash: without it `/recourses` would be served as a file.
     # Turbo answers first, by exact path — matched on the prefix alone, the statics
     # below would swallow it with a 404 instead of passing it on. Then vendored
-    # files, cascading so our own JavaScript shares the URL. All of it sits before
+    # files, then our own JavaScript, each cascading so the next shares the URL, and
+    # finally our own stylesheets — the palettes. All of it sits before
     # `Rails::Rack::Logger`, so fetching a stylesheet writes no `Started GET` line:
     # a file is not what a log is about, and placement says so without the gem
     # touching a host's logging.
@@ -38,7 +39,10 @@ module Recourse
                                    urls: STATIC_URLS, root: Engine.root.join('vendor'),
                                    cascade: true
       app.middleware.insert_before Rails::Rack::Logger, Rack::Static,
-                                   urls: STATIC_URLS, root: Engine.root.join('app/javascript')
+                                   urls: STATIC_URLS, root: Engine.root.join('app/javascript'),
+                                   cascade: true
+      app.middleware.insert_before Rails::Rack::Logger, Rack::Static,
+                                   urls: STATIC_URLS, root: Engine.root.join('app/stylesheets')
     end
   end
 end

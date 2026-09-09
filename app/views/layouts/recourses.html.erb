@@ -15,7 +15,9 @@
     <%# Preloaded from the head instead of discovered at the end of the body, so the
         module the toast controller and the dismiss X import is already in flight. -%>
     <link rel='modulepreload' href='/recourse/bootstrap.bundle.min.js'>
-    <%# After the stylesheet, which is what makes it win: both selectors are `:root`. -%>
+    <%# After the Bootstrap link, which is what makes either win: every selector involved
+        is `:root`. The palette the host named, then the one the reader chose last time. -%>
+    <%= theme_stylesheet_link %>
     <%= render 'recourses/scheme' %>
     <%= primary_color_style %>
 

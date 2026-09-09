@@ -21,7 +21,7 @@ en:
     create: Create
     created: "%{model} was created."
     created_error: "%{model} could not be created."
-    darken: Dark mode
+    darken: A darker palette
     delete: Delete %{model}
     deleted: "%{model} was deleted."
     exit: Exit
@@ -37,7 +37,7 @@ en:
     items:
       one: 1 item
       other: "%{count} items"
-    lighten: Light mode
+    lighten: A lighter palette
     missing_model: You declared `recourses :%{name}` in your routes file, but this app
       has no %{model} model.
     nested: You nested `recourses %{names}` inside `resources :%{parent}`, which does
@@ -61,6 +61,8 @@ en:
     unbookmark: Remove bookmark
     unknown_color: "`Recourse.color` is one of %{colors}, or nil for Bootstrap's own
       blue. It cannot be %{color}."
+    unknown_theme: "`Recourse.theme` is one of %{themes}, or nil for Bootstrap's own
+      palette. It cannot be %{theme}."
     updated: "%{model} was updated."
     updated_error: "%{model} could not be updated."
     unset: None

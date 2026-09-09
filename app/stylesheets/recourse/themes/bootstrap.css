@@ -1,0 +1,11 @@
+/* Bootstrap's own palette, and the only file here that declares nothing.
+
+   The eight beside it work by overriding upstream's `:root`, so having upstream's
+   palette back is a matter of dropping their block rather than of writing one — and
+   swapping this link in is how the sidebar's toggle drops it. `Recourse.theme = nil`
+   and `:bootstrap` are the same look by two routes: the first links no stylesheet at
+   all, the second links this one.
+
+   It is named so the toggle can reach it. A reader who rotates through nine palettes
+   and never finds the one the pages started in has been shown a door with no handle
+   on the inside. */
