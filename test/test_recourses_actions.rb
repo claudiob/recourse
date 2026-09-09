@@ -58,9 +58,11 @@ class TestRecoursesActions < IntegrationCase
     assert_includes body, %(<input type="hidden" name="_method" value="delete")
     assert_includes body, "<i class='bi bi-box-arrow-right'></i>"
     assert_includes body, '>Exit</span>'
-    # And the ruler beside them, for a phone: its words both drawn, the shell compact
-    # until the cookie it writes says otherwise.
-    assert_includes body, '<i class="bi bi-rulers"></i>'
+    # And the arrows ahead of them, for a phone: both faces drawn, the shell compact
+    # until the cookie they write says otherwise.
+    assert_includes body, '<i class="bi bi-arrows-angle-expand"></i>'
+    assert_includes body, '<i class="bi bi-arrows-angle-contract"></i>'
+    assert_operator body.index('bi-arrows-angle-expand'), :<, body.index('bi-moon-fill')
     assert_includes body, 'data-controller="density" data-action="density#toggle" ' \
                           'data-density-storage-value="recourse-density"'
     assert_includes body, "<body class='recourse-shell'"

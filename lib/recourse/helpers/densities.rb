@@ -4,11 +4,11 @@ module Recourse
     module Densities
     private
 
-      # Whether the reader asked for the words: the cookie the ruler writes, read back so
+      # Whether the reader asked for the words: the cookie the arrows write, read back so
       # the page arrives expanded rather than compact and then widened by a script.
       def expanded? = cookies[Recourse::DENSITY_STORAGE] == 'expanded'
 
-      # What the ruler needs to switch: the class it toggles and the cookie it writes.
+      # What the arrows need to switch: the class they toggle and the cookie they write.
       def density_data
         { controller: 'density', action: 'density#toggle', density_storage_value: Recourse::DENSITY_STORAGE }
       end

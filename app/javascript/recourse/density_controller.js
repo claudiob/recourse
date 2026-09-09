@@ -1,6 +1,6 @@
 import { Controller } from '/recourse/stimulus.js'
 
-// The ruler at the foot of the sidebar, drawn on a phone alone: a tap puts the words
+// The arrows at the foot of the sidebar, drawn on a phone alone: a tap puts the words
 // back beside every icon the chrome shows — the sidebar's entries, the crumbs, the tabs,
 // the foot's own controls — and the next tap takes them away again. The choice goes to
 // the server in a cookie, the way the zone does, so the next page is drawn with the

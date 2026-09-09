@@ -9,11 +9,11 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 * [Fix] On a phone the `Displaying items` sentence is centered over the pagination links, which already were
 
-* [Feature] A phone reads the chrome as icons, and a ruler at the foot of the sidebar puts the words back
+* [Feature] A phone reads the chrome as icons, and a pair of arrows at the foot of the sidebar puts the words back
 
   The sidebar is one centered row of icons at the very top of the page, above the trail;
   a crumb is its icon, a tab its icon and its figure, the foot's controls their icons. The
-  words are there for a screen reader, and for anyone who taps the ruler: it writes a
+  words are there for a screen reader, and for anyone who taps the arrows: they write a
   `recourse-density` cookie and the server draws every page with the words beside the icons
   until the next tap. A column at 768px and wider is unchanged.
 * [Feature] On a phone, a page under a record puts its search form and its buttons on rows below the trail

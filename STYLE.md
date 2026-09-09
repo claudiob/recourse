@@ -133,8 +133,8 @@ before writing or editing any layout, view or partial.
   sun while it is dark, and — where the host drew a route named `exit` — the way out
   beside it. They share the last `.nav-item`, `.recourse-foot`, a flex row in which each
   control takes an equal share and centers its icon: the toggle alone sits in the middle,
-  the two together at a quarter and at three quarters, and on a phone a third joins them,
-  the ruler below. While the sidebar is a row the foot is simply the last thing in it;
+  the two together at a quarter and at three quarters, and on a phone a third leads them,
+  the arrows below. While the sidebar is a row the foot is simply the last thing in it;
   while it is a column the layout's rules take it to the bottom and stretch it across.
 - Those rules are written out rather than reached for as utilities, and both halves are
   load-bearing. `.nav-item` ships `flex: auto`, so in a nav given a height every item
@@ -146,10 +146,11 @@ before writing or editing any layout, view or partial.
 - Each icon's word — `Dark`, `Light`, `Exit` — is in the markup at every width, in
   `.recourse-foot-word`, and seen only on a phone whose reader asked for words: as a
   column there is room for an icon and not for a word beside it, and a phone is icons
-  until the ruler says otherwise. Hidden the way `.visually-hidden` does it, so a screen
+  until the arrows say otherwise. Hidden the way `.visually-hidden` does it, so a screen
   reader still hears what each control does.
-- The ruler, in `.recourse-density`, is drawn for a phone alone — `display: none` from
-  768px, where the words are already there. A tap toggles `recourse-expanded` on the
+- The arrows, in `.recourse-density`, stand first in the foot and are drawn for a phone
+  alone — `display: none` from 768px, where the words are already there. A tap toggles
+  `recourse-expanded` on the
   shell and writes the `recourse-density` cookie, `expanded` or `compact`, which the
   server reads back through `expanded?` and draws the next page by from the first paint.
   A cookie rather than local storage for the reason the zone uses one: the server draws
@@ -159,9 +160,11 @@ before writing or editing any layout, view or partial.
   here. Compact, all four are hidden by one rule under
   `.recourse-shell:not(.recourse-expanded)` below 768px, and a counted tab reads `17`
   rather than `17 franchises`.
-- The ruler's own two words are both drawn — `Expand` in `.recourse-density-compact`,
-  `Compact` in `.recourse-density-expanded` — and the shell's class shows the one that
-  says where a tap goes, the way the moon's two icons are both drawn and CSS picks.
+- Both faces are drawn: `bi-arrows-angle-expand` with `Expand` in
+  `.recourse-density-compact`, `bi-arrows-angle-contract` with `Compact` in
+  `.recourse-density-expanded`, and the shell's class shows the one that says where a tap
+  goes, the way the moon and the sun are both drawn and CSS picks. Unicon's `:expand`
+  and `:collapse`, through `icon_tag`, since unicon 3.6.0.
 - A hover tints the control's background with `--bs-bg-1` under a rounded corner, the
   same tint the combobox's clear button takes: a hand cursor alone says little on an
   icon, and a tint says it is a control.
@@ -381,7 +384,7 @@ before writing or editing any layout, view or partial.
   also what leaves the foot's auto margin something to push against.
 - What a phone shows of each entry is its icon: the words are wrapped in
   `.recourse-nav-word` by `resource_label`, and hidden below 768px unless the reader has
-  asked for them — see the ruler under "The scheme toggle". An entry whose model has no
+  asked for them — see the arrows under "The scheme toggle". An entry whose model has no
   icon keeps its words at every width, there being nothing else to stand for it.
 - Every entry answers to a letter of its own title, held with Option: `Contacts`
   to C, `Counties` — declared after it — to O, since C was taken. The letter is

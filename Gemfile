@@ -14,3 +14,4 @@ gem 'rubocop' # lints against the conventions in CLAUDE.md
 gem 'simplecov' # fails the suite when coverage drops below 100%
 gem 'sqlite3' # SQLite driver for the dummy app's database
 gem 'turbo-rails' # live index refreshes: broadcasts_refreshes_to and turbo_stream_from
+gem 'unicon', path: '../unicon' # until 3.6.0 ships: the expand and collapse arrows

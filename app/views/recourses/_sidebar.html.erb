@@ -17,7 +17,24 @@
       is which of the two mode icons shows — the mode may be the system's, which only CSS
       knows, so both are drawn. -%>
   <li class='nav-item recourse-foot'>
-    <%# In a wrapper of its own, as the way out is in its form: the wrapper is the half
+    <%# For a phone alone, whose chrome is icons until a reader asks for the words: a tap
+        puts them back beside every icon, and the next takes them away. Both faces are
+        drawn — arrows parting to expand, meeting to compact — and the shell's class shows
+        the one that says where a tap goes, the way the moon and the sun are both drawn. -%>
+    <div class='recourse-density'>
+      <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
+                     data: density_data do %>
+        <span class='recourse-density-compact'>
+          <%= icon_tag :expand %>
+          <span class='recourse-foot-word'><%= t 'recourse.expand' %></span>
+        </span>
+        <span class='recourse-density-expanded'>
+          <%= icon_tag :collapse %>
+          <span class='recourse-foot-word'><%= t 'recourse.compact' %></span>
+        </span>
+      <% end %>
+    </div>
+    <%# In a wrapper of its own, as the way out is in its form: the wrapper is the share
         of the row, and the button is only as wide as its icon. -%>
     <div>
       <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
@@ -41,16 +58,5 @@
         <span class='recourse-foot-word'><%= t 'recourse.exit' %></span>
       <% end %>
     <% end %>
-    <%# For a phone alone, whose chrome is icons until a reader asks for the words: the
-        ruler puts them back beside every icon, and the next tap takes them away. Both
-        words are drawn and the shell's class shows the one that says where a tap goes. -%>
-    <div class='recourse-density'>
-      <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
-                     data: density_data do %>
-        <%= icon_tag :ruler %>
-        <span class='recourse-foot-word recourse-density-compact'><%= t 'recourse.expand' %></span>
-        <span class='recourse-foot-word recourse-density-expanded'><%= t 'recourse.compact' %></span>
-      <% end %>
-    </div>
   </li>
 </ul>
