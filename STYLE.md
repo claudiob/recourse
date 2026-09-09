@@ -149,12 +149,14 @@ before writing or editing any layout, view or partial.
   until the arrows say otherwise. Hidden the way `.visually-hidden` does it, so a screen
   reader still hears what each control does.
 - The arrows, in `.recourse-density`, stand first in the foot and are drawn for a phone
-  alone — `display: none` from 768px, where the words are already there. A tap toggles
-  `recourse-expanded` on the
-  shell and writes the `recourse-density` cookie, `expanded` or `compact`, which the
-  server reads back through `expanded?` and draws the next page by from the first paint.
-  A cookie rather than local storage for the reason the zone uses one: the server draws
-  the words, so the server is what has to be told.
+  alone — `display: none` from 768px, where the words are already there. A tap writes the
+  `recourse-density` cookie, `expanded` or `compact`, and visits the page again, the way
+  the zone does once its cookie is written; the server reads it back through `expanded?`
+  and draws `recourse-expanded` on the shell from the first paint. A cookie rather than
+  local storage for the reason the zone uses one: the server draws the words, so the
+  server is what has to be told. And a visit rather than flipping the class in place:
+  Safari did not re-lay the row of entries when the words came out of `position:
+  absolute`, and drew every link over the next until a reload.
 - Expanded, a phone shows every word the chrome has: `.recourse-nav-word` in the sidebar,
   `.recourse-crumb-word` in the trail, `.recourse-tab-word` on a card, `.recourse-foot-word`
   here. Compact, all four are hidden by one rule under
