@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## Unreleased
 
+* [Fix] On a phone the `Displaying items` sentence is centered over the pagination links, which already were
+
 * [Feature] A phone reads the chrome as icons, and a ruler at the foot of the sidebar puts the words back
 
   The sidebar is one centered row of icons at the very top of the page, above the trail;
