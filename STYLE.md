@@ -150,13 +150,15 @@ before writing or editing any layout, view or partial.
   reader still hears what each control does.
 - The arrows, in `.recourse-density`, stand first in the foot and are drawn for a phone
   alone — `display: none` from 768px, where the words are already there. A tap writes the
-  `recourse-density` cookie, `expanded` or `compact`, and visits the page again, the way
-  the zone does once its cookie is written; the server reads it back through `expanded?`
-  and draws `recourse-expanded` on the shell from the first paint. A cookie rather than
-  local storage for the reason the zone uses one: the server draws the words, so the
-  server is what has to be told. And a visit rather than flipping the class in place:
-  Safari did not re-lay the row of entries when the words came out of `position:
-  absolute`, and drew every link over the next until a reload.
+  `recourse-density` cookie, `expanded` or `compact`, and reloads the page outright; the
+  server reads it back through `expanded?` and draws `recourse-expanded` on the shell
+  from the first paint. A cookie rather than local storage for the reason the zone uses
+  one: the server draws the words, so the server is what has to be told. And a reload
+  rather than flipping the class in place, or a Turbo visit to the same address: Safari
+  did not re-lay the row of entries when the words came out of `position: absolute`, and
+  drew every link over the next — and a visit to the address the page is at is a
+  refresh, which the metas an index carries make a morph of the same body, the same
+  reshaping by another route. Only a page drawn anew lays the row out.
 - Expanded, a phone shows every word the chrome has: `.recourse-nav-word` in the sidebar,
   `.recourse-crumb-word` in the trail, `.recourse-tab-word` on a card, `.recourse-foot-word`
   here. Compact, all four are hidden by one rule under
