@@ -1610,16 +1610,16 @@ before writing or editing any layout, view or partial.
 ## Pagination
 
 - Paginate with the `pagy` gem, never hand-rolled offsets.
-- Two page sizes and no more, named once in `Recourse::LIMITS`: 20, which is
-  pagy's own default and what every table opens at, and 100 for a reader
-  scanning rather than reading. `index` passes the one in force as `limit:`.
+- Two page sizes and no more, named once in `Recourse::LIMITS`: 15, a screenful
+  and what every table opens at, and 100 for a reader scanning rather than
+  reading. `index` passes the one in force as `limit:`.
 - Which of the two is the reader's own, kept in their browser under
   `Recourse::LIMIT_STORAGE` — a *cookie*, not local storage, which is where the
   scheme goes. Pagy decides the page on the server, and a cookie is the only
   storage the server is sent, so every index answers to it with no `?limit=` in
   any address and nothing written to the host's database.
 - `Recourse::Paging#recourse_limit` checks that cookie against `LIMITS` and falls
-  back to 20. Never skip that check: a cookie is a value a stranger can write, and
+  back to 15. Never skip that check: a cookie is a value a stranger can write, and
   an unchecked one is `?limit=100000` by another route.
 - Which is also why `max_limit` stays unset. Without it pagy ignores a `?limit=`
   in the query string outright, so the only way to ask for a page size is the one
