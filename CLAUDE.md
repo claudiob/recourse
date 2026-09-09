@@ -615,6 +615,11 @@ two is filed under the one a reader would look in first.
   fonts renders every icon as a blank box.
 - Keep the copies byte-identical to what the CDN serves, so a later version can
   be diffed against upstream. `git ls-files` puts them in the gem already.
+- Every file the gem serves goes out `cache-control: no-cache`, through the statics'
+  `header_rules`. The URL of a file never changes between versions, so a browser told
+  to keep one for hours kept running the previous version's script: a phone showed a
+  tooltip a release had taken away, for as long as the host's `max-age` said. `no-cache`
+  is revalidation, not no caching — a file that stands answers `304`.
 - Our own JavaScript is not vendored. It lives in `app/javascript/recourse/` and
   is served at the same prefix: the first `Rack::Static` takes `cascade: true`, so
   a path it has no file for falls through to the second rather than 404ing. That

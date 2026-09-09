@@ -71,6 +71,8 @@ class TestRecoursesColor < IntegrationCase
     visit '/recourse/themes/dracula.css'
 
     assert_includes body, '--bs-white: #f8f8f2;'
+    # Asked for again on every load: the URL is the same in every version of the gem.
+    assert_equal 'no-cache', @session.response.headers['cache-control']
     # And it declares nothing, because the eight work by overriding `:root` — so
     # dropping their block is the whole of what brings upstream's palette back.
     visit '/recourse/themes/bootstrap.css'
