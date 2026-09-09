@@ -108,8 +108,13 @@
       /* Nothing here is meant to be wider than the window: the one thing that is, a
          table, scrolls inside its own wrapper. Safari lays a stacked table's hidden
          header row out at its full width all the same, and a page that can be
-         scrolled to it is a page Safari zooms out of and draws the navbar short on. */
-      html, .recourse-shell { overflow-x: hidden; }
+         scrolled to it is a page Safari zooms out of and draws the navbar short on.
+         `clip` on the shell rather than `hidden`: a `hidden` axis turns the other into
+         `auto`, and the body then cut off whatever hung below it — a filter's menu, on a
+         page whose table had no rows to be taller than the menu. `clip` leaves the
+         other axis alone. */
+      html { overflow-x: hidden; }
+      .recourse-shell { overflow-x: clip; }
 
       /* A finger does not hover. The tint a pointer leaves on the row under it, or on
          the link under it, would stay on whatever was last touched — or land on whatever

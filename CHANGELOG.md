@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## Unreleased
+
+* [Fix] A filter's menu is no longer cut off at the foot of a short page — one whose table has no rows — on a phone
+
 ## 4.6.1 - 2026-09-08
 
 * [Fix] On a phone the arrows that put the words back ask for the page again rather than reshaping it in place, which in Safari left the sidebar's entries drawn one over the next until a reload
