@@ -81,7 +81,9 @@ class TestRecoursesIndex < IntegrationCase
   def test_each_sidebar_entry_marks_the_letter_that_reaches_it
     visit '/places'
 
-    assert_includes body, '<span class="recourse-key">P</span>laces'
+    # The words wrapped after the icon, so a phone can keep the one and drop the other.
+    assert_includes body,
+                    '<span class="recourse-nav-word"><span><span class="recourse-key">P</span>laces'
     assert_includes body, 'P<span class="recourse-key">e</span>ople'
     # Declared outside the module, and linking where its own routes were drawn.
     assert_includes body, 'href="/memos"'

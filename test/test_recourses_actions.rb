@@ -58,5 +58,15 @@ class TestRecoursesActions < IntegrationCase
     assert_includes body, %(<input type="hidden" name="_method" value="delete")
     assert_includes body, "<i class='bi bi-box-arrow-right'></i>"
     assert_includes body, '>Exit</span>'
+    # And the ruler beside them, for a phone: its words both drawn, the shell compact
+    # until the cookie it writes says otherwise.
+    assert_includes body, '<i class="bi bi-rulers"></i>'
+    assert_includes body, 'data-controller="density" data-action="density#toggle" ' \
+                          'data-density-storage-value="recourse-density"'
+    assert_includes body, "<body class='recourse-shell'"
+    @session.cookies['recourse-density'] = 'expanded'
+    visit '/people'
+
+    assert_includes body, "<body class='recourse-shell recourse-expanded'"
   end
 end

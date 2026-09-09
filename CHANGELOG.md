@@ -7,6 +7,18 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## Unreleased
 
+* [Feature] A phone reads the chrome as icons, and a ruler at the foot of the sidebar puts the words back
+
+  The sidebar is one centered row of icons at the very top of the page, above the trail;
+  a crumb is its icon, a tab its icon and its figure, the foot's controls their icons. The
+  words are there for a screen reader, and for anyone who taps the ruler: it writes a
+  `recourse-density` cookie and the server draws every page with the words beside the icons
+  until the next tap. A column at 768px and wider is unchanged.
+* [Feature] On a phone, a page under a record puts its search form and its buttons on rows below the trail
+
+  Two or three crumbs left the form the width of `Filter by na`. An index at the top of
+  the sidebar keeps its form beside its one crumb.
+
 * [Feature] `Recourse.theme` draws every page in one of eight editor color schemes, and the sidebar's moon rotates through them
 
   Back from recourse 4's development tree, where it was cut for the release: Dawn,

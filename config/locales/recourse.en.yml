@@ -18,10 +18,11 @@ en:
     bookmark_removed: Bookmark removed
     cancel: Cancel
     clear: Clear search
+    compact: Compact
     create: Create
     created: "%{model} was created."
     created_error: "%{model} could not be created."
-    darken: A darker palette
+    darken: Dark
     delete: Delete %{model}
     deleted: "%{model} was deleted."
     exit: Exit
@@ -30,6 +31,7 @@ en:
       other: Displaying %{count} items
     displaying_slice: Displaying items %{from}-%{to} of %{total}
     edit: Edit
+    expand: Expand
     format: Please match the format %{example}
     from_now: "in %{distance}"
     # How many values a list holds, which is what its summary reads before anybody
@@ -37,7 +39,7 @@ en:
     items:
       one: 1 item
       other: "%{count} items"
-    lighten: A lighter palette
+    lighten: Light
     missing_model: You declared `recourses :%{name}` in your routes file, but this app
       has no %{model} model.
     nested: You nested `recourses %{names}` inside `resources :%{parent}`, which does

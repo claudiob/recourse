@@ -54,13 +54,15 @@ module Recourse
         new_resource_path.nil? && routed_action?('create')
       end
 
-      # Label for a link to a resource: the icon its model picked, then its title,
-      # with the letter at `key` marked where the link answers to one.
+      # Label for a sidebar link: the icon its model picked, then its title, with the
+      # letter at `key` marked where the link answers to one. The words are wrapped where
+      # an icon stands beside them, so a phone can keep the icon and drop them.
       def resource_label(resource, title, key = nil)
         name = key ? shortcut_title(title, key) : title
         icon = Recourse.known_icon resource
+        return name unless icon
 
-        safe_join [icon && tag.i(class: "bi bi-#{icon}"), name].compact, ' '
+        safe_join [tag.i(class: "bi bi-#{icon}"), tag.span(name, class: 'recourse-nav-word')], ' '
       end
 
       # The same for a crumb, whose words a phone drops where the icon stands for them:

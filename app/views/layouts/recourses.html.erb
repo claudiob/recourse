@@ -36,6 +36,7 @@
       import BookmarkController from '/recourse/bookmark_controller.js'
       import ClearController from '/recourse/clear_controller.js'
       import ComboboxController from '/recourse/combobox_controller.js'
+      import DensityController from '/recourse/density_controller.js'
       import DeselectController from '/recourse/deselect_controller.js'
       import LimitController from '/recourse/limit_controller.js'
       import PhoneController from '/recourse/phone_controller.js'
@@ -56,6 +57,7 @@
         window.Stimulus.register('bookmark', BookmarkController)
         window.Stimulus.register('clear', ClearController)
         window.Stimulus.register('combobox', ComboboxController)
+        window.Stimulus.register('density', DensityController)
         window.Stimulus.register('deselect', DeselectController)
         window.Stimulus.register('limit', LimitController)
         window.Stimulus.register('phone', PhoneController)
@@ -120,11 +122,9 @@
         .nav-link:hover:not(.active) { background-color: transparent; }
       }
 
-      /* The navbar stacks over the sidebar, and both over the main column: a menu
-         opened from a filter drops over the sidebar's row of links on a phone and over
-         the first rows of the table anywhere, rather than under either. */
-      .recourse-sidebar { position: relative; z-index: 2; }
-      .recourse-shell > nav { position: relative; z-index: 3; }
+      /* The navbar stacks over the content: a menu opened from a filter drops over the
+         first rows of the table rather than under them. */
+      .recourse-shell > nav { position: relative; z-index: 1; }
 
       /* An action column is as wide as a row is tall — an icon in a square — and a
          counter column starts at the same square, widening only when a figure like
@@ -205,43 +205,37 @@
         min-height: 0;
       }
 
-      /* A long page scrolls its content, not its chrome. Above the width the sidebar
-         becomes a column at, the shell is exactly the viewport and `main` is the only
-         thing inside it that scrolls, so the navbar and the sidebar stay where they
-         are however far down the table a reader is. Two things make it hold. Every step
-         between takes `min-height: 0`, a flex child being as tall as its content unless
-         told otherwise. And the row stops wrapping: a wrapped line is as tall as the
-         tallest thing on it, and stretching only ever grows an item to the line, never
-         shrinks it to one — so `main` kept its own height and took the page with it.
-         Below that width the sidebar is a band across the top, the row wraps to stack
-         the two, and the page scrolls as one, which is the only thing that reads on a
-         phone.
-         Named by the path down to it rather than as any `.row` in the shell: a show
-         page lays its values out in one and a form lays its fields out in another, and
-         `flex-wrap: nowrap` reaches those too as a descendant — which is three `col-6`
-         values squeezed onto one line instead of two rows of two. Only the row holding
-         the sidebar and the content is meant here, and only it is a child of the
-         container.
-         `main` is the only thing that scrolls inside the shell, and the sidebar
-         deliberately is not. A window dragged shorter than the sidebar itself is the one
-         case the viewport cannot hold, and there the sidebar is allowed to be taller
-         than the line it was stretched to, spill past the shell, and let the browser
-         scroll the page — which is what a reader expects of something taller than the
-         screen. Were it to scroll on its own instead, the same overflow would be hidden
-         inside it and the page would look whole while its foot was unreachable. */
+      /* The shell is three things — the sidebar, the navbar, the content — written in
+         the order a phone reads them: a row of icons at the very top, the trail and the
+         search under it, the page under that, scrolling as one. From the width the
+         sidebar becomes a column at, a grid seats them the other way round. The navbar
+         runs across the top, the sidebar takes the column under it and the content the
+         rest, the shell is exactly the viewport, and `main` is the only thing in it that
+         scrolls — so the navbar and the sidebar stay where they are however far down the
+         table a reader is. `minmax(0, 1fr)` is what lets the second row be shorter than
+         what is in it; a `1fr` alone is as tall as its content, and the page would scroll
+         after all.
+         The sidebar deliberately does not scroll. A window dragged shorter than the
+         sidebar itself is the one case the viewport cannot hold, and there the sidebar
+         is allowed to spill past the shell and let the browser scroll the page — which is
+         what a reader expects of something taller than the screen. Were it to scroll on
+         its own instead, the same overflow would be hidden inside it and the page would
+         look whole while its foot was unreachable. */
       @media (width >= 768px) {
-        .recourse-shell { min-height: 0; height: 100dvh; }
-        .recourse-shell > .container-fluid,
-        .recourse-shell > .container-fluid > .row { min-height: 0; }
-        .recourse-shell > .container-fluid > .row { flex-wrap: nowrap; }
-        .recourse-shell main { overflow-y: auto; }
-        /* Stretched to the line like any item, but never squeezed under its own
-           content: the floor is what carries the rule below down past the fold. */
-        .recourse-shell .recourse-sidebar { min-height: min-content; }
+        .recourse-shell {
+          display: grid;
+          grid-template-columns: auto minmax(0, 1fr);
+          grid-template-rows: auto minmax(0, 1fr);
+          grid-template-areas: 'nav nav' 'aside main';
+          height: 100dvh;
+        }
+        .recourse-shell > nav { grid-area: nav; }
+        .recourse-sidebar { grid-area: aside; }
+        .recourse-shell > main { grid-area: main; overflow-y: auto; }
       }
 
-      /* The sidebar rules off the content below it while it sits under the navbar,
-         and off the content beside it once it is a column again. v6 generates no
+      /* The sidebar rules off the navbar below it while it is the band at the top of a
+         phone, and off the content beside it once it is a column. v6 generates no
          responsive border utilities, so the switch is written out. */
       .recourse-sidebar {
         border-block-end: var(--bs-border-width) solid var(--bs-border-color);
@@ -284,6 +278,13 @@
            small controls are 14px, and so is the body on a phone, so the controls say
            16px themselves and focusing one moves nothing. */
         .recourse-search .form-control { font-size: 16px; }
+        /* A page under a record has a trail two or three crumbs long, and what sat beside
+           the trail — the search, its filters, a button — was squeezed into what those
+           left: `Filter by na`. Under such a trail each takes a row of its own, the form
+           the whole width and every control in it a row in turn, and the margin that set
+           a button apart from the trail goes, there being no trail beside it. An index at
+           the top keeps its form beside its one crumb, where it fits. */
+        .recourse-trailed > :not(nav) { flex: 0 0 100%; margin-inline-start: 0; }
       }
 
       /* Held Option marks the letter each sidebar link answers to. Marked rather than
@@ -410,20 +411,29 @@
         .recourse-foot .nav-link:hover { background-color: var(--bs-bg-1); color: var(--bs-fg-body); }
       }
 
+      /* `.nav-item` ships `flex: auto`: in a row every entry would take an equal share
+         of the width and in a full-height column an equal share of the height, and the
+         foot's auto margin would never have anything left to push against. Every item is
+         its own size instead, in both directions. */
+      .recourse-sidebar .nav-item { flex: 0 0 auto; }
+
+      /* On a phone the sidebar is one row of icons across the top, centered, each entry
+         with less room around it than a column gives — a dozen have to fit — and wrapping
+         to a second line only where a host has more than a screen's width of them. */
+      @media (width < 768px) {
+        .recourse-sidebar .nav { justify-content: center; --bs-nav-link-padding-x: .5rem; }
+      }
+
       /* The foot sits at the bottom of the sidebar and stretches across it while the
          sidebar is a column, and is simply the last item of the row while it is not
-         — the query matches the `md:` the sidebar's own classes use. Both lines are
-         needed: `.nav-item` ships `flex: auto`, so every item would take an equal share
-         of a full-height nav and the auto margin would never have anything left to
-         push against. Pin the items to their own height and the foot takes the rest. */
+         — the query matches the `md:` the sidebar's own classes use. */
       @media (width >= 768px) {
         /* A floor rather than a height, and never wrapped. `.nav` ships `flex-wrap:
            wrap`, and a column that may wrap, whose items are pinned to their own height
-           by the line below, and which is told exactly how tall to be has one way to
-           place a link that does not fit: a second column. Which is what a short window
-           used to draw. The floor lets it be taller than the space it was given. */
+           above, and which is told exactly how tall to be has one way to place a link
+           that does not fit: a second column. Which is what a short window used to draw.
+           The floor lets it be taller than the space it was given. */
         .recourse-sidebar .nav { min-height: 100%; flex-wrap: nowrap; }
-        .recourse-sidebar .nav-item { flex: 0 0 auto; }
         /* And it rides at the foot of the screen, which the auto margin alone is
            enough to do: the nav's floor is the sidebar's full height, so while the
            links leave room the margin takes all of it and the foot sits on the fold,
@@ -440,30 +450,39 @@
         }
       }
 
-      /* A phone's card has room for a row of tabs only as pictures and figures: Show
-         and Edit are their icons, a counted tab its icon and its number. A tab with
-         neither keeps its word, there being nothing else to stand for it. */
-      @media (width < 768px) {
-        .recourse-tab-word { display: none; }
-      }
-
-      /* And the trail at the top: a resource's crumb is its icon alone on a phone, so the
-         search box and the button beside it have the row. A record's crumb has no icon
-         and keeps its words. */
-      @media (width < 768px) {
-        .recourse-crumb-word { display: none; }
-      }
-
-      /* While the sidebar is a row its foot has room for words, so each icon is followed
-         by its own; as a column the words are read but not seen, the way Bootstrap's
-         `.visually-hidden` does it. */
+      /* A phone reads the chrome as pictures. A sidebar entry is its icon, a crumb its
+         icon, a tab its icon and its figure — `17` rather than `17 franchises` — and the
+         foot's controls their icons, so the sidebar is one row of squares and the trail
+         leaves the search its room. The words are there all the same, read but not seen
+         the way Bootstrap's `.visually-hidden` does it, and the ruler at the foot puts
+         them back: the cookie it writes has the server draw the shell `.recourse-expanded`,
+         and then none of this applies. A tab or a crumb with no icon keeps its word at
+         every width, there being nothing else to stand for it.
+         The same hiding, at every width, for the foot's words once the sidebar is a
+         column: there is room for an icon and not for a word beside it. */
       .recourse-foot-word { margin-inline-start: .4em; }
+      @media (width < 768px) {
+        .recourse-shell:not(.recourse-expanded) :is(.recourse-nav-word, .recourse-crumb-word,
+                                                    .recourse-tab-word, .recourse-foot-word) {
+          position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+          overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+      }
       @media (width >= 768px) {
         .recourse-foot-word {
           position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
           overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
         }
+        /* Nothing to expand: a column has its words already. */
+        .recourse-density { display: none; }
       }
+
+      /* The ruler says where a tap goes, like the moon: `Expand` while the chrome is
+         icons, `Compact` once the words are out. Both are drawn and the shell's class
+         picks, so the button needs no script to re-label itself. */
+      .recourse-density-expanded { display: none; }
+      .recourse-expanded .recourse-density-compact { display: none; }
+      .recourse-expanded .recourse-density-expanded { display: inline; }
 
       /* The toggle draws both icons and shows the one that names where a click
          would go: a moon on a light page, a sun on a dark one. Three states rather than
@@ -492,35 +511,32 @@
 
   <%# The reader's zone is told to the server here rather than from a page of its
       own: every screen the gem draws is one to read against their clock. -%>
-  <body class='recourse-shell d-flex flex-column min-vh-100'
+  <body class='<%= class_names 'recourse-shell', 'recourse-expanded': expanded? %>'
         data-controller='timezone' data-timezone-storage-value='<%= Recourse::ZONE_STORAGE %>'>
+    <%# First in the page, since a phone reads it first: the row of icons at the top,
+        above the trail. From 768px the layout's grid seats it beside the content instead,
+        under the navbar, whatever order it was written in. -%>
+    <aside class='recourse-sidebar py-3 px-3'>
+      <%= render 'recourses/sidebar' %>
+    </aside>
+
     <nav class='navbar border-bottom'>
       <%# `row-gap` rather than a margin on the search: a margin is there whether the
           form wrapped or not, and on the line it shares with the breadcrumb it drops
-          the field a few pixels below it. A row gap only exists between lines. -%>
-      <div class='container-fluid px-3 justify-content-start row-gap-2'>
+          the field a few pixels below it. A row gap only exists between lines. Under a
+          trail of more than one crumb a phone gives the form and the buttons rows of
+          their own, which `recourse-trailed` is what the stylesheet reads. -%>
+      <div class='<%= class_names 'container-fluid px-3 justify-content-start row-gap-2',
+                                  'recourse-trailed': resource_breadcrumbs.size > 1 %>'>
         <%= render 'recourses/breadcrumb' %>
         <%= yield :actions %>
         <%= yield :search %>
       </div>
     </nav>
 
-    <div class='container-fluid flex-grow-1 d-flex'>
-      <%# Stacked, the sidebar and the content are two lines of a wrapping flex row,
-          and `align-content: stretch` would hand each of them half the height the
-          page has left over — an empty gap under a dozen links. Packed to the top
-          below 768px, and stretched again above it, where the single line being full
-          height is what draws the sidebar's rule the whole way down. -%>
-      <div class='row flex-grow-1 align-content-start md:align-content-stretch'>
-        <aside class='recourse-sidebar col-12 md:col-auto py-3 px-3 mx-0'>
-          <%= render 'recourses/sidebar' %>
-        </aside>
-
-        <main class='col-12 md:col py-4 px-3'>
-          <%= yield %>
-        </main>
-      </div>
-    </div>
+    <main class='py-4 px-3'>
+      <%= yield %>
+    </main>
 
     <%= render 'recourses/flash' %>
     <%= render 'recourses/confirm' %>

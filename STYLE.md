@@ -132,10 +132,10 @@ before writing or editing any layout, view or partial.
 - The sidebar ends with the reader's own controls: a moon while the page is light and a
   sun while it is dark, and — where the host drew a route named `exit` — the way out
   beside it. They share the last `.nav-item`, `.recourse-foot`, a flex row in which each
-  control is half the width and centers its icon: the toggle alone sits in the middle,
-  and the two together sit at a quarter and at three quarters. While the sidebar is a
-  row the foot is simply the last thing in it; while it is a column the layout's rules
-  take it to the bottom and stretch it across.
+  control takes an equal share and centers its icon: the toggle alone sits in the middle,
+  the two together at a quarter and at three quarters, and on a phone a third joins them,
+  the ruler below. While the sidebar is a row the foot is simply the last thing in it;
+  while it is a column the layout's rules take it to the bottom and stretch it across.
 - Those rules are written out rather than reached for as utilities, and both halves are
   load-bearing. `.nav-item` ships `flex: auto`, so in a nav given a height every item
   takes an equal share of it and an auto margin is left nothing to push against: the
@@ -143,9 +143,25 @@ before writing or editing any layout, view or partial.
   Same reason the sidebar's own borders are written out — see the note there.
 - Not sticky. The foot rides on the fold while the links leave room and comes to rest
   under the last of them once they do not, to be scrolled to like anything else.
-- While the sidebar is a row each icon is followed by its word — `A darker palette`,
-  `A lighter palette`, `Exit` — there being room for one; as a column the word is read but not seen,
-  through `.recourse-foot-word`, which repeats `.visually-hidden` above 768px.
+- Each icon's word — `Dark`, `Light`, `Exit` — is in the markup at every width, in
+  `.recourse-foot-word`, and seen only on a phone whose reader asked for words: as a
+  column there is room for an icon and not for a word beside it, and a phone is icons
+  until the ruler says otherwise. Hidden the way `.visually-hidden` does it, so a screen
+  reader still hears what each control does.
+- The ruler, in `.recourse-density`, is drawn for a phone alone — `display: none` from
+  768px, where the words are already there. A tap toggles `recourse-expanded` on the
+  shell and writes the `recourse-density` cookie, `expanded` or `compact`, which the
+  server reads back through `expanded?` and draws the next page by from the first paint.
+  A cookie rather than local storage for the reason the zone uses one: the server draws
+  the words, so the server is what has to be told.
+- Expanded, a phone shows every word the chrome has: `.recourse-nav-word` in the sidebar,
+  `.recourse-crumb-word` in the trail, `.recourse-tab-word` on a card, `.recourse-foot-word`
+  here. Compact, all four are hidden by one rule under
+  `.recourse-shell:not(.recourse-expanded)` below 768px, and a counted tab reads `17`
+  rather than `17 franchises`.
+- The ruler's own two words are both drawn — `Expand` in `.recourse-density-compact`,
+  `Compact` in `.recourse-density-expanded` — and the shell's class shows the one that
+  says where a tap goes, the way the moon's two icons are both drawn and CSS picks.
 - A hover tints the control's background with `--bs-bg-1` under a rounded corner, the
   same tint the combobox's clear button takes: a hand cursor alone says little on an
   icon, and a tint says it is a control.
@@ -203,10 +219,15 @@ before writing or editing any layout, view or partial.
   such a layout is modelled on.
 - A breadcrumb link and its sidebar twin line up vertically, which constrains
   both. The `<nav class='navbar'>` carries no horizontal margin or padding of
-  its own, so both columns reduce to `container-fluid` (0.75rem) plus a link
-  padding of 0.75rem — the sidebar's own 0.75rem container padding is cancelled
-  by `.row`'s negative margin. Adding `px-*` or `mx-*` to the navbar shifts the
-  breadcrumb out of line by exactly that much.
+  its own, so both reduce to `px-3` (0.75rem) — the navbar's `container-fluid px-3`
+  and the aside's own — plus a link padding of 0.75rem. Adding `px-*` or `mx-*` to
+  the navbar shifts the breadcrumb out of line by exactly that much.
+- On a phone the search and the buttons share the line with the trail only while the
+  trail is one crumb. A page under a record — two or three crumbs — carries
+  `recourse-trailed` on the container, read off `resource_breadcrumbs.size > 1`, and
+  below 768px every child of it but the trail is `flex: 0 0 100%` with its `ms-3` taken
+  back: the form takes a row, each control in it a row in turn, and each button a row of
+  its own. Two crumbs beside a form left it the width of `Filter by na`.
 - `.breadcrumb-link` needs `gap-2`. Both link types are flex, but only
   `.nav-link` ships a `gap`, and a whitespace-only text node is not a flex item
   — so without it the breadcrumb's icon and text would touch while the
@@ -322,61 +343,46 @@ before writing or editing any layout, view or partial.
 
 ## The sidebar
 
-- Below the navbar, an `<aside>` sits to the left of the content holding a
-  vertical `ul.nav.flex-column` of links — one per resource `recourses` drew.
+- Beside the content from 768px, and across the very top of a phone above the navbar,
+  an `<aside>` holds a `ul.nav.md:flex-column` of links — one per resource `recourses`
+  drew.
 - The order is the order `config/routes.rb` declares them, never sorted.
 - The entry for the page being shown is `nav-link active` with
   `aria-current='page'`. It is matched on the controller, not on the URL, so
   `/contacts?page=2` still marks Contacts active.
 - A resource appears only if its `index` action is routed. `recourses :drafts,
   only: :new` draws no index, so it gets no link rather than a broken one.
-- Layout is `.row` with `aside.col-12.md:col-auto` and `main.col-12.md:col`,
-  inside the page's `.container-fluid`. Below 768px each is a full-width row of
-  its own, so the sidebar sits under the navbar and the content under that;
-  from 768px they are the two columns again, unchanged.
-- Stacked, the links run across rather than down: the `ul` is `nav md:flex-column`,
-  and a plain `.nav` is a wrapping flex row.
+- Every page is three things, written in the order a phone reads them: the `<aside>`
+  first, the `<nav>` under it, `<main>` last. Below 768px that is the page as drawn — the
+  sidebar a band across the top, the trail and the search under it, the content under
+  that — and the page scrolls as one, which is the only thing that reads on a phone.
+- From 768px `.recourse-shell` is a grid: areas `'nav nav' / 'aside main'`, columns
+  `auto minmax(0, 1fr)`, rows `auto minmax(0, 1fr)`, `height: 100dvh`. So the navbar runs
+  across the top and the sidebar is the column beside the content, whatever order the
+  markup has, and the shell is exactly the window. `main` is the only thing in it that
+  scrolls, with `overflow-y: auto`; `minmax(0, 1fr)` is what lets its row be shorter than
+  the table in it, a bare `1fr` being as tall as its content, which would hand the
+  scrolling back to the window.
+- The sidebar deliberately does not scroll. A window dragged shorter than the sidebar
+  itself is the one case the viewport cannot hold, and there the sidebar spills past
+  the shell and the browser scrolls the page — what a reader expects of something taller
+  than the screen. Scrolling it on its own would hide the same overflow inside it, and
+  the page would look whole while its foot was unreachable.
 - The rule between the sidebar and what it sits against follows it around —
-  `border-block-end` while it is a band under the navbar, `border-inline-end`
-  once it is a column beside the content. v6 generates no responsive border
-  utilities, so `.recourse-sidebar` writes both out in the layout's `<style>`
-  rather than the aside carrying `border-end`.
-- The aside's border runs to the bottom of the window. That takes a chain of
-  three: `body.d-flex.flex-column.min-vh-100`, then
-  `.container-fluid.flex-grow-1.d-flex`, then `.row.flex-grow-1`. The aside
-  stretches because `.row` is a flex container and Bootstrap leaves
-  `align-items` unset, so items default to `stretch`.
-- Above 768px that same chain is what pins the chrome. `.recourse-shell` is `height:
-  100dvh` rather than a minimum, so the shell is the window and nothing about the page
-  can make it taller; `main` and the aside take `overflow-y: auto`, so each scrolls
-  itself and the navbar and the sidebar stay put however long the table is. Every link
-  in the chain needs `min-height: 0` — a flex child is as tall as its content unless
-  told otherwise, and one of them left alone pushes the shell past the screen and hands
-  the scrolling back to the window. `min-height` is set on the shell too, since
-  `.min-vh-100` is the same specificity and only loses on order.
-- And the row stops wrapping above that width, which is the half that is easy to miss:
-  a wrapped flex line is as tall as the tallest item on it, and `align-items: stretch`
-  only ever grows an item to the line it is on — it never shrinks one to fit. So with
-  the row left wrapping, `main` kept its content height, the line grew to match, and
-  the page scrolled after all, however bounded everything above it was.
-- Every one of those rules names the row by the path down to it —
-  `.recourse-shell > .container-fluid > .row` — and never as `.recourse-shell .row`.
-  There are other rows inside the shell: a show page lays its values out in one and a
-  form lays its fields out in another, both inside `main`. A descendant selector
-  reaches them, and `flex-wrap: nowrap` on a row of `lg:col-6` values is three of them
-  squeezed onto one line where there should be two rows of two. The row this is about
-  is the only `.row` that is a child of that container, so the path says exactly it.
-- Below 768px none of it applies: the sidebar is a band across the top, and a phone
-  scrolls the page as one.
-- Only while they are one line, though: the row is
-  `align-content-start md:align-content-stretch`. Stacked, the sidebar and the
-  content are two lines of a wrapping flex row, and `align-content: stretch`
-  hands each of them half of whatever height the page has left over — a band of
-  empty space under a dozen links, and the rule stranded well below them. Packed
-  to the top instead, they sit against each other; from 768px the single line is
-  stretched again, which is what draws the rule the whole way down.
-- `min-height` rather than `height`, so short pages fill the window without a
-  scrollbar and long ones still scroll.
+  `border-block-end` while it is the band at the top of a phone, `border-inline-end`
+  once it is a column beside the content. v6 generates no responsive border utilities,
+  so `.recourse-sidebar` writes both out in the layout's `<style>` rather than the aside
+  carrying `border-end`.
+- On a phone the links run across rather than down — a plain `.nav` is a wrapping flex
+  row — centered with `justify-content: center`, and with `--bs-nav-link-padding-x:
+  .5rem` so a dozen entries fit one row of icons and wrap only where a host has more
+  than a screen's width of them. `.nav-item` ships `flex: auto`, which would share the
+  row out equally; every item is `flex: 0 0 auto` at every width, which in the column is
+  also what leaves the foot's auto margin something to push against.
+- What a phone shows of each entry is its icon: the words are wrapped in
+  `.recourse-nav-word` by `resource_label`, and hidden below 768px unless the reader has
+  asked for them — see the ruler under "The scheme toggle". An entry whose model has no
+  icon keeps its words at every width, there being nothing else to stand for it.
 - Every entry answers to a letter of its own title, held with Option: `Contacts`
   to C, `Counties` — declared after it — to O, since C was taken. The letter is
   the first one in the title nothing above it has claimed, which is what makes

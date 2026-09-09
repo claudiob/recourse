@@ -41,5 +41,16 @@
         <span class='recourse-foot-word'><%= t 'recourse.exit' %></span>
       <% end %>
     <% end %>
+    <%# For a phone alone, whose chrome is icons until a reader asks for the words: the
+        ruler puts them back beside every icon, and the next tap takes them away. Both
+        words are drawn and the shell's class shows the one that says where a tap goes. -%>
+    <div class='recourse-density'>
+      <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
+                     data: density_data do %>
+        <%= icon_tag :ruler %>
+        <span class='recourse-foot-word recourse-density-compact'><%= t 'recourse.expand' %></span>
+        <span class='recourse-foot-word recourse-density-expanded'><%= t 'recourse.compact' %></span>
+      <% end %>
+    </div>
   </li>
 </ul>

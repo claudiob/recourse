@@ -9,6 +9,7 @@ require_relative 'helpers/comboboxes'
 require_relative 'helpers/constraints'
 require_relative 'helpers/counters'
 require_relative 'helpers/deletions'
+require_relative 'helpers/densities'
 require_relative 'helpers/details'
 require_relative 'helpers/examples'
 require_relative 'helpers/fields'
@@ -40,7 +41,7 @@ module Recourse
   # View helpers for the pages the gem renders, and what the parts share.
   module Helpers
     include Actions, Bookmarks, Buttons, Cards,
-            Cells, Choices, Colors, Comboboxes, Constraints, Counters, Deletions,
+            Cells, Choices, Colors, Comboboxes, Constraints, Counters, Deletions, Densities,
             Details,
             Examples, Fields, Filters, Formats, Inputs, Kinds, Limits,
             Names, Navigation, Parents, Pictures, References, Refreshes,
