@@ -916,9 +916,11 @@ before writing or editing any layout, view or partial.
   the filled one the state. Whether this row is one of mine comes before what to do
   with it, which is why it leads.
 - It is a `button_to` and not a link, since neither writing nor dropping the row is
-  a GET, wearing `btn btn-sm btn-link p-0 border-0 lh-1` — chromeless, because the
-  icon is the whole control and a bordered button in every row of a `.recourse-actions`
-  square would read as a toolbar. Both states are one path with the verb reversed,
+  a GET, wearing `btn btn-sm btn-link p-0 border-0 lh-1 recourse-bookmark` — chromeless,
+  because the icon is the whole control and a bordered button in every row of a
+  `.recourse-actions` square would read as a toolbar, and no taller than the line,
+  since `.btn`'s minimum height would make every row with a square taller than one
+  without; the layout's `.recourse-bookmark` rule takes it back. Both states are one path with the verb reversed,
   so the square toggles by flipping the `_method` Rails already wrote into the form.
 - It carries `aria-pressed`, which is what says it is a toggle rather than a button
   that does something once, and an `aria-label` reading `Bookmark` or `Remove

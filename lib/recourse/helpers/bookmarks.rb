@@ -50,13 +50,15 @@ module Recourse
 
       # Kept or not, one square either way: the same path with the verb reversed, so
       # the button toggles by flipping the method Rails already wrote into the form.
+      # `recourse-bookmark` takes back the height `.btn` claims, so the row stays as
+      # tall as one with no square in it.
       def bookmark_button(record)
         kept = bookmarked_ids.include? record.id
         label = t "recourse.#{kept ? 'unbookmark' : 'bookmark'}"
 
         button_to bookmark_icon(kept, label), bookmark_url(record),
                   method: kept ? :delete : :post, form_class: 'd-inline-block',
-                  class: 'btn btn-sm btn-link p-0 border-0 lh-1',
+                  class: 'btn btn-sm btn-link p-0 border-0 lh-1 recourse-bookmark',
                   **bookmark_data(kept, label)
       end
 

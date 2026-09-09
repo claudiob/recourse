@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## Unreleased
 
+* [Fix] A row with a bookmark square is as tall as a row without one: the square no longer claims a button's minimum height
+
 * [Feature] The arrow after a web address opens it in a new tab, while the words still open it in this one
 
 * [Fix] A production rake task boots without Rails 8.2 warning that Action Controller and Active Record were loaded early

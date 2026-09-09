@@ -265,6 +265,10 @@
          next to one, so it takes the line's height and not `.btn`'s own minimum —
          which would leave the row under every table taller than the words in it. */
       .recourse-limit { min-height: 0; }
+      /* The bookmark square is an icon in a row of text, not a control in a form, so it
+         takes the line's height too: `.btn`'s minimum made every row with one taller
+         than the rows without. */
+      .recourse-bookmark { min-height: 0; }
       /* Stacked, each control is a row of its own rather than a fragment of one:
          there is no second control beside it to share the line with. */
       @media (width < 768px) {
