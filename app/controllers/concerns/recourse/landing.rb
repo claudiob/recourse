@@ -5,12 +5,22 @@ module Recourse
   module Landing
   private
 
-    # What a write says once it has landed: the message, and the row it landed on where
-    # one survives, for the page to mark while that message stands.
+    # What a write says once it has landed: the message, and the record it landed on
+    # where one survives, for the page to mark and lead to while that message stands.
     def wrote(message, record = nil)
       flash.notice = message
-      flash[Recourse::WRITTEN] = Recourse.row_id record if record
+      flash[Recourse::WRITTEN] = written record if record
       redirect_to written_url, status: :see_other
+    end
+
+    # What the page is told about that record: the row to mark, the words the message
+    # calls it by, and its own page where the routes drew one — nil where they did not,
+    # so the words stay words. String keys: the flash rides the session as JSON.
+    def written(record)
+      shown = Recourse.routed? controller_path, 'show'
+      url = url_for(action: :show, id: record, only_path: true) if shown
+
+      { 'row' => Recourse.row_id(record), 'label' => Recourse.record_title(record), 'url' => url }
     end
 
     # What a rejected write does instead: the form again, with the message over it and

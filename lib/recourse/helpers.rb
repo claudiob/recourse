@@ -14,6 +14,7 @@ require_relative 'helpers/details'
 require_relative 'helpers/examples'
 require_relative 'helpers/fields'
 require_relative 'helpers/filters'
+require_relative 'helpers/flashes'
 require_relative 'helpers/formats'
 require_relative 'helpers/inputs'
 require_relative 'helpers/kinds'
@@ -43,7 +44,7 @@ module Recourse
     include Actions, Bookmarks, Buttons, Cards,
             Cells, Choices, Colors, Comboboxes, Constraints, Counters, Deletions, Densities,
             Details,
-            Examples, Fields, Filters, Formats, Inputs, Kinds, Limits,
+            Examples, Fields, Filters, Flashes, Formats, Inputs, Kinds, Limits,
             Names, Navigation, Parents, Pictures, References, Refreshes,
             Routing,
             Resources, Rows, Searches, Shortcuts, Sidebars, Sorts, Tabs, Themes,
@@ -55,23 +56,7 @@ module Recourse
     # show page alone — `.recourse-values` in the layout draws it.
     ROW = 'recourse-row pb-2 mb-3 lg:col-6'
 
-    # Bootstrap theme for each flash key, so a notice and an alert read apart.
-    FLASH_THEMES = { 'notice' => 'theme-success', 'alert' => 'theme-danger' }
-
-    # Theme for one flash entry, falling back to a neutral one for a host's key.
-    def flash_theme(key)
-      FLASH_THEMES.fetch key.to_s, 'theme-primary'
-    end
-
   private
-
-    # What marks the row a write just landed on, and nothing at all on a page no write
-    # brought about — which is every page but the one after a create or an update.
-    def written_data
-      row = flash[Recourse::WRITTEN]
-
-      { controller: 'written', written_row_value: row } if row.present?
-    end
 
     # `?q=anything` arrives as a String, which has no parameters to read — the
     # same test `Recourse::Search` makes, spelled the same way.

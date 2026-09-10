@@ -50,6 +50,14 @@ module Recourse
 
       lower ? downcase(title) : title
     end
+
+    # What one record is called: its label, spoken as a string — a numeric one is not
+    # words — or the model's own name where it says nothing at all.
+    def record_title(record)
+      label = record.attributes[record.class.recourse_label.to_s]
+
+      label.presence&.to_s || record.class.model_name.human
+    end
   end
 
   extend Titles

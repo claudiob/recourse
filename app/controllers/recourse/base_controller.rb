@@ -36,12 +36,11 @@ module Recourse
     def create
       record = assign resource_class.new
       record.assign_attributes resource_params
-      model = human_name
 
       if create_resource record
-        wrote t('recourse.created', model: model), record
+        wrote t('recourse.created', record: Recourse.record_title(record)), record
       else
-        rejected record, :new, t('recourse.created_error', model: model)
+        rejected record, :new, t('recourse.created_error', model: human_name)
       end
     end
 
@@ -54,7 +53,7 @@ module Recourse
     # Saves changes to a record, then shows the index again or says what turned it down.
     def update
       if update_resource @recourse
-        wrote t('recourse.updated', model: human_name), @recourse
+        wrote t('recourse.updated', record: Recourse.record_title(@recourse)), @recourse
       else
         rejected @recourse, :edit, t('recourse.updated_error', model: human_name)
       end

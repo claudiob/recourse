@@ -843,7 +843,7 @@ before writing or editing any layout, view or partial.
            data-controller='toast'
            data-action='mouseenter->toast#stopTimer mouseleave->toast#startTimer focusin->toast#stopTimer focusout->toast#startTimer'>
         <div class='toast-header border-0'>
-          <span class='me-auto'>Contact was created.</span>
+          <span class='me-auto'><a href='/contacts/4'>Ada</a> was created.</span>
           <button type='button' class='btn-close' data-bs-dismiss='toast' aria-label='Close'></button>
         </div>
         <div class='toast-body d-none'></div>
@@ -863,10 +863,19 @@ before writing or editing any layout, view or partial.
   Stimulus controller owns the timer (see below), and hovering or focusing the
   toast holds it open — Bootstrap's own pause-on-hover only guards the timer *it*
   armed, so the controller's actions redo it.
-- The wording names the model, never the record: `Contact was created.` and
-  `Contact could not be created.`, both from `model_name.human`. Interpolating the
-  record instead prints `#<Contact:0x000000012b6febc8>`, because Active Record
-  leaves `to_s` as Object's.
+- A write that landed names the record, by the label its model picked and led to its
+  own page: `<a href='/contacts/4'>Ada</a> was created.`, so a reader can go and look
+  the row over. `Recourse.record_title` says the words — the label, or the model's
+  own name where a record says nothing, the same words the crumb above a nested page
+  reads. Never the record itself: Active Record leaves `to_s` as Object's, and
+  interpolating one prints `#<Contact:0x000000012b6febc8>`.
+- The link is only where the routes drew a `show` to link to; elsewhere the words
+  stand alone. And it is spliced into the sentence by `written_message` in the
+  view rather than stored: `flash.notice` keeps the plain `Ada was created.` for
+  whoever else reads it, and a host's own wording of the key is spliced the same.
+- A write that did not land, and a delete, name the model: `Contact could not be
+  created.` and `Contact was deleted.`, both from `model_name.human`. There is no row
+  to lead to, and a rejected record's label may be the very thing that was refused.
 - The server ships every toast `fade show`, so *appearing* needs no JavaScript at
   all: the toast paints with the page instead of waiting for the bundle to load
   and run. Bootstrap's `show()` must never run on one — it re-adds `showing` and
@@ -882,8 +891,10 @@ before writing or editing any layout, view or partial.
   `transition: none` outright under the media query, which no custom-property
   override can defeat.
 - The row a write landed on is marked for exactly as long as the toast says so. The
-  server names it in a reserved flash key, `Recourse::WRITTEN`, and `_flash` renders
-  it as `data-written-row-value` on the container rather than as a message — the loop
+  server names it in a reserved flash key, `Recourse::WRITTEN` — a hash of the `row`
+  to mark, the `label` the message calls the record by and the `url` of its page, with
+  string keys since the flash rides the session as JSON — and `_flash` renders the row
+  as `data-written-row-value` on the container rather than as a message. The loop
   reads `flash.to_hash.except(Recourse::WRITTEN)`, because every other key there
   becomes a toast of its own, whoever invented it. `FlashHash` has no `except`, hence
   the `to_hash`.

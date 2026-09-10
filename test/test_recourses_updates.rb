@@ -8,7 +8,10 @@ class TestRecoursesUpdates < IntegrationCase
     @session.patch "/teams/#{team.id}", params: { team: { name: 'Blue Crew' } }
 
     assert_equal 303, @session.response.status
-    follow_and_assert_flash 'Team was updated.'
+    # Named by its label, and as words alone: the routes drew no `show` for teams, so
+    # there is no page for the name to lead to.
+    follow_and_assert_flash 'Blue Crew was updated.'
+    refute_includes body, '>Blue Crew</a> was updated.'
   end
 
   # And a rejected change redraws the form the same way `create` does, rather than

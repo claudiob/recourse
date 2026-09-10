@@ -18,7 +18,9 @@ class TestRecoursesCreates < IntegrationCase
     place = Place.find_by! slug: 'a-new-place'
 
     assert_equal ZIP.find_by!(code: '90002'), place.zip
-    follow_and_assert_flash 'Place was created.'
+    # The message names the record by its label, led to its page: the routes drew a
+    # `show` for places, and a reader may want to look the new row over.
+    follow_and_assert_flash %(<a href="/places/#{place.id}">A new place</a> was created.)
     # The page is told which row the write landed on, so it can mark it for as long as
     # the message stands — and told as data rather than as a second message: every
     # other key in the flash becomes a toast of its own, whoever invented it.

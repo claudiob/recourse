@@ -20,7 +20,7 @@ en:
     clear: Clear search
     compact: Compact
     create: Create
-    created: "%{model} was created."
+    created: "%{record} was created."
     created_error: "%{model} could not be created."
     darken: Dark
     delete: Delete %{model}
@@ -65,7 +65,7 @@ en:
       blue. It cannot be %{color}."
     unknown_theme: "`Recourse.theme` is one of %{themes}, or nil for Bootstrap's own
       palette. It cannot be %{theme}."
-    updated: "%{model} was updated."
+    updated: "%{record} was updated."
     updated_error: "%{model} could not be updated."
     unset: None
     deletion:
