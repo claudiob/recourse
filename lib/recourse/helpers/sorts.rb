@@ -10,13 +10,17 @@ module Recourse
       # allows that, and the plain title everywhere else. Only the header row draws
       # the link, so the `data-cell` on every other row stays readable text.
       #
+      # The first click sorts descending, the second back up: the newest, the most
+      # and the latest are what a reader clicks a heading to find.
+      #
       # Named apart from Ransack's `sort_link`, which it calls: sharing the name
       # would take that helper away from every view this gem's controllers render.
       def sort_header(column, title = nil)
         title ||= sort_title column
         return title unless @recourse_headers && sortable_column?(column)
 
-        sort_link resource_search, column.to_sym, hide_indicator: true, page: nil do
+        sort_link resource_search, column.to_sym,
+                  hide_indicator: true, page: nil, default_order: :desc do
           safe_join [title, sort_caret(column)].compact, ' '
         end
       end

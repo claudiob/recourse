@@ -30,6 +30,8 @@ class TestRecoursesSearch < IntegrationCase
     assert_includes sql.last, 'ORDER BY "places"."name" DESC NULLS LAST'
     assert_includes body, 'bi bi-caret-down-fill'
     refute_includes body, 'bi bi-caret-up-fill'
+    # Sorted downward already, so the heading's next click turns the table back up.
+    assert_includes body, 'href="/places?q%5Bs%5D=name+asc">Name'
     # And a search keeps the order a heading asked for, carried as a hidden field.
     assert_includes body, '<input type="hidden" name="q[s]" id="q_s" value="name desc"'
     # Indexed, so it is a column a heading could sort by; hidden by the model, so none

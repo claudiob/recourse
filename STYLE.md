@@ -1268,6 +1268,10 @@ before writing or editing any layout, view or partial.
   `bi bi-caret-up-fill` ascending, `bi bi-caret-down-fill` descending — with no
   caret at all on a column nobody sorted by, so an arrow never claims an order
   that is not in force.
+- It passes `default_order: :desc`, so the first click on a heading sorts the
+  table downward and the second turns it back up. The newest, the most and the
+  latest are what a reader clicks a heading to find, and ascending put them on the
+  last page.
 - It also passes `page: nil`, so clicking a heading restarts the table at its
   first page. Ransack's own link already carries every other `q` parameter, so
   sorting keeps whatever search or filter was in force.

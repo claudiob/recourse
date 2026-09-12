@@ -11,8 +11,9 @@ class TestRecoursesIndex < IntegrationCase
   def test_the_table_shows_every_column_that_earns_a_place_and_no_other
     visit '/places'
 
-    assert_includes body, 'href="/places?q%5Bs%5D=name+asc">Name</a></th>'
-    # Indexed, so it sorts; `Capacity` is not, so it is a heading and nothing more.
+    # Indexed, so it sorts, and downward first; `Capacity` is not, so it is a heading
+    # and nothing more.
+    assert_includes body, 'href="/places?q%5Bs%5D=name+desc">Name</a></th>'
     assert_includes body, '<th scope="col">Capacity</th>'
     assert_includes body, '<td data-cell="Team">Blue Crew</td>'
     # Its own status, as the word the column holds rather than a number.
@@ -69,7 +70,7 @@ class TestRecoursesIndex < IntegrationCase
     cell = '<a aria-label="3 Places" data-turbo-frame="_top" data-cell="Places" ' \
            "href=\"/people/#{person.id}/places\">"
 
-    assert_includes body, %(q%5Bs%5D=places_count+asc">#{icon}</a></th>)
+    assert_includes body, %(q%5Bs%5D=places_count+desc">#{icon}</a></th>)
     assert_includes body, "#{cell}#{figure}#{word}</a>"
     assert_equal %w[Show Edit Name Places], body.scan(/data-cell="([^"]+)"/).flatten.uniq
   end
