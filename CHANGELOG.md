@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 4.7.0 - 2026-09-11
+
+* [Feature] The toast after a create or an update names the record and links it to its page
+
+  `Blue Crew was updated.` rather than `Team was updated.`, with the label led to the
+  record's show page where the routes drew one, so a reader can go and look the row over.
+  The words are the label the model picked, or the model's own name where a record says
+  nothing. A rejected write and a delete still name the model. A host asserting the old
+  wording in its own tests updates the sentence.
+
+* [Feature] The first click on a heading sorts the table downward, and the second turns it back up
+
+  The newest, the most and the latest are what a reader clicks a heading to find, and
+  ascending put them on the last page. A host asserting a heading's `asc` link in its
+  own tests now reads `desc`.
+
 ## 4.6.5 - 2026-09-09
 
 * [Fix] A table opens at 15 rows a page rather than 20; the 100-row page stays
