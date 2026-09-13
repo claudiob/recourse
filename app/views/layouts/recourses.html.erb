@@ -20,6 +20,15 @@
     <link rel='preconnect' href='https://design.houseaccount.com'>
     <link rel='preconnect' href='https://design.houseaccount.com' crossorigin>
     <link rel='stylesheet' href='https://design.houseaccount.com/v0.2.0/css/houseaccount.css'>
+    <%# The one thing these screens set that the house's stylesheet does not: system faces
+        at a compact size, for pages dense with figures. 14px as rem, so a browser's own
+        text-size setting still scales it. After the stylesheet, since both are `:root`. -%>
+    <style>
+      :root {
+        --bs-body-font-family: helvetica, verdana, arial, sans-serif;
+        --bs-body-font-size: 0.875rem;
+      }
+    </style>
     <%# After the Bootstrap link, which is what makes either win: every selector involved
         is `:root`. The palette the host named, then the one the reader chose last time. -%>
     <%= theme_stylesheet_link %>

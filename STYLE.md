@@ -32,6 +32,10 @@ before writing or editing any layout, view or partial.
 - A host puts its chrome back by writing `app/views/layouts/recourses.html.erb` of
   its own, which wins on being earlier in the view paths, or by declaring
   `layout 'application'` on a controller that subclasses `RecoursesController`.
+- Body text is `helvetica, verdana, arial, sans-serif` at 14px — `0.875rem`, so a
+  browser's text-size setting still scales it — set through `--bs-body-font-family` and
+  `--bs-body-font-size` in the layout's one `<style>`. A choice for pages dense with
+  figures, and this gem's alone: the house's stylesheet leaves body text to Bootstrap.
 - Nothing is vendored or served here. The stylesheet, the script, the icon fonts and the
   palettes live in `~/code/design`, the `houseaccount` gem's repo, and the layout links
   `https://design.houseaccount.com/v0.2.0/css/houseaccount.css` and its script, pinned. Every

@@ -41,6 +41,8 @@ class TestRecoursesColor < IntegrationCase
     assert_includes body,
                     "<script type='module' src='https://design.houseaccount.com/v0.2.0/js/houseaccount.js'>"
     refute_includes body, '/recourse/'
+    # And the one thing these screens set that the house's stylesheet does not.
+    assert_includes body, '--bs-body-font-family: helvetica, verdana, arial, sans-serif;'
     assert_includes body, '<link rel="stylesheet" ' \
                           'href="https://design.houseaccount.com/v0.2.0/theme/dracula.css" ' \
                           'data-recourse-theme="">'
