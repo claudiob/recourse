@@ -20,30 +20,37 @@ class TestRecoursesFormReferences < IntegrationCase
     # than only reporting that what was typed is wrong.
     assert_includes body, 'maxlength="5" minlength="5" pattern="\d{5}"'
     assert_includes body, 'title="Please match the format 00000"'
-    assert_includes body, %(data-bs-name='place[team_id]' data-controller='combobox')
+    # A plain select, dressed as a combobox by the design bundle; the words it needs
+    # travel on it, since a script has no locale of its own.
+    assert_includes body, '<select name="place[team_id]" id="place_team_id" required="required" ' \
+                          'class="form-select" data-controller="combobox" ' \
+                          'data-combobox-placeholder-value="Select…" ' \
+                          "data-combobox-more-value=\"#{I18n.t 'recourse.more'}\" " \
+                          'data-search="Search…" data-clear="Clear search" ' \
+                          'data-no-results="No results found">'
     # The menu holds the labels, not the ids, and the typed one holds no menu at all.
     assert_includes body, 'Blue Crew'
     refute_includes body, '90001'
   end
 
   # A key that may be nothing has to be settable back to it, which a menu of records
-  # cannot otherwise say. The item carries an empty value of its own, since the
-  # plugin builds its hidden input from whichever item is selected — and only where
-  # the model permits it: a required key offers no way to leave itself empty.
+  # cannot otherwise say. An empty option is that way back — and only where the model
+  # permits it: a required key offers no way to leave itself empty.
   def test_only_an_optional_menu_offers_a_way_to_choose_nothing
     visit "/places/#{Place.order(:id).first.id}/edit"
 
-    assert_includes menu_for('place[person_id]'), %(data-bs-value='' aria-selected='false')
-    assert_includes menu_for('place[person_id]'), '<span>None</span>'
-    refute_includes menu_for('place[team_id]'), %(data-bs-value='' )
+    assert_includes menu_for('place[person_id]'), '<option value="">None</option>'
+    refute_includes menu_for('place[team_id]'), '<option value="">'
     # `status` is `null: false` and the model says so, so it is required too.
-    refute_includes menu_for('place[status]'), %(data-bs-value='' )
+    refute_includes menu_for('place[status]'), '<option value="">'
+    # The record's own team is the pick the menu opens on.
+    assert_includes menu_for('place[team_id]'), 'selected="selected"'
   end
 
 private
 
-  # One combobox's menu, from its toggle to the end of its options.
+  # One combobox's select, from its opening tag to its closing one.
   def menu_for(name)
-    body[/data-bs-name='#{Regexp.escape name}'.*?combobox-no-results/m]
+    body[%r{<select name="#{Regexp.escape name}".*?</select>}m]
   end
 end

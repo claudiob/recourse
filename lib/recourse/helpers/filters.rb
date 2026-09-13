@@ -85,9 +85,9 @@ module Recourse
                                      all: all, values: Array(values), **)
       end
 
-      # A multiple combobox submits one comma-joined input, read back out the same way.
+      # A multiple select submits one value per pick, and a link carries them the same way.
       def filter_values(predicate)
-        query_params[predicate].to_s.split ','
+        Array(query_params[predicate]).map(&:to_s).compact_blank
       end
     end
   end
