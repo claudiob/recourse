@@ -1,38 +1,20 @@
 <%# locals: (name:, id:, placeholder:, invalid: false, feedback: nil, described: nil, required: false, label: nil, counter: nil, recourses: nil, values: [], multiple: false, selected: [], aria_label: nil, small: false, all: nil, none: nil, shown: nil) -%>
-<button class='form-control<%= ' form-control-sm' if small %><%= ' is-invalid' if invalid %> combobox-toggle' type='button' id='<%= id %>'
-        data-bs-toggle='combobox' data-bs-name='<%= name %>' data-controller='combobox'
-        data-combobox-more-value='<%= t 'recourse.more' %>'
-        data-bs-placeholder='<%= placeholder %>' data-bs-search='true'
-        aria-required='<%= required %>' <%= tag.attributes 'data-bs-multiple': ('true' if multiple), 'aria-label': aria_label, 'aria-describedby': described %>>
-  <span class='combobox-value'><%= placeholder %></span>
-  <i class='bi bi-chevron-down combobox-caret'></i>
-</button>
-<div class='menu'>
-  <div class='combobox-search' data-controller='clear'>
-    <input type='text' class='form-control combobox-search-input'
-           placeholder='<%= t 'recourse.search' %>'
-           autocomplete='off' aria-label='<%= t 'recourse.search' %>'
-           data-clear-target='input' data-action='input->clear#toggle'>
-    <button type='button' class='combobox-search-clear d-none' aria-label='<%= t 'recourse.clear' %>'
-            data-clear-target='button' data-action='clear#clear'>
-      <i class='bi bi-x-lg'></i>
-    </button>
-  </div>
-  <%# No `data-bs-value`, so the plugin's own click handler passes it by and this one
-      is ours; and never `.selected`, which it counts whatever the element is. -%>
-  <% if all -%>
-    <button type='button' class='menu-item' data-controller='deselect' data-action='deselect#all'
-            data-deselect-multiple-value='<%= multiple %>'><%= all %></button>
-    <div class='menu-divider'></div>
-  <% end -%>
-  <%# A value of its own, and an empty one: the plugin builds its hidden input from
-      whichever item is selected, so this is what sets an optional key back to
-      nothing. `deselect` cannot serve here — in a single menu the plugin selects
-      whatever is clicked rather than toggling it, so re-clicking the chosen item
-      would change nothing at all. -%>
+<%# A plain <select>, which the design bundle dresses as Bootstrap's combobox: this is
+    the whole contract, and a page without the script has a working select. The words
+    the menu needs travel on it, since a script has no locale of its own; a multiple
+    select is named with `[]`, so the browser submits every pick the way Ransack reads a
+    list predicate. -%>
+<%= tag.select name: (multiple ? "#{name}[]" : name), id: id, multiple: multiple, required: required,
+               class: class_names('form-select', 'form-select-sm': small, 'is-invalid': invalid),
+               aria: { label: aria_label, describedby: described },
+               data: { controller: 'combobox', combobox_placeholder_value: placeholder,
+                       combobox_more_value: t('recourse.more'), combobox_all_value: all,
+                       search: t('recourse.search'), clear: t('recourse.clear'),
+                       no_results: t('recourse.no_results') } do %>
+  <%# An empty option is what sets an optional key back to nothing; a required one
+      offers no way to leave itself empty. -%>
   <% if none -%>
-    <button type='button' class='menu-item' data-bs-value='' aria-selected='false'><span class='menu-item-content'><span><%= none %></span></span></button>
-    <div class='menu-divider'></div>
+    <%= tag.option none, value: '' %>
   <% end -%>
   <%# Records are cached on the relation, and a list of words is not worth caching:
       an enum has a dozen of them and they are already in memory. Nor is a table with
@@ -42,27 +24,27 @@
       <% recourses.each do |recourse| %>
         <% chosen = selected.include? recourse.id.to_s -%>
         <%# In the menu but not on it: an option accounting for none of the rows being
-            filtered is `d-none` until `All` asks for it. One already ticked stays put,
+            filtered is held back until `All` asks for it. One already ticked stays put,
             or the box would name a filter its own menu does not offer. -%>
         <% empty = counter && !chosen && recourse.attributes[counter].to_i.zero? -%>
-        <%# The name in a `.menu-item-content > span`, which is what the plugin copies into
-            the closed box: a count belongs in the menu and not on the box. Its wrapper
-            is `flex: 1`, so the count needs no margin of its own to sit at the right. -%>
-        <button class='menu-item<%= ' selected' if chosen %><%= ' d-none' if empty %>' type='button' data-bs-value='<%= recourse.id %>' aria-selected='<%= chosen %>'><span class='menu-item-content'><span><%= recourse.attributes[label] %></span></span><% if counter %><span class='recourse-count fg-2'><%= number_with_delimiter recourse.attributes[counter] %></span><% end %><% if multiple %><i class='bi bi-check menu-item-check'></i><% end %></button>
+        <%= tag.option recourse.attributes[label], value: recourse.id, selected: chosen,
+                       data: { count: (number_with_delimiter recourse.attributes[counter] if counter),
+                               hidden: ('' if empty) } %>
       <% end %>
     <% end %>
   <% else -%>
     <% values.each do |option| %>
-      <%# Compared as text, because that is what a request carries it back as. -%>
+      <%# A value on its own, or a `[label, value]` pair for where what the menu reads
+          is not what it submits: a CRM is picked by its own name and carried back as
+          the class the column holds. Compared as text, since that is what a request
+          carries it back as. -%>
+      <% shown_as, option = option.is_a?(Array) ? option : [option, option] -%>
       <% chosen = selected.include? option.to_s -%>
-      <%# In the menu but not on it, the way an unused filter option is: a list too long
-          to read opens on the few worth reading, and `All` asks for the rest. -%>
       <% waiting = shown && !chosen && shown.exclude?(option.to_s) -%>
-      <button class='menu-item<%= ' selected' if chosen %><%= ' d-none' if waiting %>' type='button' data-bs-value='<%= option %>' aria-selected='<%= chosen %>'><span class='menu-item-content'><span><%= option %></span></span><% if multiple %><i class='bi bi-check menu-item-check'></i><% end %></button>
+      <%= tag.option shown_as, value: option, selected: chosen, data: { hidden: ('' if waiting) } %>
     <% end %>
   <% end -%>
-  <div class='combobox-no-results d-none'><%= t 'recourse.no_results' %></div>
-</div>
+<% end %>
 <% if feedback -%>
   <small class='invalid-feedback' id='<%= id %>_error'><%= feedback %></small>
 <% end -%>

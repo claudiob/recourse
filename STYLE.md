@@ -713,113 +713,40 @@ before writing or editing any layout, view or partial.
 - A value that matches no record leaves the foreign key nil, so `belongs_to`
   reports `Must exist` beside the field, and the field keeps what was typed. That
   value comes from `params`, not from the record — nothing was ever assigned to it.
-- `state_id` is still a Bootstrap combobox listing each `State` by `name`, in the
-  "Search menu items" form, so a list of fifty stays usable.
+- `state_id` is still a combobox listing each `State` by `name`, with a search box, so a
+  list of fifty stays usable.
 - What each option reads is the model's own `recourse_label` — `name` by default,
   `code` for a ZIP, `email` for an Agent. See CLAUDE.md, "Every model says how it
   is labelled".
 - The menu holds every row, so it is only as usable as the table is small. The
-  ZIP combobox on `/locations/new` is 40,965 options and 3.3 MB of HTML: the
+  ZIP combobox on `/locations/new` was 40,965 options and 3.3 MB of HTML: the
   search box finds one instantly, but the page pays for all of them up front.
-  Bootstrap filters what is already in the DOM, so there is no cheaper option
-  short of a server-side search.
-- The markup is the toggle followed by its `.menu` **sibling** — the plugin finds
-  the menu with `SelectorEngine.next`, so anything between them breaks it:
+- The markup is a plain `<select>` and nothing else — `_combobox.html.erb` renders one —
+  and the design bundle dresses it as Bootstrap's combobox: a toggle reading the pick, a
+  menu with a search box, a check per pick where it is `multiple`. The select stays,
+  hidden, as the one thing the form submits, so a page without the script has a working
+  select and a required key carries a real `required`. The words the menu needs travel
+  on the select as data attributes, since a script has no locale of its own:
 
-      <button class='form-control combobox-toggle' type='button' id='county_state_id'
-              data-bs-toggle='combobox' data-bs-name='county[state_id]'
-              data-bs-placeholder='Select a State…' data-bs-search='true'>
-        <span class='combobox-value'>Select a State…</span>
-        <i class='bi bi-chevron-down combobox-caret'></i>
-      </button>
-      <div class='menu'>
-        <div class='combobox-search'>
-          <input type='text' class='form-control combobox-search-input'
-                 placeholder='Search…' autocomplete='off' aria-label='Search…'>
-        </div>
-        <button class='menu-item' type='button' data-bs-value='1'>Alabama</button>
-        <div class='combobox-no-results d-none'>No results found</div>
-      </div>
+      <select name='county[state_id]' id='county_state_id' required class='form-select'
+              data-controller='combobox' data-combobox-placeholder-value='Select…'
+              data-combobox-more-value='%{first} + %{count} more'
+              data-search='Search…' data-clear='Clear search' data-no-results='No results found'>
+        <option value=''>None</option>
+        <option value='1'>Alabama</option>
+      </select>
 
-- Every combobox logs `Bootstrap doesn't allow more than one instance per
-  element. Bound instance: bs.combobox.` to the console, in red, once per render
-  and again on every `turbo:morph`. It is upstream's, not ours, and nothing here
-  can stop it: `Combobox`'s constructor sets `this._toggle = this._element` and
-  then builds a `Menu` on that same element, so Bootstrap's own registry refuses
-  the second key and logs. Creating the menu first only moves the complaint to
-  the other key; dropping `data-bs-toggle='combobox'` would break the click that
-  opens it and not silence anything, since the constructor is what trips it.
-- Nothing is broken by it, which is why we live with it: `Menu.clearMenus` reads
-  a `static` set of open instances rather than the registry, so an outside click
-  and Escape still close the menu, and `Combobox` holds its own reference and
-  disposes it. The one casualty is `Menu.getInstance(toggle)`, which nothing
-  asks for. Unfixed as of 6.0.0-alpha1 — `js/src/combobox.ts:104` and `:207` on
-  `v6-dev` — so a later drop is what fixes it.
-- `data-bs-name` is what makes it a form control: the plugin inserts a hidden
-  input of that name before the toggle and writes the chosen `data-bs-value`
-  into it. Never put `name=` on the toggle itself.
-- That input is a node the server never renders, which Turbo's DOM surgery
-  knows nothing about — a morphing refresh deletes it while the plugin instance
-  keeps writing to the detached node, and a snapshot restore resurrects an old
-  one beside the input a fresh instance makes, so a click would submit a filter
-  that is stale, doubled or missing. The toggle therefore carries
-  `data-controller='combobox'`, whose lifecycle keeps input and instance one
-  thing: `connect` removes any restored stale inputs and adopts the instance,
-  `disconnect` disposes it (which takes its input with it), and a `turbo:morph`
-  disposes and remakes it whole — the constructor reads the `.selected` items
-  the morph just made truthful, so one move resyncs the input, the toggle's
-  text and the listeners.
-- `data-bs-search='true'` enables filtering, but the search input has to be in
-  the markup — the plugin only wires up a `.combobox-search-input` it finds.
-- That input carries an X inside its right edge once there is anything to clear,
-  and nothing before then. A menu of fifty states filtered down to one is two
-  keystrokes from being useful again, and a backspace-until-empty is a poor way
-  to ask:
-
-      <div class='combobox-search' data-controller='clear'>
-        <input type='text' class='form-control combobox-search-input' placeholder='Search…'
-               autocomplete='off' aria-label='Search…'
-               data-clear-target='input' data-action='input->clear#toggle'>
-        <button type='button' class='combobox-search-clear d-none' aria-label='Clear search'
-                data-clear-target='button' data-action='clear#clear'>
-          <i class='bi bi-x-lg'></i>
-        </button>
-      </div>
-
-- The button starts `d-none` and the `clear` controller shows it on `input`,
-  since whether a field has anything in it is not something the server can know:
-  the menu is cached, and the same markup is served to a field being typed into
-  and one that was never touched.
-- Emptying the field is not enough on its own. Bootstrap filters the menu's rows
-  on the field's `input` event, so the controller dispatches one after clearing,
-  or the rows stay filtered to a term that is no longer there. It then puts the
-  caret back in the field, which is where someone who cleared a search is about
-  to type.
-- The X is positioned rather than laid out: `.combobox-search` is the relative
-  container, the input reserves room with `padding-inline-end`, and the button
-  sits in it. A flex row instead would put the button *beside* the field, which
-  is a different control — Bootstrap's own search box has nothing there.
-- Its `display` is set through `.combobox-search-clear:not(.d-none)`, never on
-  the element itself. v6's display utilities carry no `!important` — `.d-none` is
-  a plain `display:none` — so any rule of ours with the same specificity and a
-  later position beats it, and a `display: flex` on the button showed an X over
-  every empty field. Anything the gem styles that a class is meant to hide needs
-  the same treatment.
-- The toggle carries the `id` the label points at, which is legal because a
-  `<button>` is a labelable element. Use `form.field_id` and `form.field_name`
-  rather than spelling either out.
-- Bootstrap's example uses an inline SVG caret; ours is
-  `<i class='bi bi-chevron-down combobox-caret'></i>`. The class only needs
-  `flex-shrink` and a rotation, the icon font is already loaded, and the `<i>`
-  form is what every other icon on the page uses.
-- The placeholder doubles as the empty label: `Select a <Model>…`, from
-  `model_name.human` so a registered acronym survives. An optional association
+- A filter's select is `multiple`, named with `[]` so the browser submits one value per
+  pick the way Ransack reads a list predicate, and carries `data-combobox-all-value`, the
+  `All …` row that is the way back to no filter. An option with `data-hidden` is in the
+  menu but not on it until `All` asks, and one with `data-count` shows its figure at the
+  right; both are decided here, where the counts are.
+- Every pick is written back to the select and said as its own `change`, which bubbles, so
+  the search form narrows the table on the same listener a typed term uses. How the
+  toggle, the menu, the search box and its X are built and kept across a Turbo morph is
+  the bundle's business, in `design`'s `STYLE.md` and `combobox_controller.js`.
+- The placeholder doubles as the empty label: `Select…`, and an optional association
   says `Optional` instead, like any other optional field.
-- A required association carries `aria-required` on the toggle rather than
-  `required`. The toggle is a `<button>`, which `required` does not apply to, and
-  the hidden input that would take it is not in the markup — the plugin writes it
-  at runtime. So the requirement is announced, not enforced: the model's
-  validation is still what rejects a blank.
 
 ## Flash messages
 

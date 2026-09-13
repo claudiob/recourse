@@ -22,6 +22,21 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   `houseaccount` gem serves the same paths itself, but this gem still links the site: it
   never names that gem.
 
+* [Breaking change] A combobox is a `<select>`, and a filter submits one value per pick
+
+  `_combobox.html.erb` renders a plain select carrying its words as data attributes, and
+  the design bundle dresses it as Bootstrap's combobox; the toggle, the menu and the
+  plugin's hidden input are no longer in the page. A filter's select is `multiple` and
+  named `q[status_in][]`, so a request carries `q[status_in][]=draft&q[status_in][]=sent`
+  rather than one comma-joined value — a host linking to a filtered index, or reading
+  `params[:q]`, updates the shape. A host overriding the partial rewrites it as a select.
+
+* [Breaking change] The delete dialog is the bundle's
+
+  `_confirm.html.erb` is gone: `confirm.js` in the design bundle builds the dialog on
+  the first ask, and its answer wears the words of the button that asked. A host that
+  overrode the partial deletes its copy.
+
 * [Breaking change] A phone is formatted in the browser
 
   A cell reads `<span data-controller='phone'>4155550000</span>` and a field arrives with
