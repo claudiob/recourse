@@ -3,13 +3,10 @@ module Recourse
     # Turns a model's validators into the HTML that constrains a form field.
     module Constraints
       # Shown for a field whose shape has one canonical example.
-      SAMPLE_PLACEHOLDERS = { 'phone' => '555-555-5555', 'email' => 'michael@example.com' }.freeze
+      SAMPLE_PLACEHOLDERS = { 'email' => 'michael@example.com' }.freeze
 
-      # What the browser checks where the typed shape differs from the stored one: a
-      # phone is ten digits in the database but is typed with its separators.
-      DISPLAY_PATTERNS = { 'phone' => '[2-9]\d{2}-[2-9]\d{2}-\d{4}' }.freeze
-
-      # Hands a phone field to the Stimulus controller that types its separators.
+      # Hands a phone field to the controller that decides its shape: the separators as it
+      # is typed, and the pattern, placeholder and title the field is left without here.
       PHONE_CONTROLLER = {
         controller: 'phone', action: 'keydown->phone#down input->phone#input',
       }.freeze
@@ -20,7 +17,7 @@ module Recourse
       # which is the page's model unless a field asks about another one's attribute.
       def field_html(column, type = nil, model = resource_model)
         key = (type || column).to_s
-        pattern = DISPLAY_PATTERNS[key] || column_pattern(model, column)
+        pattern = column_pattern(model, column) unless key == 'phone'
 
         {
           maxlength: length_option(model, column, :maximum),

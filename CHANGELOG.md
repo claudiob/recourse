@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## [Unreleased]
+
+* [Breaking change] Every page is styled and scripted by `https://design.houseaccount.com`, and nothing is served by the gem
+
+  The vendored Bootstrap, its icons and fonts, Stimulus, the sixteen controllers, the nine
+  palettes and the layout's own stylesheet have moved to the `design` repo, which publishes
+  them at `/v<version>/css/houseaccount.css`, `/v<version>/js/houseaccount.js` and
+  `/v<version>/theme/<name>.css` on that origin, kept forever per version. The layout links
+  the first two at a pinned version, and `Recourse::THEMES_PATH` names the third at the
+  same one; a fix there reaches these pages when the pin moves, and not before. The
+  `Rack::Static` layers under `/recourse/` are gone with the files they served.
+
+  A host needs that origin reachable from its readers' browsers. A host with a Content
+  Security Policy allows it for `style-src`, `script-src` and `font-src`. A host on the
+  `houseaccount` gem serves the same paths itself, but this gem still links the site: it
+  never names that gem.
+
+* [Breaking change] A phone is formatted in the browser
+
+  A cell reads `<span data-controller='phone'>4155550000</span>` and a field arrives with
+  ten digits, the controller and nothing about its shape: no `pattern`, `placeholder` or
+  `title`. The design bundle's controller decides `555-555-5555` in both places. A host
+  asserting the formatted number in its own tests updates the assertion.
+
 ## 4.8.0 - 2026-09-13
 
 * [Feature] A table is redrawn when a record its rows draw changes, so a `touch: true` kept for that alone can go

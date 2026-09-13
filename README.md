@@ -15,8 +15,11 @@ gem 'recourse', '~> 4.0'
 
 `~> 4.0` follows Semantic Versioning: `bundle update` takes every 4.x and never a
 breaking change. Rails 8.1 and Ruby 3.2 are the minimum; the pages need Turbo, which
-`turbo-rails` brings, and nothing else — Bootstrap and its icons are vendored and served
-by the engine, so a host without an asset pipeline gets the same screens.
+`turbo-rails` brings, and nothing else in the host. Everything a page is styled and
+scripted by — Bootstrap 6, its icons, Turbo, Stimulus and the controllers behind these
+screens — is linked from https://design.houseaccount.com, so a host without an asset
+pipeline gets the same screens, and a host with a Content Security Policy allows that
+origin for `style-src`, `script-src` and `font-src`.
 
 ## Step 1. Edit your routes
 

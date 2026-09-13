@@ -34,7 +34,7 @@ module Recourse
 
         case kind
         when :integer then number_with_delimiter value
-        when :phone then number_to_phone value
+        when :phone then phone_span value
         when :monetary then number_to_currency value, **precision_option(column)
         when :percentage then number_to_percentage value, **precision_option(column)
         when :decimal then number_with_precision value, **precision_option(column)
@@ -71,13 +71,12 @@ module Recourse
         tag.pre JSON.pretty_generate(value), class: 'recourse-payload'
       end
 
-      def enum_badge(value)
-        tag.span value, class: 'badge'
-      end
+      # Ten digits and a controller: how a phone reads is the design bundle's to decide.
+      def phone_span(value) = value && tag.span(value, data: { controller: 'phone' })
 
-      def web_url?(value)
-        value.is_a?(String) && value.match?(WEB_URL)
-      end
+      def enum_badge(value) = tag.span(value, class: 'badge')
+
+      def web_url?(value) = value.is_a?(String) && value.match?(WEB_URL)
 
       # The words lead where the value points, in this tab, the way any link does; the
       # arrow after them — Bootstrap's icon link, stepping under the cursor — opens the

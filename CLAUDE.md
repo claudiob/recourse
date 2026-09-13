@@ -400,10 +400,7 @@ two is filed under the one a reader would look in first.
 - The page's chrome is not the log's subject either: no `Started GET` for a
   stylesheet, a script or a font, none for `/cable`, and no WebSocket or
   `Turbo::StreamsChannel` chatter.
-- The gem's own files go quiet by *placement*: its `Rack::Static` middleware
-  sits before `Rails::Rack::Logger`, so a `/recourse/*` fetch is answered before
-  the logger ever sees it — which is why the gem may do this for every host
-  without touching anyone's logging config.
+- The gem serves no file of its own, so nothing it links ever reaches a host's log.
 - The cable goes quiet in the app: `Rails::Rack::SilenceRequest, path: '/cable'`
   — the middleware `silence_healthcheck_path` already uses — inserted before the
   request logger, plus `config.action_cable.logger = ActiveSupport::Logger.new(nil)`,
@@ -598,38 +595,29 @@ two is filed under the one a reader would look in first.
   replacement proposed for it are in `ROADMAP.md`. Read that before changing this hook:
   goldrush cannot create five of its models today for exactly this reason.
 
-#### Vendor what a page cannot render without
+#### Assets come from the design site
 
-- A stylesheet or script a page cannot do without is vendored into the gem and
-  served from it, never linked to a CDN. A host that fails to reach the CDN gets
-  an unstyled page, and the Bootstrap 6 CSS in particular comes from a preview
-  host with no promise of staying put.
-- The files live in `vendor/recourse/`, and an engine initializer serves them with
-  `Rack::Static`. That is the framework's own middleware rather than a controller
-  action, and it assumes no asset pipeline, which a host may well not have.
-- Keep the slash on the prefix. `urls: %w[/recourse/]` matches on `start_with?`,
-  so `urls: %w[/recourse]` would answer `/recourses` with a 404 from the file
-  server before the router ever saw it — in this gem of all places.
-- Vendor whatever the vendored file itself asks for. `bootstrap-icons.min.css`
-  loads `fonts/bootstrap-icons.woff2` relative to itself, so the CSS without the
-  fonts renders every icon as a blank box.
-- Keep the copies byte-identical to what the CDN serves, so a later version can
-  be diffed against upstream. `git ls-files` puts them in the gem already.
-- Every file the gem serves goes out `cache-control: no-cache`, through the statics'
-  `header_rules`. The URL of a file never changes between versions, so a browser told
-  to keep one for hours kept running the previous version's script: a phone showed a
-  tooltip a release had taken away, for as long as the host's `max-age` said. `no-cache`
-  is revalidation, not no caching — a file that stands answers `304`.
-- Our own JavaScript is not vendored. It lives in `app/javascript/recourse/` and
-  is served at the same prefix: the first `Rack::Static` takes `cascade: true`, so
-  a path it has no file for falls through to the second rather than 404ing. That
-  keeps `vendor/` meaning "upstream's", which is what exempts it from the lint.
-- A Stimulus controller imports Stimulus by its served path, not by the bare
-  `@hotwired/stimulus` specifier. Resolving that name would need an import map,
-  and a host app may already ship one of its own.
-- Start the application in the `<head>`, and guard it with `window.Stimulus`.
-  Turbo re-runs body scripts on every visit, and a second application connects
-  every controller a second time.
+- Since the `design_assets` branch the gem serves no file at all. Everything a page is
+  styled and scripted by — Bootstrap 6, its icons and fonts, Turbo, Stimulus and the
+  controllers this markup names — lives in `~/code/design`, the `houseaccount` gem's repo,
+  and is linked at a pinned version: `https://design.houseaccount.com/v0.2.0/css/houseaccount.css`
+  and `/v0.2.0/js/houseaccount.js`. The palettes are `Recourse::THEMES_PATH`, same version.
+- The origin and the version are written out, three times, and are not a setting. The pin
+  is the point: a change in `design` reaches these pages when somebody moves it here and
+  releases, and not before, so a broken bundle cannot take every recourse page down. Move
+  all three together. A host on the `houseaccount` gem serves the unversioned paths itself,
+  but this gem never names that gem.
+- What this gem still owns is the contract the bundle is written against: every
+  `data-controller`, `data-action` and `data-*-value` a view or helper emits, and every
+  `recourse-*` class. Renaming one here breaks a page until the bundle follows; add a
+  controller there before naming it here.
+- A phone is the example of where the line falls. The server says only that a value is
+  one — ten digits and `data-controller='phone'` on a cell and on a field — and the
+  bundle decides how it reads, so no format, placeholder or pattern is written in Ruby.
+- The bundle starts Stimulus in the `<head>`, guarded with `window.Stimulus`, and the
+  layout keeps the module script there so a controller exists before the body's first
+  `data-controller`. Two `preconnect` links precede the stylesheet, one plain and one
+  `crossorigin`, since a module script and a font are fetched over a CORS connection.
 
 #### Design lives in STYLE.md
 
