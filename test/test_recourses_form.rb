@@ -24,8 +24,11 @@ class TestRecoursesForm < IntegrationCase
     assert_equal 3, body.scan('step="1" type="number"').size
     # A format validator with no sample to show says the pattern itself.
     assert_includes body, 'pattern="[a-z0-9]+(-[a-z0-9]+)*"'
-    # And one with a sample says the sample instead.
-    assert_includes body, 'title="Please match the format 555-555-5555"'
+    # A phone says nothing about its shape: the controller it carries decides that, so the
+    # field arrives with no pattern, no placeholder and no title of its own.
+    assert_includes body, 'data-controller="phone" ' \
+                          'data-action="keydown-&gt;phone#down input-&gt;phone#input" type="tel"'
+    refute_includes body, '555-555-5555'
     assert_includes body, 'type="date"'
     assert_includes body, 'type="datetime-local"'
     # A text column is a textarea, and an optional field says so where it stands.

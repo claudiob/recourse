@@ -15,7 +15,8 @@ class TestRecoursesShow < IntegrationCase
     assert_includes body, '5.25%'
     assert_includes body, '100.25'
     assert_includes body, '0.500'
-    assert_includes body, '415-555-0000'
+    # Ten digits and a controller: the design bundle decides how a phone reads.
+    assert_includes body, '<span data-controller="phone">4155550000</span>'
     # A month is the word for one, and a year the digits it is: neither counts
     # anything, so neither wears the delimiter `capacity` beside them would.
     assert_includes body, 'February'
