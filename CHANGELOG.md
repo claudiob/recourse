@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 For more information about changelogs, check [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 4.8.0 - 2026-09-13
+
+* [Feature] A table is redrawn when a record its rows draw changes, so a `touch: true` kept for that alone can go
+
+  A cell naming a key draws the record it points at — a booking's row reading its
+  contact's phone — and the relation's own version, `COUNT(*)` and `MAX(updated_at)`
+  over the page, sees only the rows themselves. The table kept the number the contact
+  had when the fragment was written, until somebody wrote to the booking. The key now
+  carries the newest `updated_at` among everything `recourse_includes` names, which
+  the index eager-loads already — so it is read off the records in memory and costs no
+  query.
+
+  A host that declared `belongs_to ..., touch: true` to expire such a table can drop
+  it: a touch is an UPDATE per parent per child write, it contends on the parent row,
+  and it makes every child write look like a parent update to every `after_commit` the
+  parent has. One that says a domain fact — a parent genuinely updated by its child —
+  stays. Where a row of a host's own reads through a second key, name that in
+  `recourse_includes` as a hash, the shape `includes` already takes, and the version
+  follows it there.
+
 ## 4.7.0 - 2026-09-11
 
 * [Feature] The toast after a create or an update names the record and links it to its page

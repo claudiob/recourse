@@ -1,8 +1,11 @@
 <%# locals: (recourses:, pagy:) %>
 <%# A sorted or filtered table is drawn live: two requests can ask for one relation
     and want different headings, since only one of them clicked a heading to get it. -%>
-<%# The key carries three riders. The row partial's digest: a host's `_row` is
-    resolved at render, which the fragment's own template digest never follows.
+<%# The key carries what the rows draw besides their own columns: `MAX(updated_at)`
+    over the relation sees only the rows themselves, so a name or a ZIP read off the
+    record a row points at would keep whatever it said when the fragment was written.
+    And the row partial's digest: a host's `_row` is resolved at render, which the
+    fragment's own template digest never follows.
     And the column list: which columns a table shows is decided in Ruby —
     `recourse_hidden`, timestamps, counters — that no digest covers either. And the
     bookmarks, which are the viewer's rather than the relation's — so this is what
@@ -10,7 +13,8 @@
     the fragment when a square is clicked. And the zone, for the same reason again:
     a timestamp is drawn against the reader's own clock, so without it the first
     person to load a table would settle what hour everybody else read. -%>
-<% key = [recourses, row_digest, resource_columns, bookmark_digest, Time.zone.name] -%>
+<% key = [recourses, rows_version(recourses), row_digest, resource_columns,
+          bookmark_digest, Time.zone.name] -%>
 <% cache_if cacheable_table?, key do %>
   <% actions = resource_actions %>
   <div class='table-responsive'>

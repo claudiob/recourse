@@ -17,6 +17,36 @@ module Recourse
         ActionView::Digestor.digest name: row.virtual_path, format: :html, finder: lookup_context
       end
 
+      # What the rows draw besides their own columns. A cell naming a `*_id` reads the
+      # record it points at, and `MAX(updated_at)` over the relation only ever sees the
+      # rows themselves -- so without this a table keeps a name, a phone or a ZIP that
+      # the record it belongs to has since changed.
+      #
+      # Read off the objects rather than the database: the index eager-loads exactly
+      # these, so every one of them is already in memory and this costs no query. And
+      # written out to the microsecond, which is what `cache_key_with_version` keeps
+      # too: a key expands a time by `to_s`, and two writes inside one second would
+      # otherwise be one version.
+      def rows_version(rows)
+        drawn = reached rows, resource_model.recourse_includes
+
+        drawn.filter_map { |one| one.try :updated_at }.max&.utc&.to_fs :usec
+      end
+
+      # Every record the rows reach along `includes`, in any shape `includes` accepts:
+      # a name, a list of them, or a hash naming what to follow from there.
+      def reached(rows, names)
+        Array.wrap(names).flat_map do |name|
+          next along rows, name unless name.is_a? Hash
+
+          name.flat_map { |one, nested| followed along(rows, one), nested }
+        end
+      end
+
+      def followed(rows, nested) = rows + reached(rows, nested)
+
+      def along(rows, name) = rows.flat_map { |row| Array.wrap row.public_send(name) }
+
       # Whether the table may be kept at all. A sorted or filtered one never is: two
       # requests can ask for one relation and want different rows, and only one of them
       # clicked a heading to say so.

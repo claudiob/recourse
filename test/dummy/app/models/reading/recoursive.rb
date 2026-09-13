@@ -10,6 +10,12 @@ class Reading
 
       # Deepest first, and the readings with no depth recorded after every one that has.
       def recourse_order = { depth: :desc }
+
+      # The one table whose keys are named as a hash rather than as a list — the shape
+      # a host writes where its own row reads through a key, as this one could read the
+      # sensor the reading before it was taken by. `includes` takes either, so what the
+      # table's version is read off has to follow either.
+      def recourse_includes = [:grade, :sensor, { previous_reading: :sensor }]
     end
   end
 end
