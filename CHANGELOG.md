@@ -7,6 +7,16 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.1.0 - 2026-09-14
+
+* [Feature] The head past the gem's own tags is the host's, through a `recourses/head` partial
+
+  The layout named a host's icon under the four file names a Rails app might ship one at,
+  and fetched every one, three of them a 404 on a host that keeps its icons elsewhere. It
+  now renders `recourses/head` where a host — or a gem the host loads — provides one, and
+  writes no icon link of its own where nobody has. A host whose tab went blank writes its
+  icon links into that partial.
+
 ## 5.0.1 - 2026-09-14
 
 * [Fix] A required combobox starts empty rather than on its first option

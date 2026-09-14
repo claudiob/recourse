@@ -41,6 +41,10 @@ class TestRecoursesColor < IntegrationCase
     assert_includes body,
                     "<script type='module' src='https://design.houseaccount.com/v0.3.1/js/houseaccount.js'>"
     refute_includes body, '/recourse/'
+    # The tab's icon is the host's to name, in its `recourses/head` partial; the gem guesses at
+    # no file name of its own.
+    assert_includes body, "<link rel='icon' href='/favicon/fountain.svg' type='image/svg+xml'>"
+    refute_includes body, "href='/icon.png'"
     # And the one thing these screens set that the house's stylesheet does not.
     assert_includes body, '--bs-body-font-family: helvetica, verdana, arial, sans-serif;'
     assert_includes body, '<link rel="stylesheet" ' \
