@@ -47,6 +47,13 @@ Metrics/MethodLength:
 Naming/MemoizedInstanceVariableName:
   Enabled: false
 
+# Google's own names for two of its boundary layers, which a host writes as the gem
+# does and the bundle reads upcased: `level1` would name a layer Google has not got.
+Naming/VariableNumber:
+  AllowedIdentifiers:
+    - administrative_area_level_1
+    - administrative_area_level_2
+
 Style/DocumentationMethod:
   Enabled: true
   Exclude:

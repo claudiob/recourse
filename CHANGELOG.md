@@ -7,6 +7,23 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.2.0 - 2026-09-14
+
+* [Feature] A table of places can be read as a map
+
+  A model keeping a `google_place_id`, or a `latitude` and a `longitude`, earns a second
+  shape for its index: `/counties.map` draws the page on a Google map, in the frame and
+  over the footer the table has, so the search, the sort and the pages work the same on
+  either. The footer under the table offers `Display as map` and the one under the map
+  `Display as table`, each keeping the page the other was on. A place ID is filled in as
+  an area where the model is a geography Google draws boundaries for — a `State`, a `County`,
+  a `City` or a `ZIP`, by name — and pinned at the place for any other model; a point is
+  pinned as it is. The key and the map style, with those
+  layers turned on, are read from the host's credentials under `google_maps` as `api_key`
+  and `map_id`. `.map` is registered as a name for HTML, and the index renders its HTML
+  templates for it. The design bundle is pinned at v0.5.0, which carries the `map`
+  controller.
+
 ## 5.1.0 - 2026-09-14
 
 * [Feature] The head past the gem's own tags is the host's, through a `recourses/head` partial

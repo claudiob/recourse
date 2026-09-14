@@ -38,7 +38,7 @@ before writing or editing any layout, view or partial.
   figures, and this gem's alone: the house's stylesheet leaves body text to Bootstrap.
 - Nothing is vendored or served here. The stylesheet, the script, the icon fonts and the
   palettes live in `~/code/design`, the `houseaccount` gem's repo, and the layout links
-  `https://design.houseaccount.com/v0.3.1/css/houseaccount.css` and its script, pinned. Every
+  `https://design.houseaccount.com/v0.5.0/css/houseaccount.css` and its script, pinned. Every
   rule about how they are built and cached is in that repo's `STYLE.md` and `CLAUDE.md`.
 - What stays here is the markup: every class and `data-` attribute the bundle is written
   against. Rename one only once the bundle has followed.

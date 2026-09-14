@@ -10,8 +10,7 @@ Nothing here is implemented. `CHANGELOG.md` is what shipped.
 
 Version 4.0.0 ships what goldrush and houston use and nothing else. What was built in
 `drive` and cut on the way here, each a feature a later minor release may bring back:
-Active Storage attachments; cloning a record; tables arranged by drag; a table read as a
-map; a resource with no rows of its own; a listing that edits a join (`through:`); a
+Active Storage attachments; cloning a record; tables arranged by drag; a resource with no rows of its own; a listing that edits a join (`through:`); a
 parent named through a polymorphic key; singular resources (`recourse`); the three
 generators; the eight color palettes; `recourse_extra_columns`, `_actions` and `_tabs`;
 a combobox narrowed by another; and the `values:` shape of a `filter_fields` entry.

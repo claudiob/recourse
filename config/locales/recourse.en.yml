@@ -11,6 +11,8 @@ en:
     ago: "%{distance} ago"
     all: All %{models}
     all_values: All
+    as_map: Display as map
+    as_table: Display as table
     blank: "—"
     bookmark: Bookmark
     bookmark_added: Bookmark added

@@ -14,5 +14,11 @@ module Recourse
     initializer 'recourse.routes' do
       ActionDispatch::Routing::Mapper.include Scopes, Routes
     end
+
+    # `/counties.map` is the same page in another shape, so the format is a name for
+    # HTML: without it Rails has no type for the extension and answers 406.
+    initializer 'recourse.formats' do
+      Mime::Type.register_alias 'text/html', :map
+    end
   end
 end

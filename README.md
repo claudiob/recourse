@@ -144,6 +144,24 @@ Recourse.bookmarks = -> { Keepsake.where agent: Current.agent }
 
 <img width="3824" height="1220" alt="Image" src="https://github.com/user-attachments/assets/d1db4adb-0b5c-4e41-8bb6-cf72a35288f0" />
 
+A table whose model keeps a `google_place_id`, or a `latitude` and a `longitude`, can be
+read as a Google map of the same page: the footer under it offers `Display as map`, and
+`/counties.map` draws this page's rows in the frame and over the footer the table has, so
+search, sort and pages work the same on either shape. A place ID is filled in as an area
+where the model is a geography Google draws boundaries for — a `State`, a `County`, a `City`
+or a `ZIP`, by name — and pinned at the place for any other model; a point is a pin. The key
+and the map ID are the host's credentials, and the map's style has the matching **Feature
+layers** turned on in the Cloud console — Postal code for ZIPs, Administrative area level 2
+for counties. A host with a Content Security Policy allows `maps.googleapis.com` for scripts
+and connections and Google's tile hosts for images.
+
+```yaml
+# config/credentials.yml.enc
+google_maps:
+  api_key: AIza…
+  map_id: 4f2a…
+```
+
 
 ## Development
 
