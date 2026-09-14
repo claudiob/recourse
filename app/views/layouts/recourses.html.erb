@@ -41,15 +41,10 @@
     <%= render 'recourses/scheme' %>
     <%= primary_color_style %>
 
-    <%# The host's own icon, under whichever of the four names it ships it: Rails 8
-        writes `icon.png` and `icon.svg`, and an older app has a `favicon`. The browser
-        takes the first it can fetch, so an app that has done nothing but draw a route
-        still wears its own tab. -%>
-    <link rel='icon' href='/icon.png' type='image/png'>
-    <link rel='icon' href='/icon.svg' type='image/svg+xml'>
-    <link rel='icon' href='/favicon.ico' sizes='any'>
-    <link rel='icon' href='/favicon.png' type='image/png'>
-    <link rel='apple-touch-icon' href='/icon.png'>
+    <%# The rest of the head is the host's: whatever it puts in a `recourses/head` partial
+        — the icons its tab wears, say — is drawn here, from the host's own views or from a
+        gem it loads, and nothing is guessed at where nobody has written one. -%>
+    <%= render 'recourses/head' if lookup_context.exists? 'recourses/head', [], true %>
 
     <%# Turbo, Bootstrap and a Stimulus application with every controller this markup
         names, started once under `window.Stimulus`. In the head, so a controller exists

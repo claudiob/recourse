@@ -341,12 +341,11 @@ before writing or editing any layout, view or partial.
   `Autauga County`, then `ZIPs` — linking to the record's show page where one is
   routed, and plain text where none is. Icon-less either way: it names a record,
   and the crumb before it already carries the resource's.
-- The tab wears the *host's* icon, not the resource's. The layout declares the four
-  names a Rails app ships one under — `/icon.png` and `/icon.svg`, which Rails 8
-  writes, and `/favicon.ico` and `/favicon.png`, which an older app has — and the
-  browser takes the first it can fetch. The gem draws no glyph of its own: a browser
-  picks one `rel='icon'`, so a per-resource tab and an app's own tab cannot both win,
-  and the app's is the one a reader recognizes.
+- The tab wears the *host's* icon, not the resource's, and the host names it: whatever a
+  `recourses/head` partial holds — in the host's own views, or in a gem the host loads —
+  is drawn into the head, and the layout guesses at no file names where there is none.
+  The gem draws no glyph of its own: a browser picks one `rel='icon'`, so a per-resource
+  tab and an app's own tab cannot both win, and the app's is the one a reader recognizes.
 
 ## The sidebar
 
