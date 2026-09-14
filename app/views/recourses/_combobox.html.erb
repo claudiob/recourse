@@ -15,6 +15,11 @@
       offers no way to leave itself empty. -%>
   <% if none -%>
     <%= tag.option none, value: '' %>
+  <% elsif !multiple -%>
+    <%# A select left to itself picks its first option, which read as a choice nobody made.
+        A placeholder nobody can pick keeps the box empty until a reader chooses, and
+        `required` then asks for one. -%>
+    <%= tag.option placeholder, value: '', disabled: true, selected: selected.empty?, hidden: true %>
   <% end -%>
   <%# Records are cached on the relation, and a list of words is not worth caching:
       an enum has a dozen of them and they are already in memory. Nor is a table with

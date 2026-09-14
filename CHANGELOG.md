@@ -7,6 +7,14 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.0.1 - 2026-09-14
+
+* [Fix] A required combobox starts empty rather than on its first option
+
+  A `<select>` left to itself picks its first option, so the toggle read a choice nobody had
+  made and a form could be sent with it. A single select without an unset option now leads
+  with a placeholder nobody can pick, so the box says `Select…` until a reader chooses.
+
 ## 5.0.0 - 2026-09-14
 
 * [Breaking change] Every page is styled and scripted by `https://design.houseaccount.com`, and nothing is served by the gem
