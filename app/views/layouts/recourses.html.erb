@@ -5,6 +5,12 @@
     <title><%= content_for(:title) || 'Recourse' %></title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <meta name='color-scheme' content='light dark'>
+    <%# A refresh Turbo is sent morphs the page in place and keeps the scroll; without these it
+        replaces the whole body, which drops the caret, the scroll and any menu that was open.
+        On every page rather than on the ones that broadcast today, so a model that starts to
+        never has to be remembered here. -%>
+    <meta name='turbo-refresh-method' content='morph'>
+    <meta name='turbo-refresh-scroll' content='preserve'>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
