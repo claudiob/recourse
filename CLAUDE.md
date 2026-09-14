@@ -600,8 +600,8 @@ two is filed under the one a reader would look in first.
 - Since the `design_assets` branch the gem serves no file at all. Everything a page is
   styled and scripted by — Bootstrap 6, its icons and fonts, Turbo, Stimulus and the
   controllers this markup names — lives in `~/code/design`, the `houseaccount` gem's repo,
-  and is linked at a pinned version: `https://design.houseaccount.com/v0.3.0/css/houseaccount.css`
-  and `/v0.3.0/js/houseaccount.js`. The palettes are `Recourse::THEMES_PATH`, same version.
+  and is linked at a pinned version: `https://design.houseaccount.com/v0.3.1/css/houseaccount.css`
+  and `/v0.3.1/js/houseaccount.js`. The palettes are `Recourse::THEMES_PATH`, same version.
 - The origin and the version are written out, three times, and are not a setting. The pin
   is the point: a change in `design` reaches these pages when somebody moves it here and
   releases, and not before, so a broken bundle cannot take every recourse page down. Move
