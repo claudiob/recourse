@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.0.0 - 2026-09-14
+
 * [Breaking change] Every page is styled and scripted by `https://design.houseaccount.com`, and nothing is served by the gem
 
   The vendored Bootstrap, its icons and fonts, Stimulus, the sixteen controllers, the nine
@@ -31,13 +33,13 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   rather than one comma-joined value — a host linking to a filtered index, or reading
   `params[:q]`, updates the shape. A host overriding the partial rewrites it as a select.
 
-* [Breaking change] The delete dialog is the bundle's
+* [Feature] The delete dialog is the bundle's
 
   `_confirm.html.erb` is gone: `confirm.js` in the design bundle builds the dialog on
   the first ask, and its answer wears the words of the button that asked. A host that
   overrode the partial deletes its copy.
 
-* [Breaking change] A phone is formatted in the browser
+* [Fix] A phone is formatted in the browser
 
   A cell reads `<span data-controller='phone'>4155550000</span>` and a field arrives with
   ten digits, the controller and nothing about its shape: no `pattern`, `placeholder` or
