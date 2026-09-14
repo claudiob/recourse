@@ -10,10 +10,10 @@ gem install recourse
 
 ```ruby
 # Gemfile
-gem 'recourse', '~> 4.0'
+gem 'recourse', '~> 5.0'
 ```
 
-`~> 4.0` follows Semantic Versioning: `bundle update` takes every 4.x and never a
+`~> 5.0` follows Semantic Versioning: `bundle update` takes every 5.x and never a
 breaking change. Rails 8.1 and Ruby 3.2 are the minimum; the pages need Turbo, which
 `turbo-rails` brings, and nothing else in the host. Everything a page is styled and
 scripted by — Bootstrap 6, its icons, Turbo, Stimulus and the controllers behind these
