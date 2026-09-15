@@ -124,37 +124,76 @@ A controller the app already defines is left alone.
 
 ## Step 5. Enjoy the extras
 
-Here are some bonus features the gem provides. Customize them by editing their values in
-your `config/initializers/recourse.rb` file:
+The rest of what the gem offers, in four parts. The first two are a line each in
+`config/initializers/recourse.rb`; the last two need nothing beyond what the model
+already declares.
 
-- [`Recourse.color=`](https://rubydoc.info/gems/recourse/Recourse#color%3D-class_method):
-  which Bootstrap family is primary on every page.
-- [`Recourse.theme=`](https://rubydoc.info/gems/recourse/Recourse#theme%3D-class_method):
-  which color scheme every page is drawn in, one of `Recourse::THEMES.keys` — eight from
-  code editors and Bootstrap's own. Readers rotate through them, light and dark, from the
-  moon at the foot of the sidebar; their choice stays in their browser.
-- [`Recourse.bookmarks=`](https://rubydoc.info/gems/recourse/Recourse#bookmarks%3D-class_method):
-  a Proc answering the viewer's bookmark rows. Every table of a model with a `has_many`
-  at that class then opens with a square to keep a row by, kept rows first.
+### Color and theme
+
+[`Recourse.color=`](https://rubydoc.info/gems/recourse/Recourse#color%3D-class_method)
+says which Bootstrap family is primary on every page, and
+[`Recourse.theme=`](https://rubydoc.info/gems/recourse/Recourse#theme%3D-class_method)
+says which color scheme the pages are drawn in — one of `Recourse::THEMES.keys`: eight
+palettes taken from code editors, plus Bootstrap's own.
 
 ```ruby
 Recourse.color = :orange
 Recourse.theme = :nord
+```
+
+The theme is where a reader starts, not where they stay. The moon at the foot of the
+sidebar rotates through every palette, light and dark, and the one they pick stays in
+their browser.
+
+### Bookmarks
+
+[`Recourse.bookmarks=`](https://rubydoc.info/gems/recourse/Recourse#bookmarks%3D-class_method)
+takes a Proc answering the rows the viewer has kept:
+
+```ruby
 Recourse.bookmarks = -> { Keepsake.where agent: Current.agent }
 ```
 
+A Proc rather than a relation, because at boot the viewer is nobody. Every model with a
+`has_many` at that class then opens its table with a square to keep a row by, and kept
+rows come first. A model that cannot hold a bookmark gets no column.
+
 <img width="3824" height="1220" alt="Image" src="https://github.com/user-attachments/assets/d1db4adb-0b5c-4e41-8bb6-cf72a35288f0" />
+
+### Attachments
+
+What a model keeps as files needs nothing declared either. A `has_one_attached :logo` is
+a file field on the form and, on the record's page, the picture Active Storage makes of
+the file — 100 pixels tall, WebP where the browser takes it, opening the whole file in a
+new tab — or the file's name where nothing can be drawn of it.
+
+A `has_many_attached :photos` earns a page of its own, nested under the record:
+
+```ruby
+recourses :photos, only: %i[index destroy]
+```
+
+That page is a table of the files with their pictures, and a Delete on each row that
+takes the file off the record. Files are added on the record's own form, where a chosen
+file joins a shelf and replaces a single one, and a field nobody touched leaves
+everything as it was. `recourse_hidden :photos` keeps a file off every screen the way it
+keeps a column off.
+
+Drawing a picture of an image needs `image_processing`; video and PDF also need the
+host's `ffmpeg` and `poppler`.
+
+### Maps
 
 A table whose model keeps a `google_place_id`, or a `latitude` and a `longitude`, can be
 read as a Google map of the same page: the footer under it offers `Display as map`, and
 `/counties.map` draws this page's rows in the frame and over the footer the table has, so
-search, sort and pages work the same on either shape. A place ID is filled in as an area
-where the model is a geography Google draws boundaries for — a `State`, a `County`, a `City`
-or a `ZIP`, by name — and pinned at the place for any other model; a point is a pin. The key
-and the map ID are the host's credentials, and the map's style has the matching **Feature
-layers** turned on in the Cloud console — Postal code for ZIPs, Administrative area level 2
-for counties. A host with a Content Security Policy allows `maps.googleapis.com` for scripts
-and connections and Google's tile hosts for images.
+search, sort and pages work the same on either shape.
+
+A point is a pin. A place ID is filled in as an area where the model is a geography
+Google draws boundaries for — a `State`, a `County`, a `City` or a `ZIP`, by name — and
+pinned at the place for any other model.
+
+The key and the map ID are the host's own credentials:
 
 ```yaml
 # config/credentials.yml.enc
@@ -163,16 +202,10 @@ google_maps:
   map_id: 4f2a…
 ```
 
-What a model keeps as files needs nothing declared either. A `has_one_attached :logo` is a
-file field on the form and, on the record's page, the picture Active Storage makes of the
-file — 100 pixels tall, WebP where the browser takes it, opening the whole file in a new tab — or its name where nothing can
-be drawn of it. A `has_many_attached :photos` earns a page of its own with
-`recourses :photos, only: %i[index destroy]` under the record: a table of the files with
-their pictures, and a Delete on each row that takes the file off the record. Files are added
-on the record's own form, where a chosen file joins a shelf and replaces a single one, and a
-field nobody touched leaves everything as it was. `recourse_hidden :photos` keeps a file off
-every screen the way it keeps a column off. Video and PDF pictures need the host's `ffmpeg`
-and `poppler`; images need `image_processing`.
+The map's style has the matching **Feature layers** turned on in the Cloud console —
+Postal code for ZIPs, Administrative area level 2 for counties. A host with a Content
+Security Policy allows `maps.googleapis.com` for scripts and connections, and Google's
+tile hosts for images.
 
 
 ## Development
