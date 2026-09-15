@@ -22,6 +22,10 @@ module Recourse
       record.update attributes
     end
 
+    # And the record gone. `destroy!`, so a callback that stops one says so rather than
+    # leaving the page claiming it worked.
+    def destroy_resource(record) = record.destroy!
+
     # A foreign key whose label is typed arrives as that label, so it is looked up
     # here. Nothing found leaves the key nil, and `belongs_to` reports it missing.
     def resolve_references(attributes)

@@ -4,6 +4,8 @@ require 'ransack'
 require 'unicon'
 
 require_relative 'recourse/version'
+require_relative 'recourse/attachments'
+require_relative 'recourse/blobs'
 require_relative 'recourse/bookmarks'
 require_relative 'recourse/colors'
 require_relative 'recourse/columns'

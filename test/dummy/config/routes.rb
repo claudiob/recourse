@@ -15,6 +15,9 @@ Rails.application.routes.draw do
       # And one with a model and no form: nothing to fill in, so the button that makes
       # the record stands on the place's page, and a second press is refused.
       recourses :seals, only: :create
+      # No `Photo` in this app: the name is what the place has attached, and the table
+      # is of Active Storage's blobs. `destroy` with no `edit`, so each row carries it.
+      recourses :photos, only: %i[index destroy]
     end
 
     # Everything but making one: a person arrives from somewhere else.

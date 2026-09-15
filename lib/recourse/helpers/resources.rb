@@ -3,13 +3,22 @@ module Recourse
     # What the page is about and what it is called: the model behind it, the record
     # on it, and the words both are read out under.
     module Resources
-      # Human, plural name of the resource on the page, e.g. `Contacts`. `known_title`,
-      # since a host page wearing this layout may be named after no model at all — a
-      # contact's home is a `Location`, and the path is the only word for it.
-      def resources_name = Recourse.known_title(controller.controller_name)
+      # Human, plural name of the resource on the page, e.g. `Contacts`. A page of
+      # attachments is named after what the record calls them rather than after Active
+      # Storage's own word for the row: `Photos`, never `Blobs`. `known_title`, since a
+      # host page wearing this layout may be named after no model at all — a contact's
+      # home is a `Location`, and the path is the only word for it.
+      def resources_name
+        return controller.controller_name.humanize if blob_resource?
 
-      # Singular, lowercase name of the resource, e.g. 'contact'.
+        Recourse.known_title controller.controller_name
+      end
+
+      # Singular, lowercase name of the resource, e.g. 'contact' — and 'photo' on a page
+      # of files, for the same reason as above.
       def resource_name
+        return Recourse.downcase controller.controller_name.singularize.humanize if blob_resource?
+
         Recourse.downcase resource_model.model_name.human
       end
 
@@ -38,7 +47,8 @@ module Recourse
 
     private
 
-      # Resolved by the controller, where a host may have named a model the route does not.
+      # Resolved by the controller, which is the one that knows whether the name is a
+      # model of this app's, something a record has attached, or a model a host named.
       def resource_model
         controller_assign('recourse_model') || Recourse.model(controller.controller_name)
       end

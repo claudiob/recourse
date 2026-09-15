@@ -13,6 +13,13 @@ en:
     all_values: All
     as_map: Display as map
     as_table: Display as table
+    # One message in four spellings: what a record is holding, under the field that
+    # adds to it.
+    attached:
+      many: "%{count} files attached (%{files})"
+      none: No file attached
+      none_many: No files attached
+      one: 1 file attached (%{files})
     blank: "—"
     bookmark: Bookmark
     bookmark_added: Bookmark added
@@ -27,6 +34,7 @@ en:
     darken: Dark
     delete: Delete %{model}
     deleted: "%{model} was deleted."
+    destroy: Delete
     exit: Exit
     displaying:
       one: Displaying 1 item
@@ -54,6 +62,7 @@ en:
     none: "No %{models}."
     optional: Optional
     per_page: "%{limit} per page"
+    preview: Preview
     ambiguous: "matches more than one record, so it does not say which: %{label}"
     reference: "%{model} %{attribute}"
     reveal: Show

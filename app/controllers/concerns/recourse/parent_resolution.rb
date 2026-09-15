@@ -12,7 +12,7 @@ module Recourse
 
     # The record a key points at where the resource has one, and otherwise the record
     # the path names: a page nested by the path alone — the memos of a team no memo
-    # belongs to — still sits under something.
+    # belongs to, the blobs a record has attached — still sits under something.
     def find_parent
       @recourse_parent_association = parent_association
       @recourse_parent = @recourse_parent_association ? parent_model.find(parent_id) : path_parent
@@ -34,7 +34,7 @@ module Recourse
     # What the route settled and every action honours: the index lists rows carrying
     # these columns, and `new` and `create` build records that do.
     def parent_columns
-      return {} if @recourse_parent_association.nil?
+      return {} if attachment_reflection || @recourse_parent_association.nil?
 
       { @recourse_parent_association.foreign_key => @recourse_parent.id }
     end

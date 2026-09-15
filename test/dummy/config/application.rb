@@ -4,6 +4,7 @@ require 'action_cable/engine'
 require 'action_controller/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
+require 'active_storage/engine'
 
 # After the frameworks: it only extends Active Record when Active Job is loaded.
 require 'turbo-rails'
@@ -17,6 +18,9 @@ module Dummy
     config.load_defaults 8.1
     config.secret_key_base = 'dummy_secret_key_base'
     config.time_zone = 'Eastern Time (US & Canada)'
+
+    # A file has to live somewhere for a table of them to be worth drawing.
+    config.active_storage.service = :test
 
     # No schema.rb: loading one stamps the backfills as done and skips the data.
     config.active_record.dump_schema_after_migration = false

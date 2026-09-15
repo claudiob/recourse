@@ -7,6 +7,31 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+* [Feature] A record's files are a field, a value and a page
+
+  Back from the 4.0.0 development tree: a `has_one_attached` is a file field on the form
+  and a value on the record's page, a `has_many_attached :photos` beside
+  `recourses :photos, only: %i[index destroy]` under the record is a table of Active
+  Storage's blobs — searched, sorted and paged like any other — and a submitted file is
+  attached after the save rather than assigned, so an edit that touched only a name never
+  purges what the record had. New this time: a file a browser can be shown is a picture
+  first, a `<picture>` 100 pixels tall of a representation made 200 tall — WebP at quality
+  80 with its metadata stripped where the browser takes it, the file's own kind where not
+  — in the link that opens the whole file inline — the image scaled, or the frame a
+  previewer takes of a video or a PDF where the host has `ffmpeg` or `poppler` — on the
+  table and on the record's page alike. And a Delete on each row of the table, which
+  takes the file off the record and leaves the blob to Active Storage. Files are still
+  added on the record's form, and a shelf is still not counted on its tab: there is no
+  `belongs_to` to hang a counter cache on.
+
+* [Feature] A table routed `destroy` without `edit` offers Delete on each row
+
+  The Delete button stood on the edit page and nowhere else, so a resource with a
+  `destroy` and no `edit` — a file attached to a record, a row joining two — had no way to
+  be deleted from the gem's own screens. Its table now draws a third action column, the
+  trash icon in `fg-danger`, a `button_to` carrying the same confirmation the edit page's
+  button does. A table whose rows have an edit page is unchanged.
+
 ## 5.2.0 - 2026-09-14
 
 * [Feature] A table of places can be read as a map

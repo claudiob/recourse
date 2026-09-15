@@ -47,7 +47,8 @@ Every recourse with `new` or `edit` gets a form with appropriate browser formatt
 
 <img width="3824" height="1220" alt="Image" src="https://github.com/user-attachments/assets/ebe5108b-bbd1-4cd1-a635-89eef0e6fc50" />
 
-Every recourse with `destroy` gets a button with a detailed confirmation message:
+Every recourse with `destroy` gets a button with a detailed confirmation message — on its
+edit page, or on each row of its table where no `edit` is routed:
 
 [image]
 
@@ -161,6 +162,17 @@ google_maps:
   api_key: AIza…
   map_id: 4f2a…
 ```
+
+What a model keeps as files needs nothing declared either. A `has_one_attached :logo` is a
+file field on the form and, on the record's page, the picture Active Storage makes of the
+file — 100 pixels tall, WebP where the browser takes it, opening the whole file in a new tab — or its name where nothing can
+be drawn of it. A `has_many_attached :photos` earns a page of its own with
+`recourses :photos, only: %i[index destroy]` under the record: a table of the files with
+their pictures, and a Delete on each row that takes the file off the record. Files are added
+on the record's own form, where a chosen file joins a shelf and replaces a single one, and a
+field nobody touched leaves everything as it was. `recourse_hidden :photos` keeps a file off
+every screen the way it keeps a column off. Video and PDF pictures need the host's `ffmpeg`
+and `poppler`; images need `image_processing`.
 
 
 ## Development

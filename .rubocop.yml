@@ -9,6 +9,9 @@ AllCops:
   Exclude:
     # Rails rewrites this on every migration, so formatting it would not last.
     - test/dummy/db/schema.rb
+    # Copied verbatim from Active Storage by its own installer. Reformatting it
+    # would only make the next version harder to diff against upstream.
+    - test/dummy/db/migrate/*.active_storage.rb
 
 # Declining `rubygems_mfa_required`: whether a push needs MFA is settled on the
 # RubyGems account, not asserted in the gem's own metadata.

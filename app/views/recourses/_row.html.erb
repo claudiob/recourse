@@ -1,4 +1,8 @@
 <% record = local_assigns[resource_key] -%>
+<%# A file is a picture before it is a row, where there is a picture to draw. -%>
+<% if blob_resource? -%>
+  <%= column header: t('recourse.preview') do %><%= blob_preview record %><% end %>
+<% end -%>
 <% resource_columns.each do |name| -%>
   <%= column header: sort_header(name), class: counter_class(name) do %><%= resource_cell record, name %><% end %>
 <% end -%>

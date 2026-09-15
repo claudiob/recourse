@@ -25,8 +25,13 @@ module Recourse
       false
     end
 
-    # The model the route is named after.
-    def resource_class = recourse_model
+    # The model the route is named after — or Active Storage's, where the name is
+    # something the parent has attached rather than a model of this app's own.
+    def resource_class
+      return ActiveStorage::Blob if attachment_reflection
+
+      recourse_model
+    end
 
     # The model this screen is about, and the second thing a host overrides to put a
     # page of its own behind a screen the gem otherwise draws whole:
@@ -39,7 +44,11 @@ module Recourse
       Recourse.model controller_name
     end
 
+    # What the page calls one of its rows: the model's own word, or the route's for a
+    # page of files — `Photo was deleted.`, never `Blob`.
     def human_name
+      return controller_name.singularize.humanize if attachment_reflection
+
       resource_class.model_name.human
     end
 
@@ -50,15 +59,17 @@ module Recourse
     # `def resource_params = params.expect(provider: %i[name cid])`.
     def resource_params
       # The parent is merged after resolving, so the one the route names is never
-      # mistaken for a label.
-      submitted_attributes.merge parent_columns
+      # mistaken for a label; the files go no further than the permit that let them
+      # through, being attached rather than assigned.
+      submitted_attributes.except(*Recourse.attachment_names(resource_class))
+                          .merge parent_columns
     end
 
     # What the form sent, with a typed reference read back as the id it names. A bare
     # `Create` submits no attributes at all, so the key may be absent: the parent a
     # nested route names is everything such a record starts from.
     def submitted_attributes
-      permitted = Recourse.editable_columns resource_class
+      permitted = Recourse.editable_columns(resource_class) + attachment_filters
       key = controller_name.singularize.to_sym
       return {} unless params.key? key
 

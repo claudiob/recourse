@@ -79,6 +79,8 @@ module Recourse
         return search_highlight named_cell(resource, association), column if association
 
         value = resource.attributes[column]
+        return blob_link resource, value if blob_filename? column
+
         counted = resource_model.recourse_counters[column]
 
         # A count is the bare number — the icon in the heading already says what it

@@ -43,6 +43,29 @@ class TestRecoursesShow < IntegrationCase
     # closed, so a column of values a reader scans is not pushed down by one of them.
     assert_includes body, '<details><summary>3 items</summary><ul class="mb-0 mt-2">' \
                           '<li>Riverside</li><li>Terrace</li><li>Wheelchair access</li></ul>'
+    # A single file is a value here rather than a table of one row, and nothing
+    # attached reads as the dash every other empty value reads as. A shelf of them is
+    # not: `photos` has a page of its own, where a row of pictures says more.
+    assert_includes body, '<div class="form-label">Floor plan</div>' \
+                          '<div class="form-control-plaintext">—</div>'
+    refute_includes body, '<div class="form-label">Photos</div>'
+  end
+
+  # A file a browser can be shown is drawn where it stands, as the picture Active
+  # Storage makes of it at twice the height it takes, inside the link that opens the
+  # whole file inline.
+  def test_a_file_a_browser_can_draw_is_a_picture_on_the_record
+    place = Place.order(:id).second
+    visit "/places/#{place.id}"
+
+    assert_includes body, '<div class="form-label">Floor plan</div>' \
+                          '<div class="form-control-plaintext"><a target="_blank" rel="noopener" ' \
+                          'href="/rails/active_storage/blobs/redirect/'
+    assert_includes body, 'disposition=inline"><picture><source srcset="/rails/active_storage/' \
+                          'representations/redirect/'
+    assert_includes body, 'type="image/webp"><img alt="hairy.png" height="100" ' \
+                          'class="border rounded" loading="lazy" src="/rails/active_storage/' \
+                          'representations/redirect/'
   end
 
   # The card a record's own page sits in: its Show tab first, then one tab per index

@@ -3,7 +3,7 @@ module Recourse
   # its own behavior above it — `class RecoursesController < Recourse::BaseController`
   # with a `before_action :authenticate!` guards every screen the gem serves.
   class BaseController < ApplicationController
-    include Pagy::Method,
+    include Pagy::Method, AttachmentResolution, AttachmentWriting,
             Landing, Paging, ListResolution, ParentNaming,
             ParentResolution, ReferenceResolution, ResourceResolution,
             Zoning
@@ -64,7 +64,7 @@ module Recourse
     # Deletes the record and shows the index without it. `destroy!`, so a callback that
     # stops one says so rather than leaving the page claiming it worked.
     def destroy
-      @recourse.destroy!
+      destroy_resource @recourse
       wrote t('recourse.deleted', model: human_name)
     end
 
@@ -80,6 +80,8 @@ module Recourse
     # `def recourse_relation = County.with_boosts_for(@recourse_parent)`. Private, so
     # overriding it adds a query and never an action.
     def recourse_relation
+      return attachment_relation if attachment_reflection
+
       resource_class.where parent_columns
     end
   end
