@@ -56,18 +56,26 @@ module Recourse
 
     # Ransack reads nothing it has not been shown — `ransackable_attributes` is the
     # allowlist — so what arrives here needs no permitting, only untangling: a list
-    # predicate is split back into values, and a filter nobody set is dropped,
-    # since `IN ()` would match no row rather than every one.
+    # predicate is gathered into the values it was picked as, and a filter nobody set
+    # is dropped, since `IN ()` would match no row rather than every one.
     def conditions(params)
       # `?q=anything` reaches here as a String rather than as parameters of its own,
       # and a search nobody asked for reaches here as nil. Neither is a condition.
       return {} unless params.is_a? ActionController::Parameters
 
       params.to_unsafe_h.filter_map do |key, value|
+        value = list_values value if key.match? LIST_PREDICATES
         next if value.blank?
 
-        [key, key.match?(LIST_PREDICATES) ? value.to_s.split(',') : value]
+        [key, value]
       end.to_h
     end
+
+    # A multiple select submits one value per pick, so a list predicate arrives as an
+    # array — and as a lone value where a link carried one. Never split on a comma:
+    # that was the shape before a combobox became a `<select>`, and it read `["48"]`,
+    # the array written out, as one value, which Ransack cast to the 0 no row holds.
+    # Emptied of its blanks after, since the way back to no filter submits one.
+    def list_values(value) = Array(value).compact_blank
   end
 end

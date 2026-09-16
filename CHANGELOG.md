@@ -32,6 +32,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   trash icon in `fg-danger`, a `button_to` carrying the same confirmation the edit page's
   button does. A table whose rows have an edit page is unchanged.
 
+* [Fix] A filter narrows a table again
+
+  A combobox became a `<select>` in 5.0.0 and its picks are submitted one value each, but the
+  search read them the way it read the comma-joined string before it — so `q[team_id_in][]=1`
+  arrived as the array `["1"]`, was written out as the one value `["1"]`, and was cast to the
+  id 0 no row holds. Every filter menu in the gem came to an empty table, whatever was ticked.
+  The picks are now taken as the values they arrive as, and `All …`, which submits one empty
+  value, is no filter rather than a filter nothing answers.
+
 ## 5.2.0 - 2026-09-14
 
 * [Feature] A table of places can be read as a map

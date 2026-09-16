@@ -55,6 +55,30 @@ class TestRecoursesFilters < IntegrationCase
     refute_includes menu, 'data-hidden'
   end
 
+  # What a tick comes to: the rows the picks name and no others. Every pick is
+  # submitted as a value of its own — `q[team_id_in][]=1&q[team_id_in][]=2` — and
+  # read as the comma-joined string a combobox submitted before it was a `<select>`,
+  # the array came back as the single value `["1"]`, which Ransack cast to an id no
+  # row holds: every filtered table in the gem read as empty.
+  def test_a_filter_narrows_the_table_to_the_picks_a_request_carries
+    blue, green = Team.order(:id).first 2
+    visit "/places?q%5Bteam_id_in%5D%5B%5D=#{blue.id}"
+
+    assert_includes body, 'Place 01'
+    refute_includes body, 'Place 02'
+    # More than one at once is what the shape is for, and both reach the table.
+    visit "/places?q%5Bteam_id_in%5D%5B%5D=#{blue.id}&q%5Bteam_id_in%5D%5B%5D=#{green.id}"
+
+    assert_includes body, 'Place 01'
+    assert_includes body, 'Place 02'
+    refute_includes body, 'Place 03'
+    # And `All teams` — one empty value — is no filter at all rather than a filter
+    # nothing answers, which is what an `IN ()` of its own would have been.
+    visit '/places?q%5Bteam_id_in%5D%5B%5D='
+
+    assert_includes body, 'Place 03'
+  end
+
 private
 
   # One combobox's select, from its opening tag to its closing one.
