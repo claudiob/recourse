@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.3.0 - 2026-09-16
+
 * [Feature] A record's files are a field, a value and a page
 
   Back from the 4.0.0 development tree: a `has_one_attached` is a file field on the form

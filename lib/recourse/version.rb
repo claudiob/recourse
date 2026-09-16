@@ -1,4 +1,4 @@
 module Recourse
   # Version of the gem, read by the gemspec and by hosts checking compatibility.
-  VERSION = '5.2.0'
+  VERSION = '5.3.0'
 end
