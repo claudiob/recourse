@@ -648,6 +648,10 @@ two is filed under the one a reader would look in first.
   file, and skip comments and blanks by default.
 - `.md`, `.txt`, `.html` and `.erb` are exempt. Prose is not code, and a view
   is markup whose length is driven by the page, not by design choices.
+- So is a `.yml`. `config/locales/recourse.en.yml` holds a line per user-facing
+  string, so its length counts this gem's screens; it reached the ceiling twice
+  and both times the comments saying what a key is for were what got cut.
+  Reasoning in `STYLE.md`, which is where the rule lives.
 - Anything under `db/migrate/` is exempt. A migration that backfills a table is
   as long as the data it carries, and splitting one to satisfy a line count
   would be worse than leaving it long.
