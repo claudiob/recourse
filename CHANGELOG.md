@@ -18,8 +18,16 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   It is `unicon`'s `:sort_asc` and `:sort_desc` now, drawn through `icon_tag` like every
   other icon here rather than by a class written out. Bootstrap draws them `sort-up` and
   `sort-down` — named for the ordering rather than the arrow, since Bootstrap's four sort
-  glyphs point either way with either ordering. Descending draws today; ascending needs
-  `houseaccount` past 0.12.0, whose subset holds only the one.
+  glyphs point either way with either ordering. Both draw from the bundle this release
+  pins, whose subset carries `sort-up` beside the `sort-down` it already held.
+
+* [Change] The pinned bundle is `houseaccount@0.13.0`
+
+  Two releases at once, since the pin was still at 0.11.0 while 0.12.0 came and went. It is
+  what carries the ascending sort glyph, so the fix above needs it; it also brings a card
+  that is as wide as what it holds, a form reading its rows from where their words start,
+  and a combobox the bundle searches. Moved at all three sites together — the layout's
+  stylesheet and script, and `THEMES_PATH`.
 
 ## 5.4.0 - 2026-09-17
 

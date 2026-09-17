@@ -602,7 +602,7 @@ two is filed under the one a reader would look in first.
   styled and scripted by — Bootstrap 6, its icons and fonts, Turbo, Stimulus and the
   controllers this markup names — lives in `~/code/design`, the `houseaccount` gem's repo,
   and is linked from the npm package that repo publishes, at a pinned version:
-  `https://cdn.jsdelivr.net/npm/houseaccount@0.11.0/public/css/houseaccount.css` and
+  `https://cdn.jsdelivr.net/npm/houseaccount@0.13.0/public/css/houseaccount.css` and
   `/public/js/houseaccount.js`. The palettes are `Recourse::THEMES_PATH`, same version.
 - The built tree sits under `public/` inside the package because npm keeps a file at the
   path it has in its repository. That prefix belongs in the URL; without it the CDN answers

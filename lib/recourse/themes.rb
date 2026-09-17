@@ -25,7 +25,7 @@ module Recourse
   # Where the palettes are served from, named once: the layout links one, the layout's
   # own script puts back the one a reader chose, and the sidebar's controller swaps it.
   # The version is the one the layout links its stylesheet and script at.
-  THEMES_PATH = 'https://cdn.jsdelivr.net/npm/houseaccount@0.11.0/public/theme'
+  THEMES_PATH = 'https://cdn.jsdelivr.net/npm/houseaccount@0.13.0/public/theme'
 
   # Where a reader's chosen palette and mode are kept in their browser. Named once for
   # the same reason: the sidebar's controller writes it and the layout reads it back.
