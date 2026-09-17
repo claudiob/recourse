@@ -24,9 +24,18 @@ module Recourse
         filters = resource_filter_fields
         return if field.blank? && filters.empty?
 
-        render 'recourses/search', query: resource_search, url: url_for(action: :index),
+        render 'recourses/search', query: resource_search, url: search_url,
                                    field: field, prompt: resource_search_prompt,
                                    filters: filters, sort: sort_param
+      end
+
+      # Where the form submits: this page's own shape, so a filter picked on the map or
+      # on the calendar answers with the map or the calendar. Only a shape's format goes
+      # into the address — the table is the page at its own, with no extension at all.
+      def search_url
+        format = request.format.symbol
+
+        url_for action: :index, format: (format if Recourse::SHAPES.include? format)
       end
 
       # The model's search field, less the reach-through a nested route already

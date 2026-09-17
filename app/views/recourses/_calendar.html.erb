@@ -12,19 +12,22 @@
         <div class='border-bottom border-start text-center py-2'><%= calendar_day_title day %></div>
       <% end %>
 
-      <div>
+      <%# Every column is the same height whatever hours it draws — a table's own first
+          page — and the bands share it out, so the week nav under the grid stands where
+          a table's pages stand. -%>
+      <div class='d-flex flex-column' style='<%= calendar_grid_style %>'>
         <% calendar_hours(recourses).each do |hour| %>
-          <div class='small fg-2 text-end pe-2' style='<%= calendar_hour_style %>'><%= calendar_hour_title hour %></div>
+          <div class='small fg-2 text-end pe-2 flex-fill'><%= calendar_hour_title hour %></div>
         <% end %>
       </div>
 
-      <%# Each day is the hours drawn as bands and its own rows laid over them, which is
-          what `position-relative` is here for: a row is placed by the share of the grid
-          it takes rather than by anything the flow could work out. -%>
+      <%# Each day is those same bands with its own rows laid over them, which is what
+          `position-relative` is here for: a row is placed by the share of the grid it
+          takes rather than by anything the flow could work out. -%>
       <% calendar_days(week).each do |day| %>
-        <div class='border-start position-relative'>
+        <div class='d-flex flex-column border-start position-relative' style='<%= calendar_grid_style %>'>
           <% calendar_hours(recourses).each do %>
-            <div class='border-top' style='<%= calendar_hour_style %>'></div>
+            <div class='border-top flex-fill'></div>
           <% end %>
 
           <%= calendar_events recourses, day, calendar_hours(recourses) %>
@@ -34,4 +37,4 @@
   </div>
 </div>
 
-<%= render 'week', week: week %>
+<%= render 'week', recourses: recourses, week: week %>

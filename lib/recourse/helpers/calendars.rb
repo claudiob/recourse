@@ -3,11 +3,6 @@ module Recourse
     # The week a table of events is read as: the seven days across it, the hours down
     # it, and the way out of one week into the next.
     module Calendars
-      # How tall one hour of the grid stands. In `rem`, so a reader's own text size
-      # takes the grid with it, and stated here because the arithmetic that places a
-      # row against it is the gem's own — the stylesheet is told the answer.
-      HOUR_HEIGHT = '3rem'
-
       # The hours a week with nothing in it draws: a working day, which is what a
       # reader moving through empty weeks has to place the next one's rows against.
       DEFAULT_HOURS = (8...18)
@@ -24,7 +19,18 @@ module Recourse
                  class: day == Time.zone.today ? 'fw-semibold' : 'fg-2'
       end
 
-      # The hours the grid runs between, one row of the week each. Remembered per
+      # How tall the grid stands, whatever hours it draws, and why the figure is stated
+      # here: a table's own first page is `LIMITS.first` rows, so a grid that height
+      # leaves the weeks under a calendar where the pages under a table already are. A
+      # row is its line box, the two paddings a cell keeps — Bootstrap's
+      # `--bs-table-cell-padding-y`, which is declared inside a table and nowhere a
+      # calendar could read it — and the rule under it.
+      def calendar_grid_style
+        "height: calc(#{Recourse::LIMITS.first} * (1em * var(--bs-body-line-height) + " \
+          '1rem + var(--bs-border-width)))'
+      end
+
+      # The hours the grid runs between, one band of that height each. Remembered per
       # render: every one of the eight columns asks, and a page draws one grid.
       def calendar_hours(recourses)
         @recourse_hours ||= hours_of recourses
@@ -45,43 +51,41 @@ module Recourse
       # words those are is a locale's to say, like every other time on the page.
       def calendar_hour_title(hour) = l(Time.zone.now.change(hour:), format: :recourse_hour)
 
-      # One band of the grid, in the gutter and in every column, so a label and the
-      # line it names stand at the same height.
-      def calendar_hour_style = "height: #{HOUR_HEIGHT}"
-
-      # The week the grid draws, read as the two days it runs between.
+      # The week the grid draws, named as the two days it runs between: `September 13th
+      # – September 19th, 2026`. The year is said once, at the end, being the one thing
+      # the two ends of a week almost always agree about.
       def week_title(week)
-        t 'recourse.week', from: l(week, format: :recourse), to: l(week + 6, format: :recourse)
+        finish = week + 6
+
+        t 'recourse.week', from: week_day(week), to: week_day(finish), year: finish.year
       end
 
-      # The three ways out of a week, drawn in the pagination a table's pages are
-      # drawn in: the one before, this one, and the one after.
+      def week_day(day) = "#{l day, format: :recourse_month} #{day.day.ordinalize}"
+
+      # The weeks either side, drawn as a table's pages are drawn — pagy's own markup,
+      # down to the arrows and to the item it leaves unlinked — with the week showing
+      # named between them, where pagy names the page.
       def week_links(week)
-        current = Recourse.week_of Time.zone.today
+        shown = tag.a week_title(week), role: :link, class: 'page-link',
+                                        aria: { current: :page, disabled: true }
 
         safe_join [
-          week_link(week - 1.week, 'recourse.previous_week'),
-          this_week_link(current, week),
-          week_link(week + 1.week, 'recourse.next_week'),
+          week_step(week - 1.week, 'previous'),
+          tag.li(shown, class: 'page-item active'),
+          week_step(week + 1.week, 'next'),
         ]
       end
 
-      # A word rather than a link while this week is the week showing: a page offers
-      # no address for the page it is already on.
-      def this_week_link(current, week)
-        return week_link current, 'recourse.this_week' unless current == week
-
-        tag.li tag.span(t('recourse.this_week'), class: 'page-link'),
-               class: 'page-item active', aria: { current: :page }
-      end
-
-      # Another week at this page's own address, the query going with it — so a search
-      # or a filter stands while the weeks move under it.
-      def week_link(week, key)
+      # One step either way: pagy's own arrow, and the words behind it for a reader
+      # who is hearing the page rather than seeing it. The query goes with the week,
+      # so a search or a filter stands while the weeks move under it.
+      def week_step(week, way)
         query = request.query_parameters.merge week: week.to_s
+        arrow = way == 'previous' ? '<' : '>'
+        step = link_to arrow, url_for(query.merge(format: :cal)),
+                       class: 'page-link', aria: { label: t("recourse.#{way}_week") }
 
-        tag.li link_to(t(key), url_for(query.merge(format: :cal)), class: 'page-link'),
-               class: 'page-item'
+        tag.li step, class: "page-item #{way}"
       end
     end
   end

@@ -29,17 +29,38 @@ module Recourse
         lane
       end
 
-      # What one row says: its own label over the hours it runs between, and its page
-      # behind the label where the routes drew one.
+      # One row, placed by the hours it runs between and saying what it is.
       def event_chip(recourse, hours, lane, lanes)
-        label = led Recourse.record_title(recourse), resource_model.name, recourse.id
-        said = safe_join [
-          tag.div(label, class: 'text-truncate'),
-          tag.div(event_times(recourse), class: 'fg-2 text-truncate'),
-        ]
+        tag.div event_words(recourse),
+                class: 'position-absolute overflow-hidden small rounded border bg-1 px-1',
+                style: event_style(recourse, hours, lane, lanes)
+      end
 
-        tag.div said, class: 'position-absolute overflow-hidden small rounded border bg-1 px-1',
-                      style: event_style(recourse, hours, lane, lanes)
+      # What it says, a line each: its own label, whoever it is for, and the hours. In
+      # that order because a chip is as tall as the row is long — an hour at the foot of
+      # a full week is two lines — so what is clipped first is what the grid itself has
+      # already said.
+      def event_words(recourse)
+        label = led Recourse.record_title(recourse), resource_model.name, recourse.id
+        named = event_references recourse
+
+        safe_join [
+          tag.div(label, class: 'text-truncate'),
+          named && tag.div(named, class: 'fg-2 text-truncate'),
+          tag.div(event_times(recourse), class: 'fg-2 text-truncate'),
+        ].compact
+      end
+
+      # Whoever the row points at, each led to its own page: a shift is read as whose
+      # it is after it is read as what it is. Every `belongs_to` the model can follow,
+      # and the same label a table's own cell would draw for it — already loaded, since
+      # the index eager-loads every one of them.
+      def event_references(recourse)
+        named = resource_model.recourse_references.filter_map do |association|
+          named_cell recourse, association
+        end
+
+        safe_join named, ' · ' if named.any?
       end
 
       # The two ends of a row, each carrying what a machine reads, like every other

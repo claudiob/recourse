@@ -1,11 +1,11 @@
-<%# locals: (week:) %>
-<%# What the footer is to a table: the sentence saying how much is showing, the other
-    shapes the same rows take after it, and the way to the weeks either side at the end
-    of the row — where a table's pages stand, and drawn as they are. A week is how much
+<%# locals: (recourses:, week:) %>
+<%# What the footer is to a table: how much is showing, the other shapes the same rows
+    take after it, and at the end of the row — where a table's pages stand, and drawn as
+    they are — the weeks either side with this one named between them. A week is how much
     a calendar shows, so there is no page size to offer. -%>
 <div class='d-flex flex-column sm:flex-row sm:align-items-center'>
   <div class='ps-2 flex-grow-1 text-center sm:text-start'>
-    <%= week_title week %>
+    <%= t 'recourse.displaying', count: recourses.size %>
 
     <% view_links.each do |link| %>
       <span class='fg-2'>&middot;</span>

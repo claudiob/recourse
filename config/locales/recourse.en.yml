@@ -3,14 +3,15 @@ en:
   date:
     formats:
       recourse: "%b %-d, %Y"
-      # A day of the week over a calendar's column: `Sun 13`.
+      # A calendar's own two: the day over one of its columns, `Sun 13`, and the month
+      # a week is named by, whose day is an ordinal Ruby writes rather than a format.
       recourse_day: "%a %-d"
+      recourse_month: "%B"
   time:
     formats:
       recourse: "%b %-d at %I:%M%P %Z"
-      # The scale down a calendar, where only the hour is read: `9am`.
+      # The scale down a calendar, `9am`, and the hours one row runs between, `9:30am`.
       recourse_hour: "%-I%P"
-      # And the hours one row of it runs between: `9:30am`.
       recourse_time: "%-I:%M%P"
   recourse:
     add: Add %{model}
@@ -80,7 +81,6 @@ en:
     searched_eq: Filter by exact %{list}
     select: Select…
     show: Show
-    this_week: This week
     unbookmark: Remove bookmark
     unknown_color: "`Recourse.color` is one of %{colors}, or nil for Bootstrap's own
       blue. It cannot be %{color}."
@@ -89,8 +89,8 @@ en:
     updated: "%{record} was updated."
     updated_error: "%{model} could not be updated."
     unset: None
-    # The two days a calendar's week runs between.
-    week: "%{from} – %{to}"
+    # The two days a calendar's week runs between, and the year both are in.
+    week: "%{from} – %{to}, %{year}"
     deletion:
       delete: Delete
       title: Delete %{record}?

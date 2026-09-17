@@ -212,19 +212,23 @@ tile hosts for images.
 
 A table whose model keeps a `starts_at` and an `ends_at` can be read as a week of the same
 rows: the footer offers `Display as calendar`, and `/shifts.cal` draws a column a day with
-each row placed by the hours it runs between — rows that overlap in lanes of their own,
-and each led to its own page where the routes drew one.
+each row placed by the hours it runs between — rows that overlap in lanes of their own.
+A row says what it is, whoever it points at, and the hours themselves, each led to its own
+page where the routes drew one.
 
 ```ruby
 recourses :shifts
 ```
 
 A week rather than a page is what a calendar shows, so there is nothing to paginate:
-`?week=2026-09-13` moves to the week holding that day, and `Previous week`, `This week`
-and `Next week` stand where the pages stand under a table. The search and the filters
-travel with it, so a calendar narrowed to one person stays narrowed as the weeks move.
+`?week=2026-09-13` moves to the week holding that day, and pagy's own `<` and `>` stand
+where the pages stand under a table, with the week named between them. The search and the
+filters travel with it — and answer in the shape they were picked in — so a calendar
+narrowed to one person stays a narrowed calendar as the weeks move.
 
-The week opens on Sunday and the hours are the reader's own — the same cookie every other
+The grid stands as tall as a table's own first page, so the weeks under a calendar sit
+where the pages under a table do. The week opens on Sunday and the hours are the reader's
+own — the same cookie every other
 time on these pages is drawn against — and the scale runs only over the hours that week's
 rows cover, or a working day where it holds none. A row running past midnight is drawn on
 the day it opens, down to the foot of its column.

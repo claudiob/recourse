@@ -36,15 +36,20 @@ class TestRecoursesCalendars < IntegrationCase
     (week..(week + 6)).each do |one|
       assert_includes body, ">#{I18n.l one, format: :recourse_day}</span>"
     end
-    # The scale runs from the hour the earliest row opens in, and no earlier.
-    assert_includes body, "style='height: 3rem'>9am</div>"
+    # The scale runs from the hour the earliest row opens in, and no earlier, over a
+    # grid as tall as a table's own first page — so both shapes carry their footer at
+    # one height.
+    assert_includes body, '>9am</div>'
     refute_includes body, '>8am</div>'
+    assert_includes body, 'height: calc(15 * (1em * var(--bs-body-line-height)'
     # The last of the three: half the width, the second half of it, and starting three
     # quarters of the way down a grid that runs 9am to 5pm.
     handover = Shift.where(starts_at: day.in_time_zone + 15.hours).sole
 
     assert_includes body, 'style="top: 75.0%; height: 25.0%; left: 50.0%; width: 50.0%"'
     assert_includes body, %(href="/shifts/#{handover.id}">Handover</a>)
+    # And whose it is under its name, led to that record's own page like any cell.
+    assert_includes body, %(href="/people/#{handover.person_id}">#{handover.person.name}</a>)
     assert_includes body, %(<time datetime="#{handover.starts_at.rfc3339}">3:00pm</time>)
     assert_includes body, %(–<time datetime="#{handover.ends_at.rfc3339}">5:00pm</time>)
   end
@@ -54,15 +59,14 @@ class TestRecoursesCalendars < IntegrationCase
   # write, so a forged one is answered rather than raised on.
   def test_the_calendar_opens_on_this_week_and_on_this_week_again_for_an_address_it_cannot_read
     week = Recourse.week_of Time.zone.today
+    named = "#{week.strftime '%B'} #{week.day.ordinalize} – "
 
     ['/shifts.cal', '/shifts.cal?week=whenever'].each do |path|
       visit path
 
-      assert_includes body, "#{I18n.l week, format: :recourse} – " \
-                            "#{I18n.l week + 6, format: :recourse}"
-      # The week showing is a word rather than a link: a page offers no address for
-      # the page it is already on.
-      assert_includes body, '<span class="page-link">This week</span>'
+      # The week showing is named where pagy names the page, and left unlinked the way
+      # pagy leaves it: a page offers no address for the page it is already on.
+      assert_includes body, %(aria-current="page" aria-disabled="true">#{named})
     end
   end
 
@@ -72,12 +76,11 @@ class TestRecoursesCalendars < IntegrationCase
   def test_a_week_with_nothing_in_it_still_draws_the_grid_and_the_weeks_either_side
     visit '/shifts.cal?week=2020-01-08'
 
-    assert_includes body, 'Jan 5, 2020 – Jan 11, 2020'
+    assert_includes body, 'January 5th – January 11th, 2020'
+    assert_includes body, 'Displaying 0 items'
     assert_includes body, '>8am</div>'
-    assert_includes body, %(href="/shifts.cal?week=2019-12-29">Previous week</a>)
-    assert_includes body, %(href="/shifts.cal?week=2020-01-12">Next week</a>)
-    # And the way back to the reader's own week, which is a link from any other.
-    assert_includes body, %(week=#{Recourse.week_of Time.zone.today}">This week</a>)
+    assert_includes body, %(aria-label="Previous week" href="/shifts.cal?week=2019-12-29">&lt;</a>)
+    assert_includes body, %(aria-label="Next week" href="/shifts.cal?week=2020-01-12">&gt;</a>)
     refute_includes body, 'position-absolute'
   end
 

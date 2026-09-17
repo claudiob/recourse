@@ -13,11 +13,14 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   and an `ends_at` offers `Display as calendar` in its footer, and `/shifts.cal` draws
   them as a week — a column a day from Sunday, the hours that week's own rows cover down
   the side, and each row placed by the share of the day it takes, in a lane of its own
-  where a day's rows overlap. A week rather than a page is the unit, so `?week=` moves it
-  and `Previous week`, `This week` and `Next week` stand where a table's pages stand; the
-  search, the filters and the reader's own time zone all travel with it. `Display as map`
-  and `Display as table` are now drawn by one helper, so a model earning both shapes
-  offers both.
+  where a day's rows overlap, saying what it is, whoever it points at and the hours
+  themselves. The grid is as tall as a table's own first page, so the two shapes carry
+  their footers at one height. A week rather than a page is the unit, so `?week=` moves it
+  and pagy's `<` and `>` stand where a table's pages stand, the week named between them;
+  the search, the filters and the reader's own time zone all travel with it. A search or
+  a filter now answers in the shape it was picked in rather than falling back to the
+  table, and `Display as map` and `Display as table` are drawn by one helper, so a model
+  earning both shapes offers both.
 
 ## 5.3.0 - 2026-09-16
 
