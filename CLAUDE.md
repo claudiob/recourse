@@ -596,18 +596,26 @@ two is filed under the one a reader would look in first.
   replacement proposed for it are in `ROADMAP.md`. Read that before changing this hook:
   goldrush cannot create five of its models today for exactly this reason.
 
-#### Assets come from the design site
+#### Assets come from the `houseaccount` package on a CDN
 
 - Since the `design_assets` branch the gem serves no file at all. Everything a page is
   styled and scripted by — Bootstrap 6, its icons and fonts, Turbo, Stimulus and the
   controllers this markup names — lives in `~/code/design`, the `houseaccount` gem's repo,
-  and is linked at a pinned version: `https://design.houseaccount.com/v0.5.0/css/houseaccount.css`
-  and `/v0.5.0/js/houseaccount.js`. The palettes are `Recourse::THEMES_PATH`, same version.
+  and is linked from the npm package that repo publishes, at a pinned version:
+  `https://cdn.jsdelivr.net/npm/houseaccount@0.11.0/public/css/houseaccount.css` and
+  `/public/js/houseaccount.js`. The palettes are `Recourse::THEMES_PATH`, same version.
+- The built tree sits under `public/` inside the package because npm keeps a file at the
+  path it has in its repository. That prefix belongs in the URL; without it the CDN answers
+  404.
 - The origin and the version are written out, three times, and are not a setting. The pin
   is the point: a change in `design` reaches these pages when somebody moves it here and
   releases, and not before, so a broken bundle cannot take every recourse page down. Move
   all three together. A host on the `houseaccount` gem serves the unversioned paths itself,
   but this gem never names that gem.
+- npm never lets a published version be written again, so the bytes behind a pinned URL
+  cannot move under a page that linked them. That is why the CDN is named here rather than
+  `design.houseaccount.com`, whose versioned copies are a promise the site keeps rather than
+  one the registry enforces.
 - What this gem still owns is the contract the bundle is written against: every
   `data-controller`, `data-action` and `data-*-value` a view or helper emits, and every
   `recourse-*` class. Renaming one here breaks a page until the bundle follows; add a
