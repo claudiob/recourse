@@ -17,15 +17,16 @@
     <%= yield :head %>
 
     <%# Everything the page is styled by, from the one place every HouseAccount app draws
-        on: Bootstrap 6, its icons and the house's own rules for this gem's markup. Pinned
-        to a version, so a change there reaches these pages when somebody moves the pin
-        here and not before; the same version stands in the script below and in
-        `Recourse::THEMES_PATH`. Two connections opened before the parser finds either tag:
-        the stylesheet's plain one and the CORS one a module script and a font are fetched
-        over. -%>
-    <link rel='preconnect' href='https://design.houseaccount.com'>
-    <link rel='preconnect' href='https://design.houseaccount.com' crossorigin>
-    <link rel='stylesheet' href='https://design.houseaccount.com/v0.5.0/css/houseaccount.css'>
+        on: Bootstrap 6, its icons and the house's own rules for this gem's markup. Served
+        from the `houseaccount` package on a CDN, pinned to a version, so a change there
+        reaches these pages when somebody moves the pin here and not before; the same
+        version stands in the script below and in `Recourse::THEMES_PATH`. A published
+        version is never written again, so the bytes behind that URL cannot move under us.
+        Two connections opened before the parser finds either tag: the stylesheet's plain
+        one and the CORS one a module script and a font are fetched over. -%>
+    <link rel='preconnect' href='https://cdn.jsdelivr.net'>
+    <link rel='preconnect' href='https://cdn.jsdelivr.net' crossorigin>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/houseaccount@0.11.0/public/css/houseaccount.css'>
     <%# The one thing these screens set that the house's stylesheet does not: system faces
         at a compact size, for pages dense with figures. 14px as rem, so a browser's own
         text-size setting still scales it. After the stylesheet, since both are `:root`. -%>
@@ -49,7 +50,7 @@
     <%# Turbo, Bootstrap and a Stimulus application with every controller this markup
         names, started once under `window.Stimulus`. In the head, so a controller exists
         before the body's first `data-controller`. -%>
-    <script type='module' src='https://design.houseaccount.com/v0.5.0/js/houseaccount.js'></script>
+    <script type='module' src='https://cdn.jsdelivr.net/npm/houseaccount@0.11.0/public/js/houseaccount.js'></script>
   </head>
 
   <%# The reader's zone is told to the server here rather than from a page of its
