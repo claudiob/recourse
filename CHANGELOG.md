@@ -7,6 +7,20 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+* [Fix] A sorted heading has a mark again
+
+  The mark saying which way a column is sorted was a Bootstrap caret, and no caret is in the
+  icon font the pages link: the bundle carries a subset, and a name outside it gets no
+  `content` rule and no code point, so the `<i>` drew nothing at all. Since `design_assets`
+  every sorted heading has been bare, and the test asserting the mark passed throughout,
+  because what it asserts is a class name.
+
+  It is `unicon`'s `:sort_asc` and `:sort_desc` now, drawn through `icon_tag` like every
+  other icon here rather than by a class written out. Bootstrap draws them `sort-up` and
+  `sort-down` — named for the ordering rather than the arrow, since Bootstrap's four sort
+  glyphs point either way with either ordering. Descending draws today; ascending needs
+  `houseaccount` past 0.12.0, whose subset holds only the one.
+
 ## 5.4.0 - 2026-09-17
 
 * [Feature] A table of events can be read as a week

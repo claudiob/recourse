@@ -21,15 +21,15 @@ class TestRecoursesSearch < IntegrationCase
     refute_includes body, 'Place 02'
   end
 
-  # A heading that sorted the table says which way, with a caret; the others say
-  # nothing, because an arrow on every heading says nothing about the order in force.
-  def test_the_sorted_heading_wears_the_caret_and_no_other_does
+  # A heading that sorted the table says which way, with a sort mark; the others say
+  # nothing, because a mark on every heading says nothing about the order in force.
+  def test_the_sorted_heading_wears_the_mark_and_no_other_does
     sql = queries_on('places') { visit '/places?q%5Bs%5D=name+desc' }
 
     # Whichever way the rows run, the ones with nothing in the column come last.
     assert_includes sql.last, 'ORDER BY "places"."name" DESC NULLS LAST'
-    assert_includes body, 'bi bi-caret-down-fill'
-    refute_includes body, 'bi bi-caret-up-fill'
+    assert_includes body, 'bi bi-sort-down'
+    refute_includes body, 'bi bi-sort-up'
     # Sorted downward already, so the heading's next click turns the table back up.
     assert_includes body, 'href="/places?q%5Bs%5D=name+asc">Name'
     # And a search keeps the order a heading asked for, carried as a hidden field.

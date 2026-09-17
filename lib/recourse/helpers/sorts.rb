@@ -1,10 +1,10 @@
 module Recourse
   module Helpers
-    # The links in a table's headings, and the caret naming the order in force.
+    # The links in a table's headings, and the mark naming the order in force.
     module Sorts
-      # Caret for the direction a column is sorted by. A column nobody sorted by
-      # gets none: an arrow on every heading says nothing about the order in force.
-      SORT_CARETS = { 'asc' => 'caret-up-fill', 'desc' => 'caret-down-fill' }.freeze
+      # The concept for each order a column can be sorted in. A column nobody sorted
+      # by gets neither: a mark on every heading says nothing about the order in force.
+      SORT_ICONS = { 'asc' => :sort_asc, 'desc' => :sort_desc }.freeze
 
       # A heading for a column: a link that sorts the table by it where the model
       # allows that, and the plain title everywhere else. Only the header row draws
@@ -21,7 +21,7 @@ module Recourse
 
         sort_link resource_search, column.to_sym,
                   hide_indicator: true, page: nil, default_order: :desc do
-          safe_join [title, sort_caret(column)].compact, ' '
+          safe_join [title, sort_mark(column)].compact, ' '
         end
       end
 
@@ -46,12 +46,12 @@ module Recourse
       # Whether the model lets a heading sort by this column.
       def sortable_column?(column) = resource_model.ransortable_attributes.include?(column.to_s)
 
-      def sort_caret(column)
+      def sort_mark(column)
         sort = resource_search.sorts.find { |one| one.name == column.to_s }
-        icon = SORT_CARETS[sort&.dir]
-        return unless icon
+        concept = SORT_ICONS[sort&.dir]
+        return unless concept
 
-        tag.i class: "bi bi-#{icon}"
+        icon_tag concept
       end
 
       # Carried through the form as a hidden field, so searching keeps the order a
