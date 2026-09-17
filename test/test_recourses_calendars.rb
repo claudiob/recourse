@@ -81,6 +81,9 @@ class TestRecoursesCalendars < IntegrationCase
     assert_includes body, '>8am</div>'
     assert_includes body, %(aria-label="Previous week" href="/shifts.cal?week=2019-12-29">&lt;</a>)
     assert_includes body, %(aria-label="Next week" href="/shifts.cal?week=2020-01-12">&gt;</a>)
+    # And four weeks either way, which is the month a grid of weeks can hold.
+    assert_includes body, %(href="/shifts.cal?week=2019-12-08">&lt;&lt;</a>)
+    assert_includes body, %(href="/shifts.cal?week=2020-02-02">&gt;&gt;</a>)
     refute_includes body, 'position-absolute'
   end
 

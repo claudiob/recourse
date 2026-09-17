@@ -16,7 +16,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   where a day's rows overlap, saying what it is, whoever it points at and the hours
   themselves. The grid is as tall as a table's own first page, so the two shapes carry
   their footers at one height. A week rather than a page is the unit, so `?week=` moves it
-  and pagy's `<` and `>` stand where a table's pages stand, the week named between them;
+  and `<<`, `<`, `>` and `>>` stand where a table's pages stand — a week either side and
+  four weeks beyond each — with the week named between them;
   the search, the filters and the reader's own time zone all travel with it. A search or
   a filter now answers in the shape it was picked in rather than falling back to the
   table, and `Display as map` and `Display as table` are drawn by one helper, so a model

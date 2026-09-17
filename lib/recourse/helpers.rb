@@ -44,6 +44,7 @@ require_relative 'helpers/spans'
 require_relative 'helpers/tabs'
 require_relative 'helpers/times'
 require_relative 'helpers/values'
+require_relative 'helpers/weeks'
 require_relative 'helpers/zones'
 
 module Recourse
@@ -56,7 +57,7 @@ module Recourse
             Names, Navigation, Parents, Pictures, Previews, References, Refreshes,
             Routing,
             Resources, Rows, Searches, Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs,
-            Themes, Times, Values, Zones
+            Themes, Times, Values, Weeks, Zones
 
     # The grid a record's own two pages lay an attribute out in: two columns on a large
     # viewport, and the same padding on both, so a value and the field that edits it sit

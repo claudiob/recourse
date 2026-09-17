@@ -221,8 +221,9 @@ recourses :shifts
 ```
 
 A week rather than a page is what a calendar shows, so there is nothing to paginate:
-`?week=2026-09-13` moves to the week holding that day, and pagy's own `<` and `>` stand
-where the pages stand under a table, with the week named between them. The search and the
+`?week=2026-09-13` moves to the week holding that day, and `<<`, `<`, `>` and `>>` stand
+where the pages stand under a table — a week either side and four weeks beyond each —
+with the week named between them. The search and the
 filters travel with it — and answer in the shape they were picked in — so a calendar
 narrowed to one person stays a narrowed calendar as the weeks move.
 

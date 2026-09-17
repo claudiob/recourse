@@ -3,9 +3,8 @@ en:
   date:
     formats:
       recourse: "%b %-d, %Y"
-      # A calendar's own two: the day over one of its columns, `Sun 13`, and the month
-      # a week is named by, whose day is an ordinal Ruby writes rather than a format.
-      recourse_day: "%a %-d"
+      # A calendar's own two: a column's day, `Sun, Aug 30`, and a week's own month.
+      recourse_day: "%a, %b %-d"
       recourse_month: "%B"
   time:
     formats:
@@ -67,12 +66,14 @@ en:
     new: New %{model}
     new_tab: Open in a new tab
     next_week: Next week
+    next_weeks: Next four weeks
     no_results: No results found
     none: "No %{models}."
     optional: Optional
     per_page: "%{limit} per page"
     preview: Preview
     previous_week: Previous week
+    previous_weeks: Previous four weeks
     ambiguous: "matches more than one record, so it does not say which: %{label}"
     reference: "%{model} %{attribute}"
     reveal: Show
@@ -89,7 +90,6 @@ en:
     updated: "%{record} was updated."
     updated_error: "%{model} could not be updated."
     unset: None
-    # The two days a calendar's week runs between, and the year both are in.
     week: "%{from} – %{to}, %{year}"
     deletion:
       delete: Delete
