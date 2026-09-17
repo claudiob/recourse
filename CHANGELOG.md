@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.5.0 - 2026-09-17
+
 * [Fix] A sorted heading has a mark again
 
   The mark saying which way a column is sorted was a Bootstrap caret, and no caret is in the
