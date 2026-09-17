@@ -3,14 +3,21 @@ en:
   date:
     formats:
       recourse: "%b %-d, %Y"
+      # A day of the week over a calendar's column: `Sun 13`.
+      recourse_day: "%a %-d"
   time:
     formats:
       recourse: "%b %-d at %I:%M%P %Z"
+      # The scale down a calendar, where only the hour is read: `9am`.
+      recourse_hour: "%-I%P"
+      # And the hours one row of it runs between: `9:30am`.
+      recourse_time: "%-I:%M%P"
   recourse:
     add: Add %{model}
     ago: "%{distance} ago"
     all: All %{models}
     all_values: All
+    as_calendar: Display as calendar
     as_map: Display as map
     as_table: Display as table
     # One message in four spellings: what a record is holding, under the field that
@@ -58,11 +65,13 @@ en:
     more: "%{first} + %{count} more"
     new: New %{model}
     new_tab: Open in a new tab
+    next_week: Next week
     no_results: No results found
     none: "No %{models}."
     optional: Optional
     per_page: "%{limit} per page"
     preview: Preview
+    previous_week: Previous week
     ambiguous: "matches more than one record, so it does not say which: %{label}"
     reference: "%{model} %{attribute}"
     reveal: Show
@@ -71,6 +80,7 @@ en:
     searched_eq: Filter by exact %{list}
     select: Select…
     show: Show
+    this_week: This week
     unbookmark: Remove bookmark
     unknown_color: "`Recourse.color` is one of %{colors}, or nil for Bootstrap's own
       blue. It cannot be %{color}."
@@ -79,6 +89,8 @@ en:
     updated: "%{record} was updated."
     updated_error: "%{model} could not be updated."
     unset: None
+    # The two days a calendar's week runs between.
+    week: "%{from} – %{to}"
     deletion:
       delete: Delete
       title: Delete %{record}?

@@ -7,6 +7,7 @@ require_relative 'recourse/version'
 require_relative 'recourse/attachments'
 require_relative 'recourse/blobs'
 require_relative 'recourse/bookmarks'
+require_relative 'recourse/calendars'
 require_relative 'recourse/colors'
 require_relative 'recourse/columns'
 require_relative 'recourse/themes'
@@ -34,6 +35,11 @@ module Recourse
   # What Rails keeps rather than what a record is about, in the order a page shows
   # them. Named once: three places ask which columns these are.
   TIMESTAMPS = %w[created_at updated_at].freeze
+
+  # The shapes a page of rows takes besides the table, by the format each is asked
+  # for. Every one of them is the same HTML drawn another way, which is why none has
+  # a template of its own and all three answer to one controller action.
+  SHAPES = %i[map cal].freeze
 
   class << self
     # Resources `recourses` has drawn, in the order config/routes.rb lists them.

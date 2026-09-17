@@ -18,11 +18,12 @@
       <% else %>
         <%= t 'recourse.displaying', count: pagy.count %>
       <% end %>
-      <%# And the other shape the same rows can take, where the model keeps a place or
-          a point: a table becomes a map of this page's rows, and a map a table again. -%>
-      <% if (other = view_link) %>
+      <%# And every other shape the same rows can take, where the model's own columns
+          earn one: a place or a point makes a map of this page's rows, the two ends of
+          an event make a week of them, and either leads back to the table. -%>
+      <% view_links.each do |link| %>
         <span class='fg-2'>&middot;</span>
-        <%= other %>
+        <%= link %>
       <% end %>
     </div>
     <%# Centered on the row of their own a phone gives them, and at the end of the shared row from `sm` up. -%>

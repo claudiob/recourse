@@ -63,6 +63,10 @@ Rails.application.routes.draw do
   # No index action, so no sidebar link and nothing for the gem to draw.
   recourses :placeholders, only: []
 
+  # Two columns saying when a row opens and closes, which is what earns this table the
+  # calendar beside it: `/shifts.cal` draws a week of them, and nothing is declared.
+  recourses :shifts, only: %i[index show]
+
   # Declared last, so the letter its sidebar link answers to is one nothing above it
   # has taken. Its own key is what this table is here for: a menu of every reading is
   # past what a menu is, and an id is not a word the box could look through instead.

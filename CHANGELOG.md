@@ -7,6 +7,18 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+* [Feature] A table of events can be read as a week
+
+  The second shape a page of rows can take, beside the map: a model keeping a `starts_at`
+  and an `ends_at` offers `Display as calendar` in its footer, and `/shifts.cal` draws
+  them as a week — a column a day from Sunday, the hours that week's own rows cover down
+  the side, and each row placed by the share of the day it takes, in a lane of its own
+  where a day's rows overlap. A week rather than a page is the unit, so `?week=` moves it
+  and `Previous week`, `This week` and `Next week` stand where a table's pages stand; the
+  search, the filters and the reader's own time zone all travel with it. `Display as map`
+  and `Display as table` are now drawn by one helper, so a model earning both shapes
+  offers both.
+
 ## 5.3.0 - 2026-09-16
 
 * [Feature] A record's files are a field, a value and a page

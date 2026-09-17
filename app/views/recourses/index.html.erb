@@ -26,8 +26,8 @@
     card, beside the record's other pages — its tab, the count, the current one. -%>
 <% if resource_parent %>
   <%= render layout: 'card', locals: { record: resource_parent } do %>
-    <%= render 'results', resources: @resources, pagy: @pagy %>
+    <%= render 'results', resources: @resources, pagy: @pagy, week: @recourse_week %>
   <% end %>
 <% else %>
-  <%= render 'results', resources: @resources, pagy: @pagy %>
+  <%= render 'results', resources: @resources, pagy: @pagy, week: @recourse_week %>
 <% end %>

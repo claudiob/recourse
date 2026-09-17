@@ -8,6 +8,8 @@ class Person < ApplicationRecord
   # A memo outlives whoever it was about, and keeps no counter cache — so the tab
   # beside Places reads as the bare word.
   has_many :memos, dependent: :nullify
+  # A shift is somebody's, so it goes when they do.
+  has_many :shifts, dependent: :destroy
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true

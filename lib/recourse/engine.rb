@@ -15,10 +15,11 @@ module Recourse
       ActionDispatch::Routing::Mapper.include Scopes, Routes
     end
 
-    # `/counties.map` is the same page in another shape, so the format is a name for
-    # HTML: without it Rails has no type for the extension and answers 406.
+    # `/counties.map` and `/shifts.cal` are the same page in another shape, so each
+    # format is a name for HTML: without one Rails has no type for the extension and
+    # answers 406.
     initializer 'recourse.formats' do
-      Mime::Type.register_alias 'text/html', :map
+      SHAPES.each { |shape| Mime::Type.register_alias 'text/html', shape }
     end
   end
 end

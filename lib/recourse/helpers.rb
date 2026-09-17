@@ -3,6 +3,7 @@ require_relative 'helpers/attachments'
 require_relative 'helpers/blobs'
 require_relative 'helpers/bookmarks'
 require_relative 'helpers/buttons'
+require_relative 'helpers/calendars'
 require_relative 'helpers/cards'
 require_relative 'helpers/cells'
 require_relative 'helpers/choices'
@@ -13,6 +14,7 @@ require_relative 'helpers/counters'
 require_relative 'helpers/deletions'
 require_relative 'helpers/densities'
 require_relative 'helpers/details'
+require_relative 'helpers/events'
 require_relative 'helpers/examples'
 require_relative 'helpers/fields'
 require_relative 'helpers/filters'
@@ -34,9 +36,11 @@ require_relative 'helpers/routing'
 require_relative 'helpers/rows'
 require_relative 'helpers/themes'
 require_relative 'helpers/searches'
+require_relative 'helpers/shapes'
 require_relative 'helpers/shortcuts'
 require_relative 'helpers/sidebars'
 require_relative 'helpers/sorts'
+require_relative 'helpers/spans'
 require_relative 'helpers/tabs'
 require_relative 'helpers/times'
 require_relative 'helpers/values'
@@ -45,14 +49,14 @@ require_relative 'helpers/zones'
 module Recourse
   # View helpers for the pages the gem renders, and what the parts share.
   module Helpers
-    include Actions, Attachments, Blobs, Bookmarks, Buttons, Cards,
+    include Actions, Attachments, Blobs, Bookmarks, Buttons, Calendars, Cards,
             Cells, Choices, Colors, Comboboxes, Constraints, Counters, Deletions, Densities,
             Details,
-            Examples, Fields, Filters, Flashes, Formats, Inputs, Kinds, Limits, Maps,
+            Events, Examples, Fields, Filters, Flashes, Formats, Inputs, Kinds, Limits, Maps,
             Names, Navigation, Parents, Pictures, Previews, References, Refreshes,
             Routing,
-            Resources, Rows, Searches, Shortcuts, Sidebars, Sorts, Tabs, Themes,
-            Times, Values, Zones
+            Resources, Rows, Searches, Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs,
+            Themes, Times, Values, Zones
 
     # The grid a record's own two pages lay an attribute out in: two columns on a large
     # viewport, and the same padding on both, so a value and the field that edits it sit

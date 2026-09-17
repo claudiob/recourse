@@ -208,6 +208,32 @@ Security Policy allows `maps.googleapis.com` for scripts and connections, and Go
 tile hosts for images.
 
 
+### Calendars
+
+A table whose model keeps a `starts_at` and an `ends_at` can be read as a week of the same
+rows: the footer offers `Display as calendar`, and `/shifts.cal` draws a column a day with
+each row placed by the hours it runs between — rows that overlap in lanes of their own,
+and each led to its own page where the routes drew one.
+
+```ruby
+recourses :shifts
+```
+
+A week rather than a page is what a calendar shows, so there is nothing to paginate:
+`?week=2026-09-13` moves to the week holding that day, and `Previous week`, `This week`
+and `Next week` stand where the pages stand under a table. The search and the filters
+travel with it, so a calendar narrowed to one person stays narrowed as the weeks move.
+
+The week opens on Sunday and the hours are the reader's own — the same cookie every other
+time on these pages is drawn against — and the scale runs only over the hours that week's
+rows cover, or a working day where it holds none. A row running past midnight is drawn on
+the day it opens, down to the foot of its column.
+
+Both columns have to be datetimes, asked through `type_for_attribute`, so an
+`attribute :starts_at, :datetime` override counts and a column of another kind named
+`starts_at` earns nothing.
+
+
 ## Development
 
 ```bash

@@ -1,0 +1,37 @@
+<%# locals: (recourses:, week:) %>
+<div class='card overflow-hidden mb-3'>
+  <div class='overflow-x-auto'>
+    <%# One grid rather than a row of columns: the days have to line up under their own
+        headings, and a column whose width is what it happens to hold does not. The
+        gutter is as wide as `12am` reads, and the seven take equal shares of the rest.
+        A minimum width so a phone scrolls the week rather than crushing it. -%>
+    <div class='d-grid' style='grid-template-columns: 4rem repeat(7, 1fr); min-width: 45rem'>
+      <div class='border-bottom'></div>
+
+      <% calendar_days(week).each do |day| %>
+        <div class='border-bottom border-start text-center py-2'><%= calendar_day_title day %></div>
+      <% end %>
+
+      <div>
+        <% calendar_hours(recourses).each do |hour| %>
+          <div class='small fg-2 text-end pe-2' style='<%= calendar_hour_style %>'><%= calendar_hour_title hour %></div>
+        <% end %>
+      </div>
+
+      <%# Each day is the hours drawn as bands and its own rows laid over them, which is
+          what `position-relative` is here for: a row is placed by the share of the grid
+          it takes rather than by anything the flow could work out. -%>
+      <% calendar_days(week).each do |day| %>
+        <div class='border-start position-relative'>
+          <% calendar_hours(recourses).each do %>
+            <div class='border-top' style='<%= calendar_hour_style %>'></div>
+          <% end %>
+
+          <%= calendar_events recourses, day, calendar_hours(recourses) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render 'week', week: week %>

@@ -6,7 +6,7 @@ module Recourse
     include Pagy::Method, AttachmentResolution, AttachmentWriting,
             Landing, Paging, ListResolution, ParentNaming,
             ParentResolution, ReferenceResolution, ResourceResolution,
-            Zoning
+            Weeks, Zoning
 
     helper Helpers
 
@@ -19,13 +19,17 @@ module Recourse
     # The model broadcasts refreshes for its index, before `create` commits its own.
     before_action :broadcast_resource_changes
 
-    # Lists one page of the model the route is named after. `@q` is Ransack's own name.
+    # Lists one page of the model the route is named after, or one week of it where the
+    # calendar was asked for — a week is how much that shape shows. `@q` is Ransack's own.
     def index
       search = Search.new recourse_relation, params[:q]
       @q = search.query
-      @pagy, @resources = pagy search.scope, limit: recourse_limit
-      # A map is the same page in another shape, so the HTML templates draw it.
-      render :index, formats: :html if request.format.map?
+
+      @pagy, @resources = week_or_page search.scope
+
+      # A map and a calendar are the same page in another shape: the HTML templates draw
+      # both.
+      render :index, formats: :html if SHAPES.include? request.format.symbol
     end
 
     # Builds a blank record under the name Rails would use: @contact for contacts, with
