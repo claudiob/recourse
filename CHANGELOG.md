@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.4.0 - 2026-09-17
+
 * [Feature] A table of events can be read as a week
 
   The second shape a page of rows can take, beside the map: a model keeping a `starts_at`
