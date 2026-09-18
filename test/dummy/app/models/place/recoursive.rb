@@ -21,6 +21,17 @@ class Place
       # what the fallback looks like.
       def recourse_icon = :building
 
+      # And one menu the schema says nothing about: which crew keeps the place is a
+      # word reached through the team rather than a column here, so the words are this
+      # app's to name and the `label:` is the only heading there could be.
+      def filter_fields
+        super.merge 'team_name_in' => { label: 'Crew', values: Team.order(:name).pluck(:name) }
+      end
+
+      # And Ransack is told it may reach that far, which is the host's word rather than
+      # the gem's: naming the words a menu offers is not leave to query through a table.
+      def ransackable_associations(_ = nil) = super + %w[team]
+
       # Indexed, so it would otherwise be searched, sorted and shown — which is what
       # makes it the honest test of a column a model simply does not want read out.
       def recourse_hidden = :webhook_url

@@ -79,6 +79,23 @@ class TestRecoursesFilters < IntegrationCase
     assert_includes body, 'Place 03'
   end
 
+  # A menu over a predicate no column of the model describes -- a word reached through
+  # another table, or anything else Ransack can ask that a schema says nothing about.
+  # The host names the words, and names the menu too: there is no column to head it.
+  def test_a_filter_offers_the_words_a_host_named_for_a_predicate_no_column_describes
+    crew = Team.order(:name).first
+    visit '/places'
+    menu = menu_for 'q[team_name_in][]'
+
+    assert_includes menu, 'aria-label="Crew"'
+    assert_includes menu, 'data-combobox-all-value="All crews"'
+    assert_includes menu, %(<option value="#{crew.name}">#{crew.name}</option>)
+    # And it narrows: the words go back as they came, and Ransack reaches through.
+    visit "/places?q%5Bteam_name_in%5D%5B%5D=#{CGI.escape crew.name}"
+
+    assert_equal crew.places_count, body.scan('data-cell="Name"').size
+  end
+
 private
 
   # One combobox's select, from its opening tag to its closing one.

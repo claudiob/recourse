@@ -68,6 +68,19 @@ offers is the record's to say: nothing to add where there is already one, nothin
 delete where there is none. A write has no index to return to, so it lands on the
 record's own page: a singular resource is the collection of one.
 
+Filters are drawn per enum, per boolean and per foreign key. A model adds one the schema
+says nothing about — the type behind a `has_one`, a word reached through another table —
+by naming the words itself, and naming the menu too, since there is no column to head it:
+
+```ruby
+def self.filter_fields
+  super.merge 'integration_type_in' => { label: 'CRM', values: Integration.selectable }
+end
+```
+
+Naming the words is not leave to query through a table, so `ransackable_associations`
+still says how far Ransack may reach.
+
 Every nested recourse gets namespaced after the parent:
 
 <img width="3824" height="2274" alt="Image" src="https://github.com/user-attachments/assets/9b242335-a25b-4fa8-8023-422538d235b0" />
