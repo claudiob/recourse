@@ -7,6 +7,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.6.1 - 2026-09-18
+
+* [Change] The pinned bundle is `houseaccount@0.14.2`
+
+  A conversation reads at the house's own size wherever it is drawn, a bubble inside a flow
+  is read from its start, and a focus ring is no longer painted over by the link below it.
+  These pages compact their body type for tables dense with figures, which is what made the
+  first of those visible here.
+
 ## 5.6.0 - 2026-09-18
 
 * [Feature] A table can be dragged into an order

@@ -32,14 +32,15 @@ class TestRecoursesColor < IntegrationCase
   # ask the browser for a stylesheet that is not there and go unnoticed until somebody
   # looked at a page, so it is refused where it is set.
   def test_a_host_picks_a_palette_and_a_name_nobody_ships_is_refused
+    bundle = "https://cdn.jsdelivr.net/npm/houseaccount@#{Recourse::BUNDLE}/public"
     visit '/places'
 
     # Everything the page is styled and scripted by comes from the `houseaccount` package
     # on a CDN, where every HouseAccount app draws from, and nothing is served by this gem.
     assert_includes body,
-                    "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/houseaccount@0.14.0/public/css/houseaccount.css'>"
+                    "<link rel='stylesheet' href='#{bundle}/css/houseaccount.css'>"
     assert_includes body,
-                    "<script type='module' src='https://cdn.jsdelivr.net/npm/houseaccount@0.14.0/public/js/houseaccount.js'>"
+                    "<script type='module' src='#{bundle}/js/houseaccount.js'>"
     refute_includes body, '/recourse/'
     # The tab's icon is the host's to name, in its `recourses/head` partial; the gem guesses at
     # no file name of its own.
@@ -48,13 +49,12 @@ class TestRecoursesColor < IntegrationCase
     # And the one thing these screens set that the house's stylesheet does not.
     assert_includes body, '--bs-body-font-family: helvetica, verdana, arial, sans-serif;'
     assert_includes body, '<link rel="stylesheet" ' \
-                          'href="https://cdn.jsdelivr.net/npm/houseaccount@0.14.0' \
-                          '/public/theme/dracula.css" ' \
+                          "href=\"#{bundle}/theme/dracula.css\" " \
                           'data-recourse-theme="">'
     # The sidebar's toggle, and the attribute the palette link is found by: the two
     # halves of swapping a palette in the browser, and a rename either side of that
     # would leave a button that silently does nothing.
-    assert_includes body, 'data-scheme-path-value="https://cdn.jsdelivr.net/npm/houseaccount@0.14.0/public/theme"'
+    assert_includes body, %(data-scheme-path-value="#{bundle}/theme")
     # And the key the choice is kept under, which the layout's script reads back.
     assert_includes body, 'data-scheme-storage-value="recourse-scheme"'
     assert_includes body, "localStorage.getItem('recourse-scheme')"
