@@ -16,8 +16,9 @@
     the fragment when a square is clicked. And the zone, for the same reason again:
     a timestamp is drawn against the reader's own clock, so without it the first
     person to load a table would settle what hour everybody else read. -%>
-<% key = [recourses, rows_version(recourses), counters_version(recourses), row_digest,
-          resource_columns, bookmark_digest, Time.zone.name] -%>
+<% key = [recourses, rows_version(recourses), counters_version(recourses),
+          selected_version(recourses), row_digest, resource_columns, bookmark_digest,
+          Time.zone.name] -%>
 <% cache_if cacheable_table?, key do %>
   <% actions = resource_actions %>
   <%# Read once for the whole table: every row of it is positioned or none is. -%>

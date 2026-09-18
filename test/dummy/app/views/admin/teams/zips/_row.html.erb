@@ -1,0 +1,5 @@
+<%# locals: (zip:) -%>
+<%# Whether this team keeps a place in this ZIP, which the relation works out and no
+    column of a ZIP holds -- so nothing on the row moves when the answer changes. -%>
+<%= column header: 'Kept' do %><%= zip.kept.to_i.positive? ? 'Yes' : 'No' %><% end %>
+<%= column header: 'Code' do %><%= zip.code %><% end %>

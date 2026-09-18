@@ -58,4 +58,28 @@ class TestRecoursesCaching < IntegrationCase
 
     assert_match(/\ASELECT "zips"/, queries.sole)
   end
+
+  # And a value the relation works out rather than the rows holding it: whether this team
+  # keeps a place in this ZIP is answered by a join, and nothing on the ZIP moves when the
+  # answer changes -- no timestamp, no count, not even which rows come back. The values
+  # the rows carry beyond their own columns are in the key for that reason.
+  def test_a_table_redraws_when_a_value_its_relation_works_out_changes
+    team = Team.order(:id).first
+    place = team.places.order(:id).first
+    other = Team.where.not(id: team).order(:id).first
+    # No search, since a searched table is drawn live and this is about a kept one --
+    # and the page the ZIP falls on, so it is among the rows this one draws.
+    page = ((ZIP.where(ZIP.arel_table[:id].lteq(place.zip_id)).count - 1) / 15) + 1
+    visit "/teams/#{team.id}/zips?page=#{page}"
+    kept = body.scan('data-cell="Kept">Yes</td>').size
+
+    assert_operator kept, :positive?
+
+    place.update! team: other
+    visit "/teams/#{team.id}/zips?page=#{page}"
+
+    assert_equal kept - 1, body.scan('data-cell="Kept">Yes</td>').size
+  ensure
+    place&.update! team: team
+  end
 end

@@ -45,6 +45,18 @@ module Recourse
         rows.map { |row| row.attributes.values_at(*columns) }
       end
 
+      # And whatever the rows carry beyond their own columns. A host's relation may select
+      # a value worked out from another table -- whether this ZIP is in this market, which
+      # a join answers -- and nothing on the ZIP itself moves when the answer changes, so
+      # neither the version above nor the counts beside it see it. Read off the rows in
+      # memory like both of those, so this costs no query either.
+      def selected_version(rows)
+        extra = rows.first.attributes.keys - resource_model.column_names if rows.first
+        return if extra.blank?
+
+        rows.map { |row| row.attributes.values_at(*extra) }
+      end
+
       # Every record the rows reach along `includes`, in any shape `includes` accepts:
       # a name, a list of them, or a hash naming what to follow from there.
       def reached(rows, names)
