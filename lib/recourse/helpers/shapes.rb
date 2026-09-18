@@ -23,17 +23,26 @@ module Recourse
         shapes
       end
 
+      # Which shape this page is, which is the page's own business rather than the
+      # request's: a table asked for as a Turbo Stream is still a table, and reading the
+      # shape off the format offered a link to the page being read.
+      def current_shape
+        return :map if map_view?
+        return :cal if calendar_view?
+
+        :html
+      end
+
       # A link to each shape the page is not in, carrying the query it was asked with —
       # the search, the sort and the page — so another shape shows the rows the table
       # did. The week stays behind: only a calendar has one, and a calendar reached
       # from the table opens on this week.
       def view_links
-        shapes = view_shapes
         query = request.query_parameters.except 'week'
 
         # The table is the page at its own address, which is the one shape asked for by
         # carrying no extension at all.
-        shapes.except(request.format.symbol).map do |shape, key|
+        view_shapes.except(current_shape).map do |shape, key|
           link_to t(key), url_for(query.merge(format: (shape unless shape == :html)))
         end
       end

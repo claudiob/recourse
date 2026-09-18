@@ -52,4 +52,15 @@ class TestRecoursesMaps < IntegrationCase
 
     refute_includes body, 'Display as map'
   end
+  # Which shape a page is in is the page's own business rather than the request's. A
+  # table asked for as a Turbo Stream -- which is how a page redraws after a write --
+  # is still a table, and reading the shape off the format offered `Display as table`
+  # on the table being read.
+  def test_a_table_asked_for_as_a_stream_offers_no_link_to_itself
+    stream = 'text/vnd.turbo-stream.html, text/html, application/xhtml+xml'
+    @session.get '/people', headers: { 'HTTP_ACCEPT' => stream }
+
+    assert_includes body, 'Displaying'
+    refute_includes body, 'Display as table'
+  end
 end
