@@ -18,6 +18,11 @@ en:
     ago: "%{distance} ago"
     all: All %{models}
     all_values: All
+    # Why a model pointing several ways cannot be arranged without a word from it.
+    ambiguous_position: "%{model} points several ways, so which of them its position is
+      counted within is not the gem's to guess. Answer `recourse_siblings` with the rows
+      one of these is arranged among."
+    arrange: Reorder
     as_calendar: Display as calendar
     as_map: Display as map
     as_table: Display as table
@@ -72,6 +77,7 @@ en:
     none: "No %{models}."
     optional: Optional
     per_page: "%{limit} per page"
+    position_updated: Position updated
     preview: Preview
     previous_week: Previous week
     previous_weeks: Previous four weeks

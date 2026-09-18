@@ -37,9 +37,9 @@ class TestRecoursesColor < IntegrationCase
     # Everything the page is styled and scripted by comes from the `houseaccount` package
     # on a CDN, where every HouseAccount app draws from, and nothing is served by this gem.
     assert_includes body,
-                    "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/houseaccount@0.13.0/public/css/houseaccount.css'>"
+                    "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/houseaccount@0.14.0/public/css/houseaccount.css'>"
     assert_includes body,
-                    "<script type='module' src='https://cdn.jsdelivr.net/npm/houseaccount@0.13.0/public/js/houseaccount.js'>"
+                    "<script type='module' src='https://cdn.jsdelivr.net/npm/houseaccount@0.14.0/public/js/houseaccount.js'>"
     refute_includes body, '/recourse/'
     # The tab's icon is the host's to name, in its `recourses/head` partial; the gem guesses at
     # no file name of its own.
@@ -48,13 +48,13 @@ class TestRecoursesColor < IntegrationCase
     # And the one thing these screens set that the house's stylesheet does not.
     assert_includes body, '--bs-body-font-family: helvetica, verdana, arial, sans-serif;'
     assert_includes body, '<link rel="stylesheet" ' \
-                          'href="https://cdn.jsdelivr.net/npm/houseaccount@0.13.0' \
+                          'href="https://cdn.jsdelivr.net/npm/houseaccount@0.14.0' \
                           '/public/theme/dracula.css" ' \
                           'data-recourse-theme="">'
     # The sidebar's toggle, and the attribute the palette link is found by: the two
     # halves of swapping a palette in the browser, and a rename either side of that
     # would leave a button that silently does nothing.
-    assert_includes body, 'data-scheme-path-value="https://cdn.jsdelivr.net/npm/houseaccount@0.13.0/public/theme"'
+    assert_includes body, 'data-scheme-path-value="https://cdn.jsdelivr.net/npm/houseaccount@0.14.0/public/theme"'
     # And the key the choice is kept under, which the layout's script reads back.
     assert_includes body, 'data-scheme-storage-value="recourse-scheme"'
     assert_includes body, "localStorage.getItem('recourse-scheme')"
@@ -69,5 +69,21 @@ class TestRecoursesColor < IntegrationCase
     assert_includes error.message, 'dracula'
   ensure
     Recourse.theme = :dracula
+  end
+
+  # And a host may serve the bundle itself rather than read it off the CDN, which is the
+  # one line it takes: the `houseaccount` gem mounted by path answers `/css`, `/js` and
+  # `/theme` out of its own `public/`, so a stylesheet or a controller can be tried on a
+  # real page before the version carrying it is published.
+  def test_a_host_may_serve_the_bundle_itself
+    Recourse.assets = ''
+    visit '/places'
+
+    assert_includes body, "<link rel='stylesheet' href='/css/houseaccount.css'>"
+    assert_includes body, "<script type='module' src='/js/houseaccount.js'>"
+    assert_includes body, 'data-scheme-path-value="/theme"'
+    refute_includes body, 'cdn.jsdelivr.net/npm'
+  ensure
+    Recourse.assets = "https://cdn.jsdelivr.net/npm/houseaccount@#{Recourse::BUNDLE}/public"
   end
 end

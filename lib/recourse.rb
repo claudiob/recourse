@@ -4,6 +4,7 @@ require 'ransack'
 require 'unicon'
 
 require_relative 'recourse/version'
+require_relative 'recourse/assets'
 require_relative 'recourse/attachments'
 require_relative 'recourse/blobs'
 require_relative 'recourse/bookmarks'
@@ -18,8 +19,11 @@ require_relative 'recourse/helpers'
 require_relative 'recourse/limits'
 require_relative 'recourse/maps'
 require_relative 'recourse/orders'
+require_relative 'recourse/positions'
+require_relative 'recourse/positioning'
 require_relative 'recourse/writes'
 require_relative 'recourse/zones'
+require_relative 'recourse/arranged'
 require_relative 'recourse/broadcasting'
 require_relative 'recourse/recoursive'
 require_relative 'recourse/registry'
@@ -36,9 +40,8 @@ module Recourse
   # them. Named once: three places ask which columns these are.
   TIMESTAMPS = %w[created_at updated_at].freeze
 
-  # The shapes a page of rows takes besides the table, by the format each is asked
-  # for. Every one of them is the same HTML drawn another way, which is why none has
-  # a template of its own and all three answer to one controller action.
+  # The shapes a page of rows takes besides the table, by the format each is asked for.
+  # Both are the same HTML drawn another way: no template of their own, and one action.
   SHAPES = %i[map cal].freeze
 
   class << self
@@ -59,12 +62,14 @@ module Recourse
                    hidden_columns(model)
   end
 
-  # Columns no screen shows: whatever the model asked to hide through
-  # `recourse_hidden` — one name or a list, taken either way — and the column Rails
-  # reserves for single table inheritance. A class name is machinery, not something
-  # to read out or type over.
+  # Columns no screen shows: whatever the model asked to hide through `recourse_hidden`
+  # — one name or a list, taken either way — the column Rails reserves for single table
+  # inheritance, and the place a row holds where somebody arranged the table. A class
+  # name is machinery rather than something to read out, and a position is set by
+  # dragging the row rather than typed beside it.
   def self.hidden_columns(model)
-    Array(model.recourse_hidden).map(&:to_s) + [model.inheritance_column]
+    Array(model.recourse_hidden).map(&:to_s) +
+      [model.inheritance_column, *position_columns(model)]
   end
 
   # The names a column is validated under: its own, and — where it is a foreign key
@@ -75,17 +80,16 @@ module Recourse
     [column, column.delete_suffix('_id')].uniq
   end
 
-  # The model a resource is named after. A controller the gem defined has nothing
-  # else to go on, so a name that resolves to no model is a routes file to fix
-  # rather than a `NameError` from somewhere inside a view.
+  # The model a resource is named after. A controller the gem defined has nothing else
+  # to go on, so a name resolving to no model is a routes file to fix rather than a
+  # `NameError` from somewhere inside a view.
   def self.model(name)
     model?(name) || raise(Error, I18n.t('recourse.missing_model', name:, model: model_name(name)))
   end
 
   # The same, answering nil where there is no such model rather than raising. A bare
-  # action is a verb — `recourses :sweeps, only: :create` — and the gem labels its button
-  # from the path alone, so whether a name has a model behind it has to be a question
-  # and not an accusation.
+  # action is a verb — `recourses :sweeps, only: :create` — labelled from the path alone,
+  # so whether a name has a model behind it is a question and not an accusation.
   def self.model?(name) = model_name(name).safe_constantize
 
   # A namespaced resource is `admin/sources`, and the model it lists is a Source.

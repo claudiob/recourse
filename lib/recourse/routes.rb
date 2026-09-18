@@ -25,9 +25,13 @@ module Recourse
 
       names.each { |name| declare_resource name }
       options = default_nested_actions options
-      return resources(*names, **options) unless block || keepable
+      # Only where there is a table to arrange: the place a row holds is written from
+      # an index and from nowhere else.
+      arrangeable = indexed? options
 
-      resources(*names, **options) { draw_within keepable, block }
+      return resources(*names, **options) unless block || keepable || arrangeable
+
+      resources(*names, **options) { draw_within keepable, arrangeable, block }
     end
 
   private
@@ -38,6 +42,15 @@ module Recourse
       path = [current_module, name].compact.join '/'
       record_declaration path
       Controllers.define_missing path
+    end
+
+    # Whether `index` survived the `only:` or `except:` the host wrote. Neither of
+    # them is the common case, and both name the action plainly.
+    def indexed?(options)
+      return Array(options[:except]).map(&:to_sym).exclude?(:index) if options.key? :except
+      return Array(options[:only]).map(&:to_sym).include?(:index) if options.key? :only
+
+      true
     end
 
     def default_nested_actions(options)

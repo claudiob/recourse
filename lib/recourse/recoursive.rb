@@ -62,9 +62,25 @@ module Recourse
     # belongs_to it can follow, since each cell naming one would be a query of its own.
     def recourse_includes = recourse_references.map(&:name)
 
-    # How the index sorts its rows, in any shape `order` accepts. By id by default,
-    # which is the one column every table has and the order rows were created in.
-    def recourse_order = :id
+    # The column this model's rows are arranged by — dragged into an order somebody
+    # chose rather than sorted into one — or nil for a table nobody arranges. The
+    # column is the whole of the declaration, so a model keeping a `position` has said
+    # this already and says nothing here.
+    #
+    # Overridden two ways. `def recourse_position = :ordering` where the column is
+    # named otherwise, and `def recourse_position = nil` where a host keeps the order
+    # itself: that one is the way out of the convention, and it takes the handle off
+    # the table and both callbacks off the model together.
+    def recourse_position
+      Recourse::POSITION_COLUMN if Recourse.arrangeable? self
+    end
+
+    # How the index sorts its rows, in any shape `order` accepts. The column it is
+    # arranged by where there is one — the order a table is read in and the order
+    # somebody put it in are one fact, and a table read in another order would have a
+    # drop reporting a place that is no position at all — and by id otherwise, which is
+    # the one column every table has and the order rows were created in.
+    def recourse_order = recourse_position&.to_sym || :id
 
     # What a column is for, said where the table itself documents it — a form draws it
     # under the field that sets it. Read from the schema, which is the one thing here no

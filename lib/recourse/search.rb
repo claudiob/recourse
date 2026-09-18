@@ -14,8 +14,14 @@ module Recourse
     # it narrowed to rather than around it — the model is still what answers for the
     # order, the eager loads and the allowlist, and a relation knows its own.
     #
-    def initialize(relation, params)
+    # `arranged` is the column this page is dragged into order by, or nil where it is
+    # no such page. The controller's word rather than a question asked here: whether a
+    # place among rows means anything depends on the level the page was reached at,
+    # which the route knows and a relation does not — and a listing may be arranged by
+    # a column the model never keeps, which only its own controller knows.
+    def initialize(relation, params, arranged: nil)
       @model = relation.klass
+      @arranged = arranged
       @query = relation.ransack conditions(params)
     end
 
@@ -33,19 +39,27 @@ module Recourse
     # A heading's sort or the model's own order, each column with its empty rows last.
     # Ransack has ordered the relation already where a heading asked, but as the bare
     # column; the same sort is written again here so it ends the way every order does.
+    #
+    # And on a page somebody arranges, the column they arranged it by — which is the
+    # model's own order for a table arranged by the column it keeps, and is not for the
+    # second listing of one, where a host named another. The order a table is read in
+    # and the order somebody put it in have to be the same order, or a drop reports a
+    # place that is no position at all.
     def ordering
       sorts = @query.sorts.map { |sort| sort.attr.public_send(sort.dir).nulls_last }
       return sorts if sorts.any?
 
-      kept_first + Recourse.nulls_last(@model, @model.recourse_order)
+      kept_first + Recourse.nulls_last(@model, @arranged&.to_sym || @model.recourse_order)
     end
 
     # The rows this viewer has kept, ahead of whatever the model orders by — but only
     # where nobody clicked a heading, which is the same word `recourse_order` answers
     # to. A semi-join rather than an outer one: it cannot multiply a row, and it
-    # leaves the count pagy runs over this relation well-formed.
+    # leaves the count pagy runs over this relation well-formed. Never on an arranged
+    # table, where it would put one reader's kept rows ahead of the order everybody
+    # else set by hand — and leave the numbers no longer running 1, 2, 3 down the page.
     def kept_first
-      reflection = Recourse.bookmarks_for @model
+      reflection = Recourse.bookmarks_for @model unless @arranged
       return [] unless reflection
 
       kept = Recourse.bookmarks_of(reflection).select reflection.foreign_key
@@ -60,8 +74,12 @@ module Recourse
     # is dropped, since `IN ()` would match no row rather than every one.
     def conditions(params)
       # `?q=anything` reaches here as a String rather than as parameters of its own,
-      # and a search nobody asked for reaches here as nil. Neither is a condition.
-      return {} unless params.is_a? ActionController::Parameters
+      # and a search nobody asked for reaches here as nil. Neither is a condition — and
+      # neither is anything at all where the table is arranged by hand, since a search
+      # or a filter shortens the page and a drop on a shortened one reports a place
+      # among the rows that are left. Refused here rather than by leaving the form off
+      # the page, because an address is typed as readily as it is clicked.
+      return {} if @arranged || !params.is_a?(ActionController::Parameters)
 
       params.to_unsafe_h.filter_map do |key, value|
         value = list_values value if key.match? LIST_PREDICATES

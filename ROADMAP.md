@@ -10,11 +10,16 @@ Nothing here is implemented. `CHANGELOG.md` is what shipped.
 
 Version 4.0.0 ships what goldrush and houston use and nothing else. What was built in
 `drive` and cut on the way here, each a feature a later minor release may bring back:
-cloning a record; tables arranged by drag; a resource with no rows of its own; a listing that edits a join (`through:`); a
-parent named through a polymorphic key; singular resources (`recourse`); the three
-generators; the eight color palettes; `recourse_extra_columns`, `_actions` and `_tabs`;
-a combobox narrowed by another; and the `values:` shape of a `filter_fields` entry.
+cloning a record; a resource with no rows of its own; a listing that edits a join
+(`through:`); a parent named through a polymorphic key; singular resources (`recourse`);
+the three generators; `recourse_extra_columns`, `_links`, `_actions` and `_tabs`; a
+combobox narrowed by another; and the `values:` shape of a `filter_fields` entry.
 Fountain and autopilot use several of those and do not run on 4.0.0.
+
+Back since this was written: the map (5.2.0), a record's files (5.3.0), the calendar
+(5.4.0) and tables arranged by drag (5.6.0). The nine color palettes were never dropped —
+they moved to the design bundle, which is what `Recourse::THEMES` names and
+`Recourse.assets` serves.
 
 ---
 
@@ -62,8 +67,7 @@ not visibility intents, and fixing the detection deletes all four.
 ### A stale declaration is tolerated in silence
 
 fountain's `Nomination#recourse_hidden = :participant_sid` names a column that no longer
-exists in its schema. The gem neither warns nor raises. Worth a boot-time check, in the
-company of `unsorted_position` and `two_positions`.
+exists in its schema. The gem neither warns nor raises. Worth a boot-time check.
 
 ---
 
@@ -167,8 +171,8 @@ which is a different axis and is what all 13 uses are actually for.
 
 **And refuse loudly.** A per-surface API makes the trap less likely but does not close it.
 If a column is off the form, required, has no default and nothing fills it, and `create`
-is routed — raise, the way `recourse_order` already raises `unsorted_position` and
-`two_positions` rather than guessing. goldrush would have found all five at boot.
+is routed — raise, the way `recourse_siblings` already raises `ambiguous_position` rather
+than guessing. goldrush would have found all five at boot.
 
 ### Also worth revisiting
 

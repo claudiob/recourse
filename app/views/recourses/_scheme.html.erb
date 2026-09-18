@@ -23,6 +23,6 @@
       link.dataset.recourseTheme = ''
       document.head.appendChild(link)
     }
-    link.href = '<%= Recourse::THEMES_PATH %>/' + stored.theme + '.css'
+    link.href = '<%= Recourse.themes_path %>/' + stored.theme + '.css'
   })()
 </script>

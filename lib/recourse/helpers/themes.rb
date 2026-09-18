@@ -19,7 +19,7 @@ module Recourse
       end
 
       # Where one palette is served from.
-      def theme_stylesheet_path(theme) = "#{Recourse::THEMES_PATH}/#{theme}.css"
+      def theme_stylesheet_path(theme) = "#{Recourse.themes_path}/#{theme}.css"
 
       # What the sidebar's toggle needs to rotate: every palette there is, where they
       # are served from, and where to keep what the reader picked.
@@ -27,7 +27,7 @@ module Recourse
         {
           controller: 'scheme', action: 'scheme#rotate',
           scheme_themes_value: Recourse::THEMES.keys.to_json,
-          scheme_path_value: Recourse::THEMES_PATH,
+          scheme_path_value: Recourse.themes_path,
           scheme_storage_value: Recourse::SCHEME_STORAGE,
         }
       end

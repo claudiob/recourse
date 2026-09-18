@@ -1,26 +1,41 @@
 module Recourse
   module Routes
     # What a `recourses` block draws around whatever the host wrote inside it: the
-    # square that keeps one of its rows.
+    # square that keeps one of its rows, and the place one of them holds.
     module Nested
     private
 
-      # What a resource holds: the square that keeps one of its rows, and whatever the
-      # host's own block declared — each under the resource's own module, which is what
-      # every nested page relies on.
-      def draw_within(keepable, block)
+      # What a resource holds: the square that keeps one of its rows, the place a row
+      # holds in a table somebody arranged, and whatever the host's own block declared —
+      # each under the resource's own module, which is what every nested page relies on.
+      def draw_within(keepable, arrangeable, block)
+        addressable = addressable_rows?
+
         scope module: parent_resource.name do
-          draw_bookmark if keepable && addressable_rows?
+          draw_bookmark if keepable && addressable
+          draw_position if arrangeable && addressable
           instance_exec(&block) if block
         end
       end
 
       # Whether this resource has rows to address one at a time. A bookmark names one
-      # row, which means nothing for a name with no class behind it at all — and one was
-      # drawn anyway, at `/placeholders/:placeholder_id/bookmark`, where nothing linked
-      # to it and anything reaching it raised. Asked of the constant rather than the
-      # class: loading a model while the routes draw is what Rails 8.2 warns about.
+      # row and a position names one row, so neither means anything for a name with no
+      # class behind it at all — and one was drawn anyway, at
+      # `/placeholders/:placeholder_id/bookmark`, where nothing linked to it and
+      # anything reaching it raised. Asked of the constant rather than the class:
+      # loading a model while the routes draw is what Rails 8.2 warns about.
       def addressable_rows? = Object.const_defined? Recourse.model_name(parent_resource.name)
+
+      # The place a row of an arranged table holds, at `/teams/5/position`. Recorded
+      # nowhere, for the reason the bookmark gives: a tab and a bare-action button both
+      # look under a resource, and this is neither. Drawn wherever an index is —
+      # whether a model keeps a position column is a question for a request, and asking
+      # it here would reach for a database before the routes are even finished.
+      def draw_position
+        path = [current_module, 'positions'].compact.join '/'
+        Controllers.define_missing(path) { PositionsController }
+        resource :position, only: :update
+      end
 
       # The row a table's bookmark square writes: one record kept by whoever is looking,
       # at `/places/5/bookmark`. Deliberately not recorded through `Recourse.nest` — it

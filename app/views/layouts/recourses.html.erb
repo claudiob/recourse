@@ -18,15 +18,16 @@
 
     <%# Everything the page is styled by, from the one place every HouseAccount app draws
         on: Bootstrap 6, its icons and the house's own rules for this gem's markup. Served
-        from the `houseaccount` package on a CDN, pinned to a version, so a change there
-        reaches these pages when somebody moves the pin here and not before; the same
-        version stands in the script below and in `Recourse::THEMES_PATH`. A published
-        version is never written again, so the bytes behind that URL cannot move under us.
-        Two connections opened before the parser finds either tag: the stylesheet's plain
-        one and the CORS one a module script and a font are fetched over. -%>
+        from the `houseaccount` package on a CDN, pinned to a version — `Recourse.assets`
+        is where, and `Recourse::BUNDLE` is which — so a change there reaches these pages
+        when somebody moves that line and not before. Two connections opened before the
+        parser finds either tag: the stylesheet's plain one and the CORS one a module
+        script and a font are fetched over. They name the CDN outright, being a hint
+        about it and nothing more, so a host serving the bundle itself simply never uses
+        them. -%>
     <link rel='preconnect' href='https://cdn.jsdelivr.net'>
     <link rel='preconnect' href='https://cdn.jsdelivr.net' crossorigin>
-    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/houseaccount@0.13.0/public/css/houseaccount.css'>
+    <link rel='stylesheet' href='<%= Recourse.asset 'css/houseaccount.css' %>'>
     <%# The one thing these screens set that the house's stylesheet does not: system faces
         at a compact size, for pages dense with figures. 14px as rem, so a browser's own
         text-size setting still scales it. After the stylesheet, since both are `:root`. -%>
@@ -50,7 +51,7 @@
     <%# Turbo, Bootstrap and a Stimulus application with every controller this markup
         names, started once under `window.Stimulus`. In the head, so a controller exists
         before the body's first `data-controller`. -%>
-    <script type='module' src='https://cdn.jsdelivr.net/npm/houseaccount@0.13.0/public/js/houseaccount.js'></script>
+    <script type='module' src='<%= Recourse.asset 'js/houseaccount.js' %>'></script>
   </head>
 
   <%# The reader's zone is told to the server here rather than from a page of its

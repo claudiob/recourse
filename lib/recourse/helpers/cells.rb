@@ -21,22 +21,22 @@ module Recourse
         Recourse.ordered resource_model, resource_model.column_names - hidden_columns
       end
 
-      # What no table shows, less whatever the model asked to draw anyway. Each of
-      # the four below is a default the gem picks, and a host is what answers for
-      # its own screens — so naming one overrules it.
+      # What no table shows, less whatever the model asked to draw anyway. Each below
+      # is a default the gem picks, and a host answers for its own screens.
       def hidden_columns
         columns_hidden_by_default - Array(resource_model.recourse_displayed).map(&:to_s)
       end
 
       # Ciphertext, the id that addresses the row, the parent a nested route already
       # names, the timestamps and every JSON payload — what a machine keeps rather than
-      # what a row is about — and whatever the model asked to hide, the one of these a
-      # host decides without the override above.
+      # what a row is about — whatever the model asked to hide, the one of these a host
+      # decides without the override above, and the column *this page* is dragged into
+      # order by, where a host arranged a second listing by one the model never keeps.
       def columns_hidden_by_default
         [
           resource_model.recourse_encrypted_names, resource_model.primary_key, TIMESTAMPS,
           resource_parent_association&.foreign_key, json_columns,
-          Recourse.hidden_columns(resource_model),
+          Recourse.hidden_columns(resource_model), arrangement_column,
         ].flatten.compact
       end
 

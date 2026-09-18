@@ -43,8 +43,16 @@ module Recourse
         resource_column_title column.to_s
       end
 
-      # Whether the model lets a heading sort by this column.
-      def sortable_column?(column) = resource_model.ransortable_attributes.include?(column.to_s)
+      # Whether the model lets a heading sort by this column — and whether this table
+      # is one a heading may re-sort at all. An arranged table is read in the order
+      # somebody put it in: a drop reports a row's place on the page, which is a
+      # position only while the page runs 1, 2, 3, so a heading that re-sorted it would
+      # leave the next drag renumbering by the wrong index.
+      def sortable_column?(column)
+        return false if arranged?
+
+        resource_model.ransortable_attributes.include? column.to_s
+      end
 
       def sort_mark(column)
         sort = resource_search.sorts.find { |one| one.name == column.to_s }

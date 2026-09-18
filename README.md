@@ -66,7 +66,8 @@ To change the content displayed in the `index` table of a model, override any of
 | [`recourse_label`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_label-instance_method) | `:name` | the column a combobox shows and a foreign-key cell reads; typed rather than picked where it has a length validator |
 | [`recourse_hidden`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_hidden-instance_method) | `[]` | columns kept off the table, the page, the form and the search |
 | [`recourse_displayed`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_displayed-instance_method) | `[]` | columns a table draws that it would leave off: encrypted ones, the id, timestamps, JSON |
-| [`recourse_order`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_order-instance_method) | `:id` | the index's order, a Symbol or a Hash; rows with nothing in the column come last |
+| [`recourse_order`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_order-instance_method) | `:id`, or the arranged column | the index's order, a Symbol or a Hash; rows with nothing in the column come last |
+| [`recourse_position`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_position-instance_method) | `'position'` where the model keeps an integer one | the column a reader drags the rows into order by, or `nil` for a table nobody arranges |
 | [`recourse_icon`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_icon-instance_method) | the model's name | the icon on the sidebar, the crumbs and the tabs |
 
 For instance, this would yield a more compact `index` than the default configuration:
@@ -237,6 +238,61 @@ the day it opens, down to the foot of its column.
 Both columns have to be datetimes, asked through `type_for_attribute`, so an
 `attribute :starts_at, :datetime` override counts and a column of another kind named
 `starts_at` earns nothing.
+
+
+### Arranged tables
+
+A table whose model keeps an integer `position` is one a reader puts in order by hand: a
+grip opens each row, dragging it moves the row, and the place it lands in is written to a
+route the gem draws under the index. The column is the whole of the opt-in — there is
+nothing to declare, and `recourse_order` follows it, since the order a table is read in
+and the order somebody put it in are one fact.
+
+```ruby
+class Step < ActiveRecord::Base
+  belongs_to :team
+  belongs_to :person
+
+  # A step points two ways, so which of them its place is counted within is the model's
+  # to say. One `belongs_to` needs no answer, and a model pointing nowhere is arranged
+  # among the whole table.
+  def recourse_siblings = team.steps
+end
+```
+
+Two things follow the column rather than the routes. A new row lands last among its own
+and the gap closes behind one that goes, whether it was made behind a form or in a
+console: what a drop reports is a row's place on the *page*, which is a position only
+while the numbers run 1, 2, 3 with no holes in them. And a table being arranged is asked
+per page — a position means something under the parent it is counted within, so a flat
+model's own index is arranged and a listing of every row across every parent is not.
+
+The search box and the sorted headings stand down while the grips are drawn, and a `q`
+typed by hand is refused for the same reason: a filter shortens the page, and a drop on a
+shortened page reports a place among the rows that are left.
+
+A host that keeps the order itself writes `def recourse_position = nil`, which takes the
+grips off the table and the two callbacks off the model together. A host with a *second*
+listing of an arranged model — a plan's place among its service's plans, and another
+among every plan of its department — names the second column on the controller instead,
+and owns the write as well as the page:
+
+```ruby
+module Departmental
+  extend ActiveSupport::Concern
+
+private
+
+  def recourse_position = 'ordering'
+end
+
+class Administered::Departments::Plans::PositionsController < Recourse::PositionsController
+  include Departmental
+end
+```
+
+`Recourse::Positioning` is public for exactly that case: `new(relation, column).close` is
+what such a host calls to keep its own column contiguous.
 
 
 ## Development
