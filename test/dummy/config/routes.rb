@@ -11,11 +11,21 @@ Rails.application.routes.draw do
     recourses :places do
       # A name this app has no class for at all: an action is a verb, and the button
       # still needs a word.
-      recourses :sweeps, only: :create
-      # And one with a model and no form: nothing to fill in, so the button that makes
-      # the record stands on the place's page, and a second press is refused. Read out
-      # too, since it is also the model keeping no column to be named by.
-      recourses :seals, only: %i[create show]
+      recourse :sweep, only: :create
+      # And one routed `show`: a page rather than an action, which Rails draws no
+      # index for -- so the tab on the place is the only thing that reaches it.
+      recourse :zip, only: :show
+      # The same, and this one the gem serves whole: a `has_one` it reads off the
+      # place, with `new` routed so an absent one is a form to fill in rather than a
+      # page saying there is none.
+      recourse :audit, only: %i[new create show]
+      # And one routed `show create destroy`, which is a page and two verbs and no
+      # form: nothing to fill in, so the button that makes the record and the one that
+      # removes it both stand on the page that reads it, one at a time.
+      recourse :seal, only: %i[show create destroy]
+      # The same, over a record a place may not have: what the host finds is what the
+      # page reads, and a page that finds nothing says so.
+      recourse :person, only: :show
       # No `Photo` in this app: the name is what the place has attached, and the table
       # is of Active Storage's blobs. `destroy` with no `edit`, so each row carries it.
       recourses :photos, only: %i[index destroy]

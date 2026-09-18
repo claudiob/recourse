@@ -15,7 +15,7 @@ class Reading
       # a host writes where its own row reads through a key, as this one could read the
       # sensor the reading before it was taken by. `includes` takes either, so what the
       # table's version is read off has to follow either.
-      def recourse_includes = [:grade, :sensor, { previous_reading: :sensor }]
+      def recourse_includes = [:sensor, { previous_reading: :sensor }]
     end
   end
 end

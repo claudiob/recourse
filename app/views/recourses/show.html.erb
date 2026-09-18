@@ -4,7 +4,14 @@
     the card is the parent's, so the tabs on it are about the record the path names
     above this one rather than about this one. -%>
 <%= render layout: 'card', locals: { record: resource_parent || resource_record } do %>
-  <div class='row recourse-values'>
-    <%= render 'values', resource_key => resource_record %>
-  </div>
+  <%# Nothing to read out where the host found no record: a singular resource is
+      reached with no id, so the one it stands for is one it may not have yet, and the
+      page says so rather than reading attributes off nothing. -%>
+  <% if resource_record %>
+    <div class='row recourse-values'>
+      <%= render 'values', resource_key => resource_record %>
+    </div>
+  <% else %>
+    <%= render 'none', models: resource_name %>
+  <% end %>
 <% end %>

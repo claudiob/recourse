@@ -52,6 +52,22 @@ edit page, or on each row of its table where no `edit` is routed:
 
 [image]
 
+`recourse` draws what Rails' `resource` draws, and the gem records it the same way: one
+record reached with no id of its own, at `/locations/5/property`. Rails routes a singular
+resource to a plural controller, so `Locations::PropertiesController` answers it, and the
+gem reads the record off the parent under the name the route gives — `location.property`,
+whether the parent keeps it with a `has_one` or points at one with a `belongs_to`. Where
+the parent has no association of that name the record is still yours to find, with a
+`find_resource` of your own.
+
+What such a nesting earns on the parent's card depends only on what it routes. Routed
+`show`, it earns a tab reading the model's own word in the singular, pointing at that one
+page. Routed `create` or `destroy` and neither `index` nor `new`, it earns a button beside
+the breadcrumb instead — `Add property`, `Delete property` — and which of the two it
+offers is the record's to say: nothing to add where there is already one, nothing to
+delete where there is none. A write has no index to return to, so it lands on the
+record's own page: a singular resource is the collection of one.
+
 Every nested recourse gets namespaced after the parent:
 
 <img width="3824" height="2274" alt="Image" src="https://github.com/user-attachments/assets/9b242335-a25b-4fa8-8023-422538d235b0" />

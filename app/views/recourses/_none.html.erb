@@ -1,1 +1,5 @@
-<p class='fg-2'><%= t 'recourse.none', models: Recourse.downcase(resources_name) %></p>
+<%# locals: (models: nil) -%>
+<%# `models` for a page that stands for one record rather than a list: a singular
+    resource the host found nothing for says `No property.` where an empty index says
+    `No properties.` -%>
+<p class='fg-2'><%= t 'recourse.none', models: models || Recourse.downcase(resources_name) %></p>

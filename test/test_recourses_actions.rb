@@ -40,10 +40,10 @@ class TestRecoursesActions < IntegrationCase
     place = Place.order(:id).first
     visit "/places/#{place.id}"
 
-    assert_includes body, %(action="/places/#{place.id}/sweeps")
+    assert_includes body, %(action="/places/#{place.id}/sweep")
     assert_includes body, 'Add sweep'
 
-    @session.post "/places/#{place.id}/sweeps"
+    @session.post "/places/#{place.id}/sweep"
 
     assert_equal 303, @session.response.status
     assert_equal "Swept #{place.name}", @session.request.flash[:notice]

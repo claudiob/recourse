@@ -17,10 +17,13 @@ class Place < ApplicationRecord
 
   enum :status, STATUSES.index_by(&:itself)
 
-  # At most one, and made by pressing a button rather than by filling in a form.
+  # At most one, which is what a singular resource stands for.
+  has_one :audit, dependent: :destroy
+
+  # The same, and made by pressing a button rather than by filling in a form.
   has_one :seal, dependent: :destroy
 
-  # 101 of them, so a form asks for a code; three teams, so a form lists them.
+  # 201 of them, so a form asks for a code; three teams, so a form lists them.
   belongs_to :zip, counter_cache: true
   belongs_to :team, counter_cache: true, touch: true
   # The parent a nested route answers, and optional, so a place can stand alone.

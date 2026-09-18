@@ -1,7 +1,6 @@
 module Admin
   module Places
-    # A verb with no model behind it, which is what most bare actions are: the gem
-    # draws the button, and the host answers it.
+    # A verb with no model behind it, which is what most bare actions are.
     class SweepsController < RecoursesController
       def create
         place = Place.find params.expect(:place_id)

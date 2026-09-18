@@ -92,7 +92,7 @@ class TestRecoursesShow < IntegrationCase
   # itself as names it instead.
   def test_a_record_with_no_label_column_is_named_by_what_it_prints_as
     seal = Seal.order(:id).first
-    visit "/places/#{seal.place_id}/seals/#{seal.id}"
+    visit "/places/#{seal.place_id}/seal"
 
     assert_includes body, "#{seal.place.name}, sealed"
   end
