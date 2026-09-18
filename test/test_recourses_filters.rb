@@ -15,9 +15,11 @@ class TestRecoursesFilters < IntegrationCase
                           'class="form-select form-select-sm" aria-label="Status" ' \
                           'data-controller="combobox" data-combobox-placeholder-value="Status"'
     # A boolean admits two values, so it is a menu for the same reason an enum is —
-    # and the way back is the bare `All`, since `signeds` is nothing anybody writes.
+    # read as a reader reads them, and with the bare `All` as the way back, since
+    # `actives` is nothing anybody writes.
     assert_includes body, 'name="q[active_in][]"'
-    assert_includes menu_for('q[active_in][]'), '<option value="true">true</option>'
+    assert_includes menu_for('q[active_in][]'), '<option value="true">Yes</option>'
+    assert_includes menu_for('q[active_in][]'), '<option value="false">No</option>'
     assert_includes menu_for('q[active_in][]'), 'data-combobox-all-value="All"'
     assert_includes body, 'name="q[team_id_in][]"'
     # No menu for the ZIP: 201 rows are more than a menu offers, so the box reaches

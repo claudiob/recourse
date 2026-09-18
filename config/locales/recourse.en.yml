@@ -18,6 +18,9 @@ en:
     ago: "%{distance} ago"
     all: All %{models}
     all_values: All
+    # A boolean's two, as a reader reads them rather than as a database writes them.
+    affirmative: 'Yes'
+    negative: 'No'
     # Why a model pointing several ways cannot be positioned without a word from it.
     ambiguous_position: "%{model} points several ways, so which of them its position is
       counted within is not the gem's to guess. Answer `recourse_siblings` with the rows

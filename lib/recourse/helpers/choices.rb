@@ -15,13 +15,17 @@ module Recourse
         boolean_filter predicate, column, label if boolean_column? column
       end
 
-      # The two a boolean admits, as the words a table already prints for them. The
+      # The two a boolean admits, read as a reader reads them rather than as the
+      # database writes them: a menu offering `true` and `false` says what is stored
+      # and not what is being asked. A host wanting words of its own -- `Stopped` and
+      # `Reachable` over a column called `stopped` -- names them with `values:`. The
       # way back is the bare `All`: a column called `signed` pluralizes to nothing
       # anybody would write, so the line says what it does rather than what it is of.
       def boolean_filter(predicate, column, label)
         title = label || resource_model.human_attribute_name(column)
+        values = [[t('recourse.affirmative'), true], [t('recourse.negative'), false]]
 
-        filter_menu predicate, title, %w[true false], t('recourse.all_values')
+        filter_menu predicate, title, values, t('recourse.all_values')
       end
 
       def boolean_column?(column)
