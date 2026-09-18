@@ -52,6 +52,7 @@ class TestRecoursesMaps < IntegrationCase
 
     refute_includes body, 'Display as map'
   end
+
   # Which shape a page is in is the page's own business rather than the request's. A
   # table asked for as a Turbo Stream -- which is how a page redraws after a write --
   # is still a table, and reading the shape off the format offered `Display as table`
