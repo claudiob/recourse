@@ -51,6 +51,9 @@ Rails.application.routes.draw do
       # under one record. The tab is named after the route, since there is no
       # association to count or to take an icon from.
       recourses :memos, only: :index
+      # And one the parent reaches only through another table, which is where the
+      # figure on its tab comes from.
+      recourses :zips, only: :index
     end
 
     # Edited but never shown, and the table a foreign key is typed to reach.

@@ -5,8 +5,14 @@ module Recourse
   private
 
     # The record the id names, under the name Rails would use. `find`, so an id naming
-    # nothing answers 404.
-    def find_resource = assign resource_class.find(params.expect(:id))
+    # nothing answers 404. Nothing to find where the route names no model to look in, or
+    # no id to look one up by: a singular `resource :pause` draws `destroy` at a path
+    # with no id in it, and what that verb undoes is the host's to say.
+    def find_resource
+      return unless resource_model? && params[:id]
+
+      assign resource_class.find(params.expect(:id))
+    end
 
     def assign(record)
       @recourse = record

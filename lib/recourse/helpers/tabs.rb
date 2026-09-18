@@ -80,8 +80,22 @@ module Recourse
         namespace.map { |segment| Recourse.downcase segment.humanize }.join ' '
       end
 
+      # The counter a tab reads. A `has_many through:` keeps none of its own, and the
+      # join it goes through usually does: a market's ZIPs are reached through its
+      # territories, and `territories_count` is the number of them it holds. The figure
+      # is of the join rows, which is what the record actually keeps a count of.
       def counter_column_of(model, association)
-        model.recourse_counters.find { |_, one| one == association }&.first
+        counter_of(model, association) || counter_of(model, join_of(model, association))
+      end
+
+      def counter_of(model, association)
+        model.recourse_counters.find { |_, one| one == association }&.first if association
+      end
+
+      def join_of(model, association)
+        name = association.options[:through]
+
+        model.reflect_on_association name if name
       end
     end
   end

@@ -49,6 +49,16 @@ class TestRecoursesActions < IntegrationCase
     assert_equal "Swept #{place.name}", @session.request.flash[:notice]
   end
 
+  # And pressing it arrives: a singular resource draws `destroy` at a path with no id in
+  # it, and names no model to look one up in, so the screen the gem wraps stands down and
+  # lets the host answer its own verb.
+  def test_the_way_out_is_a_verb_the_host_answers_itself
+    @session.delete '/session'
+
+    assert_equal 303, @session.response.status
+    assert_equal 'Signed out', @session.response.request.flash.notice
+  end
+
   # A route named `exit` is how the routes declare the way out: a button beside the toggle.
   def test_a_route_named_exit_earns_the_sidebar_a_way_out
     visit '/people'

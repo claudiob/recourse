@@ -23,6 +23,17 @@ class TestRecoursesNesting < IntegrationCase
     assert_equal person.places_count, body.scan('data-cell="Name"').size
   end
 
+  # A tab over a table the parent reaches only through another one. The `has_many
+  # through:` keeps no counter of its own, so the figure is the join's -- the number of
+  # rows the record actually holds -- rather than no figure at all.
+  def test_a_nested_index_reached_through_a_join_is_counted_by_that_join
+    team = Team.order(:id).first
+    visit "/teams/#{team.id}/zips"
+
+    assert_includes body,
+                    %(<span>#{team.places_count} <span class="recourse-tab-word">ZIPs</span></span>)
+  end
+
   # Reached through a parent, a resource that names no actions of its own answers
   # the collection ones: list the parent's rows, and add one. The form it draws
   # never asks which parent, because the path already said.
