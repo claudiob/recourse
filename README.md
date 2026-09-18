@@ -305,6 +305,23 @@ cd test/dummy && bin/rails server
 
 The dummy app under `test/dummy` runs on SQLite; the gem names no adapter.
 
+### Reading an unpublished bundle
+
+The pages link `houseaccount` from a CDN, pinned to `Recourse::BUNDLE`, so a stylesheet or
+a Stimulus controller that is not published yet cannot be read on a page. Two lines change
+that — one in this Gemfile, kept out of it because CI checks out this repo alone:
+
+```bash
+echo "gem 'houseaccount', path: '../design'" >> Gemfile && bundle install
+cd test/dummy && bin/rails db:migrate && HOUSE_ASSETS=1 bin/rails server
+```
+
+`HOUSE_ASSETS` is what loads that gem and sets `Recourse.assets = ''`, so the page asks
+this app for `/css`, `/js` and `/theme` and the gem's engine answers them out of its own
+`public/`. Behind a variable because what a deployed app links is what the suite asserts,
+and because the dummy is also the stand-in for a host with no such gem at all. The dummy's
+development database is migrated on its own, which the line above is why.
+
 ## License
 
 [MIT](MIT-LICENSE).

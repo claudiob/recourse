@@ -6,7 +6,6 @@ gemspec
 gem 'actioncable' # carries the dummy app's live index refreshes to the browser
 gem 'activejob' # turbo-rails enqueues refresh broadcasts through it
 gem 'activestorage' # the dummy attaches a file, so a table of attachments has one to draw
-gem 'houseaccount', path: '../design' # serves the bundle when HOUSE_ASSETS is set
 gem 'image_processing' # the dummy makes the pictures a table of files shows
 gem 'irb' # REPL that bin/console starts
 gem 'json', '< 3' # Active Support 8.1 hands JSON.parse a positional options hash json 3 refuses
