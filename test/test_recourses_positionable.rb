@@ -67,4 +67,27 @@ class TestRecoursesPositionable < Minitest::Test
     # its rows were made.
     assert_equal :id, unpositioned.recourse_order
   end
+
+  # A row is dragged from the table that lists it, so asking for the route that takes the
+  # drop without drawing an index says two things that cannot both hold. It fails while
+  # the routes draw rather than serving a route nothing can reach.
+  def test_it_refuses_positionable_without_an_index
+    error = assert_raises Recourse::Error do
+      ActionDispatch::Routing::RouteSet.new.draw do
+        recourses :places, only: :show, positionable: true
+      end
+    end
+
+    assert_includes error.message, 'nowhere for a drop to be reported from'
+  end
+
+  # And it is accepted wherever an index is drawn: a resource writing neither `only:` nor
+  # `except:` routes every action, index among them.
+  def test_it_accepts_positionable_where_every_action_is_routed
+    routes = ActionDispatch::Routing::RouteSet.new
+    routes.draw { recourses :places, positionable: true }
+
+    assert_includes routes.routes.map { |route| route.path.spec.to_s },
+                    '/places/:place_id/position(.:format)'
+  end
 end

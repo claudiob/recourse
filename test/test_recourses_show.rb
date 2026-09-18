@@ -86,4 +86,14 @@ class TestRecoursesShow < IntegrationCase
     assert_operator body.index(%(href="/people/#{person.id}/places")), :<,
                     body.index(%(href="/people/#{person.id}/memos"))
   end
+
+  # A model keeping no column to be named by: `recourse_label` points at one it does not
+  # have, and the crumb over the page would have been blank. What the record prints
+  # itself as names it instead.
+  def test_a_record_with_no_label_column_is_named_by_what_it_prints_as
+    seal = Seal.order(:id).first
+    visit "/places/#{seal.place_id}/seals/#{seal.id}"
+
+    assert_includes body, "#{seal.place.name}, sealed"
+  end
 end
