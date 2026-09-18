@@ -7,16 +7,18 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
-## 5.6.0 - 2026-09-17
+## 5.6.0 - 2026-09-18
 
 * [Feature] A table can be dragged into an order
 
   Back from the 4.0.0 development tree, and opting in the way the map and the calendar do:
-  a model keeping an integer `position` is one a reader arranges by hand. A grip opens each
-  row, dragging it moves the row, and `resource :position, only: :update` — drawn under
-  every index the gem knows about — is where the place it landed is written. The column is
-  the whole of the declaration; `recourse_order` follows it, because the order a table is
-  read in and the order somebody put it in are one fact.
+  a model keeping an integer `position` is one a reader positions by hand. A grip opens each
+  row, dragging it moves the row, and `resource :position, only: :update` is where the place
+  it landed is written. That route is drawn where the host asks for it —
+  `recourses :steps, positionable: true` — and nowhere else: a table is put in order from
+  its index, so the keyword is refused on a resource that draws none. The column still
+  decides everything else, `recourse_order` among it, because the order a table is read in
+  and the order somebody put it in are one fact.
 
   The type is load-bearing rather than belt-and-braces, and asked through
   `type_for_attribute` as a calendar asks about its two ends: `contacts.position` holding a
@@ -24,25 +26,33 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   read, so a column mistaken for one costs a link; this writes, and writes at the first
   save.
 
-  Two things follow the column rather than the routes. `Recourse::Arranged` fills the
+  Two things follow the column rather than the routes. `Recourse::Positionable` fills the
   column on create and closes the gap on destroy, so a row made in a console is numbered
   like one made behind a form — what a drop reports is a row's place on the *page*, which
   is a position only while the numbers run 1, 2, 3 with no holes in them. A model pointing
   several ways answers `recourse_siblings` with the rows one of its own is counted among;
-  one pointing a single way needs no answer, and one pointing nowhere is arranged among
+  one pointing a single way needs no answer, and one pointing nowhere is positioned among
   the whole table.
 
-  Whether a page is arranged is asked per page, not per model: a place means something
-  under the parent it is counted within, so a flat model's own index is arranged and a
+  Whether a page is positioned is asked per page, not per model: a place means something
+  under the parent it is counted within, so a flat model's own index is positioned and a
   listing of every row across every parent — where the positions run 1, 2, 3, 1, 2, 3 side
   by side — is not. And the search box and the sorted headings stand down while the grips
   are drawn, a `q` typed by hand refused with them: a filter shortens the page, and a drop
   on a shortened page reports a place among the rows that are left.
 
   A host keeping the order itself writes `def recourse_position = nil`. A host with a
-  second listing of an arranged model names the second column on its own controller, which
+  second listing of a positioned model names the second column on its own controller, which
   then owns the write as well as the page — `Recourse::PositionsController` is public to
   subclass, and `Recourse::Positioning` is public for the column such a host maintains.
+
+* [Fix] A word that names a class which is not a model
+
+  `known_title` guarded against a name resolving to nothing — `pause` is a verb no app
+  makes a class for — but not against one resolving to a class with no `model_name`. A
+  host may keep a plain `Message` that gathers rows rather than a table of them, and a
+  breadcrumb over such a page raised instead of reading. It asks whether what it found
+  answers `model_name`, the way `known_icon` beside it already does.
 
 * [Feature] `Recourse.assets` says where the house bundle is served from
 

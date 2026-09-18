@@ -1,7 +1,7 @@
 require 'active_support'
 
 module Recourse
-  # Keeps an arranged table numbered 1, 2, 3: a new row lands last among its own, and
+  # Keeps a positioned table numbered 1, 2, 3: a new row lands last among its own, and
   # the gap closes behind one that goes. Both are the gem's own screens' business. The
   # form it draws never asks for a position — a reader sets one by dragging a row, and
   # a box beside the handle would be a second way to say a thing already said — so a
@@ -15,7 +15,7 @@ module Recourse
   # A host maintaining its own order says `def recourse_position = nil` and gets
   # neither callback. What it writes otherwise is `recourse_siblings`, and only where
   # more than one key could be the parent.
-  module Arranged
+  module Positionable
     extend ActiveSupport::Concern
 
     included do
@@ -39,7 +39,7 @@ module Recourse
 
   private
 
-    # A model pointing one way is arranged within what it points at, and one pointing
+    # A model pointing one way is positioned within what it points at, and one pointing
     # nowhere is a whole table in one order. Which of several is the parent is the
     # model's to say: guessing would number a picture among every picture there is,
     # quietly and at the first write.
@@ -68,8 +68,8 @@ module Recourse
   end
 end
 
-# Beside `Recoursive`'s own: a model is arranged by keeping the column, and there is no
+# Beside `Recoursive`'s own: a model is positioned by keeping the column, and there is no
 # second place to say it again.
 ActiveSupport.on_load :active_record do
-  include Recourse::Arranged
+  include Recourse::Positionable
 end

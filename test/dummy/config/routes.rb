@@ -33,18 +33,19 @@ Rails.application.routes.draw do
       # answers it, so the gem does — and a write with no page of its own to land on
       # goes back to the record the button stood on.
       namespace(:quick) { recourses :memos, only: :create }
-      # The second listing of an arranged model, dragged into order by a column the
+      # The second listing of a positionable model, dragged into order by a column the
       # model does not keep. Both halves of it are this app's: the page and the write.
-      recourses :steps, only: :index
+      recourses :steps, only: :index, positionable: true
     end
 
-    recourses :teams, except: :show do
+    recourses :teams, except: :show, positionable: true do
       # A `namespace` between a block and what it nests: the routes and the
       # controller come out under it, and no tab is drawn for a child filed there.
       namespace(:visited) { recourses :places, only: :index }
-      # The table arranged by hand, nested under the parent a place in it is counted
-      # within. Nothing is declared for it: the column is the whole of the opt-in.
-      recourses :steps
+      # The table put in order by hand, nested under the parent a place in it is counted
+      # within. The keyword is what draws the route a drop is reported to; the column is
+      # still what decides whether the grip is drawn and whether the write is allowed.
+      recourses :steps, positionable: true
       # A nested index the parent has no `has_many` for: the whole of a table read
       # under one record. The tab is named after the route, since there is no
       # association to count or to take an icon from.

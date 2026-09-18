@@ -23,7 +23,7 @@ require_relative 'recourse/positions'
 require_relative 'recourse/positioning'
 require_relative 'recourse/writes'
 require_relative 'recourse/zones'
-require_relative 'recourse/arranged'
+require_relative 'recourse/positionable'
 require_relative 'recourse/broadcasting'
 require_relative 'recourse/recoursive'
 require_relative 'recourse/registry'
@@ -64,7 +64,7 @@ module Recourse
 
   # Columns no screen shows: whatever the model asked to hide through `recourse_hidden`
   # — one name or a list, taken either way — the column Rails reserves for single table
-  # inheritance, and the place a row holds where somebody arranged the table. A class
+  # inheritance, and the place a row holds where somebody positioned the table. A class
   # name is machinery rather than something to read out, and a position is set by
   # dragging the row rather than typed beside it.
   def self.hidden_columns(model)

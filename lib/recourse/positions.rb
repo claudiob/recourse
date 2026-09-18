@@ -6,22 +6,22 @@ module Recourse
   # said its rows are in an order, and there is nothing else for a model to declare.
   POSITION_COLUMN = 'position'
 
-  # Whether a model's rows are arranged by hand. Asked of the type the model reports,
+  # Whether a model's rows are positioned by hand. Asked of the type the model reports,
   # as a calendar asks about the two ends of its events — a `position` holding a job
   # title is a word about the row rather than a place among rows, and a table of those
   # is one this must leave alone.
   #
   # The guard earns more here than it does there. A map and a calendar only read, so a
-  # column mistaken for one costs a link nobody follows; arranging writes, and it
+  # column mistaken for one costs a link nobody follows; positioning writes, and it
   # writes at the first save — a new row takes a number and a deleted one closes the
   # gap behind it — so a wrong guess here is a column overwritten rather than a page
   # drawn wrong.
-  def self.arrangeable?(model)
+  def self.positionable?(model)
     model.column_names.include?(POSITION_COLUMN) &&
       model.type_for_attribute(POSITION_COLUMN).type == :integer
   end
 
-  # The column a model is arranged by, or nil where nobody arranges it. The model's
+  # The column a model is positioned by, or nil where nobody positions it. The model's
   # own word rather than the convention, since that is what a host overrides — and nil
   # for a page whose rows answer no model at all.
   def self.position_column(model)
@@ -33,7 +33,7 @@ module Recourse
   # the table already says it.
   def self.position_columns(model) = Array(position_column(model))
 
-  # Whether *this* page is one the arranging means anything on, which is the same
+  # Whether *this* page is one the positioning means anything on, which is the same
   # question as whether the rows it lists are the rows a position is counted within.
   #
   # The association rather than the record it found: a key is what makes every row on
@@ -42,7 +42,7 @@ module Recourse
   # its index is that level too. What is neither is a page listing every row across
   # every parent, where the positions run 1, 2, 3, 1, 2, 3 and mean nothing side by
   # side: that page sorts and searches like any other, and offers no handle.
-  def self.arranges?(model, association)
+  def self.positioned?(model, association)
     return false unless position_column model
 
     association.present? || model.recourse_references.empty?

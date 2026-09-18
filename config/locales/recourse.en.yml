@@ -18,11 +18,11 @@ en:
     ago: "%{distance} ago"
     all: All %{models}
     all_values: All
-    # Why a model pointing several ways cannot be arranged without a word from it.
+    # Why a model pointing several ways cannot be positioned without a word from it.
     ambiguous_position: "%{model} points several ways, so which of them its position is
       counted within is not the gem's to guess. Answer `recourse_siblings` with the rows
-      one of these is arranged among."
-    arrange: Reorder
+      one of these is positioned among."
+    position: Reorder
     as_calendar: Display as calendar
     as_map: Display as map
     as_table: Display as table
@@ -67,6 +67,9 @@ en:
       has no %{model} model.
     nested: You nested `recourses %{names}` inside `resources :%{parent}`, which does
       not namespace what it holds. Nest it under `recourses :%{parent}` instead.
+    unindexed: "You asked for `recourses %{names}, positionable: true`, which draws no
+      index to put in order. A row is dragged from the table that lists it, so there is
+      nowhere for a drop to be reported from."
     # What a menu with several picks reads as, the first named and the rest counted.
     more: "%{first} + %{count} more"
     new: New %{model}

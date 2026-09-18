@@ -44,12 +44,12 @@ module Recourse
       end
 
       # Whether the model lets a heading sort by this column — and whether this table
-      # is one a heading may re-sort at all. An arranged table is read in the order
+      # is one a heading may re-sort at all. A positioned table is read in the order
       # somebody put it in: a drop reports a row's place on the page, which is a
       # position only while the page runs 1, 2, 3, so a heading that re-sorted it would
       # leave the next drag renumbering by the wrong index.
       def sortable_column?(column)
-        return false if arranged?
+        return false if positioned?
 
         resource_model.ransortable_attributes.include? column.to_s
       end

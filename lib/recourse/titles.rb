@@ -26,14 +26,16 @@ module Recourse
       model_title model(name)
     end
 
-    # The same for a name that may resolve to no model at all: an action drawn under
-    # a record still needs a word for its button, and `pause` is a verb this app never
-    # made a class for.
+    # The same for a name that may name no model at all: an action drawn under a record
+    # still needs a word for its button, and `pause` is a verb this app never made a
+    # class for. A word that does resolve is not a model either where what it found has
+    # no `model_name` — `Message` may be a host's own class for gathering rows rather
+    # than a table of them, and asking it would raise rather than read.
     def known_title(name)
       segment = name.to_s.split('/').last
       model = segment.classify.safe_constantize
 
-      model ? model_title(model) : segment.humanize
+      model.respond_to?(:model_name) ? model_title(model) : segment.humanize
     end
 
     # And the singular of that, for the button a bare action earns: `Add sweep` is one

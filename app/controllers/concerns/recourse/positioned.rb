@@ -1,9 +1,9 @@
 module Recourse
-  # Which column a listing is dragged into order by, and so whether it is arranged at
+  # Which column a listing is dragged into order by, and so whether it is positioned at
   # all. Two questions with one answer, asked by the table that draws the grips, by the
   # search and the headings that stand down where they are drawn, and by the write a
   # drop lands on.
-  module Arranging
+  module Positioned
     extend ActiveSupport::Concern
 
     included do
@@ -17,7 +17,7 @@ module Recourse
     # where a place among rows means something: the rows one is counted within are the
     # rows the page lists, which the parent above it settles.
     #
-    # A host overrides it where a listing is arranged by an order the model does not
+    # A host overrides it where a listing is positioned by an order the model does not
     # keep. A plan holds a place among its service's plans and another among every plan
     # of its department, and which of the two a page is in is the page's answer rather
     # than the model's: a model keeps one column, and a second listing is a second
@@ -29,12 +29,12 @@ module Recourse
     # page never showed.
     def recourse_position
       return unless resource_model?
-      return unless Recourse.arranges? resource_class, @recourse_parent_association
+      return unless Recourse.positioned? resource_class, @recourse_parent_association
 
       Recourse.position_column resource_class
     end
 
-    # Whether these rows are ones a reader arranges, which is the same question again.
-    def arranged? = @recourse_position.present?
+    # Whether these rows are ones a reader positions, which is the same question again.
+    def positioned? = @recourse_position.present?
   end
 end

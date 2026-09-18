@@ -1,5 +1,5 @@
 class CreateSteps < ActiveRecord::Migration[8.1]
-  # What a team works through, four steps to a team: the table arranged within a
+  # What a team works through, four steps to a team: the table positioned within a
   # parent, and the one pointing two ways — so it is also what `recourse_siblings`
   # is for.
   STEPS = %w[Gather Assess Repair Report].freeze

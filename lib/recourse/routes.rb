@@ -24,14 +24,15 @@ module Recourse
       keepable = Recourse.bookmarks? && parent_resource.nil?
 
       names.each { |name| declare_resource name }
+      # The host's word, and taken out before Rails sees the rest: `resources` would
+      # refuse a keyword it does not know.
+      positionable = options.delete(:positionable) { false }
       options = default_nested_actions options
-      # Only where there is a table to arrange: the place a row holds is written from
-      # an index and from nowhere else.
-      arrangeable = indexed? options
+      refuse_unindexed_positioning names, positionable, options
 
-      return resources(*names, **options) unless block || keepable || arrangeable
+      return resources(*names, **options) unless block || keepable || positionable
 
-      resources(*names, **options) { draw_within keepable, arrangeable, block }
+      resources(*names, **options) { draw_within keepable, positionable, block }
     end
 
   private
@@ -42,6 +43,14 @@ module Recourse
       path = [current_module, name].compact.join '/'
       record_declaration path
       Controllers.define_missing path
+    end
+
+    # A table is put in order from its index and from nowhere else, so asking for the
+    # route without drawing one is a host saying two things that cannot both hold.
+    def refuse_unindexed_positioning(names, positionable, options)
+      return unless positionable && !indexed?(options)
+
+      raise Error, I18n.t('recourse.unindexed', names: names.map(&:inspect).join(', '))
     end
 
     # Whether `index` survived the `only:` or `except:` the host wrote. Neither of

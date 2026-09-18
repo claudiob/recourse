@@ -1,7 +1,7 @@
 module Recourse
   module Helpers
-    # What a table somebody arranges by hand draws, and what it stops drawing.
-    module Arrangements
+    # What a table somebody positions by hand draws, and what it stops drawing.
+    module Positions
       # The concept the grip beside each row is drawn as, named for an icon set to
       # answer for rather than spelled as one set's own class: Bootstrap draws it
       # `grip-vertical`, iOS as the three bars it has used for a reorder grabber
@@ -11,18 +11,18 @@ module Recourse
     private
 
       # The column these rows are dragged into order by, which the controller settled
-      # before the page began: a listing may be arranged by a column the model never
+      # before the page began: a listing may be positioned by a column the model never
       # nominated, and only the controller knows which.
-      def arrangement_column = controller_assign('recourse_position')
+      def position_column = controller_assign('recourse_position')
 
-      # Whether these rows are ones a reader arranges, which is the same question.
-      def arranged? = arrangement_column.present?
+      # Whether these rows are ones a reader positions, which is the same question.
+      def positioned? = position_column.present?
 
       # The grip's heading: the icon on the header row, since the column is as narrow
       # as what sits in it, and the word in every other for the `data-cell` a stacked
       # table labels itself with.
-      def arrangement_header
-        label = t 'recourse.arrange'
+      def position_header
+        label = t 'recourse.position'
         return label unless @recourse_headers
 
         icon_heading HANDLE, label
@@ -30,12 +30,12 @@ module Recourse
 
       # The grip itself. A method rather than the constant, so a template reaches for
       # nothing a view context cannot resolve.
-      def arrangement_handle = icon_tag(HANDLE)
+      def position_handle = icon_tag(HANDLE)
 
       # What the body carries so a drop knows what it is counting from: the rows are a
       # page rather than the table, so the index a drag reports is short by whatever
       # the pages before it hold.
-      def arrangement_data(pagy)
+      def position_data(pagy)
         {
           controller: 'sortable', sortable_offset_value: pagy&.offset.to_i,
           sortable_message_value: t('recourse.position_updated'),
@@ -45,7 +45,7 @@ module Recourse
       # And what each row carries: where to write the place it ends up. One URL per
       # row rather than one template on the body, so a host's own row partial and a
       # nested table alike are addressed by the routes rather than by string-building.
-      def arrangement_url(record)
+      def position_url(record)
         url_for controller: "/#{controller.controller_path}/positions", action: :update,
                 "#{resource_key}_id": record
       end

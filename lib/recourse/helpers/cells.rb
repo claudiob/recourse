@@ -31,12 +31,12 @@ module Recourse
       # names, the timestamps and every JSON payload — what a machine keeps rather than
       # what a row is about — whatever the model asked to hide, the one of these a host
       # decides without the override above, and the column *this page* is dragged into
-      # order by, where a host arranged a second listing by one the model never keeps.
+      # order by, where a host positioned a second listing by one the model never keeps.
       def columns_hidden_by_default
         [
           resource_model.recourse_encrypted_names, resource_model.primary_key, TIMESTAMPS,
           resource_parent_association&.foreign_key, json_columns,
-          Recourse.hidden_columns(resource_model), arrangement_column,
+          Recourse.hidden_columns(resource_model), position_column,
         ].flatten.compact
       end
 

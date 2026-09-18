@@ -20,10 +20,10 @@ module Recourse
       # earns it — a table with nothing worth searching may still be worth filtering,
       # and a model whose only columns are an enum and a foreign key is the case.
       def search_form
-        # Nor on a table somebody arranges, for the reason a heading stands down: a
+        # Nor on a table somebody positions, for the reason a heading stands down: a
         # search or a filter shortens the page, and a drop on a shortened one reports
         # a place among the rows that are left rather than a position in the table.
-        return if arranged?
+        return if positioned?
 
         field = resource_search_field
         filters = resource_filter_fields

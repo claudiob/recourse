@@ -3,7 +3,7 @@ module Recourse
   # its own behavior above it — `class RecoursesController < Recourse::BaseController`
   # with a `before_action :authenticate!` guards every screen the gem serves.
   class BaseController < ApplicationController
-    include Pagy::Method, Arranging, AttachmentResolution, AttachmentWriting,
+    include Pagy::Method, Positioned, AttachmentResolution, AttachmentWriting,
             Landing, Paging, ListResolution, ParentNaming,
             ParentResolution, ReferenceResolution, ResourceResolution,
             Weeks, Zoning
@@ -22,7 +22,7 @@ module Recourse
     # Lists one page of the model the route is named after, or one week of it where the
     # calendar was asked for — a week is how much that shape shows. `@q` is Ransack's own.
     def index
-      search = Search.new recourse_relation, params[:q], arranged: @recourse_position
+      search = Search.new recourse_relation, params[:q], positioned: @recourse_position
       @q = search.query
 
       @pagy, @resources = week_or_page search.scope

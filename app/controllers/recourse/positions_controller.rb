@@ -1,5 +1,5 @@
 module Recourse
-  # The place one row holds in a table somebody arranged: written by a drag, and never
+  # The place one row holds in a table somebody positioned: written by a drag, and never
   # read back here. The path names the row and the route names the rows it is counted
   # among, so a position is all there is to submit.
   class PositionsController < ::RecoursesController
@@ -12,7 +12,7 @@ module Recourse
     # with nothing at all, the row being already where it was dropped, and redrawing
     # the table under the cursor that dropped it is what this avoids.
     def update
-      positioning = Positioning.new recourse_relation, arranged_column
+      positioning = Positioning.new recourse_relation, positioned_column
       positioning.move moved_record, params.expect(:position)
 
       head :no_content
@@ -20,16 +20,16 @@ module Recourse
 
   private
 
-    # The model this arranges, read off the listing the route was nested under rather
+    # The model this positions, read off the listing the route was nested under rather
     # than off this controller's own name, which is always `positions`.
     def recourse_model = Recourse.model(listing_path)
 
     def moved_record = resource_class.find(params.expect(:"#{listing_name}_id"))
 
-    # A table nobody arranges draws no handle, so the only way here is by hand — which
+    # A table nobody positions draws no handle, so the only way here is by hand — which
     # earns a 404 rather than a 500 from somewhere below.
-    def arranged_column
-      raise ActiveRecord::RecordNotFound unless arranged?
+    def positioned_column
+      raise ActiveRecord::RecordNotFound unless positioned?
 
       @recourse_position
     end

@@ -17,7 +17,7 @@ combobox narrowed by another; and the `values:` shape of a `filter_fields` entry
 Fountain and autopilot use several of those and do not run on 4.0.0.
 
 Back since this was written: the map (5.2.0), a record's files (5.3.0), the calendar
-(5.4.0) and tables arranged by drag (5.6.0). The nine color palettes were never dropped —
+(5.4.0) and tables positioned by drag (5.6.0). The nine color palettes were never dropped —
 they moved to the design bundle, which is what `Recourse::THEMES` names and
 `Recourse.assets` serves.
 

@@ -6,14 +6,14 @@ module Recourse
     private
 
       # What a resource holds: the square that keeps one of its rows, the place a row
-      # holds in a table somebody arranged, and whatever the host's own block declared —
+      # holds in a table somebody positioned, and whatever the host's own block declared —
       # each under the resource's own module, which is what every nested page relies on.
-      def draw_within(keepable, arrangeable, block)
+      def draw_within(keepable, positionable, block)
         addressable = addressable_rows?
 
         scope module: parent_resource.name do
           draw_bookmark if keepable && addressable
-          draw_position if arrangeable && addressable
+          draw_position if positionable && addressable
           instance_exec(&block) if block
         end
       end
@@ -26,7 +26,7 @@ module Recourse
       # loading a model while the routes draw is what Rails 8.2 warns about.
       def addressable_rows? = Object.const_defined? Recourse.model_name(parent_resource.name)
 
-      # The place a row of an arranged table holds, at `/teams/5/position`. Recorded
+      # The place a row of a positioned table holds, at `/teams/5/position`. Recorded
       # nowhere, for the reason the bookmark gives: a tab and a bare-action button both
       # look under a resource, and this is neither. Drawn wherever an index is —
       # whether a model keeps a position column is a question for a request, and asking

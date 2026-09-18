@@ -1,5 +1,5 @@
 module Recourse
-  # Moves one row of an arranged table to a place in it, and closes the gap it leaves
+  # Moves one row of a positioned table to a place in it, and closes the gap it leaves
   # by shifting whatever it displaced one step the other way.
   class Positioning
     # The rows a position is counted within, and the column it is counted in. A
@@ -12,7 +12,7 @@ module Recourse
 
     # Puts the record at `position`, counting from one and never past the end — a drag
     # reports where a row was dropped, and a page is not the whole table. That the two
-    # agree at all is what `Arranged` is for: a drop names a row's place on the page,
+    # agree at all is what `Positionable` is for: a drop names a row's place on the page,
     # which is a position only while the table runs 1, 2, 3 with no gaps in it.
     def move(record, position)
       target = position.to_i.clamp 1, @relation.count
