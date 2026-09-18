@@ -29,7 +29,7 @@ module Recourse
       # Nothing to disclose is nothing to mask: an encrypted column the record has no
       # value for reads as the dash, rather than as one asterisk hiding one.
       def value_control(column)
-        return masked_value formatted_value(column) if masked? column
+        return masked_value column if masked? column
 
         tag.div resource_value(column), class: 'form-control-plaintext'
       end
@@ -41,7 +41,11 @@ module Recourse
       # PII is a page's to show and nobody's to leak by accident, so it arrives as one
       # asterisk per character with the plaintext in an attribute the reveal reads: a
       # screenshot of the page discloses nothing, and reading one value takes a click.
-      def masked_value(value)
+      # What the column holds rather than what a cell would make of it: the reveal
+      # writes what it is given as text, so markup would be read out as markup -- and
+      # one asterisk per character of a tag counts nothing anybody is hiding.
+      def masked_value(column)
+        value = resource_record.attributes[column].to_s
         options = {
           class: 'form-control-plaintext d-flex gap-2 align-items-end',
           data: { controller: 'reveal', reveal_plain_value: value },

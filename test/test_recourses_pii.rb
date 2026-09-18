@@ -44,6 +44,22 @@ class TestRecoursesPii < IntegrationCase
     refute_includes body, '>SEC-0000<'
   end
 
+  # And what the column holds rather than what a cell would make of it. A cell draws a
+  # web address as a link and a phone as a span the bundle dresses, which is markup --
+  # and the reveal writes what it is handed as text, so the page would read out the tags
+  # while one asterisk per character counted them.
+  def test_a_masked_value_is_what_the_column_holds_rather_than_the_markup_a_cell_draws
+    place = Place.order(:id).first
+    notes = place.notes
+    place.update! notes: 'https://example.com/a'
+    visit "/places/#{place.id}"
+
+    assert_includes body, 'data-reveal-plain-value="https://example.com/a"'
+    assert_includes body, %(<span data-reveal-target="mask">#{'*' * 21}</span>)
+  ensure
+    place&.update! notes: notes
+  end
+
   # And a label the search could never match is not one to build a term from. The type
   # says nothing here — encryption leaves a column's type alone — so it is the
   # allowlist that answers: a `cont` against ciphertext matches nothing, and Ransack
