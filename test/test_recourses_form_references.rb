@@ -5,7 +5,7 @@ require 'integration_case'
 # and whether the menu offers a way to point at nothing.
 class TestRecoursesFormReferences < IntegrationCase
   # A foreign key is picked or typed by what the other table can offer: three teams
-  # fit in a menu, and 101 ZIPs do not — so one is a combobox and the other is a
+  # fit in a menu, and 201 ZIPs do not — so one is a combobox and the other is a
   # field asking for the label itself, under the foreign key's own name, carrying
   # that label's length so the browser can hold it to five characters.
   def test_a_reference_is_a_menu_or_a_field_by_what_it_points_at

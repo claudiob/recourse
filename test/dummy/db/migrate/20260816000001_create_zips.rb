@@ -27,7 +27,7 @@ class CreateZips < ActiveRecord::Migration[8.1]
 private
 
   def zip_rows
-    values = (1..101).map do |number|
+    values = (1..201).map do |number|
       code = format '%05d', 90_000 + number
       fips = format '%05d', number * 7
       "('#{code}', '#{fips}', 'Town #{format '%03d', number}', 0, #{now}, #{now})"

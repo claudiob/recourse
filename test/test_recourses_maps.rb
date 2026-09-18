@@ -12,18 +12,18 @@ class TestRecoursesMaps < IntegrationCase
     assert_includes body, %(href="/readings.map?page=7">Display as map</a>)
     refute_includes body, 'data-controller="map"'
 
-    visit '/readings.map?page=7'
+    visit '/readings.map?page=14'
 
-    assert_includes body, %(href="/readings?page=7">Display as table</a>)
+    assert_includes body, %(href="/readings?page=14">Display as table</a>)
     assert_includes body, 'data-controller="map"'
     # This page's rows and no others, in the order the table reads them — deepest first.
     # A reading is no geography, so its places are pins: no layer is named.
-    first, last = Reading.find(11, 1).map(&:google_place_id)
+    first, last = Reading.find(6, 1).map(&:google_place_id)
 
     assert_includes body, %(data-map-places-value="[&quot;#{first}&quot;,)
     assert_includes body, %(&quot;#{last}&quot;]")
     refute_includes body, 'data-map-boundary-value'
-    assert_includes body, 'Displaying items 91-101 of 101'
+    assert_includes body, 'Displaying items 196-201 of 201'
     refute_includes body, '<table'
   end
 

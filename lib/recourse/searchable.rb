@@ -10,9 +10,11 @@ module Recourse
   module Searchable
     include Columns, Filters, Terms
 
-    # How many rows a menu may hold before it stops being a menu. Fifty states are a
-    # list to pick from; three thousand counties are a page of HTML nobody reads.
-    MENU_LIMIT = 100
+    # How many rows a menu may hold before it stops being a menu. A couple of hundred
+    # specialties are a list to pick from -- the menu carries a search box, so its length
+    # costs scrolling rather than reading -- and three thousand counties are a page of
+    # HTML nobody reads.
+    MENU_LIMIT = 200
 
     # Attributes Ransack may read: every column that is not encrypted, plus the
     # encrypted ones a search can still match whole — `cont` reads ciphertext and

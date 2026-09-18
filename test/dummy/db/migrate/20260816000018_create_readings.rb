@@ -22,7 +22,7 @@ class CreateReadings < ActiveRecord::Migration[8.1]
 private
 
   def reading_rows
-    values = (1..101).map { |number| "(#{number * 3}, #{now}, #{now})" }
+    values = (1..201).map { |number| "(#{number * 3}, #{now}, #{now})" }
 
     <<~SQL.squish
       insert into readings (depth, created_at, updated_at) values #{values.join ', '}

@@ -31,4 +31,15 @@ class TestRecoursesDeletions < IntegrationCase
     assert_equal 303, @session.response.status
     refute Person.exists?(person.id)
   end
+
+  # The button that deletes a row leaves the frame the table is drawn in. What the delete
+  # lands on is the index again with a message over it, and the message is drawn outside
+  # that frame -- so answering inside it would take the row away and say nothing.
+  def test_the_button_deleting_a_row_answers_outside_the_tables_frame
+    place = Place.joins(:photos_attachments).order(:id).first
+    visit "/places/#{place.id}/photos"
+    form = body[%r{<form[^>]*class="button_to"[^>]*action="[^"]*/photos/\d+"[^>]*>}]
+
+    assert_includes form, 'data-turbo-frame="_top"'
+  end
 end

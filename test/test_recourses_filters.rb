@@ -20,7 +20,7 @@ class TestRecoursesFilters < IntegrationCase
     assert_includes menu_for('q[active_in][]'), '<option value="true">true</option>'
     assert_includes menu_for('q[active_in][]'), 'data-combobox-all-value="All"'
     assert_includes body, 'name="q[team_id_in][]"'
-    # No menu for the ZIP: 101 rows are more than a menu offers, so the box reaches
+    # No menu for the ZIP: 201 rows are more than a menu offers, so the box reaches
     # through that key instead and a filter would only ask the same thing twice.
     refute_includes body, 'q[zip_id_in]'
     visit "/places?q%5Bstatus_in%5D=#{Place.statuses.keys.last}"
