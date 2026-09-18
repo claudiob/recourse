@@ -33,6 +33,18 @@ module Recourse
         drawn.filter_map { |one| one.try :updated_at }.max&.utc&.to_fs :usec
       end
 
+      # The counts the rows draw, which the version above cannot see. A counter cache is
+      # written by `update_counters`, which moves no timestamp, so a row whose children
+      # changed is a row `MAX(updated_at)` still calls unchanged -- and the table went on
+      # showing the count it was cached with. Read off the rows in memory like the
+      # version is, so this costs no query either.
+      def counters_version(rows)
+        columns = resource_model.recourse_counters.keys
+        return if columns.empty?
+
+        rows.map { |row| row.attributes.values_at(*columns) }
+      end
+
       # Every record the rows reach along `includes`, in any shape `includes` accepts:
       # a name, a list of them, or a hash naming what to follow from there.
       def reached(rows, names)

@@ -32,6 +32,25 @@ class TestRecoursesCaching < IntegrationCase
     zip.update! code: code
   end
 
+  # A counter cache is written by `update_counters`, which moves no timestamp, so the
+  # version above calls the row unchanged and the table would go on showing the number
+  # it was cached with. The counts the rows draw are in the key for that reason.
+  def test_a_table_redraws_when_a_count_its_rows_draw_changes
+    person = Person.order(:id).first
+    place = Place.where.not(person: person).order(:id).first
+    owner = place.person
+    visit '/people'
+
+    assert_includes body, %(aria-label="#{person.places_count} Places")
+
+    place.update! person: person
+    visit '/people'
+
+    assert_includes body, %(aria-label="#{person.reload.places_count} Places")
+  ensure
+    place&.update! person: owner
+  end
+
   # And the version is read off the records the index eager-loaded rather than asked
   # for: the ZIPs of a page are fetched once, for the cells that name them.
   def test_reading_that_version_costs_no_query_of_its_own

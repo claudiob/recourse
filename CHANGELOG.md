@@ -7,6 +7,19 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 5.6.2 - 2026-09-18
+
+* [Fix] A kept table notices a count that changed
+
+  The key a table is cached under carried the rows, the newest `updated_at` among them and
+  everything they reach along `includes` — but not the counts they draw. A counter cache is
+  written by `update_counters`, which moves no timestamp, so a row whose children changed is
+  one `MAX(updated_at)` still calls unchanged: an agent who claimed two contacts went on
+  reading `0 contacts` until something else wrote to the agent.
+
+  The counts go in the key beside the version. They are read off the rows already in memory,
+  so this costs no query, the way reading that version costs none.
+
 ## 5.6.1 - 2026-09-18
 
 * [Change] The pinned bundle is `houseaccount@0.14.2`
