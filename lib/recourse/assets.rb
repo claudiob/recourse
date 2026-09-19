@@ -5,7 +5,7 @@ module Recourse
   # release. A published version is never written again, so the bytes behind these URLs
   # cannot move under us, and a change to the bundle reaches these pages when somebody
   # moves this line and not before.
-  BUNDLE = '0.16.0'
+  BUNDLE = '0.17.0'
 
   class << self
     # Where that release is served from, with no trailing slash. jsdelivr's copy of the
