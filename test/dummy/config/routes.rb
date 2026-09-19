@@ -47,6 +47,10 @@ Rails.application.routes.draw do
       # The second listing of a positionable model, dragged into order by a column the
       # model does not keep. Both halves of it are this app's: the page and the write.
       recourses :steps, only: :index, positionable: true
+      # A nested index this person has no association for, of a model whose name is an
+      # acronym: the tab reads `ZIPs`, as the sidebar does, rather than the `Zips` the
+      # path humanizes to.
+      recourses :zips, only: :index
     end
 
     recourses :teams, except: :show, positionable: true do

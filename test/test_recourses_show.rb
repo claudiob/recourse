@@ -87,6 +87,15 @@ class TestRecoursesShow < IntegrationCase
                     body.index(%(href="/people/#{person.id}/memos"))
   end
 
+  # And a tab named after the route is named the way the sidebar names the same
+  # resource: the model's own word, not what the path humanizes to.
+  def test_a_tab_with_no_association_behind_it_takes_the_model_word
+    person = Person.order(:id).first
+    visit "/people/#{person.id}"
+
+    assert_includes body, %(href="/people/#{person.id}/zips">ZIPs</a>)
+  end
+
   # A model keeping no column to be named by: `recourse_label` points at one it does not
   # have, and the crumb over the page would have been blank. What the record prints
   # itself as names it instead.

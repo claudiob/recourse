@@ -22,14 +22,15 @@ module Recourse
       end
 
       # `Messages`, and `Booked messages` where a namespace leads — the same shape
-      # the counted tab keeps. Humanized off the path for an index, since nothing else
-      # answers; the model's own singular for one record, since there is a model to ask
-      # and only ever one row of it. That singular is the word the bare action's button
-      # takes, from the same split, so a tab and a button under one record cannot come
-      # to disagree about what the resource is called.
+      # the counted tab keeps. The model's own word either way, plural for an index and
+      # singular for the one record a singular resource keeps, humanized off the path
+      # only where the name resolves to no model: a tab reading `Zips` beside a sidebar
+      # reading `ZIPs` is one resource called two things. That singular is the word the
+      # bare action's button takes, from the same split, so a tab and a button under one
+      # record cannot come to disagree about what the resource is called.
       def routed_tab_name(name, namespace, action)
         lead = namespace_words namespace
-        title = action == :show ? Recourse.known_singular(name) : name.humanize
+        title = action == :show ? Recourse.known_singular(name) : Recourse.known_title(name)
         title = Recourse.downcase title if lead.present?
 
         [lead.presence&.upcase_first, title].compact.join ' '
