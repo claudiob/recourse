@@ -32,9 +32,13 @@ module Recourse
       # record's crumb links to its show page, where one is routed to link to.
       def parent_breadcrumbs
         parent = resource_parent
-        return [] unless parent
+        path = Recourse.parent_of controller.controller_path if parent
+        # A host may nest a page with Rails' own `resource`, which records nothing here:
+        # the page is still under a record and still knows which one, and only where the
+        # parent's own pages live is unknown. Its crumbs are what is dropped, rather than
+        # the page they would have stood over.
+        return [] unless path
 
-        path = Recourse.parent_of controller.controller_path
         [
           [path, Recourse.title(path), parent_url(path, :index)],
           [nil, parent_title(parent), parent_url(path, :show, id: parent)],
