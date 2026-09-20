@@ -16,6 +16,8 @@ class CreatePlaces < ActiveRecord::Migration[8.1]
       t.string :type
 
       t.integer :capacity, null: false
+      # Written by the database out of the column above it, and so never typed into a form.
+      t.virtual :roomy, type: :boolean, as: '(capacity > 20)', stored: true
       t.float :rating
       t.decimal :area, precision: 8, scale: 2
       t.monetary :hourly_rate

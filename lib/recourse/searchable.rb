@@ -47,11 +47,13 @@ module Recourse
     # True where a foreign key pointing here is typed rather than picked, which a
     # form and the controller reading its parameters back have to agree on: the label
     # is bounded, or the table is too long to list.
+    # @api private
     def recourse_typed_reference? = recourse_typed_label? || !recourse_listable?
 
     # True where every row of this model could be listed in one menu. The count is
     # bounded, so the question costs the same on ten rows as on ten million, and it
     # is asked once per class — a table that crosses the line is noticed at boot.
+    # @api private
     def recourse_listable?
       return @recourse_listable unless @recourse_listable.nil?
 

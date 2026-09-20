@@ -2,6 +2,7 @@ module Recourse
   module Searchable
     # What a model's own schema offers a search: which of its columns are worth
     # looking through, and which of its foreign keys are worth looking past.
+    # @api private
     module Columns
       # Column types a search box can match on containment. An enum is a Postgres
       # type of its own, and what it holds is a word, so it reads as a string too.

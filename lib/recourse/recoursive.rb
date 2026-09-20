@@ -25,10 +25,12 @@ module Recourse
     # `%i[created_at updated_at]` asks for the two Rails keeps rather than the two
     # a record is about. A timestamp named here still lands last, and in that order,
     # whichever way round it was written.
+    # @api private
     def recourse_displayed = []
 
     # `ZIP code`: what to call a foreign key pointing here. A form's label, a table's
     # heading and a search prompt all name the same thing, so they name it once.
+    # @api private
     def recourse_reference_name
       attribute = Recourse.downcase human_attribute_name(recourse_label)
 
@@ -37,6 +39,7 @@ module Recourse
 
     # True when the label has a length, so it is short enough to be typed and a
     # form can ask for the value instead of listing every record to pick from.
+    # @api private
     def recourse_typed_label?
       validators_on(recourse_label).any? ActiveModel::Validations::LengthValidator
     end

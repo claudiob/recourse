@@ -7,6 +7,24 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.1.0 - 2026-09-20
+
+* [CHANGE] The card draws the button that deletes what the page is about
+
+  It was drawn by the gem's own `edit` template, so a host writing a template of its own
+  lost it and wrote `destroy_resource_button` back by hand. The card draws it now, the way
+  it draws the tabs and the buttons beside the trail, and a host's page is its body alone.
+
+  A record's own page carries it, whichever of the two is open, so a resource routed to be
+  read and deleted but never changed is deleted from the page that reads it. Nothing gains
+  the ability to delete what it could not: a route without `destroy` draws no button.
+
+* [CHANGE] A column the database generates is never offered on a form
+
+  Postgres writes a stored generated column out of the others and takes no value for one,
+  so a field for it would be refused whatever was typed. Such a column is read on every
+  other screen as before.
+
 ## 7.0.0 - 2026-09-19
 
 * [BREAKING] What a page counts is the gem's to work out

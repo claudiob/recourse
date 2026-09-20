@@ -12,10 +12,18 @@ module Recourse
 
     private
 
+      # The record a page may delete: the one it is about, on its own look or its own
+      # change page. A nested index wears the parent's card and deletes nothing from it.
+      # @api private
+      def destroyable_record
+        resource_record if controller.action_name.in? %w[show edit]
+      end
+
       # Deletes the record on the page, or nothing at all where no action is routed
       # to delete it with — the same two guards the edit link answers to.
+      # @api private
       def destroy_resource_button(record)
-        path = destroy_resource_path record
+        path = record && destroy_resource_path(record)
         return unless path
 
         confirm_button_to t('recourse.delete', model: resource_name), path,
@@ -24,6 +32,7 @@ module Recourse
                           form_class: 'd-inline-block'
       end
 
+      # @api private
       # What deleting this record takes with it, counted a level down and no further:
       # a state reaches counties, then ZIPs, then locations, and counting that far
       # would join 40,965 rows to draw one page.

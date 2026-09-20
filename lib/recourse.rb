@@ -59,10 +59,11 @@ module Recourse
 
   # Columns a user may set: the form offers these, the show page reads these out, and
   # `create` permits these. A counter cache is none of a user's business — Rails keeps
-  # it, so a form that offered one would let it be typed over.
+  # it, so a form that offered one would let it be typed over, and neither is a column
+  # the database generates: it takes no value at all.
   def self.editable_columns(model)
     ordered model, model.column_names - ['id', *TIMESTAMPS] - counters(model).keys -
-                   hidden_columns(model)
+                   hidden_columns(model) - virtual_columns(model)
   end
 
   # Columns no screen shows: whatever the model asked to hide through `recourse_hidden`

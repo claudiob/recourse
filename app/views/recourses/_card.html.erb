@@ -4,7 +4,10 @@
 <%# Every bare action the routes drew under this record: a nested resource with no
     index of its own is reached from nowhere, so its button sits beside the
     breadcrumbs wherever the record is shown, on whichever of its pages that is. -%>
+<%# The button that deletes what the page is about, drawn here rather than in a template
+    so a host writing its own show or edit keeps it without asking. -%>
 <% content_for :actions do %>
+  <%= destroy_resource_button destroyable_record %>
   <% bare_action_buttons(record).each do |label, path, method| %>
     <%= button_to label, path, method:, form_class: 'ms-3',
                                class: 'btn theme-primary btn-sm btn-solid' %>

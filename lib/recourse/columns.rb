@@ -1,6 +1,14 @@
 # Reopened for the order a row reads in, which a table, a show page and a form all ask
 # for the same way.
 module Recourse
+  # Columns the database writes itself out of the others, which a form never offers: a
+  # stored generated column takes no value, and Postgres refuses the one a form would send.
+  # @param model [Class] the model the page is about.
+  # @return [Array<String>] the names of its generated columns.
+  def self.virtual_columns(model)
+    model.columns.select(&:virtual?).map(&:name)
+  end
+
   # Which part of a row a column belongs to. What a column holds is the gem's to know
   # and where the schema put it is the host's, so both have a say: the kind picks the
   # band, and the order inside the band is the one the table already has. Extended onto

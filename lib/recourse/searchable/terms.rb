@@ -15,6 +15,7 @@ module Recourse
       # and the labels behind foreign keys — less the one `except:` names — on
       # containment; or, for a model that keeps nothing in plaintext worth
       # searching, its encrypted columns, whole.
+      # @api private
       def recourse_search_terms(except: nil)
         plain = recourse_searchable_columns + recourse_searchable_references(except:)
         return [plain, 'cont'] if plain.any?
@@ -23,6 +24,7 @@ module Recourse
       end
 
       # Those same terms as words, lower case but for the acronyms among them.
+      # @api private
       def recourse_search_names(except: nil)
         fields, = recourse_search_terms(except:)
 
@@ -33,6 +35,7 @@ module Recourse
 
       # A term is a column of this model, or a `zip_code` reaching through one of its
       # foreign keys — which a form and a table already have a name for.
+      # @api private
       def recourse_term_name(field)
         reached = recourse_searchable_associations.find { |one| field.start_with? "#{one.name}_" }
         return reached.klass.recourse_reference_name if reached

@@ -32,6 +32,20 @@ class TestRecoursesDeletions < IntegrationCase
     refute Person.exists?(person.id)
   end
 
+  # A record's own page carries the button, whichever of its two pages is open: a
+  # resource routed to be read and deleted but never changed is deleted from the page
+  # that reads it. A nested index wears the parent's card and offers nothing of the kind.
+  def test_a_record_is_deleted_from_whichever_of_its_own_pages_is_open
+    place = Place.order(:id).first
+    visit "/places/#{place.id}"
+
+    assert_includes body, 'Delete place'
+    assert_includes CGI.unescape_html(body[/data-turbo-confirm="([^"]*)"/, 1]), "Delete #{place.name}?"
+    visit "/people/#{Person.order(:id).first.id}/places"
+
+    refute_includes body, 'Delete person'
+  end
+
   # The button that deletes a row leaves the frame the table is drawn in. What the delete
   # lands on is the index again with a message over it, and the message is drawn outside
   # that frame -- so answering inside it would take the row away and say nothing.

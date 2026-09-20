@@ -50,6 +50,10 @@ class TestRecoursesForm < IntegrationCase
     %w[capacity active status zip_id].each do |column|
       assert_includes body, %(aria-describedby="place_#{column}_help")
     end
+    # A column the database writes out of another is read on every other screen and
+    # offered on none: a generated column takes no value, so a field for one would be
+    # refused whatever was typed into it.
+    refute_includes body, 'place[roomy]'
     # A list is typed one value to a line, and reads back the same way: a box left to
     # fetch an Array for itself would print the brackets.
     # The leading newline is Rails': a browser strips one from inside a `<textarea>`,
