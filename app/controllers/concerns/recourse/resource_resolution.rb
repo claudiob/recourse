@@ -33,6 +33,18 @@ module Recourse
       redirect_to url_for(action: :new) if Recourse.routed? controller_path, 'new'
     end
 
+    # And the other way, before a form is drawn: a singular resource holds at most one,
+    # so where the parent already keeps it there is nothing for `new` to make and the
+    # page that reads it answers instead. The mirror of `missing_record`, which sends a
+    # reader here when there is none yet. Where no `show` is drawn the form stands, that
+    # being the only page the routes gave this record.
+    def redirect_to_existing_record
+      return unless singular_reflection && Recourse.routed?(controller_path, 'show')
+      return unless @recourse_parent.association(singular_reflection.name).reader
+
+      redirect_to url_for(action: :show)
+    end
+
     def assign(record)
       @recourse = record
       instance_variable_set "@#{controller_name.singularize}", record
@@ -75,30 +87,6 @@ module Recourse
       return controller_name.singularize.humanize if attachment_reflection
 
       resource_class.model_name.human
-    end
-
-    # What a form may submit: every column a user may set, less the ones the model
-    # keeps off its screens. The other thing a host overrides, and for the same
-    # reason as `recourse_relation` — a form of its own asks for what it asks for,
-    # which may be a hidden column or an attribute that is no column at all:
-    # `def resource_params = params.expect(provider: %i[name cid])`.
-    def resource_params
-      # The parent is merged after resolving, so the one the route names is never
-      # mistaken for a label; the files go no further than the permit that let them
-      # through, being attached rather than assigned.
-      submitted_attributes.except(*Recourse.attachment_names(resource_class))
-                          .merge parent_columns
-    end
-
-    # What the form sent, with a typed reference read back as the id it names. A bare
-    # `Create` submits no attributes at all, so the key may be absent: the parent a
-    # nested route names is everything such a record starts from.
-    def submitted_attributes
-      permitted = Recourse.editable_columns(resource_class) + attachment_filters
-      key = controller_name.singularize.to_sym
-      return {} unless params.key? key
-
-      resolve_lists resolve_references(params.expect(key => permitted))
     end
   end
 end

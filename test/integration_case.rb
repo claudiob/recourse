@@ -46,4 +46,9 @@ private
   ensure
     ActiveSupport::Notifications.unsubscribe subscription
   end
+
+  # One combobox's select, from its opening tag to its closing one.
+  def menu_for(name)
+    body[%r{<select name="#{Regexp.escape name}".*?</select>}m]
+  end
 end

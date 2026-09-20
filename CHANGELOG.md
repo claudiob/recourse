@@ -7,6 +7,22 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.4.0 - 2026-09-20
+
+* [CHANGE] A singular resource that has its record reads it rather than offering a form
+
+  `new` drew a form for a second record where the parent already kept one. At most one is
+  what singular means, so the reader is sent to the page that reads it — the mirror of the
+  redirect that already sent them to `new` when there was none yet. Before the action
+  rather than inside it, so a host writing its own `new` gets it too.
+
+* [FIX] Every file in the gem is under a hundred lines again
+
+  Seven of them had grown past it. Each split along a seam it already had: web addresses
+  out of `Formats`, the trail out of `Navigation`, the counter lookups into `Counters`,
+  what a form sent into `ParameterResolution`, and which columns a screen uses apart from
+  what order they read in.
+
 ## 7.3.0 - 2026-09-20
 
 * [CHANGE] A boolean reads as the word a reader answers with

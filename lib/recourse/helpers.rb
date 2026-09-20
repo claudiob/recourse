@@ -3,6 +3,7 @@ require_relative 'helpers/positions'
 require_relative 'helpers/attachments'
 require_relative 'helpers/blobs'
 require_relative 'helpers/bookmarks'
+require_relative 'helpers/breadcrumbs'
 require_relative 'helpers/buttons'
 require_relative 'helpers/calendars'
 require_relative 'helpers/cards'
@@ -24,6 +25,7 @@ require_relative 'helpers/formats'
 require_relative 'helpers/inputs'
 require_relative 'helpers/kinds'
 require_relative 'helpers/limits'
+require_relative 'helpers/links'
 require_relative 'helpers/maps'
 require_relative 'helpers/names'
 require_relative 'helpers/navigation'
@@ -51,14 +53,13 @@ require_relative 'helpers/zones'
 module Recourse
   # View helpers for the pages the gem renders, and what the parts share.
   module Helpers
-    include Actions, Positions, Attachments, Blobs, Bookmarks, Buttons, Calendars, Cards,
-            Cells, Choices, Colors, Comboboxes, Constraints, Counters, Deletions, Densities,
-            Details,
-            Events, Examples, Fields, Filters, Flashes, Formats, Inputs, Kinds, Limits, Maps,
-            Names, Navigation, Parents, Pictures, Previews, References, Refreshes,
-            Routing,
-            Resources, Rows, Searches, Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs,
-            Themes, Times, Values, Weeks, Zones
+    include Actions, Positions, Attachments, Blobs, Bookmarks, Breadcrumbs, Buttons,
+            Calendars, Cards, Cells, Choices, Colors, Comboboxes, Constraints, Counters,
+            Deletions, Densities, Details, Events, Examples, Fields, Filters, Flashes,
+            Formats, Inputs, Kinds, Limits, Links, Maps, Names, Navigation, Parents,
+            Pictures, Previews, References, Refreshes, Routing, Resources, Rows, Searches,
+            Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs, Themes, Times, Values, Weeks,
+            Zones
 
     # The grid a record's own two pages lay an attribute out in: two columns on a large
     # viewport, and the same padding on both, so a value and the field that edits it sit

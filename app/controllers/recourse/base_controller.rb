@@ -4,7 +4,7 @@ module Recourse
   # with a `before_action :authenticate!` guards every screen the gem serves.
   class BaseController < ApplicationController
     include Pagy::Method, Positioned, AttachmentResolution, AttachmentWriting,
-            Landing, Paging, ListResolution, ParentNaming,
+            Landing, Paging, ListResolution, ParameterResolution, ParentNaming,
             ParentResolution, ReferenceResolution, ResourceResolution,
             Weeks, Zoning
 
@@ -12,6 +12,10 @@ module Recourse
 
     # `find` raises RecordNotFound, so an id that names nothing answers 404.
     before_action :find_resource, only: %i[show edit update destroy]
+
+    # Before the form rather than inside `new`, so a host that writes its own still
+    # sends a reader to the record a singular resource already has.
+    before_action :redirect_to_existing_record, only: :new
 
     # The model behind the page, assigned once, and only where the route names one.
     before_action { @recourse_model = resource_class if resource_model? }

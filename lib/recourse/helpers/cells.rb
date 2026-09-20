@@ -68,7 +68,7 @@ module Recourse
       # `Created`, not `Created at`, since when it happened is what the column holds.
       def dated_title(column)
         title = resource_model.human_attribute_name column
-        dated = column.end_with?('_at', '_on') && Columns::DATE_KINDS.include?(attribute_type(column))
+        dated = column.end_with?('_at', '_on') && Bands::DATE_KINDS.include?(attribute_type(column))
 
         dated ? title.sub(/ (at|on)\z/, '') : title
       end
