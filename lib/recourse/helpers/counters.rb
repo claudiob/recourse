@@ -44,7 +44,7 @@ module Recourse
 
         safe_join [
           tag.span(count, class: 'recourse-counter-figure',
-                          data: bh_tooltip(title, placement: 'top')),
+                          data: tooltip_data(title, placement: 'top')),
           tag.span("#{count} #{word}", class: 'recourse-counter-word'),
         ]
       end
