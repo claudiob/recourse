@@ -18,7 +18,7 @@ module Recourse
         path = destroy_resource_path record
         return unless path
 
-        bh_confirm_button t('recourse.delete', model: resource_name), path,
+        confirm_button_to t('recourse.delete', model: resource_name), path,
                           confirm: destroy_warning(record), method: :delete,
                           class: 'btn btn-sm btn-solid theme-danger ms-3',
                           form_class: 'd-inline-block'

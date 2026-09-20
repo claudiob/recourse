@@ -23,7 +23,7 @@ class TestRecoursesFormReferences < IntegrationCase
     # A plain select, dressed as a combobox by the design bundle; the words it needs
     # travel on it, since a script has no locale of its own.
     assert_includes body, '<select name="place[team_id]" id="place_team_id" required="required" ' \
-                          'class="form-select" data-controller="combobox" ' \
+                          'class="form-control" data-controller="combobox" ' \
                           'data-combobox-placeholder-value="Select…" ' \
                           "data-combobox-more-value=\"#{I18n.t 'recourse.more'}\" " \
                           'data-search="Search…" data-clear="Clear search" ' \

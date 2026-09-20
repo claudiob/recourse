@@ -12,7 +12,7 @@ class TestRecoursesFilters < IntegrationCase
     # Each a plain multiple select the design bundle dresses, named with `[]` so every
     # pick is submitted the way Ransack reads a list predicate.
     assert_includes body, '<select name="q[status_in][]" id="q_status_in" multiple="multiple" ' \
-                          'class="form-select form-select-sm" aria-label="Status" ' \
+                          'class="form-control form-control-sm" aria-label="Status" ' \
                           'data-controller="combobox" data-combobox-placeholder-value="Status"'
     # A boolean admits two values, so it is a menu for the same reason an enum is —
     # read as a reader reads them, and with the bare `All` as the way back, since
