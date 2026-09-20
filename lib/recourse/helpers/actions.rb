@@ -81,7 +81,7 @@ module Recourse
       def destroy_button(record)
         path = url_for controller: "/#{destroy_action_path}", action: :destroy, id: record
 
-        bh_confirm_button icon_tag(ICONS[:destroy], class: 'fg-danger'), path,
+        confirm_button_to icon_tag(ICONS[:destroy], class: 'fg-danger'), path,
                           confirm: destroy_warning(record), method: :delete,
                           class: 'btn btn-sm btn-link btn-icon p-0',
                           aria: { label: t('recourse.delete', model: resource_name) },

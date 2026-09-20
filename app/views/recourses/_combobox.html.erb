@@ -5,7 +5,7 @@
     select is named with `[]`, so the browser submits every pick the way Ransack reads a
     list predicate. -%>
 <%= tag.select name: (multiple ? "#{name}[]" : name), id: id, multiple: multiple, required: required,
-               class: class_names('form-select', 'form-select-sm': small, 'is-invalid': invalid),
+               class: class_names('form-control', 'form-control-sm': small, 'is-invalid': invalid),
                aria: { label: aria_label, describedby: described },
                data: { controller: 'combobox', combobox_placeholder_value: placeholder,
                        combobox_more_value: t('recourse.more'), combobox_all_value: all,
