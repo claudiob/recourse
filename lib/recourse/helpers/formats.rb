@@ -18,12 +18,13 @@ module Recourse
       end
 
       # One value, formatted by the kind its column holds — the one ladder a table
-      # cell and a show page's value both come down, so a boolean is the same icon
+      # cell and a show page's value both come down, so a boolean is the same word
       # and an enum the same badge on either. A block, where the caller has one,
       # marks the search terms inside whichever arm ends up as words.
       def formatted_attribute(column, value, &)
         kind = attribute_kind column
         return listed Array(value) if kind == :list
+        return affirmed value if kind == :boolean
         return formatted_number kind, column, value if numeric_kind? kind
 
         formatted_text kind, value, &
@@ -49,6 +50,15 @@ module Recourse
         when *Kinds::JSON_KINDS then value.presence && json_block(value)
         else linked_or_marked(value, &)
         end
+      end
+
+      # The word a reader answers with, which is the word the filter beside the column
+      # already offers. A column that was never answered holds neither, so it reads as
+      # the dash every other empty value does rather than as a no.
+      def affirmed(value)
+        return if value.nil?
+
+        t value ? 'recourse.affirmative' : 'recourse.negative'
       end
 
       # One whole web address is a value to follow rather than to read, and anything

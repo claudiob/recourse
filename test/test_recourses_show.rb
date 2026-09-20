@@ -7,7 +7,7 @@ class TestRecoursesShow < IntegrationCase
   # column holds rather than as what the database keeps: money wears its currency
   # and a percentage its sign, both decimals underneath; a float keeps its own
   # precision; a date and a time are `time` tags a browser can localize; an enum is
-  # a badge and a boolean is the word, not an icon; a URL is a link to itself.
+  # a badge and a boolean the word a reader answers with; a URL is a link to itself.
   def test_it_reads_out_a_value_of_every_kind_in_the_shape_its_column_earns
     visit "/places/#{Place.order(:id).first.id}"
 
@@ -25,9 +25,12 @@ class TestRecoursesShow < IntegrationCase
     assert_includes body, '<time datetime="2026-01-01">Jan 1, 2026</time>'
     assert_includes body, 'datetime="2026-06-01T09:30:00-04:00"'
     assert_includes body, '<span class="badge">draft'
-    # Words rather than icons, and the reference read as its label either way.
-    assert_includes body, 'true'
-    assert_includes body, 'false'
+    # The word the filter beside the column offers, rather than what the database
+    # keeps, and the reference read as its label either way.
+    assert_includes body, '<div class="form-label">Active</div>' \
+                          '<div class="form-control-plaintext">Yes</div>'
+    assert_includes body, '<div class="form-label">Verified</div>' \
+                          '<div class="form-control-plaintext">No</div>'
     assert_includes body, '90001'
     assert_includes body, 'Blue Crew'
     # A URL reads as its host — no protocol, no trailing slash — and links to itself
@@ -49,6 +52,17 @@ class TestRecoursesShow < IntegrationCase
     assert_includes body, '<div class="form-label">Floor plan</div>' \
                           '<div class="form-control-plaintext">—</div>'
     refute_includes body, '<div class="form-label">Photos</div>'
+  end
+
+  # A boolean nobody answered is not a no: the column admits three states, and the
+  # row that was left empty reads as the dash every other empty value reads as.
+  def test_a_boolean_that_was_never_answered_reads_as_nothing
+    visit "/places/#{Place.order(:id).second.id}"
+
+    assert_includes body, '<div class="form-label">Active</div>' \
+                          '<div class="form-control-plaintext">No</div>'
+    assert_includes body, '<div class="form-label">Verified</div>' \
+                          '<div class="form-control-plaintext">—</div>'
   end
 
   # A file a browser can be shown is drawn where it stands, as the picture Active

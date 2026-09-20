@@ -7,6 +7,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.3.0 - 2026-09-20
+
+* [CHANGE] A boolean reads as the word a reader answers with
+
+  A cell and a value read `true` and `false`, which is what the database keeps and not
+  what anybody asked. Both now read `Yes` and `No` — the two the filter menu beside the
+  column already offered — and a nullable column nobody answered reads as the dash every
+  other empty value reads as, rather than as a no.
+
 ## 7.2.1 - 2026-09-20
 
 * [FIX] A refused change keeps the card it was made in

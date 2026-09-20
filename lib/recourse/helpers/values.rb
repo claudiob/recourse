@@ -18,7 +18,7 @@ module Recourse
       end
 
       # What the record says for one column, or a dash where it says nothing. A
-      # boolean says something either way, and an icon says it, so only a value that
+      # boolean says something either way, and a word says it, so only a value that
       # formats to nothing at all reads as nothing.
       def resource_value(column)
         value = formatted_value column
