@@ -40,7 +40,9 @@ class TestRecoursesDeletions < IntegrationCase
     visit "/places/#{place.id}"
 
     assert_includes body, 'Delete place'
-    assert_includes CGI.unescape_html(body[/data-turbo-confirm="([^"]*)"/, 1]), "Delete #{place.name}?"
+    warning = CGI.unescape_html body[/data-turbo-confirm="([^"]*)"/, 1]
+
+    assert_includes warning, "Delete #{place.name}?"
     visit "/people/#{Person.order(:id).first.id}/places"
 
     refute_includes body, 'Delete person'
