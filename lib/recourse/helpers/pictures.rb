@@ -20,7 +20,7 @@ module Recourse
       # an icon alone says nothing to one, and given the tooltip that says the same
       # word to everyone else.
       def icon_heading(concept, title, **)
-        icon_tag concept, label: title, role: :img, data: bh_tooltip(title, placement: 'top'), **
+        icon_tag concept, label: title, role: :img, data: tooltip_data(title, placement: 'top'), **
       end
     end
   end
