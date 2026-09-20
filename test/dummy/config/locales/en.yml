@@ -1,0 +1,8 @@
+en:
+  recourse:
+    models:
+      # A memo is withdrawn rather than deleted, which is what a host says here when the
+      # one word the gem has is the wrong one for a model.
+      memo:
+        delete: Withdraw %{model}
+        deletion_title: Withdraw %{record}?

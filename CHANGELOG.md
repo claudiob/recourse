@@ -7,6 +7,17 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.5.0 - 2026-09-20
+
+* [FEATURE] A model may word its own deletion
+
+  Deleting is not what every model does when a row goes: an account is disconnected, a
+  note is withdrawn. Both the button and the heading over the dialog now read
+  `recourse.models.<model>.delete` and `recourse.models.<model>.deletion_title` where a
+  host wrote them, and the one word the gem has where nobody did. Keyed off the record's
+  own class, so a subclass words it apart from its siblings — and a slash in an i18n key
+  is a nesting, so `integration/jobber` sits under `integration` in the locale.
+
 ## 7.4.0 - 2026-09-20
 
 * [CHANGE] A singular resource that has its record reads it rather than offering a form

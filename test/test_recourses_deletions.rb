@@ -69,4 +69,23 @@ class TestRecoursesDeletions < IntegrationCase
 
     assert_includes form, 'data-turbo-frame="_top"'
   end
+
+  # A model that undoes something rather than deleting it says so under its own name in
+  # the host's locale, and the button and the dialog over it read alike. Every other
+  # model is untouched: the one word the gem has is what they fall through to.
+  def test_a_model_may_word_its_own_deletion
+    visit "/memos/#{Memo.order(:id).first.id}/edit"
+    warning = CGI.unescape_html body[/data-turbo-confirm="([^"]*)"/, 1]
+
+    assert_includes body, 'Withdraw memo'
+    refute_includes body, 'Delete memo'
+    # A memo answers to no label column, so the heading names what it is, as it would
+    # under the gem's own word.
+    assert_includes warning, 'Withdraw Memo?'
+    assert_includes warning, 'This cannot be undone.'
+    # And a model that said nothing keeps the one word the gem has.
+    visit "/places/#{Place.order(:id).first.id}"
+
+    assert_includes body, 'Delete place'
+  end
 end

@@ -47,6 +47,7 @@ require_relative 'helpers/spans'
 require_relative 'helpers/tabs'
 require_relative 'helpers/times'
 require_relative 'helpers/values'
+require_relative 'helpers/warnings'
 require_relative 'helpers/weeks'
 require_relative 'helpers/zones'
 
@@ -58,8 +59,8 @@ module Recourse
             Deletions, Densities, Details, Events, Examples, Fields, Filters, Flashes,
             Formats, Inputs, Kinds, Limits, Links, Maps, Names, Navigation, Parents,
             Pictures, Previews, References, Refreshes, Routing, Resources, Rows, Searches,
-            Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs, Themes, Times, Values, Weeks,
-            Zones
+            Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs, Themes, Times, Values,
+            Warnings, Weeks, Zones
 
     # The grid a record's own two pages lay an attribute out in: two columns on a large
     # viewport, and the same padding on both, so a value and the field that edits it sit
