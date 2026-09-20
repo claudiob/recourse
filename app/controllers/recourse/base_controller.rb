@@ -71,7 +71,7 @@ module Recourse
     def destroy
       return wrote t('recourse.deleted', model: human_name) if destroy_resource @recourse
 
-      flash.alert = t('recourse.deleted_error', model: human_name)
+      flash.alert = t 'recourse.deleted_error', model: human_name
       redirect_back fallback_location: url_for(action: :index), status: :see_other
     end
 
