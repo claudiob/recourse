@@ -1,3 +1,4 @@
+require 'bh'
 require 'pagy'
 # Before searchable.rb, so its `extend` lands ahead of Ransack's own defaults.
 require 'ransack'

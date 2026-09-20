@@ -27,20 +27,17 @@ class TestRecoursesColor < IntegrationCase
     Recourse.color = nil
   end
 
-  # The dummy app asks for Dracula, so the page links its palette from the design site,
-  # where every palette lives beside the stylesheet. A name nobody ships would otherwise
-  # ask the browser for a stylesheet that is not there and go unnoticed until somebody
-  # looked at a page, so it is refused where it is set.
+  # The dummy app asks for Dracula, so the page links its palette from where the rest of
+  # the design layer is served. A name nobody ships would otherwise ask the browser for a
+  # stylesheet that is not there and go unnoticed until somebody looked at a page, so it
+  # is refused where it is set.
   def test_a_host_picks_a_palette_and_a_name_nobody_ships_is_refused
-    bundle = "https://cdn.jsdelivr.net/npm/houseaccount@#{Recourse::BUNDLE}/public"
     visit '/places'
 
-    # Everything the page is styled and scripted by comes from the `houseaccount` package
-    # on a CDN, where every HouseAccount app draws from, and nothing is served by this gem.
-    assert_includes body,
-                    "<link rel='stylesheet' href='#{bundle}/css/houseaccount.css'>"
-    assert_includes body,
-                    "<script type='module' src='#{bundle}/js/houseaccount.js'>"
+    # Everything the page is styled and scripted by is bh's, served by bh's own engine,
+    # and nothing is served by this gem.
+    assert_includes body, "<link rel='stylesheet' href='/bh/css/bh.css'>"
+    assert_includes body, "<script type='module' src='/bh/js/bh.js'>"
     refute_includes body, '/recourse/'
     # The tab's icon is the host's to name, in its `recourses/head` partial; the gem guesses at
     # no file name of its own.
@@ -49,12 +46,12 @@ class TestRecoursesColor < IntegrationCase
     # And the one thing these screens set that the house's stylesheet does not.
     assert_includes body, '--bs-body-font-family: helvetica, verdana, arial, sans-serif;'
     assert_includes body, '<link rel="stylesheet" ' \
-                          "href=\"#{bundle}/theme/dracula.css\" " \
+                          'href="/bh/theme/dracula.css" ' \
                           'data-recourse-theme="">'
     # The sidebar's toggle, and the attribute the palette link is found by: the two
     # halves of swapping a palette in the browser, and a rename either side of that
     # would leave a button that silently does nothing.
-    assert_includes body, %(data-scheme-path-value="#{bundle}/theme")
+    assert_includes body, %(data-scheme-path-value="/bh/theme")
     # And the key the choice is kept under, which the layout's script reads back.
     assert_includes body, 'data-scheme-storage-value="recourse-scheme"'
     assert_includes body, "localStorage.getItem('recourse-scheme')"
@@ -71,19 +68,16 @@ class TestRecoursesColor < IntegrationCase
     Recourse.theme = :dracula
   end
 
-  # And a host may serve the bundle itself rather than read it off the CDN, which is the
-  # one line it takes: the `houseaccount` gem mounted by path answers `/css`, `/js` and
-  # `/theme` out of its own `public/`, so a stylesheet or a controller can be tried on a
-  # real page before the version carrying it is published.
-  def test_a_host_may_serve_the_bundle_itself
-    Recourse.assets = ''
+  # And a host may serve the same three folders from somewhere else -- a CDN, or a bundle
+  # of its own carrying bh's layer -- which is the one line it takes.
+  def test_a_host_may_serve_the_design_layer_from_somewhere_else
+    Recourse.assets = 'https://cdn.example.com/house'
     visit '/places'
 
-    assert_includes body, "<link rel='stylesheet' href='/css/houseaccount.css'>"
-    assert_includes body, "<script type='module' src='/js/houseaccount.js'>"
-    assert_includes body, 'data-scheme-path-value="/theme"'
-    refute_includes body, 'cdn.jsdelivr.net/npm'
+    assert_includes body, "<link rel='stylesheet' href='https://cdn.example.com/house/css/bh.css'>"
+    assert_includes body, "<script type='module' src='https://cdn.example.com/house/js/bh.js'>"
+    assert_includes body, 'data-scheme-path-value="https://cdn.example.com/house/theme"'
   ensure
-    Recourse.assets = "https://cdn.jsdelivr.net/npm/houseaccount@#{Recourse::BUNDLE}/public"
+    Recourse.assets = Bh::Engine::PREFIX.chomp '/'
   end
 end

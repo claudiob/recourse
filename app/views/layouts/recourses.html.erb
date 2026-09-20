@@ -16,18 +16,10 @@
 
     <%= yield :head %>
 
-    <%# Everything the page is styled by, from the one place every HouseAccount app draws
-        on: Bootstrap 6, its icons and the house's own rules for this gem's markup. Served
-        from the `houseaccount` package on a CDN, pinned to a version — `Recourse.assets`
-        is where, and `Recourse::BUNDLE` is which — so a change there reaches these pages
-        when somebody moves that line and not before. Two connections opened before the
-        parser finds either tag: the stylesheet's plain one and the CORS one a module
-        script and a font are fetched over. They name the CDN outright, being a hint
-        about it and nothing more, so a host serving the bundle itself simply never uses
-        them. -%>
-    <link rel='preconnect' href='https://cdn.jsdelivr.net'>
-    <link rel='preconnect' href='https://cdn.jsdelivr.net' crossorigin>
-    <link rel='stylesheet' href='<%= Recourse.asset 'css/houseaccount.css' %>'>
+    <%# Everything the page is styled by: Bootstrap 6 and bh's rules for this gem's
+        markup, served by bh's own engine. `Recourse.assets` is where, and a host
+        serving those files from somewhere else says so there. -%>
+    <link rel='stylesheet' href='<%= Recourse.asset 'css/bh.css' %>'>
     <%# The one thing these screens set that the house's stylesheet does not: system faces
         at a compact size, for pages dense with figures. 14px as rem, so a browser's own
         text-size setting still scales it. After the stylesheet, since both are `:root`. -%>
@@ -43,15 +35,17 @@
     <%= render 'recourses/scheme' %>
     <%= primary_color_style %>
 
-    <%# The rest of the head is the host's: whatever it puts in a `recourses/head` partial
-        — the icons its tab wears, say — is drawn here, from the host's own views or from a
-        gem it loads, and nothing is guessed at where nobody has written one. -%>
-    <%= render 'recourses/head' if lookup_context.exists? 'recourses/head', [], true %>
-
     <%# Turbo, Bootstrap and a Stimulus application with every controller this markup
         names, started once under `window.Stimulus`. In the head, so a controller exists
         before the body's first `data-controller`. -%>
-    <script type='module' src='<%= Recourse.asset 'js/houseaccount.js' %>'></script>
+    <script type='module' src='<%= Recourse.asset 'js/bh.js' %>'></script>
+
+    <%# The rest of the head is the host's: whatever it puts in a `recourses/head` partial
+        — the icons its tab wears, a layer of its own over this one — is drawn here, from
+        the host's own views or from a gem it loads, and nothing is guessed at where nobody
+        has written one. Last, so a stylesheet of the host's outranks the rules above it and
+        a module of its own runs after the application this one started. -%>
+    <%= render 'recourses/head' if lookup_context.exists? 'recourses/head', [], true %>
   </head>
 
   <%# The reader's zone is told to the server here rather than from a page of its
@@ -83,6 +77,6 @@
       <%= yield %>
     </main>
 
-    <%= render 'recourses/flash' %>
+    <%= toasts(data: written_data) { |key, message| written_message key, message } %>
   </body>
 </html>

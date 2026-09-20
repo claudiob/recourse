@@ -18,12 +18,10 @@ module Recourse
         path = destroy_resource_path record
         return unless path
 
-        options = {
-          method: :delete, class: 'btn btn-sm btn-solid theme-danger ms-3',
-          form_class: 'd-inline-block', data: { turbo_confirm: destroy_warning(record) },
-        }
-
-        button_to t('recourse.delete', model: resource_name), path, **options
+        bh_confirm_button t('recourse.delete', model: resource_name), path,
+                          confirm: destroy_warning(record), method: :delete,
+                          class: 'btn btn-sm btn-solid theme-danger ms-3',
+                          form_class: 'd-inline-block'
       end
 
       # What deleting this record takes with it, counted a level down and no further:

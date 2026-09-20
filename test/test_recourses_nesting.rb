@@ -68,9 +68,12 @@ class TestRecoursesNesting < IntegrationCase
     assert_includes body,
                     %(#{team.places_count} <span class="recourse-tab-word">visited places</span>)
     assert_includes body, %(active" aria-current="page" href="/teams/#{team.id}/visited/places")
-    # And the tab beside it, for a nested index no `has_many` on Team answers to:
-    # named after the route, with no count and no icon, because nothing else knows.
-    assert_includes body, %(href="/teams/#{team.id}/memos">Memos</a>)
+    # And the tab beside it, for a nested index no `has_many` on Team answers to: named
+    # after the route and counted by nothing, but wearing the icon its model names, which
+    # the route is enough to find.
+    tab = %(<i class="bi bi-sticky"></i> <span class="recourse-tab-word">Memos</span>)
+
+    assert_includes body, %(href="/teams/#{team.id}/memos">#{tab}</a>)
   end
 
   # What is refused is a nesting that adds no namespace at all: only a `recourses`

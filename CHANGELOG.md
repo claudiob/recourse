@@ -7,6 +7,36 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 6.0.0 - 2026-09-19
+
+* [Change] These pages are drawn from bh
+
+  They were drawn from a package named after one company's design system, pinned by hand in
+  `Recourse::BUNDLE` and fetched from a CDN. They are drawn from `bh` now, which is the
+  Bootstrap layer under that package and is a dependency of this gem, so the version in the
+  lock file is the version on the page and nothing is fetched across a network.
+
+  `Recourse::BUNDLE` is gone. `Recourse.assets` stays, defaulting to bh's own engine, for a
+  host serving those three folders from somewhere else.
+
+  The host's `recourses/head` partial is drawn last in the head rather than before the
+  script, so a stylesheet of the host's outranks the rules above it and a module of its own
+  runs after the application this one starts.
+
+* [Change] The flash is bh's toasts
+
+  `recourses/_flash` and `FLASH_THEMES` are gone: the markup was bh's, written twice. What
+  is this gem's own stays — the row a write landed on, and the link spliced into the words
+  a message says — and rides on `toasts` through its `data:` and its block.
+
+* [Feature] Every tab wears its model's icon
+
+  A tab earned one only where the parent kept a `has_many` of that name, so a nested index
+  reached through a join, and every singular resource, read as words alone beside tabs that
+  had pictures. The icon is now looked up from the route, which is the same question the
+  sidebar and the crumbs already ask.
+
+
 ## 5.6.2 - 2026-09-18
 
 * [Fix] A kept table notices a count that changed

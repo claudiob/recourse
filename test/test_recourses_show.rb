@@ -93,7 +93,9 @@ class TestRecoursesShow < IntegrationCase
     person = Person.order(:id).first
     visit "/people/#{person.id}"
 
-    assert_includes body, %(href="/people/#{person.id}/zips">ZIPs</a>)
+    tab = %(<i class="bi bi-geo-alt"></i> <span class="recourse-tab-word">ZIPs</span>)
+
+    assert_includes body, %(href="/people/#{person.id}/zips">#{tab}</a>)
   end
 
   # A model keeping no column to be named by: `recourse_label` points at one it does not

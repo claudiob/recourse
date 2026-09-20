@@ -1,24 +1,16 @@
 module Recourse
   module Helpers
-    # What a flash message is drawn as: its toast's theme, the row it marks, and the
-    # words it leads somewhere.
+    # What a flash message is drawn as: the row it marks, and the words it leads somewhere.
     module Flashes
-      # Bootstrap theme for each flash key, so a notice and an alert read apart.
-      FLASH_THEMES = { 'notice' => 'theme-success', 'alert' => 'theme-danger' }
-
     private
-
-      # Theme for one flash entry, falling back to a neutral one for a host's key.
-      def flash_theme(key)
-        FLASH_THEMES.fetch key.to_s, 'theme-primary'
-      end
 
       # What marks the row a write just landed on, and nothing at all on a page no write
       # brought about — which is every page but the one after a create or an update.
       def written_data
         written = flash[Recourse::WRITTEN]
+        return {} if written.blank?
 
-        { controller: 'written', written_row_value: written['row'] } if written.present?
+        { controller: 'written', written_row_value: written['row'] }
       end
 
       # The message with the record it names led to that record's page, where a write
