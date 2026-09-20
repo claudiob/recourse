@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 
 # Specify your gem's dependencies in recourse.gemspec
+
+# The design layer, worked on beside this gem rather than through a release.
+gem 'bh', path: '../bh' # the layer these pages are drawn on, worked on beside them
 gemspec
 
 gem 'actioncable' # carries the dummy app's live index refreshes to the browser

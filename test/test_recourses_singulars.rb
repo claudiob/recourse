@@ -11,7 +11,9 @@ class TestRecoursesSingulars < IntegrationCase
     place = Place.order(:id).first
     visit "/places/#{place.id}"
 
-    assert_includes body, %(href="/places/#{place.id}/zip">ZIP</a>)
+    tab = %(<i class="bi bi-geo-alt"></i> <span class="recourse-tab-word">ZIP</span>)
+
+    assert_includes body, %(href="/places/#{place.id}/zip">#{tab}</a>)
     # A page rather than an action, so nothing posts to it.
     refute_includes body, %(action="/places/#{place.id}/zip")
   end

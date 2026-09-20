@@ -10,16 +10,16 @@ gem install recourse
 
 ```ruby
 # Gemfile
-gem 'recourse', '~> 5.0'
+gem 'recourse', '~> 6.0'
 ```
 
-`~> 5.0` follows Semantic Versioning: `bundle update` takes every 5.x and never a
+`~> 6.0` follows Semantic Versioning: `bundle update` takes every 6.x and never a
 breaking change. Rails 8.1 and Ruby 3.2 are the minimum; the pages need Turbo, which
 `turbo-rails` brings, and nothing else in the host. Everything a page is styled and
 scripted by — Bootstrap 6, its icons, Turbo, Stimulus and the controllers behind these
-screens — is linked from https://design.houseaccount.com, so a host without an asset
-pipeline gets the same screens, and a host with a Content Security Policy allows that
-origin for `style-src`, `script-src` and `font-src`.
+screens — is `bh`, which this gem depends on and whose engine serves them at `/bh/`, so a
+host without an asset pipeline gets the same screens and nothing is fetched across a
+network.
 
 ## Step 1. Edit your routes
 
@@ -344,20 +344,18 @@ The dummy app under `test/dummy` runs on SQLite; the gem names no adapter.
 
 ### Reading an unpublished bundle
 
-The pages link `houseaccount` from a CDN, pinned to `Recourse::BUNDLE`, so a stylesheet or
-a Stimulus controller that is not published yet cannot be read on a page. Two lines change
-that — one in this Gemfile, kept out of it because CI checks out this repo alone:
+The pages link bh's own files, so a stylesheet or a Stimulus controller that is not
+published yet is read by pointing the Gemfile at a checkout of it beside this one:
 
 ```bash
-echo "gem 'houseaccount', path: '../design'" >> Gemfile && bundle install
-cd test/dummy && bin/rails db:migrate && HOUSE_ASSETS=1 bin/rails server
+echo "gem 'bh', path: '../bh'" >> Gemfile && bundle install
+cd test/dummy && bin/rails db:migrate && bin/rails server
 ```
 
-`HOUSE_ASSETS` is what loads that gem and sets `Recourse.assets = ''`, so the page asks
-this app for `/css`, `/js` and `/theme` and the gem's engine answers them out of its own
-`public/`. Behind a variable because what a deployed app links is what the suite asserts,
-and because the dummy is also the stand-in for a host with no such gem at all. The dummy's
-development database is migrated on its own, which the line above is why.
+A host serving those three folders from somewhere else — a CDN, a bundle of its own
+carrying bh's layer — says so in `Recourse.assets`, and that is the whole of what it
+writes. The dummy's development database is migrated on its own, which the line above is
+why.
 
 ## License
 

@@ -43,7 +43,8 @@ module Recourse
         word = Recourse.model_title association.klass, count: value, lower: true
 
         safe_join [
-          tag.span(count, class: 'recourse-counter-figure', data: tooltip_on_top(title)),
+          tag.span(count, class: 'recourse-counter-figure',
+                          data: bh_tooltip(title, placement: 'top')),
           tag.span("#{count} #{word}", class: 'recourse-counter-word'),
         ]
       end

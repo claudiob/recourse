@@ -14,7 +14,7 @@ module Recourse
         association = nested_association record, name if action == :index
         return association_tab_label record, association, namespace if association
 
-        routed_tab_name name, namespace, action
+        tab_label_for Recourse.known_icon(name), routed_tab_name(name, namespace, action)
       end
 
       def nested_association(record, name)
@@ -36,15 +36,19 @@ module Recourse
         [lead.presence&.upcase_first, title].compact.join ' '
       end
 
-      # The icon is the counted model's own, whatever leads the words beside it. The
-      # words are wrapped where a picture or a figure stands beside them, so a phone,
-      # which has room for neither, keeps the picture and the figure and drops the words.
-      # A figure and its words share one element: the link lays its children out with a
-      # gap, and two of them would stand a gap and a space apart.
+      # The icon is the counted model's own, whatever leads the words beside it.
       def association_tab_label(record, association, namespace)
         icon = Recourse.known_model_icon association.klass
         count = tab_count record, association
-        words = tab_words association, namespace, count
+
+        tab_label_for icon, tab_words(association, namespace, count), count
+      end
+
+      # The words with whatever stands beside them. The words are wrapped where a picture
+      # or a figure does, so a phone, which has room for neither, keeps the picture and the
+      # figure and drops the words. A figure and its words share one element: the link lays
+      # its children out with a gap, and two of them would stand a gap and a space apart.
+      def tab_label_for(icon, words, count = nil)
         words = tag.span words, class: 'recourse-tab-word' if icon || count
         words = tag.span safe_join([count, words], ' ') if count
 

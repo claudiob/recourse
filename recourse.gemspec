@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'actionpack', '>= 8.1' # the routing DSL and controllers we extend
   spec.add_dependency 'activerecord', '>= 8.1' # reads the host app's resources
+  spec.add_dependency 'bh', '>= 6.7' # Bootstrap 6: the stylesheet, the script and the components
   spec.add_dependency 'pagy', '>= 43.6' # paginates the index pages
   spec.add_dependency 'railties', '>= 8.1' # Rails::Engine, which mounts the screens
   spec.add_dependency 'ransack', '>= 4.4' # sorts, searches and filters the index pages

@@ -11,12 +11,6 @@ require 'turbo-rails'
 
 require 'recourse'
 
-# The bundle's own gem, only where it is being asked to serve it: its engine answers
-# `/css`, `/js` and `/theme`, which is what `Recourse.assets = ''` in the initializer
-# then points at. Left out otherwise, so what the suite sees is what a deployed app
-# links — and so this app stays a stand-in for a host with no such gem at all.
-require 'houseaccount' if ENV['HOUSE_ASSETS']
-
 module Dummy
   # Stand-in for a host app, so tests exercise the gem through a booting Rails.
   class Application < Rails::Application

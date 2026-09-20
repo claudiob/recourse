@@ -20,13 +20,7 @@ module Recourse
       # an icon alone says nothing to one, and given the tooltip that says the same
       # word to everyone else.
       def icon_heading(concept, title, **)
-        icon_tag concept, label: title, role: :img, data: tooltip_on_top(title), **
-      end
-
-      def tooltip_on_top(title)
-        # `bs_title` is what Bootstrap's tooltip reads, and the controller is what
-        # makes one: Bootstrap never wires a tooltip on its own.
-        { controller: 'tooltip', bs_placement: 'top', bs_title: title }
+        icon_tag concept, label: title, role: :img, data: bh_tooltip(title, placement: 'top'), **
       end
     end
   end
