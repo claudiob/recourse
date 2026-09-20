@@ -7,6 +7,14 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.2.1 - 2026-09-20
+
+* [FIX] A refused change keeps the card it was made in
+
+  The card is drawn around a record's own pages, worked out from the action: `show` and
+  `edit`. A write a validation turns down draws `edit` again under the name `update`, so
+  the tabs went with it and the reader was left with a form and no way back.
+
 ## 7.2.0 - 2026-09-20
 
 * [CHANGE] A row a model will not give up says so, rather than raising

@@ -3,13 +3,18 @@ module Recourse
     # The tabs on the card a record's pages share: a look, a change, and each
     # nested index under the record — counted where the record keeps a count.
     module Cards
+      # The pages a record's card is drawn around. `update` is the change page too: a
+      # write a validation turns down draws the form again, and the tabs a reader came
+      # in by are still the record's.
+      CARDED = %w[show edit update].freeze
+
     private
 
       # The record whose card this page is drawn in: the parent, on a page nested under
       # one, and the record itself where the page is its look or its change. An index of
       # its own, and a form for a record that is not there yet, stand outside a card.
       def card_record
-        resource_parent || (resource_record if controller.action_name.in? %w[show edit])
+        resource_parent || (resource_record if controller.action_name.in? CARDED)
       end
 
       # The pages of the record the card is about, as `[label, path, current]` — a

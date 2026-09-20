@@ -23,5 +23,9 @@ class TestRecoursesUpdates < IntegrationCase
     assert_equal 422, @session.response.status
     assert_includes body, 'is-invalid'
     assert_equal 'Blue Crew', team.reload.name
+    # The card the reader came in by is still the record's: a refused write redraws the
+    # change page, and the tabs on it are not the write's to take away.
+    assert_includes body, 'card-header-tabs'
+    assert_includes body, "/teams/#{team.id}/edit"
   end
 end
