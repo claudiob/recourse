@@ -12,6 +12,8 @@ require_relative 'recourse/bookmarks'
 require_relative 'recourse/calendars'
 require_relative 'recourse/colors'
 require_relative 'recourse/columns'
+require_relative 'recourse/counters'
+require_relative 'recourse/searches'
 require_relative 'recourse/themes'
 require_relative 'recourse/icons'
 require_relative 'recourse/controllers'
@@ -59,7 +61,7 @@ module Recourse
   # `create` permits these. A counter cache is none of a user's business — Rails keeps
   # it, so a form that offered one would let it be typed over.
   def self.editable_columns(model)
-    ordered model, model.column_names - ['id', *TIMESTAMPS] - model.recourse_counters.keys -
+    ordered model, model.column_names - ['id', *TIMESTAMPS] - counters(model).keys -
                    hidden_columns(model)
   end
 

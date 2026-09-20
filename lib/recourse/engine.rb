@@ -15,6 +15,10 @@ module Recourse
       ActionDispatch::Routing::Mapper.include Scopes, Routes
     end
 
+    # Reflections belong to the classes a reload replaces, so what was read off them
+    # goes with the reload.
+    config.to_prepare { Recourse.forget_counters }
+
     # `/counties.map` and `/shifts.cal` are the same page in another shape, so each
     # format is a name for HTML: without one Rails has no type for the extension and
     # answers 406.

@@ -39,7 +39,7 @@ module Recourse
       # showing the count it was cached with. Read off the rows in memory like the
       # version is, so this costs no query either.
       def counters_version(rows)
-        columns = resource_model.recourse_counters.keys
+        columns = Recourse.counters(resource_model).keys
         return if columns.empty?
 
         rows.map { |row| row.attributes.values_at(*columns) }

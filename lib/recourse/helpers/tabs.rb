@@ -100,7 +100,7 @@ module Recourse
       end
 
       def counter_of(model, association)
-        model.recourse_counters.find { |_, one| one == association }&.first if association
+        Recourse.counters(model).find { |_, one| one == association }&.first if association
       end
 
       def join_of(model, association)

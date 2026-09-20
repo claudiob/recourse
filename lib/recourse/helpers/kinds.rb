@@ -43,7 +43,7 @@ module Recourse
       # already follow; and everything else is the type the attribute itself reports —
       # `:monetary` included, where a host has registered a type that says so.
       def attribute_kind(column)
-        return :counter if resource_model.recourse_counters.key? column
+        return :counter if Recourse.counters(resource_model).key? column
         return :enum if resource_model.defined_enums.key? column
         return :list if Recourse.list_column? resource_model, column
         return :phone if column == 'phone'

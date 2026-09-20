@@ -59,6 +59,20 @@
       <%= render 'recourses/sidebar' %>
     </aside>
 
+    <%# A record's pages are drawn in its card whoever wrote the template, so the tabs and
+        the buttons beside the trail stay the gem's and a host's own page is its body. Drawn
+        here rather than where it is written, since the card is where the bare actions are
+        said and the trail below is where they are read. -%>
+    <% page = capture do %>
+      <% if (record = card_record) %>
+        <%= render layout: 'recourses/card', locals: { record: record } do %>
+          <%= yield %>
+        <% end %>
+      <% else %>
+        <%= yield %>
+      <% end %>
+    <% end %>
+
     <nav class='navbar border-bottom'>
       <%# `row-gap` rather than a margin on the search: a margin is there whether the
           form wrapped or not, and on the line it shares with the breadcrumb it drops
@@ -74,7 +88,7 @@
     </nav>
 
     <main class='py-4 px-3'>
-      <%= yield %>
+      <%= page %>
     </main>
 
     <%= toasts(data: written_data) { |key, message| written_message key, message } %>

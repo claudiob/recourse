@@ -22,12 +22,4 @@
     cable connection down and reopens it. -%>
 <%= refresh_subscription %>
 
-<%# A nested index is a page of the parent record, so it sits in the record's own
-    card, beside the record's other pages — its tab, the count, the current one. -%>
-<% if resource_parent %>
-  <%= render layout: 'card', locals: { record: resource_parent } do %>
-    <%= render 'results', resources: @resources, pagy: @pagy, week: @recourse_week %>
-  <% end %>
-<% else %>
-  <%= render 'results', resources: @resources, pagy: @pagy, week: @recourse_week %>
-<% end %>
+<%= render 'results', resources: @resources, pagy: @pagy, week: @recourse_week %>

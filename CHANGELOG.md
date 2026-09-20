@@ -7,6 +7,35 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.0.0 - 2026-09-19
+
+* [BREAKING] What a page counts is the gem's to work out
+
+  `recourse_counters` is gone from every model. A column is counted where it holds a
+  counter cache, as before, and now also where it is named `<association>_count` for an
+  association the model has -- so a figure the app keeps itself, a `has_many through`
+  Rails will not cache among them, is drawn as a count without being declared.
+
+  The rule a host signs up for: a `*_count` column whose prefix names an association must
+  hold the count of that association. One naming nothing is an ordinary number, and one
+  naming an association it does not count wants another name -- the heading and the link
+  a counter draws would both say the wrong thing. `recourse_hidden` takes such a column
+  off the screens.
+
+* [BREAKING] A record's card is the layout's, not the template's
+
+  A host writing its own `show`, `edit` or nested `index` for a recoursed model used to
+  replace the whole page, card and all, and wrote `render layout: 'recourses/card'` back by
+  hand to get the tabs and the buttons beside the trail. The card is drawn around whatever
+  template answers now, so a host's page is its body and nothing else.
+
+  Every host view still wrapping itself draws a card inside a card: drop the wrapper. A page
+  that wants the width to itself assigns `@recourse_card = false`.
+
+  `card_record` is what the card is about -- the parent on a page nested under one, the
+  record itself on its look and its change -- which is the rule every hand-written wrapper
+  was already passing.
+
 ## 6.0.0 - 2026-09-19
 
 * [Change] These pages are drawn from bh

@@ -8,7 +8,7 @@ module Recourse
       # The class a counter's cells carry, which is what sizes the column like the
       # action columns beside it rather than like the columns carrying text.
       def counter_class(column)
-        'recourse-counter' if resource_model.recourse_counters.key? column
+        'recourse-counter' if Recourse.counters(resource_model).key? column
       end
 
       # A figure, and the word saying what it counts. The `aria-label` carries both,

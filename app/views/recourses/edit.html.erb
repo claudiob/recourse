@@ -4,7 +4,4 @@
   <%= destroy_resource_button resource_record %>
 <% end %>
 
-<%# The card is the parent's on a page nested under one, as it is for a nested index. -%>
-<%= render layout: 'card', locals: { record: resource_parent || resource_record } do %>
-  <%= render 'form', resource_key => resource_record %>
-<% end %>
+<%= render 'form', resource_key => resource_record %>

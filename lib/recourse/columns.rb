@@ -55,7 +55,7 @@ module Recourse
     # what state it is in; and a key is an integer, so it has to be recognised as a key
     # before its type is asked about at all.
     def band(model, name, keys)
-      return :counter if model.recourse_counters.key? name
+      return :counter if Recourse.counters(model).key? name
       return :state if name == model.inheritance_column || model.defined_enums.key?(name)
       return :timestamp if TIMESTAMPS.include? name
       return :reference if keys.include? name

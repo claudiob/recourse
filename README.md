@@ -99,6 +99,22 @@ To change the content displayed in the `index` table of a model, override any of
 | [`recourse_position`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_position-instance_method) | `'position'` where the model keeps an integer one | the column a reader drags the rows into order by, or `nil` for a table nobody positions |
 | [`recourse_icon`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_icon-instance_method) | the model's name | the icon on the sidebar, the crumbs and the tabs |
 
+A number is drawn as a count, headed with what it counts and linking to the rows behind
+it, when its column holds a counter cache or is named `<association>_count` for an
+association the model has. So a count the app keeps itself — a `has_many through`, which
+Rails will not cache — needs nothing declared:
+
+```ruby
+class Technician < ActiveRecord::Base
+  has_many :visits, through: :dispatches            # and a visits_count column beside it
+end
+```
+
+Which means a `*_count` column whose prefix names an association must hold the count of
+that association. One naming nothing — `word_count`, `retry_count` — is an ordinary
+number, and one naming an association it does not count wants another name or a place in
+`recourse_hidden`.
+
 For instance, this would yield a more compact `index` than the default configuration:
 
 ```ruby

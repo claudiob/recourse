@@ -37,7 +37,7 @@ module Recourse
       # and nobody types anything under it — and `Location address line 1` over a column
       # of addresses reads as a form's question asked where there is no form.
       def sort_title(column)
-        counted = resource_model.recourse_counters[column.to_s]
+        counted = Recourse.counters(resource_model)[column.to_s]
         return counter_title counted if counted && @recourse_headers
 
         resource_column_title column.to_s

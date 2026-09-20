@@ -37,7 +37,7 @@ module Recourse
     # for leaving those out too: hidden from every screen means hidden here.
     def ransortable_attributes(_auth_object = nil)
       readable = ransackable_attributes - recourse_encrypted_names
-      indexed = recourse_indexed_columns + recourse_counters.keys + Recourse::TIMESTAMPS
+      indexed = recourse_indexed_columns + Recourse.counters(self).keys + Recourse::TIMESTAMPS
 
       keys = recourse_references.map { |one| one.foreign_key.to_s }
 

@@ -2,28 +2,14 @@ module Recourse
   module Searchable
     # What the search box above a table submits, and what it says while it is empty.
     module Terms
-      # The predicate a search box submits: everything it looks through at once,
-      # joined by `or`. Nil where a model has nothing worth looking through, which
-      # is also what leaves that model's index without the form — filters and all.
-      # `except:` takes the association a nested route already answered, so a page
-      # pinned to one provider offers no box to search them all.
-      def search_field(except: nil)
-        fields, predicate = recourse_search_terms(except:)
-        return if fields.empty?
+      # The predicate a search box submits: everything the model looks through at once,
+      # joined by `or`. A host naming its own instead is taken whole, on every page the
+      # model is read on.
+      def search_field = Recourse.search_field(self)
 
-        "#{fields.join '_or_'}_#{predicate}"
-      end
-
-      # What the search box says while it is empty, naming what it looks through.
-      def search_prompt(except: nil)
-        fields, predicate = recourse_search_terms(except:)
-        return if fields.empty?
-
-        list = recourse_search_names(except:).join ' or '
-        I18n.t "recourse.searched_#{predicate}", list: list
-      end
-
-    private
+      # What the search box says while it is empty, naming what it looks through. A
+      # host's own words are taken whole here too.
+      def search_prompt = Recourse.search_prompt(self)
 
       # What a search box looks through, and how it matches: the plaintext columns
       # and the labels behind foreign keys — less the one `except:` names — on
@@ -42,6 +28,8 @@ module Recourse
 
         fields.map { |field| Recourse.downcase recourse_term_name(field) }
       end
+
+    private
 
       # A term is a column of this model, or a `zip_code` reaching through one of its
       # foreign keys — which a form and a table already have a name for.

@@ -5,6 +5,16 @@ module Recourse
     module Cards
     private
 
+      # The record whose card this page is drawn in: the parent, on a page nested under
+      # one, and the record itself where the page is its look or its change. An index of
+      # its own, and a form for a record that is not there yet, stand outside a card. A
+      # host drawing a page whole says so by assigning `@recourse_card = false`.
+      def card_record
+        return if controller_assign('recourse_card') == false
+
+        resource_parent || (resource_record if controller.action_name.in? %w[show edit])
+      end
+
       # The pages of the record the card is about, as `[label, path, current]` — a
       # look first, a change second, then one tab per nested index: `8 ZIPs` where
       # a counter cache answers, the bare `Settings` where none does. On a nested

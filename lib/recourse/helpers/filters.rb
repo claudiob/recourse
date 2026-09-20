@@ -78,7 +78,7 @@ module Recourse
       def filter_counter(klass)
         return if resource_parent
 
-        klass.recourse_counters.find { |_, one| one.klass == resource_model }&.first
+        Recourse.counters(klass).find { |_, one| one.klass == resource_model }&.first
       end
 
       # Never invalid and never required: a filter narrows rather than sets.

@@ -58,7 +58,7 @@ module Recourse
       # counter is headed with what it counts — `ZIPs`, not `ZIPs count` — since the
       # column holds a number and the heading says what the number is of.
       def resource_column_title(column)
-        counted = resource_model.recourse_counters[column]
+        counted = Recourse.counters(resource_model)[column]
         return dated_title column unless counted
 
         Recourse.model_title counted.klass
@@ -81,7 +81,7 @@ module Recourse
         value = resource.attributes[column]
         return blob_link resource, value if blob_filename? column
 
-        counted = resource_model.recourse_counters[column]
+        counted = Recourse.counters(resource_model)[column]
 
         # A count is the bare number — the icon in the heading already says what it
         # counts — linking to the counted rows where a block nested their index here.

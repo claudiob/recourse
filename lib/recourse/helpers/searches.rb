@@ -44,13 +44,23 @@ module Recourse
       end
 
       # The model's search field, less the reach-through a nested route already
-      # answered: a page pinned to one provider offers no box to search them all.
+      # answered: a page pinned to one provider offers no box to search them all. A
+      # host naming a predicate of its own has said what it wants searched, and what
+      # it said is read on every page — which is what answering differently from the
+      # gem means here.
       def resource_search_field
-        resource_model.search_field except: resource_parent_association
+        chosen = resource_model.search_field
+        return chosen unless chosen == Recourse.search_field(resource_model)
+
+        Recourse.search_field resource_model, except: resource_parent_association
       end
 
+      # And the words above it, narrowed the same way and for the same reason.
       def resource_search_prompt
-        resource_model.search_prompt except: resource_parent_association
+        chosen = resource_model.search_prompt
+        return chosen unless chosen == Recourse.search_prompt(resource_model)
+
+        Recourse.search_prompt resource_model, except: resource_parent_association
       end
 
       # A foreign key's cell shows a label from the other table, so what decides is
