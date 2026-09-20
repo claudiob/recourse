@@ -48,6 +48,17 @@ class TestRecoursesDeletions < IntegrationCase
     refute_includes body, 'Delete person'
   end
 
+  # A model may refuse to give a row up, and the page says so where the row still is
+  # rather than raising: the delete is answered like any other write that did not take.
+  def test_a_row_a_model_will_not_give_up_says_so_and_stays
+    team = Team.find_by! name: 'Night Shift'
+    @session.delete "/teams/#{team.id}"
+
+    assert_equal 303, @session.response.status
+    assert Team.exists?(team.id)
+    follow_and_assert_flash 'Team could not be deleted.'
+  end
+
   # The button that deletes a row leaves the frame the table is drawn in. What the delete
   # lands on is the index again with a message over it, and the message is drawn outside
   # that frame -- so answering inside it would take the row away and say nothing.

@@ -23,7 +23,7 @@ module Recourse
     def destroy_resource(record)
       return super unless attachment_reflection
 
-      attachment_of(record).destroy!
+      attachment_of(record).destroy
     end
 
     # Attached rather than assigned, which is the whole reason this exists. Rails'

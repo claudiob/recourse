@@ -7,6 +7,14 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.2.0 - 2026-09-20
+
+* [CHANGE] A row a model will not give up says so, rather than raising
+
+  `destroy` was `destroy!`, so a `before_destroy` that threw `:abort` answered a reader
+  with a 500. The page keeps the row and says `Specialty could not be deleted.`, the way
+  an update that a validation turned down says what it says.
+
 ## 7.1.0 - 2026-09-20
 
 * [CHANGE] The card draws the button that deletes what the page is about

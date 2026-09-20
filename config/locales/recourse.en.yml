@@ -50,6 +50,7 @@ en:
     darken: Dark
     delete: Delete %{model}
     deleted: "%{model} was deleted."
+    deleted_error: "%{model} could not be deleted."
     destroy: Delete
     exit: Exit
     displaying:

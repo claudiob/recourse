@@ -10,4 +10,8 @@ class Team < ApplicationRecord
   has_many :steps, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
+
+  # The crew a place falls back to, which is kept the way an app keeps any row its other
+  # rows lean on: the page is told, rather than the row taken.
+  before_destroy { throw :abort if name == 'Night Shift' }
 end

@@ -65,11 +65,14 @@ module Recourse
       end
     end
 
-    # Deletes the record and shows the index without it. `destroy!`, so a callback that
-    # stops one says so rather than leaving the page claiming it worked.
+    # Deletes the record and shows the index without it. A callback that stops one is
+    # answered where the record still is, rather than left to raise or to let the page
+    # claim it worked: a row a model refuses to give up is a page's business, not a 500.
     def destroy
-      destroy_resource @recourse
-      wrote t('recourse.deleted', model: human_name)
+      return wrote t('recourse.deleted', model: human_name) if destroy_resource @recourse
+
+      flash.alert = t('recourse.deleted_error', model: human_name)
+      redirect_back fallback_location: url_for(action: :index), status: :see_other
     end
 
   private
