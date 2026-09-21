@@ -7,6 +7,20 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.8.0 - 2026-09-20
+
+* [FEATURE] A resource may say its rows can be fetched again
+
+  `recourses :visits, only: :index, retrievable: true` draws `POST /providers/5/visits/retrieval`
+  and puts the button that asks for it on the table that lists them. Where the rows came
+  from is the host's to know, so the controller is the host's to write and the gem makes
+  one only where there is none.
+
+  A page says when there is nothing to fetch from: `recourse_retrievable?` answers true
+  unless a host narrows it, which is how an index of a CRM's work offers nothing to a
+  provider who has connected none. And a resource asking for it without an index is
+  refused while the routes draw, the button having nowhere to stand.
+
 ## 7.7.1 - 2026-09-20
 
 * [FIX] The filters the gem offers itself are ones Ransack will answer
