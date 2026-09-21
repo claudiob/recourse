@@ -2,6 +2,10 @@
 
 Swap two characters in your `config/routes.rb` and get awesome admin screens for your Rails app.
 
+This README is the tour. The [guides](https://claudiob.github.io/recourse/guides/) are
+where every screen is explained in full, one page each, and the
+[reference](https://rubydoc.info/gems/recourse) is built from the source.
+
 ## How to install
 
 ```bash
@@ -10,10 +14,10 @@ gem install recourse
 
 ```ruby
 # Gemfile
-gem 'recourse', '~> 6.0'
+gem 'recourse', '~> 7.0'
 ```
 
-`~> 6.0` follows Semantic Versioning: `bundle update` takes every 6.x and never a
+`~> 7.0` follows Semantic Versioning: `bundle update` takes every 7.x and never a
 breaking change. Rails 8.1 and Ruby 3.2 are the minimum; the pages need Turbo, which
 `turbo-rails` brings, and nothing else in the host. Everything a page is styled and
 scripted by — Bootstrap 6, its icons, Turbo, Stimulus and the controllers behind these
@@ -39,7 +43,8 @@ first letter, and a paginated, searchable, sortable, filterable index table:
 <img width="3824" height="2274" alt="Image" src="https://github.com/user-attachments/assets/f952d3e5-c320-464b-b166-77c7ab8f9071" />
 
 Every recourse with `show` gets a detail page where attributes are displayed with the appropriate
-formatting, or masked if sensitive:
+formatting — a boolean as `Yes` or `No`, a date by its name, a key as the label of what it
+points at — or masked if sensitive:
 
 <img width="3824" height="2274" alt="Image" src="https://github.com/user-attachments/assets/515f63c4-8a9b-422e-95c4-88d6647911d8" />
 
@@ -47,48 +52,38 @@ Every recourse with `new` or `edit` gets a form with appropriate browser formatt
 
 <img width="3824" height="1220" alt="Image" src="https://github.com/user-attachments/assets/ebe5108b-bbd1-4cd1-a635-89eef0e6fc50" />
 
-Every recourse with `destroy` gets a button with a detailed confirmation message — on its
-edit page, or on each row of its table where no `edit` is routed:
+Every recourse with `destroy` gets a button with a detailed confirmation message — on the
+record's own page, whichever of `show` and `edit` is open, and on each row of its table
+where no `edit` page would carry it. A row a model will not give up stays, and the page says so
+rather than raising. A model may word its own deletion — `Disconnect` rather than
+`Delete` — by writing `recourse.models.<model>.delete` in its locale:
 
 [image]
 
-`recourse` draws what Rails' `resource` draws, and the gem records it the same way: one
-record reached with no id of its own, at `/locations/5/property`. Rails routes a singular
-resource to a plural controller, so `Locations::PropertiesController` answers it, and the
-gem reads the record off the parent under the name the route gives — `location.property`,
-whether the parent keeps it with a `has_one` or points at one with a `belongs_to`. Where
-the parent has no association of that name the record is still yours to find, with a
-`find_resource` of your own.
-
-What such a nesting earns on the parent's card depends only on what it routes. Routed
-`show`, it earns a tab reading the model's own word in the singular, pointing at that one
-page. Routed `create` or `destroy` and neither `index` nor `new`, it earns a button beside
-the breadcrumb instead — `Add property`, `Delete property` — and which of the two it
-offers is the record's to say: nothing to add where there is already one, nothing to
-delete where there is none. A write has no index to return to, so it lands on the
-record's own page: a singular resource is the collection of one.
-
-Filters are drawn per enum, per boolean and per foreign key. A model adds one the schema
-says nothing about — the type behind a `has_one`, a word reached through another table —
-by naming the words itself, and naming the menu too, since there is no column to head it:
-
-```ruby
-def self.filter_fields
-  super.merge 'integration_type_in' => { label: 'CRM', values: Integration.selectable }
-end
-```
-
-Naming the words is not leave to query through a table, so `ransackable_associations`
-still says how far Ransack may reach.
-
-Every nested recourse gets namespaced after the parent:
+Every nested recourse gets namespaced after the parent, and a tab on the parent's card:
 
 <img width="3824" height="2274" alt="Image" src="https://github.com/user-attachments/assets/9b242335-a25b-4fa8-8023-422538d235b0" />
 
+`recourse` draws what Rails' `resource` draws: one record reached with no id of its own,
+at `/locations/5/property`, read off the parent under the name the route gives —
+`location.property`, whether the parent keeps it with a `has_one` or points at one with
+a `belongs_to`. What such a nesting earns on the parent's card depends only on what it
+routes: a tab where `show` is, and a button beside the breadcrumb — `Add property`,
+`Delete property` — where `create` or `destroy` is routed with no page of its own. A
+singular resource holds at most one, so `new` sends a reader to the record where there
+already is one, and `show` sends them to the form where there is none yet.
+
+Two keywords say what a table may do beyond the seven actions. `positionable: true`
+draws the route a dragged row reports its place to, and `retrievable: true` draws the
+one a `Retrieve` button on the table posts to, for rows that came from somewhere else.
+Both are refused on a resource with no `index`, since there is nowhere for either to
+stand. The [routes guide](https://claudiob.github.io/recourse/guides/routes.html) has
+the rest: namespaces, the defaults a nested resource takes, and the `exit` route that
+earns the sidebar a log-out button.
 
 ## Step 2. Enhance your models
 
-To change the content displayed in the `index` table of a model, override any of these class methods:
+To change what a model's screens show, override any of these class methods:
 
 | Hook | Default | Decides |
 | --- | --- | --- |
@@ -98,22 +93,8 @@ To change the content displayed in the `index` table of a model, override any of
 | [`recourse_order`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_order-instance_method) | `:id`, or the positioned column | the index's order, a Symbol or a Hash; rows with nothing in the column come last |
 | [`recourse_position`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_position-instance_method) | `'position'` where the model keeps an integer one | the column a reader drags the rows into order by, or `nil` for a table nobody positions |
 | [`recourse_icon`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_icon-instance_method) | the model's name | the icon on the sidebar, the crumbs and the tabs |
-
-A number is drawn as a count, headed with what it counts and linking to the rows behind
-it, when its column holds a counter cache or is named `<association>_count` for an
-association the model has. So a count the app keeps itself — a `has_many through`, which
-Rails will not cache — needs nothing declared:
-
-```ruby
-class Technician < ActiveRecord::Base
-  has_many :visits, through: :dispatches            # and a visits_count column beside it
-end
-```
-
-Which means a `*_count` column whose prefix names an association must hold the count of
-that association. One naming nothing — `word_count`, `retry_count` — is an ordinary
-number, and one naming an association it does not count wants another name or a place in
-`recourse_hidden`.
+| [`recourse_includes`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_includes-instance_method) | every `belongs_to` | what the index eager-loads, in any shape `includes` takes |
+| [`recourse_broadcasts?`](https://rubydoc.info/gems/recourse/Recourse/Broadcasting#recourse_broadcasts%3F-instance_method) | `true` | whether saving a record redraws every open index listing it |
 
 For instance, this would yield a more compact `index` than the default configuration:
 
@@ -125,9 +106,31 @@ class Post < ActiveRecord::Base
   def self.recourse_order = { published_at: :desc }   # Sort posts by last published first
   def self.recourse_icon = :question                  # Represent Posts with a question icon
 end
-````
+```
 
 [image]
+
+What the schema already says needs nothing declared. A number is drawn as a count,
+headed with what it counts and linking to the rows behind it, when its column holds a
+counter cache or is named `<association>_count` for an association the model has. An
+enum is a badge on a page, a menu on a form and a filter beside the search box, and so
+is a boolean and every foreign key whose table is short enough to list. An encrypted
+column stays off every table, arrives masked on the record's page and is offered in the
+clear on its form. A `has_one_attached` is a file field and a picture; a
+`has_many_attached :photos` is a page of its own once `recourses :photos` is routed
+under the record.
+
+Filters are drawn per enum, per boolean and per foreign key. A model adds one the schema
+says nothing about — a word reached through another table — by naming the predicate,
+and the gem reads the words off the model behind it:
+
+```ruby
+def self.filter_fields = super + %i[team_name_in]
+```
+
+Naming a filter is not leave to query through a table, so `ransackable_associations`
+still says how far Ransack may reach — and a filter Ransack will not answer is refused
+while the page draws rather than left to narrow nothing.
 
 ## Step 3. Delete your views
 
@@ -153,6 +156,12 @@ to define the columns you want:
 
 [image]
 
+A `_fields.html.erb` replaces the fields of a form the same way, and a `show`, `edit` or
+nested `index` template of your own replaces the body of that page and nothing else:
+the card, its tabs, the buttons beside the breadcrumb and the tab's title are the
+layout's, so a page you write is its content alone. A page that wants the width to
+itself assigns `@recourse_card = false`.
+
 ## Step 4. Secure your controllers
 
 Every controller the gem defines inherits
@@ -165,14 +174,15 @@ class RecoursesController < Recourse::BaseController
 end
 ```
 
-A controller the app already defines is left alone.
-
+A controller the app already defines is left alone, and one line of it is usually
+enough: `recourse_relation` puts a scope of your own behind a table the gem draws
+whole, and `find_resource` finds a singular record the parent names no association for.
 
 ## Step 5. Enjoy the extras
 
-The rest of what the gem offers, in four parts. The first two are a line each in
-`config/initializers/recourse.rb`; the last two need nothing beyond what the model
-already declares.
+The rest of what the gem offers. The first two are a line each in
+`config/initializers/recourse.rb`; the others need nothing beyond what the model
+already declares, or one keyword in the routes.
 
 ### Color and theme
 
@@ -189,7 +199,8 @@ Recourse.theme = :nord
 
 The theme is where a reader starts, not where they stay. The moon at the foot of the
 sidebar rotates through every palette, light and dark, and the one they pick stays in
-their browser.
+their browser. Times are drawn in the reader's own zone the same way, reported by their
+browser and never written to the host.
 
 ### Bookmarks
 
@@ -206,147 +217,45 @@ rows come first. A model that cannot hold a bookmark gets no column.
 
 <img width="3824" height="1220" alt="Image" src="https://github.com/user-attachments/assets/d1db4adb-0b5c-4e41-8bb6-cf72a35288f0" />
 
-### Attachments
-
-What a model keeps as files needs nothing declared either. A `has_one_attached :logo` is
-a file field on the form and, on the record's page, the picture Active Storage makes of
-the file — 100 pixels tall, WebP where the browser takes it, opening the whole file in a
-new tab — or the file's name where nothing can be drawn of it.
-
-A `has_many_attached :photos` earns a page of its own, nested under the record:
-
-```ruby
-recourses :photos, only: %i[index destroy]
-```
-
-That page is a table of the files with their pictures, and a Delete on each row that
-takes the file off the record. Files are added on the record's own form, where a chosen
-file joins a shelf and replaces a single one, and a field nobody touched leaves
-everything as it was. `recourse_hidden :photos` keeps a file off every screen the way it
-keeps a column off.
-
-Drawing a picture of an image needs `image_processing`; video and PDF also need the
-host's `ffmpeg` and `poppler`.
-
-### Maps
+### Maps and calendars
 
 A table whose model keeps a `google_place_id`, or a `latitude` and a `longitude`, can be
 read as a Google map of the same page: the footer under it offers `Display as map`, and
 `/counties.map` draws this page's rows in the frame and over the footer the table has, so
-search, sort and pages work the same on either shape.
+search, sort and pages work the same on either shape. The key and the map ID are the
+host's own credentials, under `google_maps` as `api_key` and `map_id`.
 
-A point is a pin. A place ID is filled in as an area where the model is a geography
-Google draws boundaries for — a `State`, a `County`, a `City` or a `ZIP`, by name — and
-pinned at the place for any other model.
-
-The key and the map ID are the host's own credentials:
-
-```yaml
-# config/credentials.yml.enc
-google_maps:
-  api_key: AIza…
-  map_id: 4f2a…
-```
-
-The map's style has the matching **Feature layers** turned on in the Cloud console —
-Postal code for ZIPs, Administrative area level 2 for counties. A host with a Content
-Security Policy allows `maps.googleapis.com` for scripts and connections, and Google's
-tile hosts for images.
-
-
-### Calendars
-
-A table whose model keeps a `starts_at` and an `ends_at` can be read as a week of the same
-rows: the footer offers `Display as calendar`, and `/shifts.cal` draws a column a day with
-each row placed by the hours it runs between — rows that overlap in lanes of their own.
-A row says what it is, whoever it points at, and the hours themselves, each led to its own
-page where the routes drew one.
-
-```ruby
-recourses :shifts
-```
-
-A week rather than a page is what a calendar shows, so there is nothing to paginate:
-`?week=2026-09-13` moves to the week holding that day, and `<<`, `<`, `>` and `>>` stand
-where the pages stand under a table — a week either side and four weeks beyond each —
-with the week named between them. The search and the
-filters travel with it — and answer in the shape they were picked in — so a calendar
-narrowed to one person stays a narrowed calendar as the weeks move.
-
-The grid stands as tall as a table's own first page, so the weeks under a calendar sit
-where the pages under a table do. The week opens on Sunday and the hours are the reader's
-own — the same cookie every other
-time on these pages is drawn against — and the scale runs only over the hours that week's
-rows cover, or a working day where it holds none. A row running past midnight is drawn on
-the day it opens, down to the foot of its column.
-
-Both columns have to be datetimes, asked through `type_for_attribute`, so an
-`attribute :starts_at, :datetime` override counts and a column of another kind named
-`starts_at` earns nothing.
-
+A table whose model keeps a `starts_at` and an `ends_at` can be read as a week of the
+same rows: the footer offers `Display as calendar`, and `/shifts.cal` draws a column a
+day with each row placed by the hours it runs between. `?week=2026-09-13` moves to the
+week holding that day, and the search and the filters travel with it.
 
 ### Positionable tables
 
 A table whose model keeps an integer `position` is one a reader puts in order by hand: a
-grip opens each row, dragging it moves the row, and the place it lands in is written to a
-route drawn under the index. Say where that route belongs, since a page nobody drags needs
-none:
-
-```ruby
-recourses :steps, positionable: true
-```
-
-A table is put in order from its index and from nowhere else, so the keyword is refused on
-a resource that draws none. The column decides the rest — the grips, the callbacks, and
-`recourse_order`, since the order a table is read in and the order somebody put it in are
-one fact.
+grip opens each row, dragging it moves the row, and the place it lands in is written to
+the route `positionable: true` drew under the index. The column decides the rest — the
+grips, the callbacks that keep the numbers running 1, 2, 3, and `recourse_order`, since
+the order a table is read in and the order somebody put it in are one fact. A model
+pointing two ways says which of them its place is counted within:
 
 ```ruby
 class Step < ActiveRecord::Base
   belongs_to :team
   belongs_to :person
 
-  # A step points two ways, so which of them its place is counted within is the model's
-  # to say. One `belongs_to` needs no answer, and a model pointing nowhere is positioned
-  # among the whole table.
   def recourse_siblings = team.steps
 end
 ```
 
-Two things follow the column rather than the routes. A new row lands last among its own
-and the gap closes behind one that goes, whether it was made behind a form or in a
-console: what a drop reports is a row's place on the *page*, which is a position only
-while the numbers run 1, 2, 3 with no holes in them. And a table being positioned is asked
-per page — a position means something under the parent it is counted within, so a flat
-model's own index is positioned and a listing of every row across every parent is not.
+### Retrievable tables
 
-The search box and the sorted headings stand down while the grips are drawn, and a `q`
-typed by hand is refused for the same reason: a filter shortens the page, and a drop on a
-shortened page reports a place among the rows that are left.
-
-A host that keeps the order itself writes `def recourse_position = nil`, which takes the
-grips off the table and the two callbacks off the model together. A host with a *second*
-listing of a positioned model — a plan's place among its service's plans, and another
-among every plan of its department — names the second column on the controller instead,
-and owns the write as well as the page:
-
-```ruby
-module Departmental
-  extend ActiveSupport::Concern
-
-private
-
-  def recourse_position = 'ordering'
-end
-
-class Administered::Departments::Plans::PositionsController < Recourse::PositionsController
-  include Departmental
-end
-```
-
-`Recourse::Positioning` is public for exactly that case: `new(relation, column).close` is
-what such a host calls to keep its own column contiguous.
-
+A table whose rows come from somewhere else — a CRM, a feed — offers to fetch them
+again: `recourses :visits, only: :index, retrievable: true` draws
+`POST /providers/5/visits/retrieval` and the `Retrieve` button that posts to it. Where
+the rows come from is the host's to know, so `Providers::Visits::RetrievalsController`
+is the host's to write, and `recourse_retrievable?` on the listing controller is how a
+page says there is nothing to fetch from.
 
 ## Development
 
