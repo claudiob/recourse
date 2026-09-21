@@ -36,7 +36,7 @@
     <h1>Swap two characters and get admin screens for your Rails app.</h1>
     <p class="lede">A <code>recourses</code> line in <code>config/routes.rb</code> draws the routes, the
     controllers and every view a resource needs to be browsed and edited — read off the model, with no
-    files added to the host app. Anything the gem draws, the app can still write itself.</p>
+    files added to the host app.</p>
     <p class="actions">
       <a class="btn solid" href="guides/getting_started.html">Get started</a>
       <a class="btn outline" href="guides/">Read the guides</a>
@@ -44,17 +44,11 @@
   </section>
 
   <section>
-    <h2>Install it</h2>
+    <h2>Install it and edit your routes</h2>
+    <p>Add <code>recourse</code> to the Gemfile. Then edit your <code>config/routes.rb</code> replacing <code>resources</code>
+    with <code>recourses</code>.</p>
 <pre><code><span class="c"># Gemfile</span>
 gem 'recourse'</code></pre>
-    <p>Nothing else goes in the host: everything a page is styled and scripted by is served by a gem this one
-    depends on, so an app without an asset pipeline gets the same screens and nothing is fetched across a network.</p>
-  </section>
-
-  <section>
-    <h2>Edit your routes</h2>
-    <p>Replace <code>resources</code> with <code>recourses</code>. Every action the line routes is a screen the gem serves,
-    nested resources included, and a controller or a view the app already has is left alone.</p>
 <pre><code><span class="c"># config/routes.rb</span>
 <span class="del">- resources :posts, only: %i[index show] do</span>
 <span class="add">+ recourses :posts, only: %i[index show] do</span>
