@@ -10,11 +10,9 @@ module Recourse
       def retrieval_button
         return unless Recourse.retrievable?(controller.controller_path) && recourse_retrievable?
 
-        button_to retrieval_path, class: 'btn btn-sm btn-solid theme-primary ms-3',
-                                  form_class: 'd-inline-block',
-                                  aria: { label: retrieval_label } do
-          icon_tag :sync
-        end
+        button_to t('recourse.retrieval.button'), retrieval_path,
+                  class: 'btn btn-sm btn-solid theme-primary ms-3',
+                  form_class: 'd-inline-block', aria: { label: retrieval_label }
       end
 
       # The one route a retrievable resource earns, under the resource itself.
@@ -23,8 +21,7 @@ module Recourse
       end
 
       def retrieval_label
-        t 'recourse.retrieve', models: Recourse.model_title(resource_model,
-                                                            lower: true)
+        t 'recourse.retrieval.label', models: Recourse.model_title(resource_model, lower: true)
       end
     end
   end

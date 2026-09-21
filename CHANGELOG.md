@@ -7,6 +7,13 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.8.2 - 2026-09-20
+
+* [CHANGE] The retrieval button says what it does
+
+  It drew an icon and said the rest to a screen reader alone. It reads `Retrieve` now,
+  and keeps the aria-label naming the rows it fetches.
+
 ## 7.8.1 - 2026-09-20
 
 * [FIX] A retrieval route is named after its resource
