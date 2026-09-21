@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Records and forms — Recourse Guides</title>
-<meta name="description" content="A record's page and its form in Recourse: how each value reads, which field each column gets, the card around both, the delete and its dialog, and the toast a write leaves.">
+<meta name="description" content="A record’s page and its form in Recourse: how each value reads, which field each column gets, the card around both, the delete and its dialog, and the toast a write leaves.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -21,7 +21,6 @@
       <a href="./" aria-current="page">Guides</a>
       <a href="https://rubydoc.info/gems/recourse">Reference</a>
       <a href="https://github.com/claudiob/recourse">Source</a>
-      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
   </header>
 
@@ -52,7 +51,7 @@
         <b>Chapters</b>
         <ol>
           <li><a href="#card">The card</a></li>
-          <li><a href="#show">The record's page</a></li>
+          <li><a href="#show">The record’s page</a></li>
           <li><a href="#masked">Masked values</a></li>
           <li><a href="#form">The form</a></li>
           <li><a href="#validators">What the validators say</a></li>
@@ -64,19 +63,19 @@
       </div>
 
       <h2 id="card">The card</h2>
-      <p>A record's pages are drawn in a card whose header holds one tab per page the record has: a look, a
-      change, and then one per resource nested under it, in the order the routes nested them. A nested index's tab
-      reads <code>8 ZIPs</code> where the record keeps a counter and the bare <code>ZIPs</code> where it does not; a singular
-      resource's tab reads its model's word in the singular. Tabs are links, each a page of its own with its own
+      <p>A record’s pages are drawn in a card whose header holds one tab per page the record has: a look, a
+      change, and then one per resource nested under it, in the order the routes nested them. A nested index’s tab
+      reads <code>8 comments</code> where the record keeps a counter and the bare <code>Comments</code> where it does not; a singular
+      resource’s tab reads its model’s word in the singular. Tabs are links, each a page of its own with its own
       address and breadcrumb.</p>
-      <p>A nested page sits in the parent's card, with its own tab current and the parent's Show and Edit beside
+      <p>A nested page sits in the parent’s card, with its own tab current and the parent’s Show and Edit beside
       it. A form for a record that is not there yet gets no card, there being no other page of it to offer.</p>
-      <p>The card is the layout's, not the template's: it is drawn around whatever template answers, so a host
+      <p>The card is the layout’s, not the template’s: it is drawn around whatever template answers, so a host
       writing its own <code>show</code>, <code>edit</code> or nested <code>index</code> writes its body and nothing else. The tabs, the
-      buttons beside the breadcrumb, the delete and the tab's title all stay. A page that wants the width to itself
+      buttons beside the breadcrumb, the delete and the tab’s title all stay. A page that wants the width to itself
       assigns <code>@recourse_card = false</code>.</p>
 
-      <h2 id="show">The record's page</h2>
+      <h2 id="show">The record’s page</h2>
       <p>One heading and one value per editable column — the same list the form offers, encrypted columns included
       — two to a row on a large viewport, and then <code>Created</code> and <code>Updated</code> at the end, always, whatever
       the table shows. Each value reads as what it is <em>of</em>: a foreign key as the label of what it points at, a
@@ -91,11 +90,11 @@
       <h2 id="masked">Masked values</h2>
       <p>An encrypted value arrives masked, one asterisk per character, with a <code>Show</code> beside it that swaps the
       plaintext in and then removes itself. What a screenshot catches is asterisks, and reading one value is a
-      deliberate click. The form is the other way round: an encrypted attribute's field carries the value in the
+      deliberate click. The form is the other way round: an encrypted attribute’s field carries the value in the
       clear, in the field its kind earns, since a value nobody can read is a value nobody can change.</p>
 
       <h2 id="form">The form</h2>
-      <p><code>new</code> and <code>edit</code> render the same form, titled <code>New place</code> or after the record's label, with
+      <p><code>new</code> and <code>edit</code> render the same form, titled <code>New post</code> or after the record’s label, with
       one field per editable column and then one per attachment. Which field a column gets follows its kind:
       a checkbox for a boolean, a menu for an enum, a number field stepped by what the column keeps — <code>step="1"</code>
       for an integer, the scale for a decimal — a date field, a <code>datetime-local</code>, a telephone field for a
@@ -103,11 +102,11 @@
       line for a list. Money and a percentage are adorned with their unit rather than labelled twice. A column the
       database generates is never offered, since it would refuse whatever was typed.</p>
       <p>Fields sit two to a row on a large viewport and stack below it. The submit is a solid primary button. A
-      <code>_fields.html.erb</code> of the host's own replaces the fields and keeps the rest; see
+      <code>_fields.html.erb</code> of the host’s own replaces the fields and keeps the rest; see
       <a href="customizing.html#fields">Customizing</a>.</p>
 
       <h2 id="validators">What the validators say</h2>
-      <p>What a value may be is the model's business, so the browser is told what the validators say and never what
+      <p>What a value may be is the model’s business, so the browser is told what the validators say and never what
       the schema does. A length validator becomes <code>maxlength</code> and <code>minlength</code>; a format validator becomes
       <code>pattern</code>, with a <code>title</code> showing the shape it wants, read off the pattern — <code>\d{5}</code> reads
       <code>Please match the format 00000</code>; a numericality validator or a digits-only pattern becomes a numeric
@@ -119,44 +118,43 @@
       <h2 id="references">Comboboxes and typed references</h2>
       <p>A foreign key is a combobox listing every record of the other model by its label, with a search box, and
       <code>Select…</code> until a reader chooses. Two things turn it into a field to type into instead: the other
-      model's label has a length validator, so it is short enough to type; or the other table is too long to list,
-      which is 200 rows. A typed reference is labelled <code>ZIP code</code>, takes the shape of that attribute from the
+      model’s label has a length validator, so it is short enough to type; or the other table is too long to list,
+      which is 200 rows. A typed reference is labelled <code>Country code</code>, takes the shape of that attribute from the
       other model, and is looked up on the way in — a value naming no record leaves the key nil and <code>Must
-      exist</code> beside the field, which keeps what was typed. That is what keeps <code>/locations/new</code> from
-      being a menu of forty thousand ZIPs.</p>
+      exist</code> beside the field, which keeps what was typed. That is what keeps <code>/orders/new</code> from being a menu of every customer.</p>
 
       <h2 id="errors">Errors and notes</h2>
       <p>A rejected write redraws the same page with the fields keeping what was typed. The control that failed is
       marked and the reason follows it, sentence-cased and bare — <code>Must exist</code>, <code>Can't be blank</code> — since the
-      label above it already names the attribute. The message over the page is <code>Place could not be created.</code></p>
+      label above it already names the attribute. The message over the page is <code>Post could not be created.</code></p>
       <p>Under a field, where the database has said what its column is for, a line saying so; under a file field on
       an edit form, a line saying what the record is holding now — <code>2 files attached (a.png and b.png)</code>. The
       column comment is read off the schema, or off <code>recourse_comment</code> on an adapter that keeps none; see
       <a href="models.html#comments">Models</a>.</p>
 
       <h2 id="written">What a write leaves</h2>
-      <p>A write that landed goes back to the index — or to the record's own page where the routes drew no index, or
-      to the parent's page where they drew neither — with a toast naming the record by its label and leading to its
+      <p>A write that landed goes back to the index — or to the record’s own page where the routes drew no index, or
+      to the parent’s page where they drew neither — with a toast naming the record by its label and leading to its
       page: <code>Ada was created.</code>, the name a link where <code>show</code> is routed. The row it landed on is tinted in
-      the table for as long as the toast stands. A delete names the model instead: <code>Contact was deleted.</code></p>
+      the table for as long as the toast stands. A delete names the model instead: <code>Comment was deleted.</code></p>
       <p>A rejected write with no form to send it back to — a bare action, a one-click Create — goes back to the page
       the button stood on, with what turned the write down as the message.</p>
 
       <h2 id="delete">The delete</h2>
-      <p>The Delete button stands beside the breadcrumb on the record's own page, whichever of the two is open, and
+      <p>The Delete button stands beside the breadcrumb on the record’s own page, whichever of the two is open, and
       only where <code>destroy</code> is routed. It asks first, in a dialog naming the record and counting one level of what
       goes with it — <code>:destroy</code> children as deleted with it, <code>:nullify</code> ones as kept without it — and ending
       <code>This cannot be undone.</code>:</p>
-<pre><code>Delete California?
+<pre><code>Delete Acme?
 
-58 counties and 3 markets will be deleted with it.
-12 messages will be kept, without its state.
+12 projects and 3 invoices will be deleted with it.
+40 comments will be kept, without its account.
 Anything under those goes too.
 
 This cannot be undone.</code></pre>
-      <p>Counted one level down and no further, one <code>COUNT</code> per <code>has_many</code>: counting a state's whole subtree
-      would join every ZIP to draw a page. A row a model will not give up — a <code>before_destroy</code> that throws
-      <code>:abort</code> — stays, and the page says <code>Specialty could not be deleted.</code> rather than raising. A model may
+      <p>Counted one level down and no further, one <code>COUNT</code> per <code>has_many</code>: counting the whole tree under
+      an account would join every row it reaches to draw a page. A row a model will not give up — a <code>before_destroy</code> that throws
+      <code>:abort</code> — stays, and the page says <code>Category could not be deleted.</code> rather than raising. A model may
       word its own button and heading, <code>Disconnect</code> rather than <code>Delete</code>; see
       <a href="models.html#deletion">Models</a>.</p>
 

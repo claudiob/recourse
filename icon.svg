@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img"
-     aria-label="Two arrows swapping places over a table">
+     aria-label="Two arrows swapping places">
   <!--
     The mark: two characters changing places, which is the whole of what a host does
-    to its routes file. Two arrows, one each way, over three rules standing for the
-    table every swap earns. Set rx to 0 for the Apple touch icon and the avatar: iOS
+    to its routes file. Two arrows, one each way, and nothing else, since a
+    16-pixel tab carries no more. Set rx to 0 for the Apple touch icon and the avatar: iOS
     masks its own corner and every avatar is shown round.
   -->
   <rect width="512" height="512" rx="96" fill="#1c1a17"/>
@@ -12,8 +12,5 @@
     <path d="M300 124 L352 176 L300 228"/>
     <path d="M384 296 H160"/>
     <path d="M212 244 L160 296 L212 348"/>
-  </g>
-  <g fill="#e8590c">
-    <rect x="128" y="404" width="256" height="30" rx="15"/>
   </g>
 </svg>

@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -21,7 +21,6 @@
       <a href="./" aria-current="page">Guides</a>
       <a href="https://rubydoc.info/gems/recourse">Reference</a>
       <a href="https://github.com/claudiob/recourse">Source</a>
-      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
   </header>
 
@@ -66,10 +65,9 @@
 
       <h2 id="columns">Which columns, in which order</h2>
       <p>A table draws one column per attribute the model has, less four kinds it leaves off by default: encrypted
-      columns, the primary key, the two timestamps, and JSON. <code>recourse_displayed</code> names any of those back and
-      <code>recourse_hidden</code> takes any column off; both are in <a href="models.html#hidden">Models</a>. A position
-      column is never drawn, since the row's own place in the table already says it.</p>
-      <p>The order is banded, and the schema's own order stands inside each band: an enum first, then foreign
+      columns, the primary key, the two timestamps, and JSON. <code>recourse_hidden</code> takes any other column off; see <a href="models.html#hidden">Models</a>. A position
+      column is never drawn, since the row’s own place in the table already says it.</p>
+      <p>The order is banded, and the schema’s own order stands inside each band: an enum first, then foreign
       keys, then scalars, booleans, long values, dates, timestamps, and counters last of all. A state is read
       first, what a row points at next, what it counts after everything the row is. There is no hook for the order
       across bands; a column-reorder migration moves one within its band, and a host <code>_row</code> partial draws any
@@ -79,23 +77,23 @@
       <code>Created at</code>.</p>
 
       <h2 id="actions">The action columns</h2>
-      <p>A table opens with one narrow column per action a row has: an eye linking to the record's page and a
+      <p>A table opens with one narrow column per action a row has: an eye linking to the record’s page and a
       pencil to its form, each drawn only where its action is routed. A look before a change, so the pencil is
       not the first thing under the cursor. A resource with neither opens at its first attribute.</p>
       <p>A resource routed <code>destroy</code> with no <code>edit</code> has no page to carry the Delete button — a file
       attached to a record, a row joining two — so its table draws a third column: the trash icon, with the same
-      dialog the record's page would have shown. A table whose rows have an edit page draws no delete on the row: a
+      dialog the record’s page would have shown. A table whose rows have an edit page draws no delete on the row: a
       row of pencils with a bin beside each is a mis-click waiting to happen.</p>
       <p>Where a host writes its own <code>_row</code> partial these columns are still prepended, since they are the
-      table's rather than the row's.</p>
+      table’s rather than the row’s.</p>
 
       <h2 id="cells">How a cell reads</h2>
-      <p>A cell reads as what its column is <em>of</em>, the way the record's page does: a foreign key as the label of
-      the record it points at, linked to that record's page where one is routed; a boolean as <code>Yes</code> or
-      <code>No</code>; an enum as a badge; a number delimited; a date by its name and a time in the reader's zone with
+      <p>A cell reads as what its column is <em>of</em>, the way the record’s page does: a foreign key as the label of
+      the record it points at, linked to that record’s page where one is routed; a boolean as <code>Yes</code> or
+      <code>No</code>; an enum as a badge; a number delimited; a date by its name and a time in the reader’s zone with
       how long ago in a tooltip; a web address as its host, with an arrow that opens it in a new tab; a phone
       punctuated; a list as <code>3 items</code>. The full table is in <a href="models.html#kinds">Models</a>.</p>
-      <p>A counter reads as the figure alone under an icon heading, and as <code>38,405 ZIPs</code> under a word once the
+      <p>A counter reads as the figure alone under an icon heading, and as <code>1,204 comments</code> under a word once the
       table is wide enough. Each is a link to the rows it counts where a nested index of them is routed under the
       record.</p>
 
@@ -106,13 +104,13 @@
       and the latest are what a reader clicks a heading to find, and the second turns it back up. Rows with nothing
       in the sorted column come last either way. Clicking a heading restarts at the first page and keeps whatever
       search or filter was in force.</p>
-      <p>The model's own order, before anyone clicks, is <code>recourse_order</code>: the id, or the position column on a
+      <p>The model’s own order, before anyone clicks, is <code>recourse_order</code>: the id, or the position column on a
       positioned table.</p>
 
       <h2 id="searching">Searching</h2>
       <p>The search box looks through every indexed string column the table shows, plus the label behind each
-      foreign key whose table is too long to list — <code>/locations</code> searches <code>zip_code_cont</code> — and says so
-      in its own placeholder: <code>Filter by code or name</code>. Typing submits after a moment of quiet, and only the
+      foreign key whose table is too long to list — <code>/orders</code> searches <code>customer_name_cont</code> — and says so
+      in its own placeholder: <code>Filter by title or slug</code>. Typing submits after a moment of quiet, and only the
       table is replaced, so the caret stays where it was. What the search matched is marked in the cell that matched
       it, and only there; a search never looks through a number.</p>
       <p>A model whose searchable columns are all encrypted gets a box asking for a whole value — <code>Filter by exact
@@ -131,35 +129,35 @@
 
       <h2 id="pages">Pages</h2>
       <p>A table opens at 15 rows, and the footer offers <code>100 per page</code> for a reader scanning rather than reading.
-      The choice is the reader's, kept in their browser as a cookie and checked against those two sizes, so no page
+      The choice is the reader’s, kept in their browser as a cookie and checked against those two sizes, so no page
       carries a <code>?limit=</code> and nothing is written to the host. Under the table: <code>Displaying items 1-15 of
       101</code>, the switch, and the pages at the right; a table that fits on one page says how many items it has and
       offers neither.</p>
 
       <h2 id="bookmarks">Bookmarks</h2>
-      <p>One line in an initializer names the viewer's kept rows, as a Proc, because at boot the viewer is nobody:</p>
-<pre><code>Recourse.bookmarks = -> { Keepsake.where agent: Current.agent }</code></pre>
+      <p>One line in an initializer names the viewer’s kept rows, as a Proc, because at boot the viewer is nobody:</p>
+<pre><code>Recourse.bookmarks = -> { Bookmark.where user: Current.user }</code></pre>
       <p>Every model with a <code>has_many</code> at that class then opens its table with a square to keep a row by, ahead of
       the action columns: hollow where the viewer has not kept the row, filled where they have, the row tinted with
       it. Kept rows come first. A click flips the square at once, posts in the background, and the tint follows the
       write back; a bookmark asks nothing first, since a mis-click is undone by clicking again. A model that cannot
-      hold a bookmark gets no column, and a nested listing keeps its rows at the resource's own route rather than
+      hold a bookmark gets no column, and a nested listing keeps its rows at the resource’s own route rather than
       under every parent.</p>
 
       <h2 id="refreshes">Live refreshes</h2>
-      <p>When the host runs <code>turbo-rails</code>, an open index subscribes to its model's refreshes: a record saved in
+      <p>When the host runs <code>turbo-rails</code>, an open index subscribes to its model’s refreshes: a record saved in
       one browser redraws the table in every other one that has the page open, morphed in place, with the scroll,
       the search box and any open menu kept. A refresh re-fetches the current address, so the search, the sort and
       the page survive it. A model opts out with <code>recourse_broadcasts?</code>.</p>
 
       <h2 id="cache">The cache</h2>
       <p>The table is a fragment keyed on the relation — its rows, the newest <code>updated_at</code> among them and among
-      everything <code>recourse_includes</code> names, the counts the rows draw, the viewer's bookmarks and their time zone —
+      everything <code>recourse_includes</code> names, the counts the rows draw, the viewer’s bookmarks and their time zone —
       so nothing has to expire it and a row written anywhere shows on the next request. A sorted, searched or filtered
       table is drawn live. A host that declared <code>touch: true</code> only to expire such a table can drop it.</p>
 
       <h2 id="phone">On a phone</h2>
-      <p>Below 768px the sidebar is a row of icons across the top, the trail and the search under it, and the table's
+      <p>Below 768px the sidebar is a row of icons across the top, the trail and the search under it, and the table’s
       rows become stacked blocks, each cell labelled by its heading. A pair of arrows at the foot of the sidebar puts
       the words back beside every icon, and the choice is kept as a cookie so the server draws it that way from the
       first paint.</p>

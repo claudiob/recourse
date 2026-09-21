@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://claudiob.github.io/recourse/avatar.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,7 +28,6 @@
       <a href="guides/">Guides</a>
       <a href="https://rubydoc.info/gems/recourse">Reference</a>
       <a href="https://github.com/claudiob/recourse">Source</a>
-      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
   </header>
 
@@ -45,66 +44,40 @@
   </section>
 
   <section>
-    <h2>Three steps, and the third is optional</h2>
-    <div class="steps">
-      <div class="step">
-        <span class="n">STEP 1</span>
-        <h3>Edit your routes</h3>
-        <p>Replace <code>resources</code> with <code>recourses</code>. Every action the line routes is a
-        screen the gem serves, nested resources included.</p>
-<pre><code><span class="del">- resources :posts do</span>
-<span class="add">+ recourses :posts do</span>
-<span class="del">-   resources :comments</span>
-<span class="add">+   recourses :comments</span>
+    <h2>Install it</h2>
+<pre><code><span class="c"># Gemfile</span>
+gem 'recourse'</code></pre>
+    <p>Nothing else goes in the host: everything a page is styled and scripted by is served by a gem this one
+    depends on, so an app without an asset pipeline gets the same screens and nothing is fetched across a network.</p>
+  </section>
+
+  <section>
+    <h2>Edit your routes</h2>
+    <p>Replace <code>resources</code> with <code>recourses</code>. Every action the line routes is a screen the gem serves,
+    nested resources included, and a controller or a view the app already has is left alone.</p>
+<pre><code><span class="c"># config/routes.rb</span>
+<span class="del">- resources :posts, only: %i[index show] do</span>
+<span class="add">+ recourses :posts, only: %i[index show] do</span>
+<span class="del">-   resources :comments, except: :destroy</span>
+<span class="add">+   recourses :comments, except: :destroy</span>
   end</code></pre>
-      </div>
-      <div class="step">
-        <span class="n">STEP 2</span>
-        <h3>Enhance your models</h3>
-        <p>Most models need nothing: the screens read the validators, the associations, the column types
-        and the indexes. A class method or two says the rest.</p>
-<pre><code>class Post &lt; ApplicationRecord
-  def self.recourse_label = :title
-  def self.recourse_hidden = :ip_address
-  def self.recourse_order = { published_at: :desc }
-end</code></pre>
-      </div>
-      <div class="step">
-        <span class="n">STEP 3</span>
-        <h3>Secure your controllers</h3>
-        <p>Every generated controller inherits <code>RecoursesController</code>, which the host defines to
-        put a guard above every screen at once.</p>
-<pre><code>class RecoursesController &lt; Recourse::BaseController
-  before_action :authenticate!
-end</code></pre>
-      </div>
-    </div>
+    <p>That is the whole of what a host has to do. Everything else — what a model says about its own screens, a
+    row or a form of the host’s own, a guard above every controller — is optional, and the
+    <a href="guides/">guides</a> cover each in turn.</p>
   </section>
 
   <section>
     <h2>What one line earns</h2>
     <div class="earned">
       <div><b>A table</b><p>Paginated, searched, sorted and filtered, with a sidebar entry and a keyboard shortcut. Counts link to the rows behind them, and an open table redraws itself when a row changes.</p></div>
-      <div><b>A record's page</b><p>Every value drawn as what it is: a key as the label it points at, a date by its name, a boolean as Yes or No, an encrypted value masked until asked for.</p></div>
-      <div><b>A form</b><p>A field for each column's kind, carrying what the validators say — a length as <code>maxlength</code>, a format as <code>pattern</code>, a required attribute as a required field.</p></div>
+      <div><b>A record’s page</b><p>Every value drawn as what it is: a key as the label it points at, a date by its name, a boolean as Yes or No, an encrypted value masked until asked for.</p></div>
+      <div><b>A form</b><p>A field for each column’s kind, carrying what the validators say — a length as <code>maxlength</code>, a format as <code>pattern</code>, a required attribute as a required field.</p></div>
       <div><b>A delete that asks first</b><p>A dialog naming the record and counting what goes with it, and a page that says so rather than raising when a model will not give a row up.</p></div>
       <div><b>Nesting</b><p>Each resource nested under a record is a tab on its card, counted where the record keeps a count, and a bare action is a button beside the breadcrumb.</p></div>
       <div><b>Other shapes</b><p>A table of places reads as a Google map, a table of events as a week, a table with a <code>position</code> is dragged into order, and one fed from elsewhere offers to fetch again.</p></div>
-      <div><b>Bookmarks</b><p>One Proc naming the viewer's kept rows, and every table that can hold one opens with a square to keep a row by, kept rows first.</p></div>
-      <div><b>Your look</b><p>A primary color, one of nine palettes, light or dark at the reader's own choosing, and every time drawn in the reader's own zone.</p></div>
+      <div><b>Bookmarks</b><p>One Proc naming the viewer’s kept rows, and every table that can hold one opens with a square to keep a row by, kept rows first.</p></div>
+      <div><b>Your look</b><p>A primary color, one of nine palettes, light or dark at the reader’s own choosing, and every time drawn in the reader’s own zone.</p></div>
     </div>
-  </section>
-
-  <section>
-    <h2>How to install</h2>
-<pre><code>gem install recourse</code></pre>
-<pre><code><span class="c"># Gemfile</span>
-gem 'recourse', '~> 7.0'</code></pre>
-    <p><code>~> 7.0</code> follows Semantic Versioning: <code>bundle update</code> takes every 7.x and never a
-    breaking change. Rails 8.1 and Ruby 3.2 are the minimum. The pages need Turbo, which
-    <code>turbo-rails</code> brings, and nothing else in the host: everything a page is styled and scripted by
-    is <code>bh</code>, which this gem depends on and whose engine serves it, so a host without an asset pipeline
-    gets the same screens and nothing is fetched across a network.</p>
   </section>
 
   <section>
@@ -118,8 +91,8 @@ gem 'recourse', '~> 7.0'</code></pre>
       <a href="guides/records.html"><b>Records and forms</b><span>The show page, the form, the card around both, and the delete.</span></a>
       <a href="guides/shapes.html"><b>Maps and calendars</b><span>The same page of rows drawn on a map or as a week.</span></a>
       <a href="guides/positioning.html"><b>Positionable tables</b><span>Rows a reader drags into an order the model keeps.</span></a>
-      <a href="guides/retrieval.html"><b>Retrievable tables</b><span>A button that fetches a table's rows again from wherever they came.</span></a>
-      <a href="guides/appearance.html"><b>Look and feel</b><span>Color, theme, the reader's own settings, assets and the locale.</span></a>
+      <a href="guides/retrieval.html"><b>Retrievable tables</b><span>A button that fetches a table’s rows again from wherever they came.</span></a>
+      <a href="guides/appearance.html"><b>Look and feel</b><span>Color, theme, the reader’s own settings, assets and the locale.</span></a>
       <a href="guides/customizing.html"><b>Customizing</b><span>What a host writes in place of what the gem draws: views and controllers.</span></a>
     </div>
   </section>

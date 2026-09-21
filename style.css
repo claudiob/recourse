@@ -12,7 +12,6 @@
   --accent-ink: #9a3412;
   --code-bg: #fffdf8;
   --mark: #ffe8b3;
-  --display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
   --text: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
   color-scheme: light dark;
@@ -48,7 +47,7 @@ body {
 a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
 a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
-h1, h2, h3, h4 { font-family: var(--display); font-weight: 500; letter-spacing: -0.01em; line-height: 1.15; margin: 0; }
+h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; margin: 0; }
 h1 { font-size: clamp(34px, 5vw, 56px); }
 h2 { font-size: clamp(26px, 3.2vw, 34px); margin-top: 2.4em; }
 h3 { font-size: clamp(20px, 2.2vw, 24px); margin-top: 1.8em; }
@@ -94,16 +93,15 @@ img.shot { width: 100%; height: auto; border: 1px solid var(--rule); border-radi
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
   padding: 18px 0; border-bottom: 1px solid var(--rule);
 }
-.brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 22px; color: var(--ink); border: 0; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-size: 22px; color: var(--ink); border: 0; }
 .brand img { width: 28px; height: 28px; border-radius: 7px; }
 .mast nav { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: .95em; }
 .mast nav a { color: var(--ink-2); border: 0; }
 .mast nav a:hover, .mast nav a[aria-current] { color: var(--accent); }
 
 /* ---- the landing page ---- */
-.hero { padding: clamp(40px, 8vw, 96px) 0 clamp(28px, 5vw, 56px); }
-.hero h1 { max-width: 14ch; }
-.hero .lede { font-size: clamp(18px, 1.6vw, 21px); max-width: 44ch; color: var(--ink-2); margin: 1.2em 0 1.6em; }
+.hero { padding: clamp(20px, 4vw, 44px) 0 clamp(24px, 4vw, 48px); }
+.hero .lede { font-size: clamp(18px, 1.6vw, 21px); color: var(--ink-2); margin: 1.2em 0 1.6em; }
 .hero .actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
 .btn {
   display: inline-block; padding: 10px 18px; border-radius: 6px; font-weight: 600; border: 1px solid var(--accent);
@@ -149,13 +147,13 @@ img.shot { width: 100%; height: auto; border: 1px solid var(--rule); border-radi
 
 .earned { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px 28px; margin: 24px 0 0; }
 .earned div { border-top: 2px solid var(--accent); padding-top: 12px; }
-.earned b { display: block; font-family: var(--display); font-weight: 500; font-size: 1.2em; margin-bottom: .3em; }
+.earned b { display: block; font-weight: 500; font-size: 1.2em; margin-bottom: .3em; }
 .earned p { color: var(--ink-2); font-size: .95em; margin: 0; }
 
 .guides { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin: 20px 0 0; }
 .guides a { display: block; border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; color: var(--ink); background: color-mix(in srgb, var(--paper-2) 50%, transparent); }
 .guides a:hover { border-color: var(--accent); }
-.guides b { display: block; font-family: var(--display); font-weight: 500; font-size: 1.15em; margin-bottom: .25em; }
+.guides b { display: block; font-weight: 500; font-size: 1.15em; margin-bottom: .25em; }
 .guides span { color: var(--ink-2); font-size: .92em; }
 
 .foot { display: flex; gap: 24px; flex-wrap: wrap; justify-content: space-between; padding: 28px 0 40px; margin-top: 60px; border-top: 1px solid var(--rule); color: var(--quiet); font-size: .92em; }

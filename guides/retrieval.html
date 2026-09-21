@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -21,7 +21,6 @@
       <a href="./" aria-current="page">Guides</a>
       <a href="https://rubydoc.info/gems/recourse">Reference</a>
       <a href="https://github.com/claudiob/recourse">Source</a>
-      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
   </header>
 
@@ -44,9 +43,9 @@
 
     <article>
       <h1>Retrievable tables</h1>
-      <p>Some tables list rows that came from somewhere else — a CRM's visits, a feed's entries — and a reader
-      wants them fetched again. This guide is the keyword that says so, what it draws, and the one controller the
-      host writes.</p>
+      <p>Some tables list rows that came from somewhere else — a marketplace’s orders, a feed’s entries — and a
+      reader wants them fetched again. This guide is the keyword that says so, what it draws, and the one controller
+      the host writes.</p>
 
       <div class="chapters">
         <b>Chapters</b>
@@ -58,38 +57,38 @@
       </div>
 
       <h2 id="keyword">The keyword</h2>
-<pre><code>recourses :providers do
-  recourses :visits, only: :index, retrievable: true
+<pre><code>recourses :stores do
+  recourses :orders, only: :index, retrievable: true
 end</code></pre>
-      <p>That draws <code>POST /providers/5/visits/retrieval</code>, named <code>provider_visits_retrieval</code>, and puts a
+      <p>That draws <code>POST /stores/5/orders/retrieval</code>, named <code>store_orders_retrieval</code>, and puts a
       <code>Retrieve</code> button on the table that lists them, beside the breadcrumb. The button is labelled for a screen
-      reader with the rows it fetches: <code>Retrieve visits again</code>.</p>
+      reader with the rows it fetches: <code>Retrieve orders again</code>.</p>
       <p>The keyword is refused on a resource with no <code>index</code>, since the button stands on the table that lists the
       rows and there would be nowhere to put it.</p>
 
       <h2 id="controller">The controller</h2>
-      <p>Where the rows come from is the host's to know, so the controller is the host's to write, and the gem makes
+      <p>Where the rows come from is the host’s to know, so the controller is the host’s to write, and the gem makes
       one only where there is none — the same bargain a bare action strikes. It is named after the resource, under
       the parent, and it is a <code>RecoursesController</code> like every other screen, so the same guard stands above it:</p>
-<pre><code>class Providers::Visits::RetrievalsController &lt; RecoursesController
+<pre><code>class Stores::Orders::RetrievalsController &lt; RecoursesController
   def create
-    provider = Provider.find params.expect(:provider_id)
-    provider.import_visits
-    flash.notice = 'Fetching visits'
-    redirect_to provider_visits_path(provider), status: :see_other
+    store = Store.find params.expect(:store_id)
+    store.import_orders
+    flash.notice = 'Fetching orders'
+    redirect_to store_orders_path(store), status: :see_other
   end
 end</code></pre>
       <p>The work belongs to the model, or to a job the model enqueues, and the action says it started. A redirect
       after a non-GET carries <code>status: :see_other</code>, since every screen is a Turbo visit.</p>
 
       <h2 id="nothing">Saying there is nothing to fetch from</h2>
-      <p>An index of a CRM's work is no use to a provider who has connected none, and only the host knows it. The
-      listing controller answers <code>recourse_retrievable?</code>, true unless narrowed, and the button is drawn only
+      <p>An index of a marketplace’s orders is no use to a store that has connected none, and only the host knows it.
+      The listing controller answers <code>recourse_retrievable?</code>, true unless narrowed, and the button is drawn only
       where it holds:</p>
-<pre><code>class Providers::VisitsController &lt; RecoursesController
+<pre><code>class Stores::OrdersController &lt; RecoursesController
 private
 
-  def recourse_retrievable? = @provider.integrated?
+  def recourse_retrievable? = @store.connected?
 end</code></pre>
       <p>Private, so narrowing it adds no action. The route stays drawn either way; it is the button that goes.</p>
 

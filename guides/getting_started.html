@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -21,7 +21,6 @@
       <a href="./" aria-current="page">Guides</a>
       <a href="https://rubydoc.info/gems/recourse">Reference</a>
       <a href="https://github.com/claudiob/recourse">Source</a>
-      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
   </header>
 
@@ -62,13 +61,10 @@
 
       <h2 id="install">Installing the gem</h2>
 <pre><code><span class="c"># Gemfile</span>
-gem 'recourse', '~> 7.0'</code></pre>
-      <p><code>~> 7.0</code> follows Semantic Versioning: <code>bundle update</code> takes every 7.x and never a
-      breaking change. Rails 8.1 and Ruby 3.2 are the minimum, and so are Pagy 43 and Ransack 4.4, which the
-      gem depends on for the pages and the search.</p>
-      <p>The pages need Turbo, which <code>turbo-rails</code> brings, and nothing else in the host. Everything a
-      page is styled and scripted by — Bootstrap 6, its icons, Turbo, Stimulus and the controllers behind these
-      screens — is <code>bh</code>, which this gem depends on and whose engine serves them at <code>/bh/</code>. A host
+gem 'recourse'</code></pre>
+      <p>Nothing else goes in the host. The pages need Turbo, which <code>turbo-rails</code> brings as a dependency, and
+      everything a page is styled and scripted by — Bootstrap, its icons, Turbo, Stimulus and the controllers behind
+      these screens — is <code>bh</code>, which this gem depends on and whose engine serves them at <code>/bh/</code>. A host
       without an asset pipeline gets the same screens, and nothing is fetched across a network. A host serving
       those files from somewhere else says so in <code>Recourse.assets</code>; see <a href="appearance.html#assets">Look and feel</a>.</p>
 
@@ -95,27 +91,27 @@ gem 'recourse', '~> 7.0'</code></pre>
         <thead><tr><th>Routed</th><th>Earns</th></tr></thead>
         <tbody>
           <tr><td><code>index</code></td><td>A sidebar entry, a keyboard shortcut, and a paginated, searchable, sortable, filterable table. See <a href="tables.html">Tables</a>.</td></tr>
-          <tr><td><code>show</code></td><td>A record's page, every value drawn as what it is, encrypted ones masked until asked for. See <a href="records.html">Records and forms</a>.</td></tr>
-          <tr><td><code>new</code>, <code>edit</code></td><td>A form with a field for each column's kind, carrying what the validators say. A rejected write redraws it with the errors beside the fields.</td></tr>
+          <tr><td><code>show</code></td><td>A record’s page, every value drawn as what it is, encrypted ones masked until asked for. See <a href="records.html">Records and forms</a>.</td></tr>
+          <tr><td><code>new</code>, <code>edit</code></td><td>A form with a field for each column’s kind, carrying what the validators say. A rejected write redraws it with the errors beside the fields.</td></tr>
           <tr><td><code>create</code>, <code>update</code></td><td>The write, a toast naming the record and leading to its page, and the row it landed on marked in the table.</td></tr>
-          <tr><td><code>destroy</code></td><td>A button on the record's own page, or on each row where no edit page would carry it, with a dialog naming what goes with the record before it goes.</td></tr>
+          <tr><td><code>destroy</code></td><td>A button on the record’s own page, or on each row where no edit page would carry it, with a dialog naming what goes with the record before it goes.</td></tr>
         </tbody>
       </table>
       <p>A resource with an <code>index</code> and nothing else is a read-only table; one with <code>create</code>
-      and no <code>new</code> gets a one-click <code>Create</code> button in the Add link's place, on the host's word
+      and no <code>new</code> gets a one-click <code>Create</code> button in the Add link’s place, on the host’s word
       that a bare record can stand. Nested resources default to <code>only: %i[index new create]</code>: the
-      parent's rows, and a form to add one. See <a href="routes.html">Routes</a> for every shape a routes line can take.</p>
+      parent’s rows, and a form to add one. See <a href="routes.html">Routes</a> for every shape a routes line can take.</p>
 
       <h2 id="sidebar">The sidebar and the shortcuts</h2>
       <p>Every resource routed <code>index</code> is an entry in the sidebar, in the order <code>config/routes.rb</code>
       declares them, never sorted. A resource without an index gets no entry rather than a broken one. Each entry
-      carries the model's icon — a rolodex for a contact, a hammer for a job — chosen by name through the
+      carries the model’s icon, chosen by the model’s own name through the
       <a href="https://github.com/claudiob/unicon">unicon</a> gem, and a model may name another concept with
       <code>recourse_icon</code>.</p>
-      <p>Every entry answers to a letter of its own title, held with Option: <code>Contacts</code> to C, and
-      <code>Counties</code>, declared after it, to O, since C was taken. Holding Option underlines the letter in place,
+      <p>Every entry answers to a letter of its own title, held with Option: <code>Posts</code> to P, and
+      <code>Pages</code>, declared after it, to A, since P was taken. Holding Option underlines the letter in place,
       so the hint points at a key rather than at a number nobody can guess.</p>
-      <p>The foot of the sidebar holds the reader's own controls: a moon or a sun that moves the page through the
+      <p>The foot of the sidebar holds the reader’s own controls: a moon or a sun that moves the page through the
       palettes and between light and dark, and — where the host drew a route named <code>exit</code> — the way out.</p>
 
       <h2 id="secure">Securing the controllers</h2>

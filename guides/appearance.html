@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Look and feel — Recourse Guides</title>
-<meta name="description" content="How Recourse pages look and where that comes from: the primary color, the nine palettes, what the reader chooses for themselves, the reader's time zone, where the assets are served from, the host's head partial, and the locale.">
+<meta name="description" content="How Recourse pages look and where that comes from: the primary color, the nine palettes, what the reader chooses for themselves, the reader’s time zone, where the assets are served from, the host’s head partial, and the locale.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -21,7 +21,6 @@
       <a href="./" aria-current="page">Guides</a>
       <a href="https://rubydoc.info/gems/recourse">Reference</a>
       <a href="https://github.com/claudiob/recourse">Source</a>
-      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
   </header>
 
@@ -44,7 +43,7 @@
 
     <article>
       <h1>Look and feel</h1>
-      <p>Two lines in an initializer say how every page looks. The rest is the reader's — their palette, their page
+      <p>Two lines in an initializer say how every page looks. The rest is the reader’s — their palette, their page
       size, their time zone, how much a phone spells out — and this guide is where each of those is kept, where
       the assets come from, and how the words are changed.</p>
 
@@ -54,9 +53,9 @@
           <li><a href="#color">The primary color</a></li>
           <li><a href="#theme">The theme</a></li>
           <li><a href="#reader">What the reader chooses</a></li>
-          <li><a href="#zone">The reader's time zone</a></li>
+          <li><a href="#zone">The reader’s time zone</a></li>
           <li><a href="#assets">Where the assets come from</a></li>
-          <li><a href="#head">The host's head and layout</a></li>
+          <li><a href="#head">The host’s head and layout</a></li>
           <li><a href="#locale">The locale</a></li>
         </ol>
       </div>
@@ -65,7 +64,7 @@
 <pre><code><span class="c"># config/initializers/recourse.rb</span>
 Recourse.color = :orange</code></pre>
       <p>Which Bootstrap family every button, link, sorted heading and focus ring is drawn in: one of <code>blue</code>,
-      <code>gray</code>, <code>orange</code>, <code>purple</code>, <code>pink</code> or <code>brown</code>, or nil for Bootstrap's own blue. Anything
+      <code>gray</code>, <code>orange</code>, <code>purple</code>, <code>pink</code> or <code>brown</code>, or nil for Bootstrap’s own blue. Anything
       else raises, naming the six, since a typo would otherwise go unnoticed until somebody looked at a button. The
       label on a solid button is white or dark by family, so orange gets dark text rather than white on it.</p>
 
@@ -73,9 +72,9 @@ Recourse.color = :orange</code></pre>
 <pre><code>Recourse.theme = :nord</code></pre>
       <p>Which color scheme the pages are drawn in — one of <code>Recourse::THEMES.keys</code>: <code>dawn</code>,
       <code>dracula</code>, <code>gruvbox</code>, <code>monokai</code>, <code>nord</code>, <code>one_dark</code>, <code>solarized</code>,
-      <code>tokyo_night</code>, and <code>bootstrap</code> for upstream's own palette, which is also what nil means. A palette
-      repaints Bootstrap's ramps in both modes and leads with an accent of its own, so a theme alone looks right; a
-      color named beside it still says which family is primary. Every page follows the system's light or dark
+      <code>tokyo_night</code>, and <code>bootstrap</code> for upstream’s own palette, which is also what nil means. A palette
+      repaints Bootstrap’s ramps in both modes and leads with an accent of its own, so a theme alone looks right; a
+      color named beside it still says which family is primary. Every page follows the system’s light or dark
       setting until the reader says otherwise.</p>
 
       <h2 id="reader">What the reader chooses</h2>
@@ -85,11 +84,11 @@ Recourse.color = :orange</code></pre>
       size, 15 or 100 rows, offered under every table; and on a phone, whether the chrome is icons alone or icons
       with their words, toggled by the arrows at the foot of the sidebar.</p>
 
-      <h2 id="zone">The reader's time zone</h2>
-      <p>Every time on these pages is drawn in the reader's own zone. The browser reports it into a cookie, and the
+      <h2 id="zone">The reader’s time zone</h2>
+      <p>Every time on these pages is drawn in the reader’s own zone. The browser reports it into a cookie, and the
       server wraps each action in <code>Time.use_zone</code> of it, so the page, the table, the calendar and the field that
-      edits a value all agree. A browser that has not said, or names a zone Rails does not know, gets the host's
-      <code>config.time_zone</code>. The host's own setting is never written and its own screens are drawn as before; storage
+      edits a value all agree. A browser that has not said, or names a zone Rails does not know, gets the host’s
+      <code>config.time_zone</code>. The host’s own setting is never written and its own screens are drawn as before; storage
       stays UTC.</p>
 
       <h2 id="assets">Where the assets come from</h2>
@@ -97,17 +96,17 @@ Recourse.color = :orange</code></pre>
       this markup names — is <code>bh</code>, a dependency of the gem, served by its own engine at <code>/bh/</code>. Nothing is
       vendored here and nothing is fetched across a network, and the version in the lock file is the version on the
       page.</p>
-      <p>A host serving those files from somewhere else — a CDN, a bundle of its own carrying bh's layer — says so,
+      <p>A host serving those files from somewhere else — a CDN, a bundle of its own carrying bh’s layer — says so,
       with no trailing slash, and that is the whole of what it writes:</p>
 <pre><code>Recourse.assets = 'https://cdn.example.com/bh'</code></pre>
 
-      <h2 id="head">The host's head and layout</h2>
-      <p>The head past the gem's own tags is the host's. Whatever a <code>recourses/head</code> partial holds — the icon
-      the tab wears, a stylesheet of the host's own over this one — is drawn last in the head, from the host's own
+      <h2 id="head">The host’s head and layout</h2>
+      <p>The head past the gem’s own tags is the host’s. Whatever a <code>recourses/head</code> partial holds — the icon
+      the tab wears, a stylesheet of the host’s own over this one — is drawn last in the head, from the host’s own
       views or from a gem it loads, and the gem writes no icon link of its own where nobody has:</p>
 <pre><code><span class="c"># app/views/recourses/_head.html.erb</span>
 &lt;link rel='icon' href='/favicon.svg' type='image/svg+xml'&gt;</code></pre>
-      <p>Every screen renders in the gem's <code>layouts/recourses</code>, never in the host's <code>application</code> layout. A
+      <p>Every screen renders in the gem’s <code>layouts/recourses</code>, never in the host’s <code>application</code> layout. A
       host puts its own chrome back by writing <code>app/views/layouts/recourses.html.erb</code>, which wins on being earlier
       in the view paths, or by declaring <code>layout 'application'</code> on <code>RecoursesController</code>. Such a layout
       yields <code>:actions</code> and <code>:search</code> where it wants the buttons and the search box, and gets no styling until
@@ -117,9 +116,9 @@ Recourse.color = :orange</code></pre>
       <p>Every string the gem shows is a key in <code>config/locales/recourse.en.yml</code>, and a host rewords one by writing
       the key in a locale of its own: <code>recourse.add</code> is <code>Add %{model}</code>, <code>recourse.none</code> is <code>No
       %{models}.</code>, <code>recourse.deletion.undone</code> is <code>This cannot be undone.</code> Dates and times read from
-      <code>date.formats.recourse</code> and <code>time.formats.recourse</code>, namespaced so the host's own formats stand, and a
+      <code>date.formats.recourse</code> and <code>time.formats.recourse</code>, namespaced so the host’s own formats stand, and a
       locale without them raises rather than degrading. A column heading is renamed by translating the attribute, and
-      a model's deletion is worded under <code>recourse.models</code>; see <a href="models.html#deletion">Models</a>.</p>
+      a model’s deletion is worded under <code>recourse.models</code>; see <a href="models.html#deletion">Models</a>.</p>
 
       <nav class="next"><a href="retrieval.html">← Retrievable tables</a><a href="customizing.html">Customizing →</a></nav>
     </article>

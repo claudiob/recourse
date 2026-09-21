@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -21,7 +21,6 @@
       <a href="./" aria-current="page">Guides</a>
       <a href="https://rubydoc.info/gems/recourse">Reference</a>
       <a href="https://github.com/claudiob/recourse">Source</a>
-      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
   </header>
 
@@ -66,25 +65,25 @@
       title is a word about the row, not a place among rows, and a table of those is left alone. A column named
       otherwise is named in the model: <code>def recourse_position = :ordering</code>.</p>
       <p>The routes say where a drop is reported, since a page nobody drags needs no route:</p>
-<pre><code>recourses :steps, positionable: true</code></pre>
-      <p>That draws <code>PATCH /steps/5/position</code> under the index. A table is put in order from its index and from
+<pre><code>recourses :tasks, positionable: true</code></pre>
+      <p>That draws <code>PATCH /tasks/5/position</code> under the index. A table is put in order from its index and from
       nowhere else, so the keyword is refused on a resource that draws none.</p>
 
       <h2 id="page">What the page does</h2>
       <p>A grip opens each row, dragging it moves the row, and the place it lands in is written to that route. The
       table is ordered by the column, whatever <code>recourse_order</code> would otherwise say: the order a table is read in
-      and the order somebody put it in are one fact. The column itself is never drawn, since the row's place in the
+      and the order somebody put it in are one fact. The column itself is never drawn, since the row’s place in the
       table already says it, and the form never asks for it.</p>
       <p>The search box and the sorted headings stand down while the grips are drawn, and a <code>q</code> typed by hand is
       refused for the same reason: a filter shortens the page, and a drop on a shortened page would report a place
       among the rows that are left.</p>
       <p>Whether a page is positioned is asked per page, not per model. A position means something under the parent it
-      is counted within, so a flat model's own index is positioned and a listing nested under a parent is, while a
+      is counted within, so a flat model’s own index is positioned and a listing nested under a parent is, while a
       listing of every row across every parent — where the positions run 1, 2, 3, 1, 2, 3 side by side — is not, and
       sorts and searches like any other.</p>
 
       <h2 id="numbers">What keeps the numbers running</h2>
-      <p>What a drop reports is a row's place on the <em>page</em>, which is a position only while the numbers run 1, 2, 3
+      <p>What a drop reports is a row’s place on the <em>page</em>, which is a position only while the numbers run 1, 2, 3
       with no holes in them. So two things follow the column rather than the routes: a new row lands last among its
       own, and the gap closes behind one that goes, whether it was made behind a form or in a console. Both are
       callbacks every model carries and only a positioned one runs.</p>
@@ -92,13 +91,13 @@
       <h2 id="siblings">A model pointing two ways</h2>
       <p>The rows a position is counted among are those under the same parent, or the whole table where the model
       points nowhere. A model with one <code>belongs_to</code> needs no answer. One pointing two ways is asked rather than
-      guessed, since numbering a step among every step there is would be the wrong answer given quietly, at the first
+      guessed, since numbering a task among every task there is would be the wrong answer given quietly, at the first
       write:</p>
-<pre><code>class Step &lt; ApplicationRecord
-  belongs_to :team
-  belongs_to :person
+<pre><code>class Task &lt; ApplicationRecord
+  belongs_to :project
+  belongs_to :user
 
-  def recourse_siblings = team.steps
+  def recourse_siblings = project.tasks
 end</code></pre>
       <p>Without it, the first save raises naming the model and the method.</p>
 
@@ -107,10 +106,10 @@ end</code></pre>
       table and both callbacks off the model together.</p>
 
       <h2 id="second">A second listing</h2>
-      <p>A host with a second listing of a positioned model — a step's place among its team's steps, and another
-      among the steps of whoever is to do them — names the second column on its controllers instead, and owns the
+      <p>A host with a second listing of a positioned model — a task’s place among its project’s tasks, and another
+      among the tasks of the user assigned to it — names the second column on its controllers instead, and owns the
       write as well as the page. Both halves are told the same thing, since a drop on that listing would otherwise
-      write the model's own column from a page showing the other:</p>
+      write the model’s own column from a page showing the other:</p>
 <pre><code>module Ranking
   extend ActiveSupport::Concern
 
@@ -119,11 +118,11 @@ private
   def recourse_position = 'ranking'
 end
 
-class People::StepsController &lt; RecoursesController
+class Users::TasksController &lt; RecoursesController
   include Ranking
 end
 
-class People::Steps::PositionsController &lt; Recourse::PositionsController
+class Users::Tasks::PositionsController &lt; Recourse::PositionsController
   include Ranking
 end</code></pre>
       <p><code>Recourse::PositionsController</code> is public to subclass, and <code>Recourse::Positioning</code> is public for
