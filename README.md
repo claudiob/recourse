@@ -89,7 +89,6 @@ To change what a model's screens show, override any of these class methods:
 | --- | --- | --- |
 | [`recourse_label`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_label-instance_method) | `:name` | the column a combobox shows and a foreign-key cell reads; typed rather than picked where it has a length validator |
 | [`recourse_hidden`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_hidden-instance_method) | `[]` | columns kept off the table, the page, the form and the search |
-| [`recourse_displayed`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_displayed-instance_method) | `[]` | columns a table draws that it would leave off: encrypted ones, the id, timestamps, JSON |
 | [`recourse_order`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_order-instance_method) | `:id`, or the positioned column | the index's order, a Symbol or a Hash; rows with nothing in the column come last |
 | [`recourse_position`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_position-instance_method) | `'position'` where the model keeps an integer one | the column a reader drags the rows into order by, or `nil` for a table nobody positions |
 | [`recourse_icon`](https://rubydoc.info/gems/recourse/Recourse/Recoursive#recourse_icon-instance_method) | the model's name | the icon on the sidebar, the crumbs and the tabs |
@@ -102,7 +101,6 @@ For instance, this would yield a more compact `index` than the default configura
 class Post < ActiveRecord::Base
   def self.recourse_label = :title                    # Label a post with its title
   def self.recourse_hidden = %i[ip_address]           # Hide the IP address from the views
-  def self.recourse_displayed = :created_at           # Display the created_at in the views
   def self.recourse_order = { published_at: :desc }   # Sort posts by last published first
   def self.recourse_icon = :question                  # Represent Posts with a question icon
 end
