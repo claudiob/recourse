@@ -7,6 +7,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.8.1 - 2026-09-20
+
+* [FIX] A retrieval route is named after its resource
+
+  A collection route takes its name from the scope around it, so four retrievable
+  resources under one parent all answered to `provider_retrieval` and only the first
+  kept the name. Each is `provider_visits_retrieval` now, and the other three have a
+  path helper again.
+
 ## 7.8.0 - 2026-09-20
 
 * [FEATURE] A resource may say its rows can be fetched again

@@ -46,7 +46,11 @@ module Recourse
       # neither.
       def draw_retrieval
         Controllers.define_missing [current_module, 'retrievals'].compact.join('/')
-        collection { resource :retrieval, only: :create }
+        # Named after the resource as well as the parent: a collection route takes its
+        # name from the scope around it, so four retrievals under one parent would all
+        # answer to `provider_retrieval` and only the first would keep the name.
+        named = "#{parent_resource.name}_retrieval"
+        collection { resource :retrieval, only: :create, as: named }
       end
 
       # The row a table's bookmark square writes: one record kept by whoever is looking,
