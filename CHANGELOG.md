@@ -7,6 +7,17 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.6.1 - 2026-09-20
+
+* [FIX] The three write seams are marked `@api private`
+
+  `create_resource`, `update_resource` and `destroy_resource` are how the gem writes a
+  record, not a shelf for a host to reach. A host with something of its own to do on a
+  write writes the action.
+
+  The comment over `destroy_resource` still described the `destroy!` it stopped being in
+  7.2.0, and said the opposite of what it now does.
+
 ## 7.6.0 - 2026-09-20
 
 * [CHANGE] The layout titles the page, so a host template cannot lose it

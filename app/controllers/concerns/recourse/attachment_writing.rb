@@ -9,17 +9,20 @@ module Recourse
 
     # A new record, then the files that came with it, in one transaction: a record
     # half-saved is worse than one not saved.
+    # @api private
     def create_resource(record)
       record.transaction { super && attach_submitted_files(record) }
     end
 
-    # The same for one that already exists.
+    # A record that already exists, then the files that came with it.
+    # @api private
     def update_resource(record)
       super && attach_submitted_files(record)
     end
 
     # On a page of what a record has attached, the row between the two goes and the
     # file stays for whatever else points at it; everywhere else the record itself goes.
+    # @api private
     def destroy_resource(record)
       return super unless attachment_reflection
 

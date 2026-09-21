@@ -7,14 +7,16 @@ module Recourse
 
     # A new record, unless a typed label named more than one row, which is answered on
     # the form rather than by writing a guess.
+    # @api private
     def create_resource(record)
       return false if ambiguous_references? record
 
       record.save
     end
 
-    # The same for one that already exists. The parameters are read before the refusal
-    # is asked about, since reading them is what notices an ambiguous label.
+    # A record that already exists, under the same refusal. The parameters are read
+    # before it is asked about, since reading them is what notices an ambiguous label.
+    # @api private
     def update_resource(record)
       attributes = resource_params
       return false if ambiguous_references? record
@@ -22,8 +24,9 @@ module Recourse
       record.update attributes
     end
 
-    # And the record gone. `destroy!`, so a callback that stops one says so rather than
-    # leaving the page claiming it worked.
+    # The record gone, or false where a callback refused to give it up, which the page
+    # says where the row still is.
+    # @api private
     def destroy_resource(record) = record.destroy
 
     # A foreign key whose label is typed arrives as that label, so it is looked up
