@@ -19,9 +19,11 @@ module Recourse
       # Columns a filter may name at all. A menu narrowing the table by a column no
       # screen shows asks a reader to choose by something they cannot see, which is the
       # reason `recourse_searchable_columns` leaves the same columns out of the search
-      # box: hidden from every screen means hidden here.
+      # box: hidden from every screen means hidden here. And one Ransack will not
+      # answer for is no filter either — a model that narrows what it allows narrows
+      # what it offers with it.
       def filterable_columns
-        column_names - Recourse.hidden_columns(self)
+        (column_names & ransackable_attributes) - Recourse.hidden_columns(self)
       end
 
       # Every one of the three comes to the same shape, and `_in` is what lets a

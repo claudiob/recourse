@@ -7,6 +7,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.7.1 - 2026-09-20
+
+* [FIX] The filters the gem offers itself are ones Ransack will answer
+
+  `filterable_columns` read the schema alone, so a model narrowing
+  `ransackable_attributes` was offered menus for the columns it had just refused — and
+  7.7.0 turned those into a refusal on a page the host never wrote a filter for. A model
+  that narrows what it allows narrows what it is offered with it.
+
 ## 7.7.0 - 2026-09-20
 
 * [CHANGE] `filter_fields` is a list of predicates, and nothing else
