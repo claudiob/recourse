@@ -10,7 +10,7 @@ module Recourse
       # rather than picked — so what is left is what a form would hold, which is
       # what decides whether there is a form at all.
       def resource_filter_fields
-        resource_filters.filter_map { |predicate, options| filter_field predicate, **options }
+        resource_filters.filter_map { |predicate| filter_field predicate }
       end
 
       # The model's filters, less the one a nested route already answered:
@@ -18,80 +18,48 @@ module Recourse
       # for it would only offer to re-ask — or to contradict — the address.
       def resource_filters
         parent = resource_parent_association
-        filters = resource_model.filter_fields
+        filters = declared_filters
         return filters unless parent
 
-        filters.except "#{parent.foreign_key}_in"
+        filters - ["#{parent.foreign_key}_in"]
       end
 
-      # One filter: the words a host named, the values a column of its own admits, or
-      # a menu of the records a foreign key points at, holding whichever the request
-      # already asked for. `values:` is the shape for a predicate no column of this
-      # model describes, and it needs the `label:` there is no column to read one off.
-      def filter_field(predicate, label: nil, scope: nil, values: nil)
-        return values_filter predicate, label, values if values
+      # The predicates the model named, as words. A filter is named and nothing else:
+      # what it reads as and what it offers are the column's to say.
+      def declared_filters
+        resource_model.filter_fields.map(&:to_s)
+      end
 
-        column = predicate.to_s.sub Search::LIST_PREDICATES, ''
+      # One filter: the values a column of its own admits, a menu of the records a
+      # foreign key points at, or one reached through an association. A predicate
+      # Ransack will not answer is refused here rather than drawn, a menu that
+      # narrows nothing being worse than no menu at all.
+      def filter_field(predicate)
+        refuse_unanswerable predicate
+        column = predicate.sub Search::LIST_PREDICATES, ''
 
-        choice_filter(predicate, column, label) || reference_filter(predicate, column, label, scope)
+        choice_filter(predicate, column) || reference_filter(predicate, column) ||
+          reached_filter(predicate, column)
+      end
+
+      # Ransack decides, since Ransack is what would drop it: a model answers for the
+      # attributes it allows and no others, and a filter naming one it does not allow
+      # comes back holding every row.
+      def refuse_unanswerable(predicate)
+        resource_model.ransack({ predicate => ['1'] }, ignore_unknown_conditions: false)
+      rescue ::Ransack::InvalidSearchError
+        raise Error, I18n.t('recourse.unanswerable', model: resource_model, predicate:)
       end
 
       # A menu of the records a foreign key points at. Nothing where that key is typed
       # rather than picked, which is the same question the field beside it asks: the
       # label is bounded, or the table is too long to list. Either way the menu would
-      # be a table of its own. A `scope:` draws one anyway.
-      def reference_filter(predicate, column, label, scope)
+      # be a table of its own.
+      def reference_filter(predicate, column)
         association = belongs_to_association column
-        return if association.nil? ||
-                  (scope.nil? && association.klass.recourse_typed_reference?)
+        return if association.nil? || association.klass.recourse_typed_reference?
 
-        filter_combobox predicate, label || reference_title(column, association),
-                        (scope || association.klass).all
-      end
-
-      def filter_combobox(predicate, title, recourses)
-        label = recourses.klass.recourse_label
-        counter = filter_counter recourses.klass
-        # What it reads as when nothing is ticked, so the way back is a line in the menu.
-        models = Recourse.model_title recourses.klass, lower: true
-
-        filter_menu predicate, title, nil, t('recourse.all', models: models),
-                    label: label.to_s, counter: counter,
-                    recourses: filter_options(recourses, label, counter)
-      end
-
-      # The commonest choice first where the model keeps a count, since a menu is read
-      # from the top and most requests want the option most rows are behind — and by
-      # name where it keeps none. The name breaks ties, or two markets on the same
-      # number would swap places between one request and the next.
-      def filter_options(recourses, label, counter)
-        return recourses.select(:id, label).order label unless counter
-
-        recourses.select(:id, label, counter).order counter => :desc, label => :asc
-      end
-
-      # The column on the model a filter lists that counts the rows being filtered —
-      # `markets.zips_count` on `/zips`. Read from the counter caches that model keeps
-      # rather than from a column named after this one, so a `zips_count` nobody
-      # maintains is not a count. None on a nested page: the count is of every row in
-      # the table, and the page shows the parent's share of them, which nothing counted.
-      def filter_counter(klass)
-        return if resource_parent
-
-        Recourse.counters(klass).find { |_, one| one.klass == resource_model }&.first
-      end
-
-      # Never invalid and never required: a filter narrows rather than sets.
-      def filter_menu(predicate, title, values, all, **)
-        render('recourses/combobox', name: "q[#{predicate}]", id: "q_#{predicate}",
-                                     placeholder: title, multiple: true, aria_label: title,
-                                     selected: filter_values(predicate), small: true,
-                                     all: all, values: Array(values), **)
-      end
-
-      # A multiple select submits one value per pick, and a link carries them the same way.
-      def filter_values(predicate)
-        Array(query_params[predicate]).map(&:to_s).compact_blank
+        filter_combobox predicate, reference_title(column, association), association.klass.all
       end
     end
   end

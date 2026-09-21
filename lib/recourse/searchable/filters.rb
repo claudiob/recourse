@@ -11,7 +11,7 @@ module Recourse
       # big to list. The model's own columns come first, before the menus that name
       # other tables.
       def filter_fields
-        enum_filter_fields.merge(boolean_filter_fields).merge reference_filter_fields
+        enum_filter_fields + boolean_filter_fields + reference_filter_fields
       end
 
     private
@@ -27,7 +27,7 @@ module Recourse
       # Every one of the three comes to the same shape, and `_in` is what lets a
       # request tick more than one of the values a menu offers.
       def filters_for(names)
-        names.index_with({}).transform_keys { |name| "#{name}_in" }
+        names.map { |name| "#{name}_in" }
       end
 
       # One per enum: a dozen words a column admits are a menu whatever else is on the

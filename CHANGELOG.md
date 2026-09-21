@@ -7,6 +7,23 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.7.0 - 2026-09-20
+
+* [CHANGE] `filter_fields` is a list of predicates, and nothing else
+
+  A filter was a predicate to the options that drew it — `label:` for its heading,
+  `values:` for its words, `scope:` for the rows it offered. All three are gone: a model
+  names the filters it wants and the gem works out the rest. A predicate may now reach
+  through an association, so `skilled_specialties_id_in` lists the specialties and
+  `integration_type_in` the kinds the integrations table holds, each read as the locale
+  calls that model.
+
+* [FEATURE] A filter Ransack will not answer is refused
+
+  A predicate whose attribute is missing from `ransackable_attributes` drew a menu that
+  narrowed nothing and handed back every row. Ransack is asked first, since Ransack is
+  what would drop it, and a model that names one raises rather than drawing it.
+
 ## 7.6.1 - 2026-09-20
 
 * [FIX] The three write seams are marked `@api private`

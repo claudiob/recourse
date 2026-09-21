@@ -74,6 +74,10 @@ en:
     unindexed: "You asked for `recourses %{names}, positionable: true`, which draws no
       index to put in order. A row is dragged from the table that lists it, so there is
       nowhere for a drop to be reported from."
+    unanswerable: "%{model} lists `%{predicate}` among its `filter_fields`, and Ransack
+      will not answer it: the attribute behind it is missing from
+      `ransackable_attributes` or `ransackable_associations`. A menu drawn for it would
+      narrow nothing and hand back every row."
     # What a menu with several picks reads as, the first named and the rest counted.
     more: "%{first} + %{count} more"
     new: New %{model}

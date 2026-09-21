@@ -55,4 +55,29 @@ class TestRecoursesFilters < IntegrationCase
     refute_includes menu, 'data-count'
     refute_includes menu, 'data-hidden'
   end
+
+  # A filter may reach through an association to a column on the other model: the kinds
+  # a table holds, where the column is the one Rails keeps a subclass in. Each reads as
+  # the locale calls that model, and as its own name where the locale says nothing.
+  def test_a_filter_reaches_through_an_association_to_the_kinds_a_table_holds
+    visit '/readings'
+    menu = menu_for 'q[sensor_type_in][]'
+
+    assert_includes menu, '<option value="Sensor::Float">Float</option>'
+    assert_includes menu, '<option value="Sensor::Radar">Radar gauge</option>'
+  end
+
+  # A filter Ransack will not answer is refused rather than drawn: the menu would come
+  # back holding every row, which reads as a filter that found everything rather than
+  # as one the model never allowed.
+  def test_a_filter_the_model_does_not_allow_is_refused
+    Place.define_singleton_method(:filter_fields) { super() + %i[notes_in] }
+    error = assert_raises(ActionView::Template::Error) { visit '/places' }
+
+    assert_kind_of Recourse::Error, error.cause
+    assert_includes error.cause.message, 'notes_in'
+    assert_includes error.cause.message, 'ransackable_attributes'
+  ensure
+    Place.singleton_class.send :remove_method, :filter_fields
+  end
 end

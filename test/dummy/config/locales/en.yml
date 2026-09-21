@@ -6,3 +6,9 @@ en:
       memo:
         delete: Withdraw %{model}
         deletion_title: Withdraw %{record}?
+
+  activerecord:
+    models:
+      # A kind the locale names, beside one it does not: a filter reads each the way
+      # Rails reads a model's own name.
+      sensor/radar: Radar gauge

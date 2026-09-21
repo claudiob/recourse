@@ -22,11 +22,9 @@ class Place
       def recourse_icon = :building
 
       # And one menu the schema says nothing about: which crew keeps the place is a
-      # word reached through the team rather than a column here, so the words are this
-      # app's to name and the `label:` is the only heading there could be.
-      def filter_fields
-        super.merge 'team_name_in' => { label: 'Crew', values: Team.order(:name).pluck(:name) }
-      end
+      # word reached through the team rather than a column here, so the gem reads the
+      # words off the teams themselves.
+      def filter_fields = super + %i[team_name_in]
 
       # And Ransack is told it may reach that far, which is the host's word rather than
       # the gem's: naming the words a menu offers is not leave to query through a table.

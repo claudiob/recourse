@@ -30,13 +30,13 @@ class TestRecoursesFilterPicks < IntegrationCase
   # A menu over a predicate no column of the model describes -- a word reached through
   # another table, or anything else Ransack can ask that a schema says nothing about.
   # The host names the words, and names the menu too: there is no column to head it.
-  def test_a_filter_offers_the_words_a_host_named_for_a_predicate_no_column_describes
+  def test_a_filter_offers_the_words_a_column_on_the_other_table_holds
     crew = Team.order(:name).first
     visit '/places'
     menu = menu_for 'q[team_name_in][]'
 
-    assert_includes menu, 'aria-label="Crew"'
-    assert_includes menu, 'data-combobox-all-value="All crews"'
+    assert_includes menu, 'aria-label="Team"'
+    assert_includes menu, 'data-combobox-all-value="All teams"'
     assert_includes menu, %(<option value="#{crew.name}">#{crew.name}</option>)
     # And it narrows: the words go back as they came, and Ransack reaches through.
     visit "/places?q%5Bteam_name_in%5D%5B%5D=#{CGI.escape crew.name}"

@@ -10,4 +10,12 @@ class Reading < ApplicationRecord
   belongs_to :sensor, optional: true
 
   validates :depth, presence: true
+
+  # The kinds of sensor a reading may be filtered by, which the gem reads off the
+  # sensors themselves rather than off this list.
+  def self.filter_fields = super + %i[sensor_type_in]
+
+  # And Ransack is told it may reach that far, naming a menu's words being no leave
+  # to query through a table.
+  def self.ransackable_associations(_ = nil) = super + %w[sensor]
 end

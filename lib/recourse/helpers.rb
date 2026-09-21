@@ -19,6 +19,7 @@ require_relative 'helpers/details'
 require_relative 'helpers/events'
 require_relative 'helpers/examples'
 require_relative 'helpers/fields'
+require_relative 'helpers/filter_menus'
 require_relative 'helpers/filters'
 require_relative 'helpers/flashes'
 require_relative 'helpers/formats'
@@ -32,6 +33,7 @@ require_relative 'helpers/navigation'
 require_relative 'helpers/parents'
 require_relative 'helpers/pictures'
 require_relative 'helpers/previews'
+require_relative 'helpers/reaches'
 require_relative 'helpers/references'
 require_relative 'helpers/resources'
 require_relative 'helpers/refreshes'
@@ -56,11 +58,11 @@ module Recourse
   module Helpers
     include Actions, Positions, Attachments, Blobs, Bookmarks, Breadcrumbs, Buttons,
             Calendars, Cards, Cells, Choices, Colors, Comboboxes, Constraints, Counters,
-            Deletions, Densities, Details, Events, Examples, Fields, Filters, Flashes,
-            Formats, Inputs, Kinds, Limits, Links, Maps, Names, Navigation, Parents,
-            Pictures, Previews, References, Refreshes, Routing, Resources, Rows, Searches,
-            Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs, Themes, Times, Values,
-            Warnings, Weeks, Zones
+            Deletions, Densities, Details, Events, Examples, Fields, FilterMenus, Filters,
+            Flashes, Formats, Inputs, Kinds, Limits, Links, Maps, Names, Navigation,
+            Parents, Pictures, Previews, Reaches, References, Refreshes, Routing,
+            Resources, Rows, Searches, Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs,
+            Themes, Times, Values, Warnings, Weeks, Zones
 
     # The grid a record's own two pages lay an attribute out in: two columns on a large
     # viewport, and the same padding on both, so a value and the field that edits it sit
