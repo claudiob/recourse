@@ -1,5 +1,3 @@
-<% content_for :title, resources_name %>
-
 <% if (new_path = new_resource_path) %>
   <% content_for :actions do %>
     <%= link_to t('recourse.add', model: resource_name), new_path,

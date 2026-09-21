@@ -46,6 +46,14 @@ module Recourse
         safe_join [tag.i(class: "bi bi-#{icon}"), word], ' '
       end
 
+      # What the tab calls this page: what the trail ends with, the resource it is of
+      # where the record names nothing, and the app's own name where neither answers.
+      def page_title
+        breadcrumb_leaf.presence || breadcrumb_name.presence || app_name
+      end
+
+      def app_name = Rails.application.class.module_parent_name
+
       # Only a page beneath the index names itself, and names what it is showing.
       def breadcrumb_leaf
         case controller.action_name

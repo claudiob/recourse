@@ -7,6 +7,17 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.6.0 - 2026-09-20
+
+* [CHANGE] The layout titles the page, so a host template cannot lose it
+
+  The four templates each set `content_for :title`, so a host writing one of its own —
+  which is the whole point of the gem drawing the rest — left the tab reading `Recourse`.
+  The title is chrome like the trail beside it, and the layout works it out from the same
+  place: what the trail ends with, the resource it is of where the record names nothing,
+  and the app's own name where neither answers. `content_for :title` still wins where a
+  host sets one.
+
 ## 7.5.0 - 2026-09-20
 
 * [FEATURE] A model may word its own deletion
