@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Positionable tables — Recourse Guides</title>
+<meta name="description" content="Tables a reader drags into an order the model keeps: the position column, the route a drop reports to, what keeps the numbers running, and a second listing ordered by another column.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <a class="brand" href="../"><img src="../icon.svg" alt="">Recourse</a>
+    <nav>
+      <a href="./" aria-current="page">Guides</a>
+      <a href="https://rubydoc.info/gems/recourse">Reference</a>
+      <a href="https://github.com/claudiob/recourse">Source</a>
+      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
+    </nav>
+  </header>
+
+  <div class="guide">
+    <aside>
+      <b>Guides</b>
+      <ol>
+        <li><a href="getting_started.html">Getting started</a></li>
+        <li><a href="routes.html">Routes</a></li>
+        <li><a href="models.html">Models</a></li>
+        <li><a href="tables.html">Tables</a></li>
+        <li><a href="records.html">Records and forms</a></li>
+        <li><a href="shapes.html">Maps and calendars</a></li>
+        <li><a href="positioning.html" aria-current="page">Positionable tables</a></li>
+        <li><a href="retrieval.html">Retrievable tables</a></li>
+        <li><a href="appearance.html">Look and feel</a></li>
+        <li><a href="customizing.html">Customizing</a></li>
+      </ol>
+    </aside>
+
+    <article>
+      <h1>Positionable tables</h1>
+      <p>A table whose model keeps an integer <code>position</code> is one a reader puts in order by hand. This guide is
+      what the column earns, what the routes have to say, what keeps the numbers running, and how a host lists the
+      same rows in a second order.</p>
+
+      <div class="chapters">
+        <b>Chapters</b>
+        <ol>
+          <li><a href="#column">The column and the keyword</a></li>
+          <li><a href="#page">What the page does</a></li>
+          <li><a href="#numbers">What keeps the numbers running</a></li>
+          <li><a href="#siblings">A model pointing two ways</a></li>
+          <li><a href="#opting">Opting out</a></li>
+          <li><a href="#second">A second listing</a></li>
+        </ol>
+      </div>
+
+      <h2 id="column">The column and the keyword</h2>
+      <p>The column is the whole of the declaration: a model keeping an integer <code>position</code> has said its rows are
+      in an order. The type is load-bearing, asked through <code>type_for_attribute</code> — a <code>position</code> holding a job
+      title is a word about the row, not a place among rows, and a table of those is left alone. A column named
+      otherwise is named in the model: <code>def recourse_position = :ordering</code>.</p>
+      <p>The routes say where a drop is reported, since a page nobody drags needs no route:</p>
+<pre><code>recourses :steps, positionable: true</code></pre>
+      <p>That draws <code>PATCH /steps/5/position</code> under the index. A table is put in order from its index and from
+      nowhere else, so the keyword is refused on a resource that draws none.</p>
+
+      <h2 id="page">What the page does</h2>
+      <p>A grip opens each row, dragging it moves the row, and the place it lands in is written to that route. The
+      table is ordered by the column, whatever <code>recourse_order</code> would otherwise say: the order a table is read in
+      and the order somebody put it in are one fact. The column itself is never drawn, since the row's place in the
+      table already says it, and the form never asks for it.</p>
+      <p>The search box and the sorted headings stand down while the grips are drawn, and a <code>q</code> typed by hand is
+      refused for the same reason: a filter shortens the page, and a drop on a shortened page would report a place
+      among the rows that are left.</p>
+      <p>Whether a page is positioned is asked per page, not per model. A position means something under the parent it
+      is counted within, so a flat model's own index is positioned and a listing nested under a parent is, while a
+      listing of every row across every parent — where the positions run 1, 2, 3, 1, 2, 3 side by side — is not, and
+      sorts and searches like any other.</p>
+
+      <h2 id="numbers">What keeps the numbers running</h2>
+      <p>What a drop reports is a row's place on the <em>page</em>, which is a position only while the numbers run 1, 2, 3
+      with no holes in them. So two things follow the column rather than the routes: a new row lands last among its
+      own, and the gap closes behind one that goes, whether it was made behind a form or in a console. Both are
+      callbacks every model carries and only a positioned one runs.</p>
+
+      <h2 id="siblings">A model pointing two ways</h2>
+      <p>The rows a position is counted among are those under the same parent, or the whole table where the model
+      points nowhere. A model with one <code>belongs_to</code> needs no answer. One pointing two ways is asked rather than
+      guessed, since numbering a step among every step there is would be the wrong answer given quietly, at the first
+      write:</p>
+<pre><code>class Step &lt; ApplicationRecord
+  belongs_to :team
+  belongs_to :person
+
+  def recourse_siblings = team.steps
+end</code></pre>
+      <p>Without it, the first save raises naming the model and the method.</p>
+
+      <h2 id="opting">Opting out</h2>
+      <p>A host that keeps the order itself writes <code>def recourse_position = nil</code>, which takes the grips off the
+      table and both callbacks off the model together.</p>
+
+      <h2 id="second">A second listing</h2>
+      <p>A host with a second listing of a positioned model — a step's place among its team's steps, and another
+      among the steps of whoever is to do them — names the second column on its controllers instead, and owns the
+      write as well as the page. Both halves are told the same thing, since a drop on that listing would otherwise
+      write the model's own column from a page showing the other:</p>
+<pre><code>module Ranking
+  extend ActiveSupport::Concern
+
+private
+
+  def recourse_position = 'ranking'
+end
+
+class People::StepsController &lt; RecoursesController
+  include Ranking
+end
+
+class People::Steps::PositionsController &lt; Recourse::PositionsController
+  include Ranking
+end</code></pre>
+      <p><code>Recourse::PositionsController</code> is public to subclass, and <code>Recourse::Positioning</code> is public for
+      exactly that case: <code>Recourse::Positioning.new(relation, column).close</code> is what such a host calls to keep
+      its own column contiguous when a row goes.</p>
+
+      <nav class="next"><a href="shapes.html">← Maps and calendars</a><a href="retrieval.html">Retrievable tables →</a></nav>
+    </article>
+  </div>
+
+  <footer class="foot">
+    <span><a href="https://github.com/claudiob/recourse">Source</a> · <a href="https://rubydoc.info/gems/recourse">Reference</a> · <a href="../">Home</a></span>
+    <span>MIT License</span>
+  </footer>
+</div>
+</body>
+</html>

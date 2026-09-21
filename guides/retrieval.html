@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retrievable tables — Recourse Guides</title>
+<meta name="description" content="A table whose rows come from somewhere else: the retrievable keyword, the route and the button it draws, the controller the host writes, and how a page says there is nothing to fetch from.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <a class="brand" href="../"><img src="../icon.svg" alt="">Recourse</a>
+    <nav>
+      <a href="./" aria-current="page">Guides</a>
+      <a href="https://rubydoc.info/gems/recourse">Reference</a>
+      <a href="https://github.com/claudiob/recourse">Source</a>
+      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
+    </nav>
+  </header>
+
+  <div class="guide">
+    <aside>
+      <b>Guides</b>
+      <ol>
+        <li><a href="getting_started.html">Getting started</a></li>
+        <li><a href="routes.html">Routes</a></li>
+        <li><a href="models.html">Models</a></li>
+        <li><a href="tables.html">Tables</a></li>
+        <li><a href="records.html">Records and forms</a></li>
+        <li><a href="shapes.html">Maps and calendars</a></li>
+        <li><a href="positioning.html">Positionable tables</a></li>
+        <li><a href="retrieval.html" aria-current="page">Retrievable tables</a></li>
+        <li><a href="appearance.html">Look and feel</a></li>
+        <li><a href="customizing.html">Customizing</a></li>
+      </ol>
+    </aside>
+
+    <article>
+      <h1>Retrievable tables</h1>
+      <p>Some tables list rows that came from somewhere else — a CRM's visits, a feed's entries — and a reader
+      wants them fetched again. This guide is the keyword that says so, what it draws, and the one controller the
+      host writes.</p>
+
+      <div class="chapters">
+        <b>Chapters</b>
+        <ol>
+          <li><a href="#keyword">The keyword</a></li>
+          <li><a href="#controller">The controller</a></li>
+          <li><a href="#nothing">Saying there is nothing to fetch from</a></li>
+        </ol>
+      </div>
+
+      <h2 id="keyword">The keyword</h2>
+<pre><code>recourses :providers do
+  recourses :visits, only: :index, retrievable: true
+end</code></pre>
+      <p>That draws <code>POST /providers/5/visits/retrieval</code>, named <code>provider_visits_retrieval</code>, and puts a
+      <code>Retrieve</code> button on the table that lists them, beside the breadcrumb. The button is labelled for a screen
+      reader with the rows it fetches: <code>Retrieve visits again</code>.</p>
+      <p>The keyword is refused on a resource with no <code>index</code>, since the button stands on the table that lists the
+      rows and there would be nowhere to put it.</p>
+
+      <h2 id="controller">The controller</h2>
+      <p>Where the rows come from is the host's to know, so the controller is the host's to write, and the gem makes
+      one only where there is none — the same bargain a bare action strikes. It is named after the resource, under
+      the parent, and it is a <code>RecoursesController</code> like every other screen, so the same guard stands above it:</p>
+<pre><code>class Providers::Visits::RetrievalsController &lt; RecoursesController
+  def create
+    provider = Provider.find params.expect(:provider_id)
+    provider.import_visits
+    flash.notice = 'Fetching visits'
+    redirect_to provider_visits_path(provider), status: :see_other
+  end
+end</code></pre>
+      <p>The work belongs to the model, or to a job the model enqueues, and the action says it started. A redirect
+      after a non-GET carries <code>status: :see_other</code>, since every screen is a Turbo visit.</p>
+
+      <h2 id="nothing">Saying there is nothing to fetch from</h2>
+      <p>An index of a CRM's work is no use to a provider who has connected none, and only the host knows it. The
+      listing controller answers <code>recourse_retrievable?</code>, true unless narrowed, and the button is drawn only
+      where it holds:</p>
+<pre><code>class Providers::VisitsController &lt; RecoursesController
+private
+
+  def recourse_retrievable? = @provider.integrated?
+end</code></pre>
+      <p>Private, so narrowing it adds no action. The route stays drawn either way; it is the button that goes.</p>
+
+      <nav class="next"><a href="positioning.html">← Positionable tables</a><a href="appearance.html">Look and feel →</a></nav>
+    </article>
+  </div>
+
+  <footer class="foot">
+    <span><a href="https://github.com/claudiob/recourse">Source</a> · <a href="https://rubydoc.info/gems/recourse">Reference</a> · <a href="../">Home</a></span>
+    <span>MIT License</span>
+  </footer>
+</div>
+</body>
+</html>

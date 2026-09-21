@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recourse — swap two characters, get admin screens</title>
+<meta name="description" content="Recourse adds a `recourses` method to config/routes.rb. One line draws the routes, controllers and views needed to browse and edit a resource, with no files added to the host app.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon-96x96.png" type="image/png" sizes="96x96">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#1c1a17">
+<meta property="og:title" content="Recourse">
+<meta property="og:description" content="Swap two characters in config/routes.rb and get admin screens for your Rails app.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://claudiob.github.io/recourse/avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <a class="brand" href="./"><img src="icon.svg" alt="">Recourse</a>
+    <nav>
+      <a href="guides/">Guides</a>
+      <a href="https://rubydoc.info/gems/recourse">Reference</a>
+      <a href="https://github.com/claudiob/recourse">Source</a>
+      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <p class="swap" aria-label="resources becomes recourses"><span>re</span><span class="s">s</span><span>our</span><span class="c">c</span><span>es</span></p>
+    <h1>Swap two characters and get admin screens for your Rails app.</h1>
+    <p class="lede">A <code>recourses</code> line in <code>config/routes.rb</code> draws the routes, the
+    controllers and every view a resource needs to be browsed and edited — read off the model, with no
+    files added to the host app. Anything the gem draws, the app can still write itself.</p>
+    <p class="actions">
+      <a class="btn solid" href="guides/getting_started.html">Get started</a>
+      <a class="btn outline" href="guides/">Read the guides</a>
+    </p>
+  </section>
+
+  <section>
+    <h2>Three steps, and the third is optional</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="n">STEP 1</span>
+        <h3>Edit your routes</h3>
+        <p>Replace <code>resources</code> with <code>recourses</code>. Every action the line routes is a
+        screen the gem serves, nested resources included.</p>
+<pre><code><span class="del">- resources :posts do</span>
+<span class="add">+ recourses :posts do</span>
+<span class="del">-   resources :comments</span>
+<span class="add">+   recourses :comments</span>
+  end</code></pre>
+      </div>
+      <div class="step">
+        <span class="n">STEP 2</span>
+        <h3>Enhance your models</h3>
+        <p>Most models need nothing: the screens read the validators, the associations, the column types
+        and the indexes. A class method or two says the rest.</p>
+<pre><code>class Post &lt; ApplicationRecord
+  def self.recourse_label = :title
+  def self.recourse_hidden = :ip_address
+  def self.recourse_order = { published_at: :desc }
+end</code></pre>
+      </div>
+      <div class="step">
+        <span class="n">STEP 3</span>
+        <h3>Secure your controllers</h3>
+        <p>Every generated controller inherits <code>RecoursesController</code>, which the host defines to
+        put a guard above every screen at once.</p>
+<pre><code>class RecoursesController &lt; Recourse::BaseController
+  before_action :authenticate!
+end</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What one line earns</h2>
+    <div class="earned">
+      <div><b>A table</b><p>Paginated, searched, sorted and filtered, with a sidebar entry and a keyboard shortcut. Counts link to the rows behind them, and an open table redraws itself when a row changes.</p></div>
+      <div><b>A record's page</b><p>Every value drawn as what it is: a key as the label it points at, a date by its name, a boolean as Yes or No, an encrypted value masked until asked for.</p></div>
+      <div><b>A form</b><p>A field for each column's kind, carrying what the validators say — a length as <code>maxlength</code>, a format as <code>pattern</code>, a required attribute as a required field.</p></div>
+      <div><b>A delete that asks first</b><p>A dialog naming the record and counting what goes with it, and a page that says so rather than raising when a model will not give a row up.</p></div>
+      <div><b>Nesting</b><p>Each resource nested under a record is a tab on its card, counted where the record keeps a count, and a bare action is a button beside the breadcrumb.</p></div>
+      <div><b>Other shapes</b><p>A table of places reads as a Google map, a table of events as a week, a table with a <code>position</code> is dragged into order, and one fed from elsewhere offers to fetch again.</p></div>
+      <div><b>Bookmarks</b><p>One Proc naming the viewer's kept rows, and every table that can hold one opens with a square to keep a row by, kept rows first.</p></div>
+      <div><b>Your look</b><p>A primary color, one of nine palettes, light or dark at the reader's own choosing, and every time drawn in the reader's own zone.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How to install</h2>
+<pre><code>gem install recourse</code></pre>
+<pre><code><span class="c"># Gemfile</span>
+gem 'recourse', '~> 7.0'</code></pre>
+    <p><code>~> 7.0</code> follows Semantic Versioning: <code>bundle update</code> takes every 7.x and never a
+    breaking change. Rails 8.1 and Ruby 3.2 are the minimum. The pages need Turbo, which
+    <code>turbo-rails</code> brings, and nothing else in the host: everything a page is styled and scripted by
+    is <code>bh</code>, which this gem depends on and whose engine serves it, so a host without an asset pipeline
+    gets the same screens and nothing is fetched across a network.</p>
+  </section>
+
+  <section>
+    <h2>The guides</h2>
+    <p>One page per screen, in the order a host meets them.</p>
+    <div class="guides">
+      <a href="guides/getting_started.html"><b>Getting started</b><span>Install the gem, route a resource, and see what each action earns.</span></a>
+      <a href="guides/routes.html"><b>Routes</b><span><code>recourses</code>, <code>recourse</code>, nesting, namespaces, and the two keywords.</span></a>
+      <a href="guides/models.html"><b>Models</b><span>The hooks a model may answer, and what the schema says without them.</span></a>
+      <a href="guides/tables.html"><b>Tables</b><span>Columns, sorting, searching, filters, pages, bookmarks and live refreshes.</span></a>
+      <a href="guides/records.html"><b>Records and forms</b><span>The show page, the form, the card around both, and the delete.</span></a>
+      <a href="guides/shapes.html"><b>Maps and calendars</b><span>The same page of rows drawn on a map or as a week.</span></a>
+      <a href="guides/positioning.html"><b>Positionable tables</b><span>Rows a reader drags into an order the model keeps.</span></a>
+      <a href="guides/retrieval.html"><b>Retrievable tables</b><span>A button that fetches a table's rows again from wherever they came.</span></a>
+      <a href="guides/appearance.html"><b>Look and feel</b><span>Color, theme, the reader's own settings, assets and the locale.</span></a>
+      <a href="guides/customizing.html"><b>Customizing</b><span>What a host writes in place of what the gem draws: views and controllers.</span></a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span><a href="https://github.com/claudiob/recourse">Source</a> · <a href="https://rubydoc.info/gems/recourse">Reference</a> · <a href="guides/">Guides</a></span>
+    <span>MIT License</span>
+  </footer>
+</div>
+</body>
+</html>

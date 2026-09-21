@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recourse Guides</title>
+<meta name="description" content="Guides to Recourse: one page per screen the gem draws, in the order a host meets them.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <a class="brand" href="../"><img src="../icon.svg" alt="">Recourse</a>
+    <nav>
+      <a href="./" aria-current="page">Guides</a>
+      <a href="https://rubydoc.info/gems/recourse">Reference</a>
+      <a href="https://github.com/claudiob/recourse">Source</a>
+      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
+    </nav>
+  </header>
+
+  <section class="hero" style="padding-bottom: 12px">
+    <h1>Recourse Guides</h1>
+    <p class="lede">What each screen does and why it does it that way, one page per screen, for
+    Recourse 7. The <a href="https://rubydoc.info/gems/recourse">reference</a> says what every method takes;
+    these say what to write and what you get.</p>
+  </section>
+
+  <h2 style="margin-top: 1em">Start here</h2>
+  <div class="guides">
+    <a href="getting_started.html"><b>Getting started</b><span>Install the gem, route a resource, secure the controllers, and see what each action earns.</span></a>
+    <a href="routes.html"><b>Routes</b><span><code>recourses</code> and <code>recourse</code>, nesting and namespaces, the defaults a nested resource takes, and the two keywords.</span></a>
+    <a href="models.html"><b>Models</b><span>The hooks a model may answer — label, hidden, displayed, order, icon — and everything the schema says without them.</span></a>
+  </div>
+
+  <h2>The screens</h2>
+  <div class="guides">
+    <a href="tables.html"><b>Tables</b><span>Which columns a table draws and in what order, sorting, searching, filters, pages, bookmarks, counters and live refreshes.</span></a>
+    <a href="records.html"><b>Records and forms</b><span>How a value reads on a record's page, which field each column gets on a form, the card around both, and the delete.</span></a>
+    <a href="shapes.html"><b>Maps and calendars</b><span>The same page of rows drawn on a Google map, or as a week of events.</span></a>
+    <a href="positioning.html"><b>Positionable tables</b><span>Rows dragged into an order the model keeps, and what keeps the numbers running.</span></a>
+    <a href="retrieval.html"><b>Retrievable tables</b><span>A table whose rows come from somewhere else, and the button that fetches them again.</span></a>
+  </div>
+
+  <h2>The host's side</h2>
+  <div class="guides">
+    <a href="appearance.html"><b>Look and feel</b><span>Color and theme, what the reader chooses for themselves, where the assets come from, and the locale.</span></a>
+    <a href="customizing.html"><b>Customizing</b><span>Views and controllers a host writes in place of what the gem draws, and what stays the gem's.</span></a>
+  </div>
+
+  <footer class="foot">
+    <span><a href="https://github.com/claudiob/recourse">Source</a> · <a href="https://rubydoc.info/gems/recourse">Reference</a> · <a href="../">Home</a></span>
+    <span>MIT License</span>
+  </footer>
+</div>
+</body>
+</html>

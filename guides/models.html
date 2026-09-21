@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Models — Recourse Guides</title>
+<meta name="description" content="The class methods a model may answer to shape its Recourse screens, and everything the schema says without them: counters, enums, encryption, lists, attachments, comments, filters.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <a class="brand" href="../"><img src="../icon.svg" alt="">Recourse</a>
+    <nav>
+      <a href="./" aria-current="page">Guides</a>
+      <a href="https://rubydoc.info/gems/recourse">Reference</a>
+      <a href="https://github.com/claudiob/recourse">Source</a>
+      <a href="https://github.com/claudiob/recourse/blob/main/CHANGELOG.md">Changelog</a>
+    </nav>
+  </header>
+
+  <div class="guide">
+    <aside>
+      <b>Guides</b>
+      <ol>
+        <li><a href="getting_started.html">Getting started</a></li>
+        <li><a href="routes.html">Routes</a></li>
+        <li><a href="models.html" aria-current="page">Models</a></li>
+        <li><a href="tables.html">Tables</a></li>
+        <li><a href="records.html">Records and forms</a></li>
+        <li><a href="shapes.html">Maps and calendars</a></li>
+        <li><a href="positioning.html">Positionable tables</a></li>
+        <li><a href="retrieval.html">Retrievable tables</a></li>
+        <li><a href="appearance.html">Look and feel</a></li>
+        <li><a href="customizing.html">Customizing</a></li>
+      </ol>
+    </aside>
+
+    <article>
+      <h1>Models</h1>
+      <p>Most models need to say nothing: the screens read the validators, the associations, the column types
+      and the indexes. This guide is the class methods a model may answer when the default is not what it
+      wants, and then everything the schema already decides.</p>
+
+      <div class="chapters">
+        <b>Chapters</b>
+        <ol>
+          <li><a href="#hooks">The hooks</a></li>
+          <li><a href="#label">The label</a></li>
+          <li><a href="#hidden">Hidden and displayed</a></li>
+          <li><a href="#order">Order, icon and includes</a></li>
+          <li><a href="#counters">Counters</a></li>
+          <li><a href="#kinds">What the column's kind decides</a></li>
+          <li><a href="#encrypted">Encrypted columns</a></li>
+          <li><a href="#attachments">Attachments</a></li>
+          <li><a href="#comments">Column comments</a></li>
+          <li><a href="#search">Search, sort and filters</a></li>
+          <li><a href="#deletion">Wording a deletion</a></li>
+          <li><a href="#broadcasts">Broadcasts</a></li>
+        </ol>
+      </div>
+
+      <h2 id="hooks">The hooks</h2>
+      <p>Every Active Record model answers these; a model overrides one as a class method.</p>
+      <table>
+        <thead><tr><th>Hook</th><th>Default</th><th>Decides</th></tr></thead>
+        <tbody>
+          <tr><td><code>recourse_label</code></td><td><code>:name</code></td><td>the column a combobox shows and a foreign-key cell reads; typed rather than picked where it has a length validator</td></tr>
+          <tr><td><code>recourse_hidden</code></td><td><code>[]</code></td><td>columns kept off the table, the page, the form and the search</td></tr>
+          <tr><td><code>recourse_displayed</code></td><td><code>[]</code></td><td>columns a table draws that it would leave off: encrypted ones, the id, timestamps, JSON</td></tr>
+          <tr><td><code>recourse_order</code></td><td><code>:id</code>, or the positioned column</td><td>the index's order, a Symbol or a Hash; rows with nothing in the column come last</td></tr>
+          <tr><td><code>recourse_position</code></td><td><code>'position'</code> where the model keeps an integer one</td><td>the column a reader drags the rows into order by, or <code>nil</code> for a table nobody positions</td></tr>
+          <tr><td><code>recourse_siblings</code></td><td>the rows under the one parent</td><td>which rows a positioned record's place is counted among, where the model points two ways</td></tr>
+          <tr><td><code>recourse_icon</code></td><td>the model's name</td><td>the icon on the sidebar, the crumbs and the tabs</td></tr>
+          <tr><td><code>recourse_includes</code></td><td>every <code>belongs_to</code></td><td>what the index eager-loads, in any shape <code>includes</code> takes</td></tr>
+          <tr><td><code>recourse_comment(column)</code></td><td>the schema's comment</td><td>the line under a form field saying what the column is for</td></tr>
+          <tr><td><code>recourse_broadcasts?</code></td><td><code>true</code></td><td>whether saving a record redraws every open index listing it</td></tr>
+          <tr><td><code>filter_fields</code></td><td>enums, booleans, listable keys</td><td>the menus beside the search box, as Ransack predicates</td></tr>
+        </tbody>
+      </table>
+      <p>A model with more than a line of these keeps them in a concern of its own, so the model body stays the
+      model's:</p>
+<pre><code><span class="c"># app/models/post/recoursive.rb</span>
+class Post
+  module Recoursive
+    extend ActiveSupport::Concern
+
+    class_methods do
+      def recourse_label = :title
+      def recourse_hidden = :ip_address
+      def recourse_displayed = :created_at
+      def recourse_order = { published_at: :desc }
+      def recourse_icon = :question
+    end
+  end
+end</code></pre>
+
+      <h2 id="label">The label</h2>
+      <p><code>recourse_label</code> is the column one record is known by: what a combobox lists, what a foreign-key
+      cell in another table reads, what a toast calls the record it wrote, and what the breadcrumb over a nested
+      page says. It has to be a real column, since the combobox selects only the id and the label.</p>
+      <p>Where that column has a length validator the label is short enough to type, so a form asks for the value
+      — <code>ZIP code</code> — rather than listing every record, and the value is looked up on the way in: a code
+      naming no record leaves the key nil and <code>Must exist</code> beside the field. The same happens where the other
+      table is too long to list, which is 200 rows.</p>
+      <p>An encrypted label is drawn in the clear wherever a label is drawn, tables of other models included.
+      That is a decision to make deliberately rather than fall into.</p>
+
+      <h2 id="hidden">Hidden and displayed</h2>
+      <p><code>recourse_hidden</code> takes a column off every screen at once: the table, the record's page, the form,
+      the search box, the sort headings and the filter menus. It has no table-only form — a column that is only
+      noisy on an index stays, or gets a <code>_row</code> partial of the host's own. One name or a list:
+      <code>def recourse_hidden = :name</code> reads as well as <code>%i[name title]</code>. It also keeps an attachment off
+      every screen: <code>recourse_hidden :photos</code>.</p>
+      <p><code>recourse_displayed</code> works the other way, and only on the table. Four kinds of column stay off a table
+      by default — encrypted ones, the primary key, the two timestamps, and JSON — and this is the hook that names
+      one back: <code>def recourse_displayed = :phone</code> puts a number on a table that recognizes its rows by nothing
+      else, and <code>%i[created_at updated_at]</code> asks for the two Rails keeps. A timestamp named here lands last, in
+      that order, whichever way it was written.</p>
+
+      <h2 id="order">Order, icon and includes</h2>
+      <p><code>recourse_order</code> is any shape <code>order</code> takes. A Symbol or a Hash also puts the rows with nothing in
+      the column last, whichever direction is asked; a SQL string is taken as written. A positioned model is ordered
+      by its position column, since the order a table is read in and the order somebody put it in are one fact.</p>
+      <p><code>recourse_icon</code> names a concept rather than an icon — <code>:train</code>, not <code>train-front</code> — and
+      <a href="https://github.com/claudiob/unicon">unicon</a> says what that concept is called in Bootstrap Icons. The
+      default is the model's own name, so a <code>Contact</code> draws a rolodex without saying so, and a name unicon has never
+      heard of draws nothing rather than a placeholder.</p>
+      <p><code>recourse_includes</code> is what the index eager-loads: every <code>belongs_to</code> by default, so twenty rows
+      naming a county cost one query for the counties rather than twenty. A host whose row reads through a second key
+      names it as a hash, the shape <code>includes</code> already takes — <code>[:sensor, { previous_reading: :sensor }]</code>
+      — and the table's cache key follows it there, so a change to any record the rows draw expires the table.</p>
+
+      <h2 id="counters">Counters</h2>
+      <p>A number is drawn as a count — headed with the icon of what it counts, linking to the rows behind it — when
+      its column holds a counter cache, or is named <code>&lt;association&gt;_count</code> for an association the model has.
+      So a figure the app keeps itself needs nothing declared:</p>
+<pre><code>class Technician &lt; ApplicationRecord
+  has_many :visits, through: :dispatches   <span class="c"># and a visits_count column beside it</span>
+end</code></pre>
+      <p>The rule a host signs up for: a <code>*_count</code> column whose prefix names an association must hold the count
+      of that association. One naming nothing — <code>word_count</code>, <code>retry_count</code> — is an ordinary number, and one
+      naming an association it does not count wants another name or a place in <code>recourse_hidden</code>, since the heading
+      and the link would both say the wrong thing.</p>
+      <p>A counter links to the nested index of those rows where the routes drew one under the record. The tab on the
+      record's card reads the same count.</p>
+
+      <h2 id="kinds">What the column's kind decides</h2>
+      <p>Every screen asks <code>type_for_attribute</code>, so an <code>attribute</code> override counts the way the schema does.</p>
+      <table>
+        <thead><tr><th>Column</th><th>Table and page</th><th>Form</th><th>Filter</th></tr></thead>
+        <tbody>
+          <tr><td>enum</td><td>a badge, in the word the column holds</td><td>a menu</td><td>yes</td></tr>
+          <tr><td>boolean</td><td><code>Yes</code>, <code>No</code>, or a dash where nobody answered</td><td>a checkbox</td><td>yes</td></tr>
+          <tr><td><code>belongs_to</code></td><td>the label of the record it points at, linked to its page</td><td>a combobox, or a typed field where the other table is long or the label is bounded</td><td>where the other table is short enough to list</td></tr>
+          <tr><td>integer, decimal, float</td><td>delimited, at the column's own scale</td><td>a number field stepped by what the column keeps</td><td>—</td></tr>
+          <tr><td>money, percentage</td><td>with the currency or the <code>%</code></td><td>a number field adorned with the unit</td><td>—</td></tr>
+          <tr><td>date, datetime</td><td><code>Aug 12, 2026</code>; a time in the reader's zone, with how long ago in a tooltip</td><td>a date or <code>datetime-local</code> field</td><td>—</td></tr>
+          <tr><td>a web address</td><td>the host as a link, and an arrow opening it in a new tab</td><td>a text field</td><td>—</td></tr>
+          <tr><td><code>phone</code></td><td>punctuated by the browser</td><td>a telephone field</td><td>—</td></tr>
+          <tr><td>text</td><td>the text</td><td>a textarea of one row</td><td>—</td></tr>
+          <tr><td>an array, or a <code>serialize</code> of one</td><td>counted on the table, listed behind a summary on the page</td><td>a textarea, one value to a line</td><td>—</td></tr>
+          <tr><td>json, jsonb</td><td>off the table; pretty-printed on the page</td><td>—</td><td>—</td></tr>
+          <tr><td>a generated column</td><td>as its kind</td><td>never offered: the database writes it</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p>Money and a percentage are told apart from other decimals by their <em>type</em> — an Active Record type
+      reporting <code>:monetary</code> or <code>:percentage</code>, declared with <code>attribute</code> — never by their name, so
+      <code>hourly_rate</code> is money and <code>commission_rate</code> a share of it.</p>
+
+      <h2 id="encrypted">Encrypted columns</h2>
+      <p>Active Record Encryption is respected throughout. An encrypted column never reaches a table, since a page of
+      twenty rows is what a screenshot discloses; it arrives masked on the record's own page — one asterisk per
+      character and a <code>Show</code> beside it — and it is offered in the clear on the form that edits it, editing one
+      record being already a deliberate act. <code>recourse_displayed</code> names one back onto the table.</p>
+      <p>A search matches an encrypted column whole, never by containment, and only where the encryption is
+      deterministic: a <code>LIKE</code> against ciphertext finds nothing, and non-deterministic ciphertext differs every
+      write. A model whose searchable columns are all encrypted gets a box that asks for an exact value.</p>
+
+      <h2 id="attachments">Attachments</h2>
+      <p>A <code>has_one_attached :logo</code> is a file field on the form and, on the record's page, the picture Active
+      Storage makes of the file — 100 pixels tall, WebP where the browser takes it, opening the whole file in a new
+      tab — or the file's name where nothing can be drawn of it. Under the field on an edit form, a line says what
+      the record is holding now.</p>
+      <p>A <code>has_many_attached :photos</code> earns a page of its own once it is routed under the record:</p>
+<pre><code>recourses :places do
+  recourses :photos, only: %i[index destroy]
+end</code></pre>
+      <p>That page is a table of the files with their pictures, and a Delete on each row that takes the file off the
+      record. Files are added on the record's own form, where a chosen file joins a shelf and replaces a single one,
+      and a field nobody touched leaves everything as it was. Drawing a picture of an image needs
+      <code>image_processing</code>; video and PDF also need the host's <code>ffmpeg</code> and <code>poppler</code>.</p>
+
+      <h2 id="comments">Column comments</h2>
+      <p>Where the database has said what a column is for, the form says so under its field. <code>recourse_comment</code>
+      reads the schema's comment, which is the one question about a column no validator can answer. An adapter that
+      keeps no comments — SQLite is one — answers nil, and a host on it answers by hand:</p>
+<pre><code>COMMENTS = { 'capacity' => 'How many people fit at once' }.freeze
+
+def self.recourse_comment(column) = COMMENTS[column] || super</code></pre>
+
+      <h2 id="search">Search, sort and filters</h2>
+      <p>The Ransack hooks default to something rather than to nothing, so a model that says nothing is fully
+      searchable, sortable and filterable. The search box looks through every indexed string column the table shows,
+      plus the label behind a foreign key too long to list; a heading sorts where an index covers the column, and
+      on every counter and timestamp, never on a foreign key; and a filter is drawn per enum, per boolean and per
+      foreign key whose table is short enough to list.</p>
+      <p><code>ransackable_attributes</code>, <code>ransackable_associations</code>, <code>ransortable_attributes</code> and
+      <code>filter_fields</code> are still the model's to override, and each narrows what is offered with it: a column
+      Ransack will not answer for is offered no filter.</p>
+      <p><code>filter_fields</code> is a list of predicates and nothing else. A model adds a menu the schema says nothing about
+      — a word reached through another table — by naming the predicate, and the gem reads the words off the model
+      behind it and heads the menu as the locale calls that model:</p>
+<pre><code>def self.filter_fields = super + %i[team_name_in]
+def self.ransackable_associations(_ = nil) = super + %w[team]</code></pre>
+      <p>Naming a filter is not leave to query through a table, so <code>ransackable_associations</code> still says how far
+      Ransack may reach. A predicate Ransack will not answer raises when the page draws, rather than drawing a menu
+      that narrows nothing and hands back every row.</p>
+
+      <h2 id="deletion">Wording a deletion</h2>
+      <p>Deleting is not what every model does when a row goes: an account is disconnected, a note is withdrawn.
+      Both the button and the heading over the dialog read the model's own words where a host wrote them in the
+      locale, keyed off the record's own class so a subclass words it apart from its siblings:</p>
+<pre><code>en:
+  recourse:
+    models:
+      integration:
+        delete: Disconnect %{model}
+        deletion_title: Disconnect %{record}?</code></pre>
+      <p>The rest of the dialog — what goes with the record, what is kept, <code>This cannot be undone.</code> — is the
+      gem's, and is in <a href="records.html#delete">Records and forms</a>.</p>
+
+      <h2 id="broadcasts">Broadcasts</h2>
+      <p>When the host runs <code>turbo-rails</code>, saving a record redraws every open index listing it, morphed in place
+      with the scroll and the search box kept. A model written far more often than it is read quiets its own:</p>
+<pre><code>def self.recourse_broadcasts? = false</code></pre>
+
+      <nav class="next"><a href="routes.html">← Routes</a><a href="tables.html">Tables →</a></nav>
+    </article>
+  </div>
+
+  <footer class="foot">
+    <span><a href="https://github.com/claudiob/recourse">Source</a> · <a href="https://rubydoc.info/gems/recourse">Reference</a> · <a href="../">Home</a></span>
+    <span>MIT License</span>
+  </footer>
+</div>
+</body>
+</html>
