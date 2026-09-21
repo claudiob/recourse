@@ -54,6 +54,7 @@ module Recourse
   end
 
   @declared = []
+  @retrievable = []
   @nested = {}
   @parents = {}
   @declared_bookmarks = nil

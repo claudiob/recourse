@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # `/admin/places`.
   scope module: :admin do
     # All seven, and the model that has a column of every kind.
-    recourses :places do
+    recourses :places, retrievable: true do
       # A name this app has no class for at all: an action is a verb, and the button
       # still needs a word.
       recourse :sweep, only: :create

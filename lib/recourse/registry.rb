@@ -19,6 +19,14 @@ module Recourse
       @parents[child.to_s] = parent.to_s
     end
 
+    # Records that a resource's rows may be fetched again from wherever they came.
+    def retrieve(path)
+      @retrievable << path.to_s unless @retrievable.include? path.to_s
+    end
+
+    # Whether that resource's index offers to fetch them.
+    def retrievable?(path) = @retrievable.include?(path.to_s)
+
     # The resources nested under one parent path, in the order they were drawn.
     def nested_under(parent)
       @nested.fetch parent.to_s, []

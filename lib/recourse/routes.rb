@@ -1,9 +1,10 @@
 require_relative 'routes/nested'
+require_relative 'routes/refusals'
 
 module Recourse
   # Extends the config/routes.rb DSL, so `recourses` works anywhere `resources` does.
   module Routes
-    include Nested
+    include Nested, Refusals
 
     # Draws what `resources` draws, after supplying any controller the host lacks. A
     # block nests what it declares under each resource — ZIPs at
@@ -26,13 +27,12 @@ module Recourse
       names.each { |name| declare_resource name }
       # The host's word, and taken out before Rails sees the rest: `resources` would
       # refuse a keyword it does not know.
-      positionable = options.delete(:positionable) { false }
-      options = default_nested_actions options
-      refuse_unindexed_positioning names, positionable, options
+      positioned = options.delete(:positionable) { false }
+      fetched = options.delete(:retrievable) { false }
+      options = refuse_unindexed names, positioned, fetched, default_nested_actions(options)
+      return resources(*names, **options) unless [keepable, positioned, fetched, block].any?
 
-      return resources(*names, **options) unless block || keepable || positionable
-
-      resources(*names, **options) { draw_within keepable, positionable, block }
+      resources(*names, **options) { draw_within keepable, positioned, fetched, block }
     end
 
     # What `resource` draws, recorded the same way: one record reached without an id,
@@ -57,18 +57,16 @@ module Recourse
     # The module is the namespace being drawn in, so a resource is declared and its
     # controller defined under the path Rails will route to.
     def declare_resource(name)
-      path = [current_module, name].compact.join '/'
-      record_declaration path
-      Controllers.define_missing path
+      record_declaration declared_path(name)
+      Controllers.define_missing declared_path(name)
     end
+
+    # Where a resource of this name is routed, which is the name under everything the
+    # routes file remembers about it.
+    def declared_path(name) = [current_module, name].compact.join('/')
 
     # A table is put in order from its index and from nowhere else, so asking for the
     # route without drawing one is a host saying two things that cannot both hold.
-    def refuse_unindexed_positioning(names, positionable, options)
-      return unless positionable && !indexed?(options)
-
-      raise Error, I18n.t('recourse.unindexed', names: names.map(&:inspect).join(', '))
-    end
 
     # Whether `index` survived the `only:` or `except:` the host wrote. Neither of
     # them is the common case, and both name the action plainly.
@@ -83,14 +81,6 @@ module Recourse
       return options if !parent_resource || options.key?(:only) || options.key?(:except)
 
       options.merge only: %i[index new create]
-    end
-
-    def refuse_unscoped_nesting(names)
-      parent = parent_resource
-      return if parent.nil? || current_module.to_s.split('/').include?(parent.name)
-
-      raise Error, I18n.t('recourse.nested', names: names.map(&:inspect).join(', '),
-                                             parent: parent.name)
     end
   end
 end

@@ -35,6 +35,7 @@ require_relative 'helpers/pictures'
 require_relative 'helpers/previews'
 require_relative 'helpers/reaches'
 require_relative 'helpers/references'
+require_relative 'helpers/retrievals'
 require_relative 'helpers/resources'
 require_relative 'helpers/refreshes'
 require_relative 'helpers/routing'
@@ -61,7 +62,8 @@ module Recourse
             Deletions, Densities, Details, Events, Examples, Fields, FilterMenus, Filters,
             Flashes, Formats, Inputs, Kinds, Limits, Links, Maps, Names, Navigation,
             Parents, Pictures, Previews, Reaches, References, Refreshes, Routing,
-            Resources, Rows, Searches, Shapes, Shortcuts, Sidebars, Sorts, Spans, Tabs,
+            Resources, Retrievals, Rows, Searches, Shapes, Shortcuts, Sidebars, Sorts, Spans,
+            Tabs,
             Themes, Times, Values, Warnings, Weeks, Zones
 
     # The grid a record's own two pages lay an attribute out in: two columns on a large

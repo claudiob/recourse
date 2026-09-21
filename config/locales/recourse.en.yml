@@ -71,6 +71,11 @@ en:
       has no %{model} model.
     nested: You nested `recourses %{names}` inside `resources :%{parent}`, which does
       not namespace what it holds. Nest it under `recourses :%{parent}` instead.
+    # What the button that fetches a table's rows again is named to a screen reader.
+    retrieve: Retrieve %{models} again
+    unretrieved: "You asked for `recourses %{names}, retrievable: true`, which draws no
+      index to fetch them onto. The button that asks for them stands on the table that
+      lists them, so there is nowhere to put it."
     unindexed: "You asked for `recourses %{names}, positionable: true`, which draws no
       index to put in order. A row is dragged from the table that lists it, so there is
       nowhere for a drop to be reported from."

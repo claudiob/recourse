@@ -8,12 +8,13 @@ module Recourse
       # What a resource holds: the square that keeps one of its rows, the place a row
       # holds in a table somebody positioned, and whatever the host's own block declared —
       # each under the resource's own module, which is what every nested page relies on.
-      def draw_within(keepable, positionable, block)
+      def draw_within(keepable, positionable, retrievable, block)
         addressable = addressable_rows?
 
         scope module: parent_resource.name do
           draw_bookmark if keepable && addressable
           draw_position if positionable && addressable
+          draw_retrieval if retrievable
           instance_exec(&block) if block
         end
       end
@@ -35,6 +36,17 @@ module Recourse
         path = [current_module, 'positions'].compact.join '/'
         Controllers.define_missing(path) { PositionsController }
         resource :position, only: :update
+      end
+
+      # The fetch a table's own button asks for, at `/providers/5/visits/retrieval`.
+      # Where the rows came from is the host's to know, so the controller is the
+      # host's to write and the gem only makes one where there is none — the same
+      # bargain a bare action strikes. Recorded nowhere, for the reason the bookmark
+      # gives: a tab and a bare-action button both look under a resource, and this is
+      # neither.
+      def draw_retrieval
+        Controllers.define_missing [current_module, 'retrievals'].compact.join('/')
+        collection { resource :retrieval, only: :create }
       end
 
       # The row a table's bookmark square writes: one record kept by whoever is looking,
