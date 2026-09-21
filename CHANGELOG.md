@@ -7,6 +7,14 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.8.3 - 2026-09-21
+
+* [FIX] A delete button in a table row is no taller than the row
+
+  The button kept `.btn`'s minimum height of 2rem, half again the line the other cells
+  read at, so every row of a table with a delete column stood taller than the rows of a
+  table without one.
+
 ## 7.8.2 - 2026-09-20
 
 * [CHANGE] The retrieval button says what it does

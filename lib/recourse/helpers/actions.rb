@@ -73,17 +73,18 @@ module Recourse
         url_for controller: "/#{resource_controller_path}", action: action, id: record
       end
 
-      # The icon alone, red for what it does, and the same warning the edit page's button
-      # carries in front of it, which the bundle draws as its dialog. Out of the frame
-      # the table is drawn in, like every other action in the row: what a delete lands on
-      # is a whole page with a message over it, and answering inside the frame would keep
-      # the table and throw the message away.
+      # The icon alone, red for what it does, no taller than the line the row reads at,
+      # and the same warning the edit page's button carries in front of it, which the
+      # bundle draws as its dialog. Out of the frame the table is drawn in, like every
+      # other action in the row: what a delete lands on is a whole page with a message
+      # over it, and answering inside the frame would keep the table and throw the
+      # message away.
       def destroy_button(record)
         path = url_for controller: "/#{destroy_action_path}", action: :destroy, id: record
 
         confirm_button_to icon_tag(ICONS[:destroy], class: 'fg-danger'), path,
                           confirm: destroy_warning(record), method: :delete,
-                          class: 'btn btn-sm btn-link btn-icon p-0',
+                          class: 'btn btn-sm btn-link btn-icon p-0 min-h-0',
                           aria: { label: t('recourse.delete', model: resource_name) },
                           form: { data: { turbo_frame: '_top' } }
       end
