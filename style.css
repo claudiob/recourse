@@ -171,7 +171,6 @@ img.shot { width: 100%; height: auto; border: 1px solid var(--rule); border-radi
 .guide > aside a[aria-current] { color: var(--accent); font-weight: 600; }
 .guide > aside a:hover { color: var(--accent); }
 .guide > article { max-width: 72ch; }
-.guide > article > p:first-of-type { font-size: 1.12em; color: var(--ink-2); }
 .chapters { border: 1px solid var(--rule); border-radius: 8px; padding: 14px 18px 8px; margin: 22px 0 8px; background: color-mix(in srgb, var(--paper-2) 50%, transparent); }
 .chapters b { display: block; font-size: .8em; letter-spacing: .1em; text-transform: uppercase; color: var(--quiet); margin-bottom: 6px; }
 .chapters ol { margin: 0; padding-left: 1.3em; columns: 2; column-gap: 28px; }
@@ -179,6 +178,16 @@ img.shot { width: 100%; height: auto; border: 1px solid var(--rule); border-radi
 .chapters a { border: 0; }
 .next { display: flex; justify-content: space-between; gap: 16px; margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: .95em; }
 .aside-note { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; color: var(--ink-2); margin: 1.2em 0 1.4em; }
+
+@media (max-width: 640px) {
+  /* A table reads as one block per row on a phone, each cell led by its heading. */
+  table, tbody, tr, td { display: block; }
+  thead { display: none; }
+  tr { padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  td { border: 0; padding: 2px 0; }
+  td:first-child { font-weight: 600; }
+  td[data-label]:not(:first-child)::before { content: attr(data-label) ": "; color: var(--quiet); font-size: .85em; }
+}
 
 @media (max-width: 860px) {
   .guide { grid-template-columns: minmax(0, 1fr); gap: 20px; }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Customizing — Recourse Guides</title>
-<meta name="description" content="What a host writes in place of what Recourse draws: a row partial, a fields partial, a template of its own, a controller with a scope or a record of its own, and what stays the gem’s.">
+<meta name="description" content="What a host writes in place of what Recourse draws: views and controllers.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -43,28 +43,9 @@
 
     <article>
       <h1>Customizing</h1>
-      <p>The gem only fills the gap: anything it draws, the host can write itself, and a file the host has is
-      left alone. This guide is what to write for each kind of change, from one partial to a whole controller,
-      and what stays the gem’s whatever the host writes.</p>
-
-      <div class="chapters">
-        <b>Chapters</b>
-        <ol>
-          <li><a href="#row">A row of your own</a></li>
-          <li><a href="#fields">The fields of a form</a></li>
-          <li><a href="#templates">A template of your own</a></li>
-          <li><a href="#relation">A scope behind a table</a></li>
-          <li><a href="#model">A model behind a page</a></li>
-          <li><a href="#record">A record the parent does not name</a></li>
-          <li><a href="#writes">The writes</a></li>
-          <li><a href="#stays">What stays the gem’s</a></li>
-        </ol>
-      </div>
+      <p>Anything the gem draws, the host can write itself, and a file the host has is left alone.</p>
 
       <h2 id="row">A row of your own</h2>
-      <p>A host changes one table by writing <code>app/views/&lt;resources&gt;/_row.html.erb</code>, one <code>column</code> call per
-      cell with the content in a block. The record arrives under its own name, and the partial is rendered once for
-      the header row with that local nil, so nothing outside a <code>column</code> block may assume it is present:</p>
 <pre><code>&lt;%# app/views/posts/_row.html.erb %&gt;
 &lt;%# locals: (post:) -%&gt;
 
@@ -75,78 +56,37 @@
 &lt;%= column header: 'Author' do %&gt;
   &lt;%= post.author.name %&gt;
 &lt;% end %&gt;</code></pre>
-      <p>Three helpers are public for this. <code>column</code> draws the cell, and takes anything <code>tag</code> does.
-      <code>sort_header</code> draws a heading that sorts, and only where the column can be sorted. <code>search_highlight</code>
-      marks what the search matched, and only in a column the search looked through — including the label of a
-      record the search reached through a key, so a row drawn out of the author a post points at marks the name.
-      The action columns and the bookmark square are the table’s rather than the row’s, and are still drawn ahead of
-      whatever the partial defines.</p>
-      <p>A link in a cell leaves the table’s frame through <code>turbo_link_to</code>, never <code>link_to</code>, or Turbo replaces the
-      table with <code>Content missing</code> rather than going there.</p>
+      <p>One <code>column</code> per cell. <code>sort_header</code> draws a heading that sorts where it can, and
+      <code>search_highlight</code> marks what the search matched. The partial is rendered once for the header row with the
+      record nil, so nothing outside a <code>column</code> block may read it. The action columns and the bookmark square
+      are still drawn ahead of it. A link in a cell uses <code>turbo_link_to</code>, never <code>link_to</code>.</p>
 
       <h2 id="fields">The fields of a form</h2>
-      <p>A <code>_fields.html.erb</code> under the resource replaces the fields and keeps the form, the submit and the errors.
-      Both <code>new</code> and <code>edit</code> render it, so a host writes one and never a second. The field helper the gem’s own
-      partial uses is the gem’s, not a host’s: a host’s fields are ordinary form builder calls on the record the form
-      already holds.</p>
+      <p>A <code>_fields.html.erb</code> under the resource replaces the fields and keeps the form, the submit and the
+      errors, on both <code>new</code> and <code>edit</code>.</p>
 
       <h2 id="templates">A template of your own</h2>
-      <p>A <code>show</code>, <code>edit</code> or nested <code>index</code> template under the resource replaces the body of that page and
-      nothing else. The card, its tabs, the buttons beside the breadcrumb, the delete and the tab’s title are the
-      layout’s, drawn around whatever template answers, so a host’s page is its content alone. A page that wants the
-      width to itself assigns <code>@recourse_card = false</code>; a page that wants another title sets
-      <code>content_for :title</code>, which still wins.</p>
-      <p>A host template reads the record under the name a hand-written controller would set: <code>@post</code> for
-      posts, <code>@recourse_parent</code> for the record a nested page stands under.</p>
+      <p>A <code>show</code>, <code>edit</code> or nested <code>index</code> template replaces the body of the page and nothing else: the
+      card, its tabs, the buttons beside the breadcrumb and the title stay the layout’s. The record arrives as
+      <code>@post</code>, and the parent of a nested page as <code>@recourse_parent</code>. <code>@recourse_card = false</code> takes the
+      card away; <code>content_for :title</code> still wins.</p>
 
-      <h2 id="relation">A scope behind a table</h2>
-      <p>A controller of the host’s own is a <code>RecoursesController</code>, and one private method puts a scope behind a
-      table the gem otherwise draws whole. The search, the sort, the filters, the pages and the cache all still come
-      from the gem:</p>
+      <h2 id="relation">A controller of your own</h2>
+      <p>A host controller is a <code>RecoursesController</code>, and one private method usually does the job. The search,
+      the sort, the filters, the pages and the cache still come from the gem.</p>
 <pre><code>class Projects::CommentsController &lt; RecoursesController
 private
 
+  <span class="c"># The rows behind a table the gem draws whole.</span>
   def recourse_relation
     project = Project.find params.expect(:project_id)
     Comment.where task: project.tasks
   end
 end</code></pre>
-      <p>By default the relation is every row of the model, narrowed by the foreign key a nested route names. A
-      relation may carry values of its own beside the columns — a <code>select</code> with an aggregate — and a
-      <code>_row</code> partial reads them off the record.</p>
-
-      <h2 id="model">A model behind a page</h2>
-      <p>The route’s own name answers which model a page is about, by asking the app for a class of that name. A
-      page named for something else — <code>recourses :purchases</code> listing a table of orders — names its model
-      instead, with <code>def recourse_model = Order</code>. Private, like the relation: naming a model adds no action.</p>
-
-      <h2 id="record">A record the parent does not name</h2>
-      <p>A singular resource is read off the parent under the route’s name, whether by a <code>has_one</code> or a
-      <code>belongs_to</code>. Where the parent has no association of that name the record is the host’s to find, and an
-      override still wins where the gem could have resolved it:</p>
-<pre><code>class Projects::ManagersController &lt; RecoursesController
-private
-
-  def find_resource
-    assign @recourse_parent.team.manager
-  end
-end</code></pre>
-      <p><code>assign</code> sets both <code>@recourse</code> and the record’s own name. A find that answers nothing draws a page
-      saying so, or the form where <code>new</code> is routed.</p>
-
-      <h2 id="writes">The writes</h2>
-      <p><code>create</code>, <code>update</code> and <code>destroy</code> are ordinary actions on <code>Recourse::BaseController</code>, and a
-      host with something of its own to do on a write writes the action. What the gem does inside them is private
-      API rather than a shelf to reach for. A bare action’s controller and a retrieval controller are written whole;
-      see <a href="routes.html#bare">Routes</a> and <a href="retrieval.html">Retrievable tables</a>.</p>
-
-      <h2 id="stays">What stays the gem’s</h2>
-      <ul>
-        <li>The sidebar, the breadcrumb, the search form and where they sit, unless the host replaces the whole layout; see <a href="appearance.html#head">Look and feel</a>.</li>
-        <li>The card around a record’s pages, its tabs and the buttons beside the breadcrumb, whatever template answers.</li>
-        <li>The action columns and the bookmark square on a table, whatever row partial draws the rest.</li>
-        <li>Which columns a form permits: the editable columns, less what <code>recourse_hidden</code> keeps back. A host that hides a column the database requires has a form that cannot save; see <a href="models.html#hidden">Models</a>.</li>
-      </ul>
+      <p><code>recourse_model</code> names the model behind a page named for something else: <code>def recourse_model = Order</code>
+      under <code>recourses :purchases</code>. <code>find_resource</code> finds a singular record the parent names no association
+      for: <code>assign @recourse_parent.team.manager</code>. <code>create</code>, <code>update</code> and <code>destroy</code> are ordinary
+      actions a host with something of its own to do rewrites; what the gem does inside them is private.</p>
 
       <nav class="next"><a href="appearance.html">← Look and feel</a><a href="./">All guides →</a></nav>
     </article>

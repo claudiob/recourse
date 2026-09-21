@@ -43,95 +43,46 @@
 
     <article>
       <h1>Getting started</h1>
-      <p>This guide installs the gem, routes one resource, and walks through what that one line draws.
-      After it you will know which screens a routed action earns, where the sidebar comes from, and how to
-      put a guard above every screen at once.</p>
 
-      <div class="chapters">
-        <b>Chapters</b>
-        <ol>
-          <li><a href="#install">Installing the gem</a></li>
-          <li><a href="#routes">Routing a resource</a></li>
-          <li><a href="#earns">What each action earns</a></li>
-          <li><a href="#sidebar">The sidebar and the shortcuts</a></li>
-          <li><a href="#secure">Securing the controllers</a></li>
-          <li><a href="#next">Where to go next</a></li>
-        </ol>
-      </div>
-
-      <h2 id="install">Installing the gem</h2>
+      <h2 id="install">Install the gem</h2>
 <pre><code><span class="c"># Gemfile</span>
 gem 'recourse'</code></pre>
-      <p>Nothing else goes in the host. The pages need Turbo, which <code>turbo-rails</code> brings as a dependency, and
-      everything a page is styled and scripted by — Bootstrap, its icons, Turbo, Stimulus and the controllers behind
-      these screens — is <code>bh</code>, which this gem depends on and whose engine serves them at <code>/bh/</code>. A host
-      without an asset pipeline gets the same screens, and nothing is fetched across a network. A host serving
-      those files from somewhere else says so in <code>Recourse.assets</code>; see <a href="appearance.html#assets">Look and feel</a>.</p>
+      <p>Nothing else goes in the host. Turbo comes as a dependency, and everything a page is styled and scripted
+      by is served by <code>bh</code>, another dependency, so nothing is fetched across a network.</p>
 
-      <h2 id="routes">Routing a resource</h2>
-      <p>Replace a call to <code>resources</code> with <code>recourses</code>. Everything <code>resources</code> takes,
-      <code>recourses</code> takes too: <code>only:</code>, <code>except:</code>, a block of nested resources.</p>
+      <h2 id="routes">Route a resource</h2>
 <pre><code><span class="c"># config/routes.rb</span>
 <span class="del">- resources :posts, only: %i[index show] do</span>
 <span class="add">+ recourses :posts, only: %i[index show] do</span>
 <span class="del">-   resources :comments, except: :destroy</span>
 <span class="add">+   recourses :comments, except: :destroy</span>
   end</code></pre>
-      <p>The line draws what <code>resources</code> draws, and then supplies whatever the host lacks: a
-      <code>PostsController</code> where none is defined, and a template for every action that controller
-      serves. A controller the app already defines is left alone — the gem only fills the gap — and so is any
-      template the app has under <code>app/views/posts/</code>.</p>
-      <p>The name has to be a model. <code>recourses :posts</code> with no <code>Post</code> class raises while the
-      routes draw, naming the routes line, rather than failing later from somewhere inside a view.</p>
+      <p><code>recourses</code> takes everything <code>resources</code> takes. It draws the same routes, then supplies whatever
+      the host lacks: a <code>PostsController</code> where none is defined, and a template for every action. A
+      controller or a template the app already has is left alone. A name with no model behind it raises while the
+      routes draw.</p>
 
       <h2 id="earns">What each action earns</h2>
-      <p>Each of the seven actions is a screen, drawn by reading the model: its validators, its associations,
-      its column types and its indexes.</p>
       <table>
         <thead><tr><th>Routed</th><th>Earns</th></tr></thead>
         <tbody>
-          <tr><td><code>index</code></td><td>A sidebar entry, a keyboard shortcut, and a paginated, searchable, sortable, filterable table. See <a href="tables.html">Tables</a>.</td></tr>
-          <tr><td><code>show</code></td><td>A record’s page, every value drawn as what it is, encrypted ones masked until asked for. See <a href="records.html">Records and forms</a>.</td></tr>
-          <tr><td><code>new</code>, <code>edit</code></td><td>A form with a field for each column’s kind, carrying what the validators say. A rejected write redraws it with the errors beside the fields.</td></tr>
-          <tr><td><code>create</code>, <code>update</code></td><td>The write, a toast naming the record and leading to its page, and the row it landed on marked in the table.</td></tr>
-          <tr><td><code>destroy</code></td><td>A button on the record’s own page, or on each row where no edit page would carry it, with a dialog naming what goes with the record before it goes.</td></tr>
+          <tr><td data-label="Routed"><code>index</code></td><td data-label="Earns">A sidebar entry, a keyboard shortcut, and a paginated, searchable, sortable, filterable <a href="tables.html">table</a>.</td></tr>
+          <tr><td data-label="Routed"><code>show</code></td><td data-label="Earns">A <a href="records.html">record’s page</a>, every value drawn as what it is, encrypted ones masked.</td></tr>
+          <tr><td data-label="Routed"><code>new</code>, <code>edit</code></td><td data-label="Earns">A form with a field per column, carrying what the validators say.</td></tr>
+          <tr><td data-label="Routed"><code>create</code>, <code>update</code></td><td data-label="Earns">The write, a toast naming the record, and the row it landed on marked.</td></tr>
+          <tr><td data-label="Routed"><code>destroy</code></td><td data-label="Earns">A button that names what goes with the record before it goes.</td></tr>
         </tbody>
       </table>
-      <p>A resource with an <code>index</code> and nothing else is a read-only table; one with <code>create</code>
-      and no <code>new</code> gets a one-click <code>Create</code> button in the Add link’s place, on the host’s word
-      that a bare record can stand. Nested resources default to <code>only: %i[index new create]</code>: the
-      parent’s rows, and a form to add one. See <a href="routes.html">Routes</a> for every shape a routes line can take.</p>
+      <p>Every resource with an <code>index</code> is an entry in the sidebar, in routes order, answering to a letter of its
+      title held with Option. Nested resources default to <code>only: %i[index new create]</code>.</p>
 
-      <h2 id="sidebar">The sidebar and the shortcuts</h2>
-      <p>Every resource routed <code>index</code> is an entry in the sidebar, in the order <code>config/routes.rb</code>
-      declares them, never sorted. A resource without an index gets no entry rather than a broken one. Each entry
-      carries the model’s icon, chosen by the model’s own name through the
-      <a href="https://github.com/claudiob/unicon">unicon</a> gem, and a model may name another concept with
-      <code>recourse_icon</code>.</p>
-      <p>Every entry answers to a letter of its own title, held with Option: <code>Posts</code> to P, and
-      <code>Pages</code>, declared after it, to A, since P was taken. Holding Option underlines the letter in place,
-      so the hint points at a key rather than at a number nobody can guess.</p>
-      <p>The foot of the sidebar holds the reader’s own controls: a moon or a sun that moves the page through the
-      palettes and between light and dark, and — where the host drew a route named <code>exit</code> — the way out.</p>
-
-      <h2 id="secure">Securing the controllers</h2>
-      <p>Every controller the gem defines inherits <code>RecoursesController</code>. The host defines that class itself,
-      which is how a guard goes above every screen at once:</p>
+      <h2 id="secure">Secure the controllers</h2>
 <pre><code><span class="c"># app/controllers/recourses_controller.rb</span>
 class RecoursesController &lt; Recourse::BaseController
   before_action :authenticate!
 end</code></pre>
-      <p>The behavior is in <code>Recourse::BaseController</code>, so a host redefining <code>RecoursesController</code> loses
-      none of it. A controller the host writes for one resource — <code>class PostsController &lt; RecoursesController</code>
-      — inherits the same guard, and a bare action the host answers itself is a <code>RecoursesController</code> too, that
-      being where an admin keeps the filters guarding it.</p>
-
-      <h2 id="next">Where to go next</h2>
-      <ul>
-        <li><a href="routes.html">Routes</a>, for nesting, namespaces, singular resources and the two keywords.</li>
-        <li><a href="models.html">Models</a>, for the class methods a model may answer and what the schema says without them.</li>
-        <li><a href="customizing.html">Customizing</a>, for the partial, the template or the controller a host writes when the default is not what it wants.</li>
-      </ul>
+      <p>Every controller the gem defines inherits this class, and so does any the host writes for one resource, so
+      one guard stands above every screen.</p>
 
       <nav class="next"><span></span><a href="routes.html">Routes →</a></nav>
     </article>

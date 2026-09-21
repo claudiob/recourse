@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Maps and calendars — Recourse Guides</title>
-<meta name="description" content="The same page of rows drawn on a Google map or as a week of events: what a model needs to keep, what the host needs to provide, and how search and filters travel with each shape.">
+<meta name="description" content="The same page of rows drawn on a Google map or as a week of events.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -43,59 +43,25 @@
 
     <article>
       <h1>Maps and calendars</h1>
-      <p>A page of rows can take two shapes besides the table, and each is the same page drawn another way: the
-      same search, the same filters, the same footer. A model earns a shape by the columns it keeps, and declares
-      nothing.</p>
-
-      <div class="chapters">
-        <b>Chapters</b>
-        <ol>
-          <li><a href="#maps">Maps</a></li>
-          <li><a href="#credentials">The key and the map ID</a></li>
-          <li><a href="#calendars">Calendars</a></li>
-          <li><a href="#weeks">Moving between weeks</a></li>
-        </ol>
-      </div>
+      <p>Two more shapes a page of rows can take, each the same page drawn another way, with the same search,
+      filters and footer. A model earns one by the columns it keeps, and declares nothing.</p>
 
       <h2 id="maps">Maps</h2>
-      <p>A table whose model keeps a <code>google_place_id</code>, or a <code>latitude</code> and a <code>longitude</code>, can be read
-      as a Google map of the same page. The footer under the table offers <code>Display as map</code>, and
-      <code>/stores.map</code> draws this page’s rows in the frame and over the footer the table has, so the search,
-      the sort and the pages work the same on either shape. The footer under the map offers <code>Display as
-      table</code>, keeping the page the map was on.</p>
-      <p>A point is a pin. A place ID is filled in as an area where the model is a geography Google draws boundaries
-      for — a <code>State</code>, a <code>County</code>, a <code>City</code> or a <code>ZIP</code>, by the model’s name — and pinned at the
-      place for any other model.</p>
-
-      <h2 id="credentials">The key and the map ID</h2>
-      <p>The key and the map are the host’s own credentials, read under <code>google_maps</code>:</p>
+      <p>A model keeping a <code>google_place_id</code>, or a <code>latitude</code> and a <code>longitude</code>, gets <code>Display as
+      map</code> in its footer, and <code>/stores.map</code> draws the page’s rows on a Google map. A point is a pin; a place ID
+      is an area where the model is a <code>State</code>, <code>County</code>, <code>City</code> or <code>ZIP</code>, and a pin otherwise.</p>
 <pre><code><span class="c"># config/credentials.yml.enc</span>
 google_maps:
   api_key: AIza…
   map_id: 4f2a…</code></pre>
-      <p>The map’s style has the matching Feature layers turned on in the Cloud console — Postal code for ZIPs,
-      Administrative area level 2 for counties. A host with a Content Security Policy allows
-      <code>maps.googleapis.com</code> for scripts and connections, and Google’s tile hosts for images.</p>
+      <p>The map’s style needs the matching Feature layers turned on in the Cloud console, and a Content Security
+      Policy allows <code>maps.googleapis.com</code> and Google’s tile hosts.</p>
 
       <h2 id="calendars">Calendars</h2>
-      <p>A table whose model keeps a <code>starts_at</code> and an <code>ends_at</code> can be read as a week of the same rows:
-      the footer offers <code>Display as calendar</code>, and <code>/events.cal</code> draws a column a day from Sunday, with
-      each row placed by the hours it runs between and rows that overlap in lanes of their own. A row says what it
-      is, whoever it points at, and the hours themselves, each led to its own page where the routes drew one.</p>
-      <p>Both columns have to be datetimes, asked through <code>type_for_attribute</code>, so an <code>attribute :starts_at,
-      :datetime</code> override counts and a column of another kind named <code>starts_at</code> earns nothing: a date has no
-      hour for a week to place it by.</p>
-      <p>The grid stands as tall as a table’s own first page, so the weeks under a calendar sit where the pages under
-      a table do. The hours are the reader’s own — the same zone every other time on these pages is drawn against —
-      and the scale runs only over the hours that week’s rows cover, or a working day where it holds none. A row
-      running past midnight is drawn on the day it opens, down to the foot of its column.</p>
-
-      <h2 id="weeks">Moving between weeks</h2>
-      <p>A week rather than a page is what a calendar shows, so there is nothing to paginate. <code>?week=2026-09-13</code>
-      moves to the week holding that day, and <code>&lt;&lt;</code>, <code>&lt;</code>, <code>&gt;</code> and <code>&gt;&gt;</code> stand where the pages
-      stand under a table — a week either side and four weeks beyond each — with the week named between them. The
-      search and the filters travel with it, and answer in the shape they were picked in, so a calendar narrowed to
-      one person stays a narrowed calendar as the weeks move.</p>
+      <p>A model keeping a <code>starts_at</code> and an <code>ends_at</code>, both datetimes, gets <code>Display as calendar</code>, and
+      <code>/events.cal</code> draws a week from Sunday, a column a day, each row placed by its hours in the reader’s zone,
+      overlapping rows in lanes of their own. <code>?week=2026-09-13</code> moves to that week, and arrows under the grid
+      move a week or four either way. The search and the filters travel with it.</p>
 
       <nav class="next"><a href="records.html">← Records and forms</a><a href="positioning.html">Positionable tables →</a></nav>
     </article>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tables — Recourse Guides</title>
-<meta name="description" content="The index table Recourse draws: which columns it shows and in what order, sorting, searching, filters, pages, bookmarks, counters, links and live refreshes.">
+<meta name="description" content="The index table Recourse draws: columns, sorting, searching, filters, pages, bookmarks and live refreshes.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -43,124 +43,58 @@
 
     <article>
       <h1>Tables</h1>
-      <p>The table every <code>index</code> draws: which columns it shows and in what order, how it is sorted,
-      searched and filtered, how it is paged, and what else a row can carry.</p>
 
-      <div class="chapters">
-        <b>Chapters</b>
-        <ol>
-          <li><a href="#columns">Which columns, in which order</a></li>
-          <li><a href="#actions">The action columns</a></li>
-          <li><a href="#cells">How a cell reads</a></li>
-          <li><a href="#sorting">Sorting</a></li>
-          <li><a href="#searching">Searching</a></li>
-          <li><a href="#filters">Filters</a></li>
-          <li><a href="#pages">Pages</a></li>
-          <li><a href="#bookmarks">Bookmarks</a></li>
-          <li><a href="#refreshes">Live refreshes</a></li>
-          <li><a href="#cache">The cache</a></li>
-          <li><a href="#phone">On a phone</a></li>
-        </ol>
-      </div>
-
-      <h2 id="columns">Which columns, in which order</h2>
-      <p>A table draws one column per attribute the model has, less four kinds it leaves off by default: encrypted
-      columns, the primary key, the two timestamps, and JSON. <code>recourse_hidden</code> takes any other column off; see <a href="models.html#hidden">Models</a>. A position
-      column is never drawn, since the row’s own place in the table already says it.</p>
-      <p>The order is banded, and the schema’s own order stands inside each band: an enum first, then foreign
-      keys, then scalars, booleans, long values, dates, timestamps, and counters last of all. A state is read
-      first, what a row points at next, what it counts after everything the row is. There is no hook for the order
-      across bands; a column-reorder migration moves one within its band, and a host <code>_row</code> partial draws any
-      order at all.</p>
-      <p>Column headings come from <code>human_attribute_name</code>, so a host renames one by translating the attribute.
-      A date or a time is headed without the <code>at</code> or <code>on</code> its column ends in: <code>Created</code>, not
-      <code>Created at</code>.</p>
-
-      <h2 id="actions">The action columns</h2>
-      <p>A table opens with one narrow column per action a row has: an eye linking to the record’s page and a
-      pencil to its form, each drawn only where its action is routed. A look before a change, so the pencil is
-      not the first thing under the cursor. A resource with neither opens at its first attribute.</p>
-      <p>A resource routed <code>destroy</code> with no <code>edit</code> has no page to carry the Delete button — a file
-      attached to a record, a row joining two — so its table draws a third column: the trash icon, with the same
-      dialog the record’s page would have shown. A table whose rows have an edit page draws no delete on the row: a
-      row of pencils with a bin beside each is a mis-click waiting to happen.</p>
-      <p>Where a host writes its own <code>_row</code> partial these columns are still prepended, since they are the
-      table’s rather than the row’s.</p>
-
-      <h2 id="cells">How a cell reads</h2>
-      <p>A cell reads as what its column is <em>of</em>, the way the record’s page does: a foreign key as the label of
-      the record it points at, linked to that record’s page where one is routed; a boolean as <code>Yes</code> or
-      <code>No</code>; an enum as a badge; a number delimited; a date by its name and a time in the reader’s zone with
-      how long ago in a tooltip; a web address as its host, with an arrow that opens it in a new tab; a phone
-      punctuated; a list as <code>3 items</code>. The full table is in <a href="models.html#kinds">Models</a>.</p>
-      <p>A counter reads as the figure alone under an icon heading, and as <code>1,204 comments</code> under a word once the
-      table is wide enough. Each is a link to the rows it counts where a nested index of them is routed under the
-      record.</p>
+      <h2 id="columns">Columns</h2>
+      <p>One column per attribute, less four kinds a table leaves off: encrypted columns, the primary key, the two
+      timestamps and JSON. The order is banded — an enum first, then foreign keys, scalars, booleans, long values,
+      dates, and counters last — with the schema’s order inside each band. Headings come from
+      <code>human_attribute_name</code>, a date or a time headed without its <code>at</code>.</p>
+      <p>A table opens with one narrow column per action a row has, an eye and a pencil, each drawn only where its
+      action is routed. A resource routed <code>destroy</code> with no <code>edit</code> draws a third, the trash icon, since no
+      page would carry the button.</p>
+      <p>A cell reads as what its column is of: a key as the label it points at, linked; a boolean as
+      <code>Yes</code> or <code>No</code>; a time in the reader’s zone with how long ago in a tooltip; a web address as its host;
+      a counter as the figure, or <code>1,204 comments</code> where the table is wide.</p>
 
       <h2 id="sorting">Sorting</h2>
-      <p>A heading is a link where its column can be sorted: the timestamps, every counter, and whatever an index
-      covers. Never a foreign key — its cell shows a label from another table, and the id under it is not the order
-      that label reads in — and never a hidden column. The first click sorts downward, since the newest, the most
-      and the latest are what a reader clicks a heading to find, and the second turns it back up. Rows with nothing
-      in the sorted column come last either way. Clicking a heading restarts at the first page and keeps whatever
-      search or filter was in force.</p>
-      <p>The model’s own order, before anyone clicks, is <code>recourse_order</code>: the id, or the position column on a
-      positioned table.</p>
+      <p>A heading is a link where an index covers the column, and on every counter and timestamp — never on a
+      foreign key, whose cell shows a label from another table. The first click sorts downward, the second up, and
+      rows with nothing in the column come last either way.</p>
 
       <h2 id="searching">Searching</h2>
-      <p>The search box looks through every indexed string column the table shows, plus the label behind each
-      foreign key whose table is too long to list — <code>/orders</code> searches <code>customer_name_cont</code> — and says so
-      in its own placeholder: <code>Filter by title or slug</code>. Typing submits after a moment of quiet, and only the
-      table is replaced, so the caret stays where it was. What the search matched is marked in the cell that matched
-      it, and only there; a search never looks through a number.</p>
-      <p>A model whose searchable columns are all encrypted gets a box asking for a whole value — <code>Filter by exact
-      email</code> — and only deterministic encryption qualifies. A model with nothing worth searching and no filters
-      gets no form at all.</p>
+      <p>The box looks through every indexed string column the table shows, plus the label behind a key whose table
+      is too long to list, and says so in its placeholder: <code>Filter by title or slug</code>. Typing submits after a
+      moment of quiet and replaces only the table. What matched is marked in the cell that matched it. A model with
+      only encrypted columns to search gets a box asking for an exact value.</p>
 
       <h2 id="filters">Filters</h2>
-      <p>Beside the box, one menu per enum, per boolean and per foreign key whose table is short enough to list. Each
-      is a combobox with a search box of its own, ticking more than one value, and opening with <code>All statuses</code>
-      as the way back to no filter. Where the model a menu lists counts the rows being filtered, each option ends with
-      its count and the menu is ordered by it; a page under a record shows no counts, since the number would be of a
-      table the page is not showing. Ticking an option answers at once.</p>
-      <p>A foreign key too long to list — 200 rows — gets no menu, and a place in the search box instead, so a page
-      never loses the ability to narrow by it. A model adds a menu of its own by naming the predicate in
-      <code>filter_fields</code>; see <a href="models.html#search">Models</a>.</p>
+      <p>One menu per enum, per boolean and per foreign key whose table has 200 rows or fewer, each ticking more
+      than one value and opening with <code>All …</code> as the way back. Options show how many rows they hold and are
+      ordered by it, except under a record, where the number would be of a table the page is not showing. A model
+      adds a menu of its own in <a href="models.html#search"><code>filter_fields</code></a>.</p>
 
       <h2 id="pages">Pages</h2>
-      <p>A table opens at 15 rows, and the footer offers <code>100 per page</code> for a reader scanning rather than reading.
-      The choice is the reader’s, kept in their browser as a cookie and checked against those two sizes, so no page
-      carries a <code>?limit=</code> and nothing is written to the host. Under the table: <code>Displaying items 1-15 of
-      101</code>, the switch, and the pages at the right; a table that fits on one page says how many items it has and
-      offers neither.</p>
+      <p>A table opens at 15 rows, and the footer offers <code>100 per page</code>. The choice is a cookie, checked against
+      those two sizes, so no address carries a page size and nothing is written to the host.</p>
 
       <h2 id="bookmarks">Bookmarks</h2>
-      <p>One line in an initializer names the viewer’s kept rows, as a Proc, because at boot the viewer is nobody:</p>
 <pre><code>Recourse.bookmarks = -> { Bookmark.where user: Current.user }</code></pre>
-      <p>Every model with a <code>has_many</code> at that class then opens its table with a square to keep a row by, ahead of
-      the action columns: hollow where the viewer has not kept the row, filled where they have, the row tinted with
-      it. Kept rows come first. A click flips the square at once, posts in the background, and the tint follows the
-      write back; a bookmark asks nothing first, since a mis-click is undone by clicking again. A model that cannot
-      hold a bookmark gets no column, and a nested listing keeps its rows at the resource’s own route rather than
-      under every parent.</p>
+      <p>A Proc, because at boot the viewer is nobody. Every model with a <code>has_many</code> at that class opens its table
+      with a square to keep a row by, kept rows first and tinted. A click posts in the background and asks nothing,
+      since it is undone by clicking again.</p>
 
       <h2 id="refreshes">Live refreshes</h2>
-      <p>When the host runs <code>turbo-rails</code>, an open index subscribes to its model’s refreshes: a record saved in
-      one browser redraws the table in every other one that has the page open, morphed in place, with the scroll,
-      the search box and any open menu kept. A refresh re-fetches the current address, so the search, the sort and
-      the page survive it. A model opts out with <code>recourse_broadcasts?</code>.</p>
+      <p>With <code>turbo-rails</code>, an open index redraws when a row changes, morphed in place with the scroll, the
+      search box and any open menu kept. A model opts out with <code>recourse_broadcasts?</code>.</p>
 
       <h2 id="cache">The cache</h2>
-      <p>The table is a fragment keyed on the relation — its rows, the newest <code>updated_at</code> among them and among
-      everything <code>recourse_includes</code> names, the counts the rows draw, the viewer’s bookmarks and their time zone —
-      so nothing has to expire it and a row written anywhere shows on the next request. A sorted, searched or filtered
-      table is drawn live. A host that declared <code>touch: true</code> only to expire such a table can drop it.</p>
+      <p>The table is a fragment keyed on the relation, its newest <code>updated_at</code>, the counts, the viewer’s bookmarks
+      and their time zone, so nothing has to expire it. A sorted, searched or filtered table is drawn live. A
+      <code>touch: true</code> declared only to expire a table can go.</p>
 
       <h2 id="phone">On a phone</h2>
-      <p>Below 768px the sidebar is a row of icons across the top, the trail and the search under it, and the table’s
-      rows become stacked blocks, each cell labelled by its heading. A pair of arrows at the foot of the sidebar puts
-      the words back beside every icon, and the choice is kept as a cookie so the server draws it that way from the
-      first paint.</p>
+      <p>The sidebar is a row of icons across the top and every row of the table a stacked block. A pair of arrows at
+      the foot of the sidebar puts the words back beside the icons.</p>
 
       <nav class="next"><a href="models.html">← Models</a><a href="records.html">Records and forms →</a></nav>
     </article>

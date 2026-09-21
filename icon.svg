@@ -2,15 +2,15 @@
      aria-label="Two arrows swapping places">
   <!--
     The mark: two characters changing places, which is the whole of what a host does
-    to its routes file. Two arrows, one each way, and nothing else, since a
-    16-pixel tab carries no more. Set rx to 0 for the Apple touch icon and the avatar: iOS
-    masks its own corner and every avatar is shown round.
+    to its routes file. Two arrows, one each way, each tip over the other's tail. Set rx
+    to 0 for the Apple touch icon and the avatar: iOS masks its own corner and every
+    avatar is shown round.
   -->
   <rect width="512" height="512" rx="96" fill="#1c1a17"/>
   <g fill="none" stroke="#f6f4ee" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M128 176 H352"/>
-    <path d="M300 124 L352 176 L300 228"/>
-    <path d="M384 296 H160"/>
-    <path d="M212 244 L160 296 L212 348"/>
+    <path d="M128 176 H384"/>
+    <path d="M332 124 L384 176 L332 228"/>
+    <path d="M384 296 H128"/>
+    <path d="M180 244 L128 296 L180 348"/>
   </g>
 </svg>

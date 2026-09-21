@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Positionable tables — Recourse Guides</title>
-<meta name="description" content="Tables a reader drags into an order the model keeps: the position column, the route a drop reports to, what keeps the numbers running, and a second listing ordered by another column.">
+<meta name="description" content="Tables a reader drags into an order the model keeps.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -43,73 +43,28 @@
 
     <article>
       <h1>Positionable tables</h1>
-      <p>A table whose model keeps an integer <code>position</code> is one a reader puts in order by hand. This guide is
-      what the column earns, what the routes have to say, what keeps the numbers running, and how a host lists the
-      same rows in a second order.</p>
-
-      <div class="chapters">
-        <b>Chapters</b>
-        <ol>
-          <li><a href="#column">The column and the keyword</a></li>
-          <li><a href="#page">What the page does</a></li>
-          <li><a href="#numbers">What keeps the numbers running</a></li>
-          <li><a href="#siblings">A model pointing two ways</a></li>
-          <li><a href="#opting">Opting out</a></li>
-          <li><a href="#second">A second listing</a></li>
-        </ol>
-      </div>
-
-      <h2 id="column">The column and the keyword</h2>
-      <p>The column is the whole of the declaration: a model keeping an integer <code>position</code> has said its rows are
-      in an order. The type is load-bearing, asked through <code>type_for_attribute</code> — a <code>position</code> holding a job
-      title is a word about the row, not a place among rows, and a table of those is left alone. A column named
-      otherwise is named in the model: <code>def recourse_position = :ordering</code>.</p>
-      <p>The routes say where a drop is reported, since a page nobody drags needs no route:</p>
+      <p>A model keeping an integer <code>position</code> is one a reader puts in order by hand. The column is the whole
+      declaration; a column named otherwise is named with <code>def self.recourse_position = :ordering</code>. The routes
+      say where a drop is reported:</p>
 <pre><code>recourses :tasks, positionable: true</code></pre>
-      <p>That draws <code>PATCH /tasks/5/position</code> under the index. A table is put in order from its index and from
-      nowhere else, so the keyword is refused on a resource that draws none.</p>
-
-      <h2 id="page">What the page does</h2>
-      <p>A grip opens each row, dragging it moves the row, and the place it lands in is written to that route. The
-      table is ordered by the column, whatever <code>recourse_order</code> would otherwise say: the order a table is read in
-      and the order somebody put it in are one fact. The column itself is never drawn, since the row’s place in the
-      table already says it, and the form never asks for it.</p>
-      <p>The search box and the sorted headings stand down while the grips are drawn, and a <code>q</code> typed by hand is
-      refused for the same reason: a filter shortens the page, and a drop on a shortened page would report a place
-      among the rows that are left.</p>
-      <p>Whether a page is positioned is asked per page, not per model. A position means something under the parent it
-      is counted within, so a flat model’s own index is positioned and a listing nested under a parent is, while a
-      listing of every row across every parent — where the positions run 1, 2, 3, 1, 2, 3 side by side — is not, and
-      sorts and searches like any other.</p>
-
-      <h2 id="numbers">What keeps the numbers running</h2>
-      <p>What a drop reports is a row’s place on the <em>page</em>, which is a position only while the numbers run 1, 2, 3
-      with no holes in them. So two things follow the column rather than the routes: a new row lands last among its
-      own, and the gap closes behind one that goes, whether it was made behind a form or in a console. Both are
-      callbacks every model carries and only a positioned one runs.</p>
-
-      <h2 id="siblings">A model pointing two ways</h2>
-      <p>The rows a position is counted among are those under the same parent, or the whole table where the model
-      points nowhere. A model with one <code>belongs_to</code> needs no answer. One pointing two ways is asked rather than
-      guessed, since numbering a task among every task there is would be the wrong answer given quietly, at the first
-      write:</p>
+      <p>A grip opens each row, dragging it moves the row, and the place it lands in is written to
+      <code>PATCH /tasks/5/position</code>. The table is ordered by the column, the column is never drawn, and the search
+      box and the sorted headings stand down while the grips are drawn, since a shortened page would report a wrong
+      place. A listing of every row across every parent, where positions repeat, is not positioned.</p>
+      <p>Two callbacks keep the numbers running 1, 2, 3: a new row lands last among its own, and the gap closes behind
+      one that goes. A model pointing two ways says which rows its place is counted among:</p>
 <pre><code>class Task &lt; ApplicationRecord
   belongs_to :project
   belongs_to :user
 
   def recourse_siblings = project.tasks
 end</code></pre>
-      <p>Without it, the first save raises naming the model and the method.</p>
-
-      <h2 id="opting">Opting out</h2>
-      <p>A host that keeps the order itself writes <code>def recourse_position = nil</code>, which takes the grips off the
-      table and both callbacks off the model together.</p>
+      <p>A host keeping the order itself writes <code>def self.recourse_position = nil</code>, which takes the grips and
+      both callbacks away.</p>
 
       <h2 id="second">A second listing</h2>
-      <p>A host with a second listing of a positioned model — a task’s place among its project’s tasks, and another
-      among the tasks of the user assigned to it — names the second column on its controllers instead, and owns the
-      write as well as the page. Both halves are told the same thing, since a drop on that listing would otherwise
-      write the model’s own column from a page showing the other:</p>
+      <p>A host listing the same rows in a second order — tasks under a user, ranked — names that column on both the
+      listing controller and the positions controller, since a drop would otherwise write the model’s own column:</p>
 <pre><code>module Ranking
   extend ActiveSupport::Concern
 
@@ -125,9 +80,8 @@ end
 class Users::Tasks::PositionsController &lt; Recourse::PositionsController
   include Ranking
 end</code></pre>
-      <p><code>Recourse::PositionsController</code> is public to subclass, and <code>Recourse::Positioning</code> is public for
-      exactly that case: <code>Recourse::Positioning.new(relation, column).close</code> is what such a host calls to keep
-      its own column contiguous when a row goes.</p>
+      <p><code>Recourse::Positioning.new(relation, column).close</code> is what such a host calls to keep its own column
+      contiguous when a row goes.</p>
 
       <nav class="next"><a href="shapes.html">← Maps and calendars</a><a href="retrieval.html">Retrievable tables →</a></nav>
     </article>

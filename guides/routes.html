@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Routes — Recourse Guides</title>
-<meta name="description" content="Everything a Recourse routes line can say: recourses and recourse, nesting, namespaces, the defaults a nested resource takes, and the positionable and retrievable keywords.">
+<meta name="description" content="Everything a Recourse routes line can say: recourses and recourse, nesting, namespaces, and the positionable and retrievable keywords.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -43,140 +43,63 @@
 
     <article>
       <h1>Routes</h1>
-      <p>Everything a routes line can say. <code>recourses</code> works anywhere <code>resources</code> does and takes
-      the same options; what follows is what it does with them, and the two keywords it adds.</p>
-
-      <div class="chapters">
-        <b>Chapters</b>
-        <ol>
-          <li><a href="#recourses">recourses</a></li>
-          <li><a href="#nesting">Nesting</a></li>
-          <li><a href="#namespaces">Namespaces and modules</a></li>
-          <li><a href="#singular">Singular resources</a></li>
-          <li><a href="#bare">Bare actions</a></li>
-          <li><a href="#keywords">The two keywords</a></li>
-          <li><a href="#exit">The exit route</a></li>
-          <li><a href="#refusals">What is refused</a></li>
-        </ol>
-      </div>
 
       <h2 id="recourses">recourses</h2>
 <pre><code>recourses :users
 recourses :posts, only: %i[index show]
 recourses :drafts, except: :destroy</code></pre>
-      <p>Each line draws the routes <code>resources</code> would draw, records the resource in the order it was
-      declared — which is the order of the sidebar — and defines a controller where the host has none. The
-      controller is made on the app’s first request rather than while the routes draw, so a production
-      <code>db:migrate</code>, which draws its routes before the app is done booting, loads nothing early.</p>
-      <p>What each routed action earns is in <a href="getting_started.html#earns">Getting started</a>. Two are worth
-      repeating here because they read differently in the routes file: <code>create</code> without <code>new</code> gets a
-      one-click <code>Create</code> button, and <code>destroy</code> without <code>edit</code> gets a Delete on each row of the
-      table.</p>
+      <p>Each line draws what <code>resources</code> draws and defines a controller where the host has none, on the
+      app’s first request rather than while the routes draw. Two combinations read differently: <code>create</code>
+      without <code>new</code> gets a one-click <code>Create</code> button, and <code>destroy</code> without <code>edit</code> gets a
+      Delete on each row.</p>
 
       <h2 id="nesting">Nesting</h2>
 <pre><code>recourses :posts do
   recourses :comments
 end</code></pre>
-      <p>A block nests what it declares under each record, at <code>/posts/5/comments</code>, and namespaces the nested
-      controller after the parent: <code>Posts::CommentsController</code> stays a second controller beside the
-      top-level <code>CommentsController</code>, with templates of its own under <code>app/views/posts/comments/</code>.</p>
-      <p>A nested resource defaults to <code>only: %i[index new create]</code> — the parent’s rows, and a form to add
-      one under it. An explicit <code>only:</code> or <code>except:</code> is the host’s word and wins. The rows a nested index
-      lists are the parent’s: the gem narrows the model by the foreign key that names the parent, and a form under
-      the record already has that key set.</p>
-      <p>What a nesting earns on the parent’s card depends only on what it routes. An <code>index</code> earns a
-      tab, reading <code>8 comments</code> where the parent keeps a counter cache and the bare <code>Comments</code> where it
-      does not. A <code>create</code> with no index earns a button beside the breadcrumb instead — <code>Add note</code> —
-      and a write with no page of its own to land on goes back to the record the button stood on. A parent need not
-      have an association of the nested name at all: the tab is then named after the route, and the rows are the
-      host’s to narrow with <code>recourse_relation</code>; see <a href="customizing.html#relation">Customizing</a>.</p>
-      <p>Nesting inside a plain <code>resources</code> block is refused, because it adds no namespace and every nested
-      page relies on one. Nest under <code>recourses</code> instead.</p>
-
-      <h2 id="namespaces">Namespaces and modules</h2>
-<pre><code>scope module: :admin do
-  recourses :products
-end
-
-namespace :admin do
-  recourses :products
-end</code></pre>
-      <p>Both put the controller under <code>Admin::</code>. The first keeps the path at <code>/products</code>, the second
-      moves it to <code>/admin/products</code>. A model named with a namespace lists the model the last segment names:
-      <code>admin/products</code> is a <code>Product</code>.</p>
-      <p>A <code>namespace</code> may sit between a block and what it nests:</p>
-<pre><code>recourses :users do
-  namespace(:quick) { recourses :notes, only: :create }
-end</code></pre>
-      <p>The routes and the controller come out under it — <code>Users::Quick::NotesController</code> — and a
-      page filed there earns no tab, being reached from nowhere. A bare action filed there still earns its
-      button.</p>
+      <p>The nested resource lives at <code>/posts/5/comments</code>, answered by <code>Posts::CommentsController</code>, with
+      templates under <code>app/views/posts/comments/</code>. It defaults to <code>only: %i[index new create]</code>, lists the
+      parent’s rows, and earns a tab on the parent’s card — <code>8 comments</code> where the parent keeps a counter
+      cache. A <code>create</code> with no index is a button beside the breadcrumb instead. Nesting inside a plain
+      <code>resources</code> block is refused, since every nested page relies on the namespace.</p>
+      <p><code>scope module:</code> and <code>namespace</code> work as in Rails, and a <code>namespace</code> may sit between a block
+      and what it nests: <code>Users::Quick::NotesController</code> for <code>namespace(:quick) { recourses :notes }</code>
+      under users.</p>
 
       <h2 id="singular">Singular resources</h2>
 <pre><code>recourses :users do
   recourse :profile, only: %i[new create show]
 end</code></pre>
-      <p><code>recourse</code> draws what Rails’ <code>resource</code> draws: one record reached with no id of its own, at
-      <code>/users/5/profile</code>. Rails routes a singular resource to a plural controller, so
-      <code>Users::ProfilesController</code> answers it, and the gem reads the record off the parent under the name the
-      route gives — <code>user.profile</code>, whether the parent keeps it with a <code>has_one</code> or points at one with
-      a <code>belongs_to</code>. Where the parent has no association of that name the record is still the host’s to
-      find, with a <code>find_resource</code> of its own.</p>
-      <p>A singular resource holds at most one, and the two directions follow from that. Routed <code>show</code>, it
-      earns a tab on the parent’s card reading the model’s own word in the singular. Where the record is
-      missing and <code>new</code> is routed, <code>show</code> sends the reader to the form; where it is present,
-      <code>new</code> sends them to the page that reads it. A write has no index to return to, so it lands on the
-      record’s own page.</p>
-      <p>Routed <code>create</code> or <code>destroy</code> and neither <code>index</code> nor <code>new</code>, a singular resource is a
-      button beside the breadcrumb — <code>Add badge</code>, <code>Delete badge</code> — and which of the two it offers is the
-      record’s to say: nothing to add where there is already one, nothing to delete where there is none.</p>
+      <p><code>recourse</code> draws what Rails’ <code>resource</code> draws: one record at <code>/users/5/profile</code>, read off the
+      parent as <code>user.profile</code>, whether by a <code>has_one</code> or a <code>belongs_to</code>. Routed <code>show</code>, it is a
+      tab on the parent’s card; where the record is missing, <code>show</code> sends the reader to the form, and where it
+      is present, <code>new</code> sends them to the page that reads it. Routed only <code>create</code> or <code>destroy</code>, it is a
+      button beside the breadcrumb, offered only where it makes sense.</p>
 
       <h2 id="bare">Bare actions</h2>
 <pre><code>recourses :posts do
   recourse :publication, only: :create
 end</code></pre>
-      <p>A name this app has no class for is a verb, and the gem still draws its button on the parent’s pages,
-      labelled from the path alone: <code>Add publication</code>. The host writes the controller, a
-      <code>RecoursesController</code> like every other screen:</p>
+      <p>A name with no class behind it is a verb. The gem draws its button on the parent’s pages, <code>Add
+      publication</code>, and the host writes the controller, a <code>RecoursesController</code> like every other:</p>
 <pre><code>class Posts::PublicationsController &lt; RecoursesController
   def create
     post = Post.find params.expect(:post_id)
     post.publish!
-    flash.notice = "Published #{post.title}"
     redirect_to post_path(post), status: :see_other
   end
 end</code></pre>
-      <p>A rejection with no form to send it back to goes back to the page the button stood on, with what turned
-      the write down as the message.</p>
 
       <h2 id="keywords">The two keywords</h2>
 <pre><code>recourses :tasks, positionable: true
 recourses :orders, only: :index, retrievable: true</code></pre>
-      <p><code>positionable: true</code> draws the route a dragged row reports its place to, under the index. The
-      column decides everything else; see <a href="positioning.html">Positionable tables</a>.</p>
-      <p><code>retrievable: true</code> draws <code>POST /orders/retrieval</code> — under the parent, where the resource is
-      nested — and puts the <code>Retrieve</code> button on the table. The controller is the host’s to write; see
-      <a href="retrieval.html">Retrievable tables</a>.</p>
-      <p>Both are refused on a resource with no <code>index</code>: a row is dragged from the table that lists it, and the
-      button that fetches rows again stands on that same table, so without one there is nowhere for either to
-      be.</p>
+      <p><code>positionable</code> draws the route a dragged row reports its place to; see
+      <a href="positioning.html">Positionable tables</a>. <code>retrievable</code> draws the route a <code>Retrieve</code> button posts
+      to; see <a href="retrieval.html">Retrievable tables</a>. Both are refused on a resource with no <code>index</code>.</p>
 
       <h2 id="exit">The exit route</h2>
 <pre><code>resource :session, only: :destroy, as: :exit</code></pre>
-      <p>A route named <code>exit</code> gives the foot of the sidebar a log-out button beside the light/dark toggle.
-      The route is the whole declaration; the controller is the host’s. The button is submitted by the browser
-      rather than by Turbo, since a log out usually ends with a redirect to another origin.</p>
-
-      <h2 id="refusals">What is refused</h2>
-      <p>Each of these raises <code>Recourse::Error</code> while the routes draw, with a message naming the line to fix:</p>
-      <ul>
-        <li>A <code>recourses</code> name with no model behind it.</li>
-        <li>A <code>recourses</code> nested inside a plain <code>resources</code> block.</li>
-        <li><code>positionable: true</code> or <code>retrievable: true</code> on a resource that draws no index.</li>
-      </ul>
-      <p>Two more are raised when a page draws rather than when the routes do, since both need the model loaded:
-      a filter in <code>filter_fields</code> Ransack will not answer, and a positioned model pointing several ways
-      without a <code>recourse_siblings</code>. Both are in <a href="models.html">Models</a>.</p>
+      <p>A route named <code>exit</code> gives the foot of the sidebar a log-out button. The controller is the host’s.</p>
 
       <nav class="next"><a href="getting_started.html">← Getting started</a><a href="models.html">Models →</a></nav>
     </article>
