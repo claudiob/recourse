@@ -7,6 +7,16 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.9.0 - 2026-09-26
+
+* [FEATURE] A pin or an area on a map leads to its row's page
+
+  Each point is sent as `[lat, lng, href, title]` and each place as `[id, href, title]`: the
+  record's own page wherever one is routed, and its label. bh's map controller makes a pin
+  or an area with an `href` clickable, following it through Turbo. Needs the bh that reads
+  these shapes: an older one still draws points, but takes a place's whole triple for its
+  ID and draws nothing, which is why this release requires bh 6.10.
+
 * [FEATURE] A route named `enter` earns the sidebar a way in
 
   The mirror of `exit`: `get 'session/new', to: 'sessions#new', as: :enter` draws a

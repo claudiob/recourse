@@ -1,4 +1,4 @@
 module Recourse
   # Version of the gem, read by the gemspec and by hosts checking compatibility.
-  VERSION = '7.8.3'
+  VERSION = '7.9.0'
 end

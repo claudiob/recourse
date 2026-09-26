@@ -20,8 +20,8 @@ class TestRecoursesMaps < IntegrationCase
     # A reading is no geography, so its places are pins: no layer is named.
     first, last = Reading.find(6, 1).map(&:google_place_id)
 
-    assert_includes body, %(data-map-places-value="[&quot;#{first}&quot;,)
-    assert_includes body, %(&quot;#{last}&quot;]")
+    assert_includes body, %(data-map-places-value="[[&quot;#{first}&quot;,)
+    assert_includes body, %([&quot;#{last}&quot;,)
     refute_includes body, 'data-map-boundary-value'
     assert_includes body, 'Displaying items 196-201 of 201'
     refute_includes body, '<table'
@@ -35,7 +35,8 @@ class TestRecoursesMaps < IntegrationCase
     assert_includes body, 'data-map-boundary-value="POSTAL_CODE"'
     first = ZIP.find_by!(code: '90001').google_place_id
 
-    assert_includes body, %(data-map-places-value="[&quot;#{first}&quot;,)
+    # A ZIP has no page of its own here, so its area leads nowhere and says only its code.
+    assert_includes body, %(data-map-places-value="[[&quot;#{first}&quot;,null,&quot;90001&quot;])
   end
 
   # A row keeping coordinates rather than a place is pinned as it is, no lookup.
@@ -45,6 +46,9 @@ class TestRecoursesMaps < IntegrationCase
     assert_includes body, 'data-map-points-value="[[37.'
     assert_includes body, ',-122.'
     refute_includes body, 'data-map-places-value'
+    # And each pin leads to its place's own page, named after it.
+    place = Place.where.not(latitude: nil).order(:id).first
+    assert_includes body, %(,&quot;/places/#{place.id}&quot;,&quot;#{place.name}&quot;])
   end
 
   def test_a_table_of_rows_with_neither_place_nor_point_offers_no_map
