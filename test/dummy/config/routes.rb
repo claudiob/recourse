@@ -78,9 +78,10 @@ Rails.application.routes.draw do
     end
   end
 
-  # The way out of the sidebar. Named `exit`, which is what earns it the button beside
-  # the toggle: the route is the whole declaration, and the controller is this app's.
+  # The ways out of the sidebar and into it. Named `exit` and `enter`, which is what earns
+  # each its place beside the toggle: the route is the whole declaration.
   resource :session, only: :destroy, as: :exit
+  get 'session/new', to: 'sessions#new', as: :enter
 
   # Outside the module, and with an index template of the host's own.
   recourses :memos, except: :show

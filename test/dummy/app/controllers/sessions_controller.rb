@@ -7,6 +7,12 @@
 # keeps the filters guarding it — and a singular resource, so the path it answers at
 # carries no id and this app has no `Session` to look one up in either way.
 class SessionsController < RecoursesController
+  # The way in, which the sidebar links to for the route named `enter`. Nobody is
+  # authenticated here either, so saying where the form would be is all of it.
+  def new
+    render plain: 'Sign in here'
+  end
+
   def destroy
     flash.notice = 'Signed out'
     redirect_to places_path, status: :see_other

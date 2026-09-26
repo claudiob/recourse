@@ -51,6 +51,14 @@
     </div>
     <%# Submitted by the browser rather than by Turbo: a log out ends with a redirect to
         wherever the host signs people in, which is another origin a fetch cannot follow. -%>
+    <%# The way in, where the host drew a route named `enter`: a link, since what it
+        leads to is a form rather than a change. -%>
+    <% if enter? %>
+      <%= link_to enter_path, class: 'nav-link border-0 bg-transparent' do %>
+        <i class='bi bi-box-arrow-in-right'></i>
+        <span class='recourse-foot-word'><%= t 'recourse.enter' %></span>
+      <% end %>
+    <% end %>
     <% if exit? %>
       <%= button_to exit_path, method: :delete, class: 'nav-link border-0 bg-transparent',
                     form: { data: { turbo: false } } do %>

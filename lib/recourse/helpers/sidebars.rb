@@ -10,6 +10,13 @@ module Recourse
       # convention, and its helper existing is what the sidebar asks.
       def exit? = respond_to? :exit_path
 
+      # And the way in, its mirror: a route named `enter` — `resource :session, only:
+      # :new, as: :enter`, or a `get` of the host's own — earns a link beside the toggle
+      # to wherever the host signs people in. A link rather than a button, since asking
+      # for a form to sign in with changes nothing. Whether a viewer who already signed
+      # in still sees it is the host's to say, by answering this for them.
+      def enter? = respond_to? :enter_path
+
       # Sidebar entries as [name, title, path, key], in the order routes.rb declares
       # them, `key` being where in the title the letter that reaches it sits.
       def sidebar_resources

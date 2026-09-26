@@ -78,8 +78,8 @@ draws the route a dragged row reports its place to, and `retrievable: true` draw
 one a `Retrieve` button on the table posts to, for rows that came from somewhere else.
 Both are refused on a resource with no `index`, since there is nowhere for either to
 stand. The [routes guide](https://claudiob.github.io/recourse/guides/routes.html) has
-the rest: namespaces, the defaults a nested resource takes, and the `exit` route that
-earns the sidebar a log-out button.
+the rest: namespaces, the defaults a nested resource takes, and the `enter` and `exit`
+routes that earn the sidebar a sign-in link and a log-out button.
 
 ## Step 2. Enhance your models
 
@@ -211,7 +211,8 @@ Recourse.bookmarks = -> { Keepsake.where agent: Current.agent }
 
 A Proc rather than a relation, because at boot the viewer is nobody. Every model with a
 `has_many` at that class then opens its table with a square to keep a row by, and kept
-rows come first. A model that cannot hold a bookmark gets no column.
+rows come first. A model that cannot hold a bookmark gets no column, and neither does a
+visitor the Proc answers nil for — somebody who never signed in has nowhere to keep one.
 
 <img width="3824" height="1220" alt="Image" src="https://github.com/user-attachments/assets/d1db4adb-0b5c-4e41-8bb6-cf72a35288f0" />
 

@@ -81,4 +81,13 @@ class TestRecoursesActions < IntegrationCase
 
     assert_includes body, "<body class='recourse-shell recourse-expanded'"
   end
+
+  # A route named `enter` is its mirror: a link to the way in, beside the way out.
+  def test_a_route_named_enter_earns_the_sidebar_a_way_in
+    visit '/people'
+
+    assert_includes body, %(<a class="nav-link border-0 bg-transparent" href="/session/new">)
+    assert_includes body, "<i class='bi bi-box-arrow-in-right'></i>"
+    assert_includes body, '>Sign in</span>'
+  end
 end

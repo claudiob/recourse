@@ -7,6 +7,17 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+* [FEATURE] A route named `enter` earns the sidebar a way in
+
+  The mirror of `exit`: `get 'session/new', to: 'sessions#new', as: :enter` draws a
+  `Sign in` link beside the toggle, to wherever the host signs people in. A host that
+  signs people in shows one or the other by answering `enter?` and `exit?` itself.
+
+* [FEATURE] A bookmarks Proc answering nil draws no bookmark column
+
+  A visitor who never signed in has nowhere to keep a row, so `Recourse.bookmarks =
+  -> { Current.user&.bookmarks }` leaves them without the squares rather than raising.
+
 ## 7.8.3 - 2026-09-21
 
 * [FIX] A delete button in a table row is no taller than the row

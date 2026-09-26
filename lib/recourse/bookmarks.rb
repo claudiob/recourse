@@ -17,7 +17,8 @@ module Recourse
   # would run a host's Proc long before there is a request for it to read.
   def self.bookmarks? = !@declared_bookmarks.nil?
 
-  # The viewer's bookmarks, resolved for this request.
+  # The viewer's bookmarks, resolved for this request, or nil where the Proc answered
+  # nil: nobody is looking whose rows could be kept, a visitor who never signed in.
   def self.bookmarks
     bookmarks = @declared_bookmarks
     bookmarks = bookmarks.call if bookmarks.respond_to? :call
@@ -28,10 +29,11 @@ module Recourse
   # How a model's bookmarks point back at it: its own `has_many` at the bookmark
   # class, which is both the opt-in and everything needed to write one. A model that
   # cannot hold a bookmark has not declared one, so it gets no column.
+  # And none for a viewer the Proc named nobody, who has nowhere to keep a row.
   def self.bookmarks_for(model)
     return unless bookmarks?
 
-    klass = bookmarks.klass
+    klass = bookmarks&.klass or return
     model.reflect_on_all_associations(:has_many).find { |one| one.klass == klass }
   end
 

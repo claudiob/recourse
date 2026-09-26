@@ -53,6 +53,7 @@ en:
     deleted_error: "%{model} could not be deleted."
     destroy: Delete
     exit: Exit
+    enter: Sign in
     displaying:
       one: Displaying 1 item
       other: Displaying %{count} items

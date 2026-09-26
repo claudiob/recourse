@@ -58,4 +58,16 @@ class TestRecoursesBookmarks < IntegrationCase
     # word: the rule that colors it is in the layout of every page, tinted rows or not.
     refute_includes body, 'class="recourse-kept"'
   end
+
+  # A Proc naming nobody, for a visitor who never signed in: no squares to keep a row by.
+  def test_a_viewer_the_proc_names_nobody_gets_no_column
+    declared = Recourse.declared_bookmarks
+    Recourse.bookmarks = -> {}
+    visit '/places'
+
+    assert_includes body, '<table'
+    refute_includes body, 'bi-bookmark'
+  ensure
+    Recourse.bookmarks = declared
+  end
 end
