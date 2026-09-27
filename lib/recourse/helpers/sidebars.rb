@@ -17,6 +17,15 @@ module Recourse
       # in still sees it is the host's to say, by answering this for them.
       def enter? = respond_to? :enter_path
 
+      # Who is signed in, as the way out names them: `Sign out N-100L`. Nil, as it is where
+      # the host does not say, leaves the tooltip at `Sign out`.
+      def exit_name = nil
+
+      # What the way out's tooltip says.
+      def exit_tooltip
+        exit_name.present? ? t('recourse.sign_out_as', name: exit_name) : t('recourse.sign_out')
+      end
+
       # Sidebar entries as [name, title, path, key], in the order routes.rb declares
       # them, `key` being where in the title the letter that reaches it sits.
       def sidebar_resources

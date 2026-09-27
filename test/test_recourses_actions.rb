@@ -66,7 +66,9 @@ class TestRecoursesActions < IntegrationCase
     assert_includes body,
                     %(<form data-turbo="false" class="button_to" method="post" action="/session">)
     assert_includes body, %(<input type="hidden" name="_method" value="delete")
-    assert_includes body, "<i class='bi bi-box-arrow-right'></i>"
+    assert_includes body,
+                    '<i class="bi bi-box-arrow-right" data-controller="tooltip" ' \
+                    'data-bs-placement="right" data-bs-title="Sign out"></i>'
     assert_includes body, '>Exit</span>'
     # And the arrows ahead of them, for a phone: both faces drawn, the shell compact
     # until the cookie they write says otherwise.
@@ -87,7 +89,28 @@ class TestRecoursesActions < IntegrationCase
     visit '/people'
 
     assert_includes body, %(<a class="nav-link border-0 bg-transparent" href="/session/new">)
-    assert_includes body, "<i class='bi bi-box-arrow-in-right'></i>"
+    assert_includes body,
+                    '<i class="bi bi-box-arrow-in-right" data-controller="tooltip" ' \
+                    'data-bs-placement="right" data-bs-title="Sign in"></i>'
     assert_includes body, '>Sign in</span>'
+  end
+
+  # The way out's tooltip names whoever is signed in, once the host says who that is.
+  def test_the_way_out_names_who_is_signed_in_where_the_host_says_so
+    named = Class.new do
+      include Recourse::Helpers::Sidebars
+
+      def t(key, **options) = I18n.t(key, **options)
+      def exit_name = 'N-100L'
+    end
+
+    assert_equal 'Sign out N-100L', named.new.send(:exit_tooltip)
+    unnamed = Class.new do
+      include Recourse::Helpers::Sidebars
+
+      def t(key, **) = I18n.t(key)
+    end
+
+    assert_equal 'Sign out', unnamed.new.send(:exit_tooltip)
   end
 end

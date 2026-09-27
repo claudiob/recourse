@@ -55,8 +55,12 @@ class TestRecoursesColor < IntegrationCase
     # And the key the choice is kept under, which the layout's script reads back.
     assert_includes body, 'data-scheme-storage-value="recourse-scheme"'
     assert_includes body, "localStorage.getItem('recourse-scheme')"
-    assert_includes body, "<i class='bi bi-moon-fill'></i>"
-    assert_includes body, "<i class='bi bi-sun-fill'></i>"
+    assert_includes body,
+                    '<i class="bi bi-moon-fill" data-controller="tooltip" ' \
+                    'data-bs-placement="right" data-bs-title="Dark theme"></i>'
+    assert_includes body,
+                    '<i class="bi bi-sun-fill" data-controller="tooltip" ' \
+                    'data-bs-placement="right" data-bs-title="Light theme"></i>'
     # Upstream's own palette is in the rotation too: a reader who cannot reach the one
     # the pages started in cannot undo a click.
     assert_includes body, '&quot;bootstrap&quot;'

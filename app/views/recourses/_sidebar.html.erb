@@ -11,7 +11,8 @@
 
   <%# The foot of the sidebar: a reader's own say in how the page looks and, where the
       host drew a route named `exit`, the way out beside it — a button, since ending a
-      session is never a GET. Each takes half the row and centers its icon in it, so the
+      session is never a GET. Each icon says what it does in a tooltip that opens to the right,
+      away from the sidebar's edge. Each takes half the row and centers its icon in it, so the
       toggle alone sits in the middle and the two together sit at a quarter and at three
       quarters. Which side of the fold the foot lands on is the layout's business, and so
       is which of the two mode icons shows — the mode may be the system's, which only CSS
@@ -40,11 +41,11 @@
       <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
                      data: scheme_data do %>
         <span class='recourse-scheme-light'>
-          <i class='bi bi-moon-fill'></i>
+          <%= tag.i class: 'bi bi-moon-fill', data: tooltip_data(t('recourse.dark_theme'), placement: 'right') %>
           <span class='recourse-foot-word'><%= t 'recourse.darken' %></span>
         </span>
         <span class='recourse-scheme-dark'>
-          <i class='bi bi-sun-fill'></i>
+          <%= tag.i class: 'bi bi-sun-fill', data: tooltip_data(t('recourse.light_theme'), placement: 'right') %>
           <span class='recourse-foot-word'><%= t 'recourse.lighten' %></span>
         </span>
       <% end %>
@@ -55,14 +56,14 @@
         leads to is a form rather than a change. -%>
     <% if enter? %>
       <%= link_to enter_path, class: 'nav-link border-0 bg-transparent' do %>
-        <i class='bi bi-box-arrow-in-right'></i>
+        <%= tag.i class: 'bi bi-box-arrow-in-right', data: tooltip_data(t('recourse.enter'), placement: 'right') %>
         <span class='recourse-foot-word'><%= t 'recourse.enter' %></span>
       <% end %>
     <% end %>
     <% if exit? %>
       <%= button_to exit_path, method: :delete, class: 'nav-link border-0 bg-transparent',
                     form: { data: { turbo: false } } do %>
-        <i class='bi bi-box-arrow-right'></i>
+        <%= tag.i class: 'bi bi-box-arrow-right', data: tooltip_data(exit_tooltip, placement: 'right') %>
         <span class='recourse-foot-word'><%= t 'recourse.exit' %></span>
       <% end %>
     <% end %>

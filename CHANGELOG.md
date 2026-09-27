@@ -7,6 +7,14 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+* [FEATURE] The sidebar's foot says what each icon does
+
+  The moon, the sun, the way in and the way out each open a tooltip to the right, away
+  from the sidebar's edge, the way a column's icon opens one above it: `Dark theme`,
+  `Light theme`, `Sign in` and `Sign out`. A host that answers `exit_name` with whoever is
+  signed in earns `Sign out N-100L`. The words are `recourse.dark_theme`, `light_theme`,
+  `sign_out` and `sign_out_as` in the locale.
+
 ## 7.9.0 - 2026-09-26
 
 * [FEATURE] A pin or an area on a map leads to its row's page
