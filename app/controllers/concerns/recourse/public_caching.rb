@@ -37,7 +37,8 @@ module Recourse
 
       {
         public: true, max_age: keep[:max_age], extras: ["s-maxage=#{keep[:shared_max_age]}"],
-        stale_while_revalidate: keep[:stale_while_revalidate], stale_if_error: keep[:stale_if_error],
+        stale_while_revalidate: keep[:stale_while_revalidate],
+        stale_if_error: keep[:stale_if_error],
       }
     end
   end
