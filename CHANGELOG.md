@@ -7,6 +7,11 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+* [FIX] The count in a tab is delimited
+
+  `3,506 aircrafts`, not `3506 aircrafts`: the same figure the table's own count and the
+  footer already draw with delimiters.
+
 ## 7.11.1 - 2026-09-26
 
 * [FIX] A tooltip in the sidebar's foot closes when its icon is clicked

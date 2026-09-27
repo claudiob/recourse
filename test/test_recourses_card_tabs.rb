@@ -3,6 +3,19 @@ require 'integration_case'
 
 # The card a record's own page sits in, and the tabs the nested indexes hang off it by.
 class TestRecoursesCardTabs < IntegrationCase
+  # A figure in a tab is delimited like every other figure on the page, so a table of a few
+  # thousand rows reads `3,506` and not `3506`.
+  def test_a_tab_delimits_the_count_it_carries
+    person = Person.order(:id).first
+    was = person.places_count
+    person.update_column :places_count, 12_345
+    visit "/people/#{person.id}"
+
+    assert_includes body, %(12,345 <span class="recourse-tab-word">places</span>)
+  ensure
+    person.update_column :places_count, was
+  end
+
   # The card a record's own page sits in: its Show tab first, then one tab per index
   # nested under it, in the order routes.rb nested them rather than the order the
   # associations were declared. A counter cache decides how a tab reads and never

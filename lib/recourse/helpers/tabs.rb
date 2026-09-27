@@ -50,7 +50,7 @@ module Recourse
       # its children out with a gap, and two of them would stand a gap and a space apart.
       def tab_label_for(icon, words, count = nil)
         words = tag.span words, class: 'recourse-tab-word' if icon || count
-        words = tag.span safe_join([count, words], ' ') if count
+        words = tag.span safe_join([number_with_delimiter(count), words], ' ') if count
 
         safe_join [icon && tag.i(class: "bi bi-#{icon}"), words].compact, ' '
       end
