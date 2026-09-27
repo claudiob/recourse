@@ -11,7 +11,8 @@
         never has to be remembered here. -%>
     <meta name='turbo-refresh-method' content='morph'>
     <meta name='turbo-refresh-scroll' content='preserve'>
-    <%= csrf_meta_tags %>
+    <%# No token on a page everybody is shown: the next reader would submit this one's. -%>
+    <%= csrf_meta_tags unless public_page? %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
@@ -52,6 +53,9 @@
       own: every screen the gem draws is one to read against their clock. -%>
   <body class='<%= class_names 'recourse-shell', 'recourse-expanded': expanded? %>'
         data-controller='timezone' data-timezone-storage-value='<%= Recourse::ZONE_STORAGE %>'>
+    <%# What the reader's browser says, put back before anything is painted, on a page the
+        server drew for everybody: the words beside the sidebar's icons. -%>
+    <%= render 'recourses/density' if public_page? %>
     <%# First in the page, since a phone reads it first: the row of icons at the top,
         above the trail. From 768px the layout's grid seats it beside the content instead,
         under the navbar, whatever order it was written in. -%>

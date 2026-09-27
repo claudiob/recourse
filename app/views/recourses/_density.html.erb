@@ -1,0 +1,10 @@
+<%# The density a reader chose last time, back before the page is painted, as the server was
+    not told: a page drawn once for everybody is compact, and this widens it. Classic and
+    inline for the reason the scheme is: a module runs after the first paint. -%>
+<script>
+  (function () {
+    if (/(?:^|; )<%= Recourse::DENSITY_STORAGE %>=expanded(?:;|$)/.test(document.cookie)) {
+      document.body.classList.add('recourse-expanded')
+    }
+  })()
+</script>

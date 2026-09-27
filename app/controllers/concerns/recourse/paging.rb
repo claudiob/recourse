@@ -8,7 +8,12 @@ module Recourse
     # a stranger can write, and an unchecked one is `?limit=100000` by another route.
     # Which is also why pagy's `max_limit` stays unset: the query string is still not
     # asked, and this is the one thing that is.
+    #
+    # A page drawn once for everybody has the first size, whatever this reader chose: the
+    # switch under the table redraws the table alone, which is not that page.
     def recourse_limit
+      return Recourse::LIMITS.first if public_page?
+
       limit = cookies[Recourse::LIMIT_STORAGE].to_i
 
       Recourse::LIMITS.include?(limit) ? limit : Recourse::LIMITS.first

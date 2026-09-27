@@ -7,6 +7,19 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.11.0 - 2026-09-26
+
+* [FEATURE] A host can say which pages are the same for everybody, and they are sent to be kept
+
+  `Recourse.public_pages = -> { !signed_in? }` runs in the controller for every request. A GET
+  it approves is sent `Cache-Control: public` with `max-age`, `s-maxage`, `stale-while-revalidate`
+  and `stale-if-error` (`Recourse.public_cache` sets the seconds), and `Vary: Turbo-Frame`. It is
+  drawn once for everybody, so none of what the reader's own browser tells the server is in
+  it: not their zone, not their page size, not their density (the layout widens the page in
+  the browser instead), no form token and no way out. `Recourse.public_version = -> { … }` gives
+  such a page an ETag, so a CDN or a browser asks whether it stands and is told `304`. A frame's
+  request is never public: the same address answers a page.
+
 ## 7.10.0 - 2026-09-26
 
 * [FEATURE] The sidebar's foot says what each icon does

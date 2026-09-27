@@ -5,8 +5,9 @@ module Recourse
     private
 
       # Whether the reader asked for the words: the cookie the arrows write, read back so
-      # the page arrives expanded rather than compact and then widened by a script.
-      def expanded? = cookies[Recourse::DENSITY_STORAGE] == 'expanded'
+      # the page arrives expanded rather than compact and then widened by a script. Not on a
+      # page drawn once for everybody, which the layout's own script widens in the browser.
+      def expanded? = !public_page? && cookies[Recourse::DENSITY_STORAGE] == 'expanded'
 
       # What the arrows need to switch: the class they toggle and the cookie they write.
       def density_data

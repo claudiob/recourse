@@ -60,7 +60,9 @@
         <span class='recourse-foot-word'><%= t 'recourse.enter' %></span>
       <% end %>
     <% end %>
-    <% if exit? %>
+    <%# Nobody in particular is signed in on a page drawn once for everybody, and the button
+        carries a token that is theirs alone. -%>
+    <% if exit? && !public_page? %>
       <%= button_to exit_path, method: :delete, class: 'nav-link border-0 bg-transparent',
                     form: { data: { turbo: false } } do %>
         <%= tag.i class: 'bi bi-box-arrow-right', data: tooltip_data(exit_tooltip, placement: 'right') %>

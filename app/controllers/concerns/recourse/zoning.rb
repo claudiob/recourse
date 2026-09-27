@@ -20,7 +20,11 @@ module Recourse
     # Nil where the browser has not said, or said something no zone answers to — and
     # `Time.zone = nil` falls back to the host's own setting, so an absent cookie and a
     # forged one both leave the page exactly as it is drawn today.
+    # And nil for a page drawn once for everybody, whose times are the host's own: this
+    # reader's zone is no business of the next reader's page.
     def recourse_zone
+      return if public_page?
+
       name = cookies[Recourse::ZONE_STORAGE]
 
       ActiveSupport::TimeZone[name] if name.present?
