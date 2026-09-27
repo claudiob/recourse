@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.11.2 - 2026-09-26
+
 * [FIX] The count in a tab is delimited
 
   `3,506 aircrafts`, not `3506 aircrafts`: the same figure the table's own count and the
