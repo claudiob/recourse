@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.10.0 - 2026-09-26
+
 * [FEATURE] The sidebar's foot says what each icon does
 
   The moon, the sun, the way in and the way out each open a tooltip to the right, away
