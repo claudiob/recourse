@@ -7,6 +7,20 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.11.1 - 2026-09-26
+
+* [FIX] A tooltip in the sidebar's foot closes when its icon is clicked
+
+  Needs bh 6.10.1, which closes an icon's tooltip on a click on it or on its button. The moon
+  and the sun swap places on a click, and the tooltip of the one that went was left open and
+  put in the page's corner.
+
+* [FIX] The moon and the sun say `Dark` and `Light`
+
+  The words the phone shows beside them, and no longer `Dark theme` and `Light theme`. The
+  `recourse.dark_theme` and `recourse.light_theme` words 7.10.0 added are gone: a host that
+  translated them translates `recourse.darken` and `recourse.lighten`, which are the same words.
+
 ## 7.11.0 - 2026-09-26
 
 * [FEATURE] A host can say which pages are the same for everybody, and they are sent to be kept

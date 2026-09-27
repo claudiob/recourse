@@ -57,10 +57,10 @@ class TestRecoursesColor < IntegrationCase
     assert_includes body, "localStorage.getItem('recourse-scheme')"
     assert_includes body,
                     '<i class="bi bi-moon-fill" data-controller="tooltip" ' \
-                    'data-bs-placement="right" data-bs-title="Dark theme"></i>'
+                    'data-bs-placement="right" data-bs-title="Dark"></i>'
     assert_includes body,
                     '<i class="bi bi-sun-fill" data-controller="tooltip" ' \
-                    'data-bs-placement="right" data-bs-title="Light theme"></i>'
+                    'data-bs-placement="right" data-bs-title="Light"></i>'
     # Upstream's own palette is in the rotation too: a reader who cannot reach the one
     # the pages started in cannot undo a click.
     assert_includes body, '&quot;bootstrap&quot;'

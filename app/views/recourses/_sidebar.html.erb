@@ -41,11 +41,11 @@
       <%= tag.button type: 'button', class: 'nav-link border-0 bg-transparent',
                      data: scheme_data do %>
         <span class='recourse-scheme-light'>
-          <%= tag.i class: 'bi bi-moon-fill', data: tooltip_data(t('recourse.dark_theme'), placement: 'right') %>
+          <%= tag.i class: 'bi bi-moon-fill', data: tooltip_data(t('recourse.darken'), placement: 'right') %>
           <span class='recourse-foot-word'><%= t 'recourse.darken' %></span>
         </span>
         <span class='recourse-scheme-dark'>
-          <%= tag.i class: 'bi bi-sun-fill', data: tooltip_data(t('recourse.light_theme'), placement: 'right') %>
+          <%= tag.i class: 'bi bi-sun-fill', data: tooltip_data(t('recourse.lighten'), placement: 'right') %>
           <span class='recourse-foot-word'><%= t 'recourse.lighten' %></span>
         </span>
       <% end %>

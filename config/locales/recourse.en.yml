@@ -47,7 +47,6 @@ en:
     create: Create
     created: "%{record} was created."
     created_error: "%{model} could not be created."
-    dark_theme: Dark theme
     darken: Dark
     delete: Delete %{model}
     deleted: "%{model} was deleted."
@@ -70,7 +69,6 @@ en:
     items:
       one: 1 item
       other: "%{count} items"
-    light_theme: Light theme
     lighten: Light
     missing_model: You declared `recourses :%{name}` in your routes file, but this app
       has no %{model} model.
