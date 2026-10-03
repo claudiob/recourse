@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.13.0 - 2026-10-02
+
 * [FEATURE] A model can be mapped by the point of a record it names
 
   `def self.recourse_mapped = :address` pins each user where its `has_one :address` keeps a
