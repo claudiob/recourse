@@ -28,6 +28,11 @@ module Recourse
     # @api private
     def recourse_displayed = []
 
+    # The association a row's point is kept on, where the row keeps none of its own: a
+    # `has_one :geocode` holding the `latitude` and `longitude` a map pins it by. Nil
+    # by default, which leaves the map to the row's own columns.
+    def recourse_mapped = nil
+
     # `ZIP code`: what to call a foreign key pointing here. A form's label, a table's
     # heading and a search prompt all name the same thing, so they name it once.
     # @api private

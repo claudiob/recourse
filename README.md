@@ -224,6 +224,16 @@ read as a Google map of the same page: the footer under it offers `Display as ma
 search, sort and pages work the same on either shape. The key and the map ID are the
 host's own credentials, under `google_maps` as `api_key` and `map_id`.
 
+A model that keeps its point on another record says which one, and its rows are pinned there:
+
+```ruby
+class User < ApplicationRecord
+  has_one :address
+
+  def self.recourse_mapped = :address # an Address keeps the latitude and the longitude
+end
+```
+
 A table whose model keeps a `starts_at` and an `ends_at` can be read as a week of the
 same rows: the footer offers `Display as calendar`, and `/shifts.cal` draws a column a
 day with each row placed by the hours it runs between. `?week=2026-09-13` moves to the

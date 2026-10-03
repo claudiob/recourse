@@ -4,6 +4,10 @@
 class Seal < ApplicationRecord
   belongs_to :place
 
+  # Pinned where its place is: the point is the place's, read through the seal's own
+  # `place`, which is all a seal's map needs.
+  def self.recourse_mapped = :place
+
   # What the unique index says, said where a write can be turned down rather than
   # raised at: the button is hidden once there is one, and a post that arrives anyway
   # -- a second tab, a double click -- is refused rather than answered with a 500.

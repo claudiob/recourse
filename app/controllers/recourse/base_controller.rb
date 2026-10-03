@@ -26,7 +26,7 @@ module Recourse
     # Lists one page of the model the route is named after, or one week of it where the
     # calendar was asked for — a week is how much that shape shows. `@q` is Ransack's own.
     def index
-      search = Search.new recourse_relation, params[:q], positioned: @recourse_position
+      search = Search.new index_relation, params[:q], positioned: @recourse_position
       @q = search.query
 
       @pagy, @resources = week_or_page search.scope
@@ -83,6 +83,14 @@ module Recourse
 
     def broadcast_resource_changes
       @recourse_model.recourse_broadcast if @recourse_model.respond_to? :recourse_broadcast
+    end
+
+    # What an index lists: the host's relation, with each row's point read alongside
+    # where a map draws them and the row keeps its point on another record.
+    def index_relation
+      return recourse_relation unless request.format.map?
+
+      Recourse.with_points recourse_relation
     end
 
     # The rows the index lists, before the search, the sort and the page reach them:

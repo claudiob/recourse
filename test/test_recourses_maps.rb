@@ -51,6 +51,25 @@ class TestRecoursesMaps < IntegrationCase
     assert_includes body, %(,&quot;/places/#{place.id}&quot;,&quot;#{place.name}&quot;])
   end
 
+  # A row keeping no point of its own is pinned by the point of the record it names as
+  # `recourse_mapped`: a seal where its place is.
+  def test_a_table_mapped_through_an_association_is_drawn_at_its_points
+    place = Place.where.not(latitude: nil).order(:id).first
+    seal = Seal.find_or_create_by! place: place
+    visit '/seals'
+
+    assert_includes body, 'Display as map'
+
+    visit '/seals.map'
+
+    # No page of its own to lead to, so the pin leads nowhere.
+    points = body[/data-map-points-value="([^"]*)"/, 1]
+
+    assert_includes points, "[#{place.latitude.to_f},#{place.longitude.to_f},null,"
+  ensure
+    seal&.destroy
+  end
+
   def test_a_table_of_rows_with_neither_place_nor_point_offers_no_map
     visit '/teams'
 

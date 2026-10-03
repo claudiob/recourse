@@ -14,8 +14,29 @@ module Recourse
     city: :locality, zip: :postal_code,
   }.freeze
 
-  # Whether a model's rows can be drawn on a map: by the place each keeps, or its point.
-  def self.mappable?(model) = placed?(model) || (POINT_COLUMNS - model.column_names).empty?
+  # Whether a model's rows can be drawn on a map: by the place each keeps, by its point,
+  # or by the point of the record it names as `recourse_mapped`.
+  def self.mappable?(model) = placed?(model) || pointed?(model) || pointed?(mapped(model))
+
+  # Whether a model keeps both halves of a point among its own columns.
+  def self.pointed?(model) = model.present? && (POINT_COLUMNS - model.column_names).empty?
+
+  # The model a row's point is kept on, where it is kept on another one.
+  def self.mapped(model)
+    name = model.recourse_mapped
+    name && model.reflect_on_association(name).klass
+  end
+
+  # The rows with the point of the record each names as `recourse_mapped` read alongside
+  # their own columns, which is where a map reads a point from. Any row with none is
+  # still read, and is nowhere on the map.
+  def self.with_points(relation)
+    target = mapped(relation.klass) or return relation
+    own = relation.klass.arel_table[Arel.star]
+    relation = relation.select(own) if relation.select_values.empty?
+    relation.left_joins(relation.klass.recourse_mapped)
+            .select(*POINT_COLUMNS.map { |column| target.arel_table[column] })
+  end
 
   # The layer a model's places are drawn on, or nil for a model that is no geography.
   def self.boundary(model) = BOUNDARIES[model.model_name.element.to_sym]
