@@ -18,7 +18,7 @@ module Recourse
   def self.mappable?(model) = placed?(model) || (POINT_COLUMNS - model.column_names).empty?
 
   # The layer a model's places are drawn on, or nil for a model that is no geography.
-  def self.boundary(model) = BOUNDARIES[model.model_name.singular.to_sym]
+  def self.boundary(model) = BOUNDARIES[model.model_name.element.to_sym]
 
   # Whether a model's rows keep a place ID, which an area or a pin at a place is drawn from.
   def self.placed?(model) = model.column_names.include? PLACE_COLUMN
