@@ -65,16 +65,4 @@ class TestRecoursesNamespacedModels < IntegrationCase
     assert_includes body, 'First aid'
     refute_includes body, other.name
   end
-
-  # The route's name for the model, `badge`, rather than the model's own `admin_badge`:
-  # the path a square posts to and the id a nested page reads its parent by.
-  def test_a_namespaced_model_is_kept_and_nested_under_by_its_route_name
-    visit '/badges'
-
-    assert_includes body, %(action="/badges/#{@badge.id}/bookmark")
-
-    visit "/badges/#{@badge.id}/memos"
-
-    assert_includes body, 'First aid'
-  end
 end

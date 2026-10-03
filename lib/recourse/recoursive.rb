@@ -10,7 +10,7 @@ module Recourse
     # The concept a resource is drawn with, which Unicon names in each icon set it
     # knows. A model's own name by default — `contact` draws a rolodex, `job` a hammer
     # — and Unicon answers with a circle for a name it has never heard of.
-    def recourse_icon = model_name.element.to_sym
+    def recourse_icon = model_name.singular.to_sym
 
     # Columns the model keeps off its screens — the table, the show page, the
     # form and the search box — none by default. One name or a list:

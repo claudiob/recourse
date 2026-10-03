@@ -27,7 +27,7 @@ module Recourse
       model = parent && Recourse.model?(parent)
       return unless model
 
-      id = request.path_parameters[:"#{model.model_name.singular_route_key}_id"]
+      id = request.path_parameters[:"#{model.model_name.singular}_id"]
       model.find_by id: id if id
     end
 

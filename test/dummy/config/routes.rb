@@ -82,12 +82,7 @@ Rails.application.routes.draw do
 
     # The one model kept in this module rather than at the top level: `admin/badges`
     # lists an Admin::Badge, where `admin/places` lists a Place as it always has.
-    recourses :badges, only: %i[index show] do
-      # A nested index the badge has no association for: the badge is found by the
-      # `badge_id` its route carries, which is the route's name for it and not the
-      # model's own `admin_badge`.
-      recourses :memos, only: :index
-    end
+    recourses :badges, only: %i[index show]
   end
 
   # The ways out of the sidebar and into it. Named `exit` and `enter`, which is what earns

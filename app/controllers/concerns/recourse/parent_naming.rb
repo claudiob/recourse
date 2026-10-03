@@ -18,7 +18,7 @@ module Recourse
       model = path && Recourse.model?(path)
       return unless model && @recourse_parent.is_a?(model)
 
-      instance_variable_set "@#{model.model_name.element}", @recourse_parent
+      instance_variable_set "@#{model.model_name.singular}", @recourse_parent
     end
   end
 end

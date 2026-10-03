@@ -83,7 +83,7 @@ module Recourse
 
       def bookmark_url(record)
         url_for controller: "/#{resource_controller_path}/bookmarks", action: :create,
-                "#{resource_model.model_name.singular_route_key}_id": record.id
+                "#{resource_model.model_name.singular}_id": record.id
       end
     end
   end
