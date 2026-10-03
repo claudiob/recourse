@@ -7,13 +7,6 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
-* [FEATURE] A model can be mapped by the point of a record it names
-
-  `def self.recourse_mapped = :address` pins each user where its `has_one :address` keeps a
-  `latitude` and a `longitude`, for a model that keeps no point of its own. Its table offers
-  `Display as map`, and the map reads each row's point through that association; a row
-  without one is left off the map. A model that keeps its own columns is mapped as before.
-
 ## 7.12.1 - 2026-10-02
 
 * [FIX] A model kept in a module is bookmarked and nested under by its route's name

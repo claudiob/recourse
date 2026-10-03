@@ -105,9 +105,6 @@ Rails.application.routes.draw do
   # calendar beside it: `/shifts.cal` draws a week of them, and nothing is declared.
   recourses :shifts, only: %i[index show]
 
-  # A table that keeps no point of its own and is mapped by its place's.
-  recourses :seals, only: :index
-
   # Declared last, so the letter its sidebar link answers to is one nothing above it
   # has taken. Its own key is what this table is here for: a menu of every reading is
   # past what a menu is, and an id is not a word the box could look through instead.
