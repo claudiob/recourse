@@ -15,7 +15,7 @@ module Recourse
       def resources_name
         return controller.controller_name.humanize if blob_resource?
 
-        Recourse.known_title controller.controller_path
+        Recourse.known_title controller.controller_name
       end
 
       # Singular, lowercase name of the resource, e.g. 'contact' — and 'photo' on a page
@@ -72,7 +72,7 @@ module Recourse
       # Resolved by the controller, which is the one that knows whether the name is a
       # model of this app's, something a record has attached, or a model a host named.
       def resource_model
-        controller_assign('recourse_model') || Recourse.model(controller.controller_path)
+        controller_assign('recourse_model') || Recourse.model(controller.controller_name)
       end
     end
   end

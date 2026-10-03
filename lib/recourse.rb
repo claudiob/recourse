@@ -71,57 +71,10 @@ module Recourse
   # action is a verb — `recourse :sweep, only: :create` — and the gem labels its button
   # from the path alone, so whether a name has a model behind it has to be a question
   # and not an accusation.
-  def self.model?(name) = namespaced_model(name) || model_name(name).safe_constantize
+  def self.model?(name) = model_name(name).safe_constantize
 
   # A namespaced resource is `admin/sources`, and the model it lists is a Source.
   def self.model_name(name) = name.to_s.split('/').last.classify
-
-  # Whether a model answers the name, asked of the constants rather than the classes:
-  # the routes ask while they draw, and loading a model then is what Rails 8.2 warns
-  # about.
-  def self.model_defined?(name)
-    namespaced_names(name).any? { |namespaced| constant namespaced, load: false } ||
-      Object.const_defined?(model_name(name))
-  end
-
-  # A model the app keeps in the route's own module, where there is one: `admin/users`
-  # lists an Admin::User, and so does `admin/posts/users`, nested under a post.
-  # Only an Active Record model counts, so a concern or a host's own class that shares
-  # the name never takes a page over; and where there is none, `admin/comments` lists a
-  # Comment as it always has.
-  private_class_method def self.namespaced_model(name)
-    namespaced_names(name).each do |namespaced|
-      model = constant namespaced
-      return model if model.is_a?(Class) && model < ActiveRecord::Base
-    end
-
-    nil
-  end
-
-  # The names a model in the route's modules goes by, innermost module first. The
-  # segment a nested route adds for its parent is a module no model lives in, so the
-  # module around it is asked next.
-  private_class_method def self.namespaced_names(name)
-    *modules, last = name.to_s.split '/'
-    modules.size.downto(1).map { |depth| [*modules[0, depth], last].join('/').classify }
-  end
-
-  # The constant a name gives, looked up one module at a time and never through Object:
-  # `safe_constantize` answers `Admin::Comment` with the top-level Comment, since a module
-  # looks its constants up there too. `load: false` stops short of the last one,
-  # answering only whether it is there.
-  private_class_method def self.constant(name, load: true)
-    *modules, last = name.split '::'
-    scope = modules.inject Object do |outer, part|
-      break unless outer.const_defined? part, false
-
-      outer.const_get part, false
-    end
-    return unless scope.is_a? Module
-    return unless scope.const_defined? last, false
-
-    load ? scope.const_get(last, false) : true
-  end
 
   # Raised for every failure the gem reports, so hosts can rescue one type.
   class Error < StandardError; end
