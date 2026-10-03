@@ -7,6 +7,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.12.1 - 2026-10-02
+
+* [FIX] A model kept in a module is bookmarked and nested under by its route's name
+
+  The id a bookmark posts and a nested page reads its parent by is named after the route,
+  `user_id`, and no longer after the model's whole name, `admin_user_id`, which no route draws.
+  A model's default icon and the name its parent is assigned to (`@user`) drop the module too.
+  For a model at the top level, all of these read as they did.
+
 ## 7.12.0 - 2026-10-02
 
 * [FEATURE] A route drawn in a module lists the model kept in that module
