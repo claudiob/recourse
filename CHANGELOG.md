@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.12.0 - 2026-10-02
+
 * [FEATURE] A route drawn in a module lists the model kept in that module
 
   `scope module: :admin { recourses :users }` lists an `Admin::User`, and so does a page
