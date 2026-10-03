@@ -13,6 +13,8 @@ class Person < ApplicationRecord
   # And a step is theirs to work through, in an order of their own: the second listing
   # of a positioned model, read under a key its position is not counted within.
   has_many :steps, dependent: :destroy
+  # A model kept in a module of its own, which is all a badge is here for.
+  has_many :badges, class_name: 'Admin::Badge', dependent: :destroy
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true

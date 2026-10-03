@@ -51,6 +51,9 @@ Rails.application.routes.draw do
       # acronym: the tab reads `ZIPs`, as the sidebar does, rather than the `Zips` the
       # path humanizes to.
       recourses :zips, only: :index
+      # A model kept in the Admin module, nested: the route's path is
+      # `admin/people/badges`, and what it lists is the Admin::Badge.
+      recourses :badges, only: :index
     end
 
     recourses :teams, except: :show, positionable: true do
@@ -76,6 +79,10 @@ Rails.application.routes.draw do
       # actions by default: list the parent's rows, and add one.
       recourses :places
     end
+
+    # The one model kept in this module rather than at the top level: `admin/badges`
+    # lists an Admin::Badge, where `admin/places` lists a Place as it always has.
+    recourses :badges, only: %i[index show]
   end
 
   # The ways out of the sidebar and into it. Named `exit` and `enter`, which is what earns

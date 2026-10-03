@@ -78,7 +78,7 @@ module Recourse
     # to match it. Private, the way `recourse_relation` beside it is: naming a model
     # adds no action.
     def recourse_model
-      Recourse.model controller_name
+      Recourse.model controller_path
     end
 
     # What the page calls one of its rows: the model's own word, or the route's for a

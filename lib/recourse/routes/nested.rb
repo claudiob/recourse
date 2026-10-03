@@ -25,7 +25,7 @@ module Recourse
       # `/placeholders/:placeholder_id/bookmark`, where nothing linked to it and
       # anything reaching it raised. Asked of the constant rather than the class:
       # loading a model while the routes draw is what Rails 8.2 warns about.
-      def addressable_rows? = Object.const_defined? Recourse.model_name(parent_resource.name)
+      def addressable_rows? = Recourse.model_defined? declared_path(parent_resource.name)
 
       # The place a row of a positioned table holds, at `/teams/5/position`. Recorded
       # nowhere, for the reason the bookmark gives: a tab and a bare-action button both

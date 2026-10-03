@@ -7,6 +7,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+* [FEATURE] A route drawn in a module lists the model kept in that module
+
+  `scope module: :admin { recourses :users }` lists an `Admin::User`, and so does a page
+  nested under a post, `admin/posts/users`. Only an Active Record model in the module counts;
+  where there is none, the route lists the top-level class of its last word, as before, so
+  `admin/comments` still lists a `Comment`. A host keeping models in a module will want
+  `def self.use_relative_model_naming? = true` on it, so their routes and params say `user`
+  rather than `admin_user`.
+
 ## 7.11.2 - 2026-09-26
 
 * [FIX] The count in a tab is delimited

@@ -8,7 +8,7 @@ module Recourse
   # `Message` may be a host's own class for gathering rows rather than a table of them,
   # and asking it would raise rather than draw nothing.
   def self.known_icon(name)
-    model = name.to_s.split('/').last.classify.safe_constantize
+    model = model? name
 
     known_model_icon model if model.respond_to? :recourse_icon
   end

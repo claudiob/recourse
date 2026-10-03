@@ -33,7 +33,7 @@ module Recourse
     # than a table of them, and asking it would raise rather than read.
     def known_title(name)
       segment = name.to_s.split('/').last
-      model = segment.classify.safe_constantize
+      model = model? name
 
       model.respond_to?(:model_name) ? model_title(model) : segment.humanize
     end
