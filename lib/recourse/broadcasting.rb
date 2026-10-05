@@ -17,10 +17,11 @@ module Recourse
     # `broadcasts_refreshes` would send updates and destroys to per-record streams
     # the index never hears. The ivar dies with the class on a dev reload, so the
     # next request attaches to the fresh class again. Quiet without turbo-rails and
-    # Active Job, which is when the model has no `broadcasts_refreshes_to`.
+    # Active Job, which is when the model has no `broadcasts_refreshes_to`, and
+    # without Action Cable, which the index would subscribe through.
     def recourse_broadcast
       return if recourse_broadcasting? || !recourse_broadcasts?
-      return unless respond_to? :broadcasts_refreshes_to
+      return unless respond_to?(:broadcasts_refreshes_to) && defined?(ActionCable)
 
       @recourse_broadcasting = true
       broadcasts_refreshes_to ->(record) { record.model_name.plural }

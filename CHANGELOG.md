@@ -7,6 +7,11 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+* [FIX] A host without Action Cable draws every index
+
+  Its tables simply do not redraw themselves when a row changes, rather than raising
+  `uninitialized constant ActionCable` from the subscription the index used to render.
+
 ## 7.11.2 - 2026-09-26
 
 * [FIX] The count in a tab is delimited
