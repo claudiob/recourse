@@ -1,4 +1,4 @@
 module Recourse
   # Version of the gem, read by the gemspec and by hosts checking compatibility.
-  VERSION = '7.11.2'
+  VERSION = '7.11.3'
 end

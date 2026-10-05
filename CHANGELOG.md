@@ -7,6 +7,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 7.11.3 - 2026-10-05
+
 * [FIX] A host without Action Cable draws every index
 
   Its tables simply do not redraw themselves when a row changes, rather than raising
