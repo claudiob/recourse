@@ -85,8 +85,9 @@ module Recourse
       @recourse_model.recourse_broadcast if @recourse_model.respond_to? :recourse_broadcast
     end
 
-    # The rows the index lists, before the search, the sort and the page reach them:
-    # every row of the model, narrowed by the parent a nested route names. The one thing
+    # The rows the index lists, before the search, the sort and the page reach them,
+    # and the only rows a record's own pages find: every row of the model, narrowed by
+    # the parent a nested route names. The one thing
     # a host overrides to put a scope of its own behind a screen the gem draws whole —
     # `def recourse_relation = County.with_boosts_for(@recourse_parent)`. Private, so
     # overriding it adds a query and never an action.

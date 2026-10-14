@@ -19,4 +19,17 @@ class TestRecoursesScoping < IntegrationCase
     assert_operator Memo.count, :>, kept
     assert_match(/of #{kept}\s*</, body)
   end
+
+  # A record's own pages find it among the rows its table lists, so a memo reached under a
+  # team that does not keep its person is not found, rather than read or edited there.
+  def test_a_record_is_found_among_the_rows_its_table_lists
+    team = Team.order(:id).second
+    kept = Memo.where person: Person.where(id: team.places.select(:person_id))
+    visit "/teams/#{team.id}/memos/#{kept.order(:id).first.id}/edit"
+
+    left_out = Memo.where.not(id: kept).order(:id).first
+    assert_raises ActiveRecord::RecordNotFound do
+      @session.get "/teams/#{team.id}/memos/#{left_out.id}/edit"
+    end
+  end
 end

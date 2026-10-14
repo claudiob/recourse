@@ -61,10 +61,10 @@ Rails.application.routes.draw do
       # within. The keyword is what draws the route a drop is reported to; the column is
       # still what decides whether the grip is drawn and whether the write is allowed.
       recourses :steps, positionable: true
-      # A nested index the parent has no `has_many` for: the whole of a table read
-      # under one record. The tab is named after the route, since there is no
-      # association to count or to take an icon from.
-      recourses :memos, only: :index
+      # A nested index the parent has no `has_many` for, its tab named after the route,
+      # and a form only for the memos its relation keeps: one it leaves out is not
+      # found under this team.
+      recourses :memos, only: %i[index edit update]
       # And one the parent reaches only through another table, which is where the
       # figure on its tab comes from.
       recourses :zips, only: :index

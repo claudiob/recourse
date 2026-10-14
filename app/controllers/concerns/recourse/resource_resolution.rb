@@ -4,13 +4,16 @@ module Recourse
   module ResourceResolution
   private
 
+    # A record with an id is found among the rows `recourse_relation` lists, so a host
+    # that narrows its table narrows the record's own pages with it: a row the table
+    # leaves out is not found, rather than read, edited or deleted under that route.
     # A singular resource is reached with no id — `/places/5/memo` names the record by
     # the path it hangs off rather than by a key of its own — so it is read off the
     # parent instead, under the name the route already gives it. Where the parent has
     # no association of that name the record is still the host's to find, in a
     # controller of its own.
     def find_resource
-      return assign resource_class.find(params.expect(:id)) if params.key? :id
+      return assign recourse_relation.find(params.expect(:id)) if params.key? :id
       return unless singular_reflection
 
       record = @recourse_parent.association(singular_reflection.name).reader
