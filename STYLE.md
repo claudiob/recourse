@@ -35,11 +35,10 @@ before writing or editing any layout, view or partial.
 - Body text is `helvetica, verdana, arial, sans-serif` at 14px — `0.875rem`, so a
   browser's text-size setting still scales it — set through `--bs-body-font-family` and
   `--bs-body-font-size` in the layout's one `<style>`. A choice for pages dense with
-  figures, and this gem's alone: the house's stylesheet leaves body text to Bootstrap.
-- Nothing is vendored or served here. The stylesheet, the script, the icon fonts and the
-  palettes live in `~/code/design`, the `houseaccount` gem's repo, and the layout links
-  `https://design.houseaccount.com/v0.5.0/css/houseaccount.css` and its script, pinned. Every
-  rule about how they are built and cached is in that repo's `STYLE.md` and `CLAUDE.md`.
+  figures, and this gem's alone: bh's stylesheet leaves body text to Bootstrap.
+- Nothing is vendored or served here. The stylesheet, the script and the palettes are bh's,
+  served by bh's engine at `Recourse.assets`, and the icons are Bootstrap Icons, linked from
+  `Recourse.icons`. Every rule about how bh's files are built is in bh's own repo.
 - What stays here is the markup: every class and `data-` attribute the bundle is written
   against. Rename one only once the bundle has followed.
 
@@ -1504,7 +1503,7 @@ before writing or editing any layout, view or partial.
 - A phone number shown to a user is ten digits and a controller —
   `<span data-controller='phone'>5552234567</span>` — and the design bundle's controller
   reads it out as `555-223-4567`. Never format the digits in Ruby: how a phone reads is
-  the house's decision, and this gem serves anyone.
+  the design layer's decision, and this gem serves anyone.
 - Storage is unaffected: the column still holds ten bare digits, as `CLAUDE.md`
   requires. The formatting is for reading only.
 - In a generic table this keys off the column being named `phone`, which is

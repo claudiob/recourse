@@ -1,8 +1,7 @@
 # Roadmap
 
 What is known to be wrong and what is planned to change, with the evidence for each.
-Written 2026-08-27 from a survey of every app on `recourse_4` — autopilot, fountain,
-goldrush, houston, pizza — and a full trace of the gem's own visibility and feature code.
+Written 2026-08-27 from a survey of the five apps on `recourse_4`, and a full trace of the gem's own visibility and feature code.
 
 Nothing here is implemented. `CHANGELOG.md` is what shipped.
 
@@ -14,7 +13,7 @@ cloning a record; a resource with no rows of its own; a listing that edits a joi
 (`through:`); a parent named through a polymorphic key; singular resources (`recourse`);
 the three generators; `recourse_extra_columns`, `_links`, `_actions` and `_tabs`; a
 combobox narrowed by another; and the `values:` shape of a `filter_fields` entry.
-Fountain and autopilot use several of those and do not run on 4.0.0.
+Two of those apps use several of those and do not run on 4.0.0.
 
 Back since this was written: the map (5.2.0), a record's files (5.3.0), the calendar
 (5.4.0) and tables positioned by drag (5.6.0). The nine color palettes were never dropped —
@@ -66,7 +65,7 @@ not visibility intents, and fixing the detection deletes all four.
 
 ### A stale declaration is tolerated in silence
 
-fountain's `Nomination#recourse_hidden = :participant_sid` names a column that no longer
+One app's `Nomination#recourse_hidden = :participant_sid` names a column that no longer
 exists in its schema. The gem neither warns nor raises. Worth a boot-time check.
 
 ---
@@ -122,12 +121,12 @@ search box.**
 **12 of 30 host `_row` overrides exist purely to shorten an index** that `recourse_hidden`
 could not shorten without also emptying the form.
 
-fountain's `Provider` is the extreme: 18 of the 21 columns its controller re-permits are
+One app's `Provider` is the extreme: 18 of the 21 columns its controller re-permits are
 in `recourse_hidden`, so one index-width decision costs a `resource_params` override plus
 two hand-written form templates that bypass `_fields` entirely.
 
 Two host comments state the problem outright. autopilot's `DepartmentsController`:
-*"Hidden is the gem's one word for both."* And fountain's `Location::Recoursive` is a
+*"Hidden is the gem's one word for both."* And one app's `Location::Recoursive` is a
 documented refusal —
 
     # The apartment and the coordinates stay, noisy as they are on a table:
