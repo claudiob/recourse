@@ -168,13 +168,18 @@ which the host defines to put behavior above every screen at once:
 
 ```ruby
 class RecoursesController < Recourse::BaseController
-  before_action :authenticate!
+  prepend_before_action :authenticate!
 end
 ```
 
+`prepend_before_action`, so the guard runs before the gem's own: a record's pages look
+it up through `recourse_relation`, and a relation that reads who is signed in finds
+nobody yet if the guard comes after.
+
 A controller the app already defines is left alone, and one line of it is usually
 enough: `recourse_relation` puts a scope of your own behind a table the gem draws
-whole, and behind the pages of each record in it, and `find_resource` finds a singular record the parent names no association for.
+whole, and behind the pages of each record in it, and `find_resource` finds a singular
+record the parent names no association for.
 
 ## Step 5. Enjoy the extras
 

@@ -1,7 +1,7 @@
 module Recourse
   # Everything a recoursed screen does, in a class of its own so a host can put
   # its own behavior above it — `class RecoursesController < Recourse::BaseController`
-  # with a `before_action :authenticate!` guards every screen the gem serves.
+  # with a `prepend_before_action :authenticate!` guards every screen the gem serves.
   class BaseController < ApplicationController
     include Pagy::Method, Positioned, AttachmentResolution, AttachmentWriting,
             Landing, Paging, ListResolution, ParameterResolution, ParentNaming,

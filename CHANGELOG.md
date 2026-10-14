@@ -7,6 +7,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 8.0.1 - 2026-10-14
+
+* [FIX] Guard the screens with `prepend_before_action`, not `before_action`
+
+  Since 8.0.0 a record's pages look it up through `recourse_relation` before any
+  `before_action` of the host's runs, so a relation reading who is signed in -- an admin's
+  own chats -- found nobody and raised. The README, the guides and the comments now say
+  `prepend_before_action :authenticate!`, which runs the guard first.
+
 ## 8.0.0 - 2026-10-14
 
 * [BREAKING] A record's own pages find it among the rows `recourse_relation` lists
