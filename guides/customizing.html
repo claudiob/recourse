@@ -77,12 +77,14 @@
 <pre><code>class Projects::CommentsController &lt; RecoursesController
 private
 
-  <span class="c"># The rows behind a table the gem draws whole.</span>
+  <span class="c"># The rows behind a table the gem draws whole, and the only ones its pages find.</span>
   def recourse_relation
     project = Project.find params.expect(:project_id)
     Comment.where task: project.tasks
   end
 end</code></pre>
+      <p>The relation is also where a record’s own pages look it up: <code>show</code>, <code>edit</code>, <code>update</code> and
+      <code>destroy</code> find a comment among the project’s, and a comment the relation leaves out is not found.</p>
       <p><code>recourse_model</code> names the model behind a page named for something else: <code>def recourse_model = Order</code>
       under <code>recourses :purchases</code>. <code>find_resource</code> finds a singular record the parent names no association
       for: <code>assign @recourse_parent.team.manager</code>. <code>create</code>, <code>update</code> and <code>destroy</code> are ordinary
