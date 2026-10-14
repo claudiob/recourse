@@ -18,10 +18,12 @@
     <%= yield :head %>
 
     <%# Everything the page is styled by: Bootstrap 6 and bh's rules for this gem's
-        markup, served by bh's own engine. `Recourse.assets` is where, and a host
-        serving those files from somewhere else says so there. -%>
+        markup, served by bh's own engine, and the Bootstrap Icons every icon here is
+        named in. `Recourse.assets` and `Recourse.icons` are where, and a host serving
+        those files from somewhere else says so there. -%>
     <link rel='stylesheet' href='<%= Recourse.asset 'css/bh.css' %>'>
-    <%# The one thing these screens set that the house's stylesheet does not: system faces
+    <%= tag.link rel: 'stylesheet', href: Recourse.icons if Recourse.icons %>
+    <%# The one thing these screens set that bh's stylesheet does not: system faces
         at a compact size, for pages dense with figures. 14px as rem, so a browser's own
         text-size setting still scales it. After the stylesheet, since both are `:root`. -%>
     <style>

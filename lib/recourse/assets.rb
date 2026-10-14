@@ -9,9 +9,14 @@ module Recourse
     # A host serving those files from somewhere else — a CDN, a bundle of its own that
     # carries bh's layer — points this at it, and that is the whole of what it writes.
     attr_accessor :assets
+
+    # The stylesheet of Bootstrap Icons, whose names every icon on these pages is drawn by.
+    # A host serving the font itself points this at its own copy, or sets it to nil.
+    attr_accessor :icons
   end
 
   @assets = Bh::Engine::PREFIX.chomp '/'
+  @icons = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css'
 
   # One file of the design layer.
   def self.asset(path) = "#{assets}/#{path}"

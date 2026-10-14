@@ -20,10 +20,10 @@ gem 'recourse', '~> 8.0'
 `~> 8.0` follows Semantic Versioning: `bundle update` takes every 8.x and never a
 breaking change. Rails 8.1 and Ruby 3.2 are the minimum; the pages need Turbo, which
 `turbo-rails` brings, and nothing else in the host. Everything a page is styled and
-scripted by — Bootstrap 6, its icons, Turbo, Stimulus and the controllers behind these
-screens — is `bh`, which this gem depends on and whose engine serves them at `/bh/`, so a
-host without an asset pipeline gets the same screens and nothing is fetched across a
-network.
+scripted by — Bootstrap 6, Turbo, Stimulus and the controllers behind these screens — is
+`bh`, which this gem depends on and whose engine serves them at `/bh/`, so a host without
+an asset pipeline gets the same screens. The icons are Bootstrap Icons, whose font the
+layout links from `Recourse.icons`: jsDelivr's copy unless a host names its own, or `nil`.
 
 ## Step 1. Edit your routes
 

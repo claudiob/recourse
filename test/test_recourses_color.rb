@@ -39,11 +39,13 @@ class TestRecoursesColor < IntegrationCase
     assert_includes body, "<link rel='stylesheet' href='/bh/css/bh.css'>"
     assert_includes body, "<script type='module' src='/bh/js/bh.js'>"
     refute_includes body, '/recourse/'
+    # The icons are drawn by their Bootstrap Icons names, so the font comes with the page.
+    assert_includes body, %(<link rel="stylesheet" href="#{Recourse.icons}">)
     # The tab's icon is the host's to name, in its `recourses/head` partial; the gem guesses at
     # no file name of its own.
-    assert_includes body, "<link rel='icon' href='/favicon/fountain.svg' type='image/svg+xml'>"
+    assert_includes body, "<link rel='icon' href='/favicon/dummy.svg' type='image/svg+xml'>"
     refute_includes body, "href='/icon.png'"
-    # And the one thing these screens set that the house's stylesheet does not.
+    # And the one thing these screens set that bh's stylesheet does not.
     assert_includes body, '--bs-body-font-family: helvetica, verdana, arial, sans-serif;'
     assert_includes body, '<link rel="stylesheet" ' \
                           'href="/bh/theme/dracula.css" ' \
