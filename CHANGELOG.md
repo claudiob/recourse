@@ -7,6 +7,17 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 8.0.0 - 2026-10-14
+
+* [BREAKING] A record's own pages find it among the rows `recourse_relation` lists
+
+  `show`, `edit`, `update` and `destroy` looked a record up by id across the whole model,
+  so a host that narrowed its table -- an admin's own chats, a team's memos -- still let
+  anybody read, edit or delete a row the table left out, by typing its id. The record is
+  now found through `recourse_relation`, and one the relation leaves out is not found. A
+  host whose relation filters out records that should still have pages of their own, or
+  selects columns a form cannot save back, finds them in a controller of its own.
+
 ## 7.11.3 - 2026-10-05
 
 * [FIX] A host without Action Cable draws every index

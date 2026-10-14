@@ -14,10 +14,10 @@ gem install recourse
 
 ```ruby
 # Gemfile
-gem 'recourse', '~> 7.0'
+gem 'recourse', '~> 8.0'
 ```
 
-`~> 7.0` follows Semantic Versioning: `bundle update` takes every 7.x and never a
+`~> 8.0` follows Semantic Versioning: `bundle update` takes every 8.x and never a
 breaking change. Rails 8.1 and Ruby 3.2 are the minimum; the pages need Turbo, which
 `turbo-rails` brings, and nothing else in the host. Everything a page is styled and
 scripted by — Bootstrap 6, its icons, Turbo, Stimulus and the controllers behind these
@@ -174,7 +174,7 @@ end
 
 A controller the app already defines is left alone, and one line of it is usually
 enough: `recourse_relation` puts a scope of your own behind a table the gem draws
-whole, and `find_resource` finds a singular record the parent names no association for.
+whole, and behind the pages of each record in it, and `find_resource` finds a singular record the parent names no association for.
 
 ## Step 5. Enjoy the extras
 
