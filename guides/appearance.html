@@ -60,9 +60,11 @@ Recourse.theme = :nord</code></pre>
       host’s <code>config.time_zone</code>.</p>
 
       <h2 id="assets">Where the assets come from</h2>
-      <p>Bootstrap, its icons, Turbo, Stimulus and the controllers are served by <code>bh</code>, a dependency, at
-      <code>/bh/</code>. A host serving them from elsewhere says so once:</p>
-<pre><code>Recourse.assets = 'https://cdn.example.com/bh'</code></pre>
+      <p>Bootstrap, Turbo, Stimulus and the controllers are served by <code>bh</code>, a dependency, at <code>/bh/</code>,
+      and the icons are Bootstrap Icons, whose font the layout links from jsDelivr. A host serving either from
+      elsewhere says so once:</p>
+<pre><code>Recourse.assets = 'https://cdn.example.com/bh'
+Recourse.icons = 'https://cdn.example.com/bootstrap-icons.min.css'</code></pre>
 
       <h2 id="head">The head and the layout</h2>
       <p>A <code>recourses/head</code> partial in the host is drawn last in the head, for the tab’s icon or a stylesheet
