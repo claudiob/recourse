@@ -7,6 +7,15 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## [Unreleased]
 
+## 8.1.0 - 2026-10-14
+
+* [FEATURE] The layout links the Bootstrap Icons it draws with
+
+  Every icon on these pages is named in Bootstrap Icons, but no stylesheet carried the
+  font, so a host had to link it from a `recourses/head` partial or see blank buttons. The
+  layout now links `Recourse.icons`, jsDelivr's copy of Bootstrap Icons 1.13.1 by default;
+  a host serving the font itself points the setting at its copy, or sets it to `nil`.
+
 ## 8.0.1 - 2026-10-14
 
 * [FIX] Guard the screens with `prepend_before_action`, not `before_action`
@@ -329,9 +338,9 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## 5.6.1 - 2026-09-18
 
-* [Change] The pinned bundle is `houseaccount@0.14.2`
+* [Change] The pinned design bundle is 0.14.2
 
-  A conversation reads at the house's own size wherever it is drawn, a bubble inside a flow
+  A conversation reads at the design bundle's own size wherever it is drawn, a bubble inside a flow
   is read from its start, and a focus ring is no longer painted over by the link below it.
   These pages compact their body type for tables dense with figures, which is what made the
   first of those visible here.
@@ -383,7 +392,7 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   breadcrumb over such a page raised instead of reading. It asks whether what it found
   answers `model_name`, the way `known_icon` beside it already does.
 
-* [Feature] `Recourse.assets` says where the house bundle is served from
+* [Feature] `Recourse.assets` says where the design bundle is served from
 
   The stylesheet, the script and the palettes were three URLs carrying one pinned version,
   moved together by hand every release — the 5.5.0 entry below says as much. They are one
@@ -391,11 +400,11 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   from, and jsdelivr's copy of the published package stays the default.
 
   A host that sets `Recourse.assets = ''` serves the bundle itself, out of the
-  `houseaccount` gem mounted by path: its engine answers `/css`, `/js` and `/theme` from
+  design gem mounted by path: its engine answers `/css`, `/js` and `/theme` from
   its own `public/`. That is how a stylesheet or a controller gets tried on a real page
   before the version carrying it is published, which is what this release needed.
 
-* [Change] The pinned bundle is `houseaccount@0.14.0`
+* [Change] The pinned design bundle is 0.14.0
 
   What carries the `sortable` controller the feature above names, and the two rules beside
   it: the grip's cursor, and the tint on the space a dragged row will land in.
@@ -416,7 +425,7 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
   glyphs point either way with either ordering. Both draw from the bundle this release
   pins, whose subset carries `sort-up` beside the `sort-down` it already held.
 
-* [Change] The pinned bundle is `houseaccount@0.13.0`
+* [Change] The pinned design bundle is 0.13.0
 
   Two releases at once, since the pin was still at 0.11.0 while 0.12.0 came and went. It is
   what carries the ascending sort glyph, so the fix above needs it; it also brings a card
@@ -515,11 +524,11 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
 ## 5.0.0 - 2026-09-14
 
-* [Breaking change] Every page is styled and scripted by `https://design.houseaccount.com`, and nothing is served by the gem
+* [Breaking change] Every page is styled and scripted by the design site, and nothing is served by the gem
 
   The vendored Bootstrap, its icons and fonts, Stimulus, the sixteen controllers, the nine
   palettes and the layout's own stylesheet have moved to the `design` repo, which publishes
-  them at `/v<version>/css/houseaccount.css`, `/v<version>/js/houseaccount.js` and
+  them at `/v<version>/css/<bundle>.css`, `/v<version>/js/<bundle>.js` and
   `/v<version>/theme/<name>.css` on that origin, kept forever per version. The layout links
   the first two at a pinned version, and `Recourse::THEMES_PATH` names the third at the
   same one; a fix there reaches these pages when the pin moves, and not before. The
@@ -527,8 +536,8 @@ For more information about changelogs, check [Keep a Changelog](http://keepachan
 
   A host needs that origin reachable from its readers' browsers. A host with a Content
   Security Policy allows it for `style-src`, `script-src` and `font-src`. A host on the
-  `houseaccount` gem serves the same paths itself, but this gem still links the site: it
-  never names that gem.
+  design gem serves the same paths itself, but this gem still links the site: it never names
+  that gem.
 
 * [Breaking change] A combobox is a `<select>`, and a filter submits one value per pick
 
