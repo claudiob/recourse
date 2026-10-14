@@ -79,10 +79,12 @@ gem 'recourse'</code></pre>
       <h2 id="secure">Secure the controllers</h2>
 <pre><code><span class="c"># app/controllers/recourses_controller.rb</span>
 class RecoursesController &lt; Recourse::BaseController
-  before_action :authenticate!
+  prepend_before_action :authenticate!
 end</code></pre>
       <p>Every controller the gem defines inherits this class, and so does any the host writes for one resource, so
-      one guard stands above every screen.</p>
+      one guard stands above every screen. <code>prepend_before_action</code>, so it runs before the gem’s own: a record’s
+      pages look it up through <code>recourse_relation</code>, and a relation that reads who is signed in finds nobody yet
+      if the guard comes after.</p>
 
       <nav class="next"><span></span><a href="routes.html">Routes →</a></nav>
     </article>
